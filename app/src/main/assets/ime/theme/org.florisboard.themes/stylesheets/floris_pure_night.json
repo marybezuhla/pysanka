@@ -1,8 +1,8 @@
 {
   "$schema": "https://schemas.florisboard.org/snygg/v2/stylesheet",
   "@defines": {
-    "--primary": "#388e3c",
-    "--primary-variant": "#306d32",
+    "--primary": "#4caf50",
+    "--primary-variant": "#388e3c",
     "--secondary": "#ff9800",
     "--secondary-variant": "#804c00",
     "--background": "#000000",
@@ -10,17 +10,17 @@
     "--surface": "#212121",
     "--surface-variant": "#3d3d3d",
     "--popup-surface": "#424242",
-    "--focused-popup-surface": "#707070",
+    "--focused-popup-surface": "#2e7d32",
     "--drag-marker": "rgb(255,0,0)",
     "--spacer-color": "rgba(255, 255, 255, 0.25)",
     "--one-hand-background": "#1b5e20",
     "--one-hand-foreground": "#eeeeee",
     "--incognito-icon-color": "#ffffff11",
-    "--on-primary": "#f0f0f0",
+    "--on-primary": "#000000",
     "--on-background-disabled": "#dcdcdc48",
     "--on-background": "#eeeeee",
     "--on-surface": "#eeeeee",
-    "--on-surface-variant": "#ffffff73",
+    "--on-surface-variant": "#ffffffa6",
 
     "--shape": "rounded-corner(8dp, 8dp, 8dp, 8dp)",
     "--shape-variant": "rounded-corner(12dp, 12dp, 12dp, 12dp)",
@@ -76,11 +76,11 @@
   },
   "key[code=10]": {
     "background": "var(--primary)",
-    "foreground": "var(--on-surface)"
+    "foreground": "var(--on-primary)"
   },
   "key[code=10]:pressed": {
     "background": "var(--primary-variant)",
-    "foreground": "var(--on-surface)"
+    "foreground": "var(--on-primary)"
   },
   "key[code=32]": {
     "background": "var(--surface)",
@@ -406,7 +406,7 @@
   },
   "extracted-landscape-input-action": {
     "background": "var(--primary)",
-    "foreground": "var(--on-surface)",
+    "foreground": "var(--on-primary)",
     "shape": "rounded-corner(4dp, 4dp, 4dp, 4dp)"
   },
 
