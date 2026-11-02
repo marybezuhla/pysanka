@@ -28,8 +28,8 @@ import ua.pysanka.whisper.WhisperNative
 /**
  * Pysanka: dictation, the keyboard's side. Records from the microphone (only while the dictation
  * panel is open, 16 kHz mono) and sends the sound in short pieces to [VoiceService], which turns it
- * into text. Nothing is written anywhere; the sound is dropped as soon as it is sent or cancelled.
- * Never in password, incognito or "no learning" fields.
+ * into text. Nothing is written anywhere; each piece is overwritten once it is sent. Never in
+ * password, incognito or "no learning" fields.
  */
 object VoiceInput {
     sealed interface State {
@@ -47,7 +47,15 @@ object VoiceInput {
     private val main = Handler(Looper.getMainLooper())
     private var link: Link? = null
     private var recorder: Thread? = null
-    @Volatile private var recording = false
+
+    /** One recording's flags (a recorder that has not ended yet never sees the next one's). */
+    private class Rec {
+        /** Stop recording: the recorder sends what it still has, then asks for the text. */
+        @Volatile var stopping = false
+        /** Drop the recording: the recorder ends without sending more. */
+        @Volatile var dropped = false
+    }
+    private var rec = Rec()
     private var token = 0L
     private var onText: ((String) -> Unit)? = null
 
@@ -56,9 +64,12 @@ object VoiceInput {
     fun hasMic(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
 
+    /** Whether dictation may work in the field now. */
+    fun allowedHere() = !FieldPrivacy.isPassword && !FieldPrivacy.isPrivate
+
     /** Whether dictation can start in the field now, or what is missing. */
     fun ready(context: Context): Ready = when {
-        FieldPrivacy.isPassword || FieldPrivacy.isPrivate -> Ready.NOT_HERE
+        !allowedHere() -> Ready.NOT_HERE
         !WhisperNative.supported -> Ready.UNSUPPORTED
         !hasModel(context) -> Ready.NO_MODEL
         !hasMic(context) -> Ready.NO_MIC
@@ -71,15 +82,14 @@ object VoiceInput {
      */
     fun start(context: Context, language: String, onText: (String) -> Unit) {
         cancel()
+        // The previous recorder lets the microphone go before a new one takes it
+        recorder?.join(500)
         val app = context.applicationContext
         this.onText = onText
         token++
         val t = token
         link = Link(app) { what, data -> if (data.getLong(VoiceService.KEY_TOKEN) == t) answer(what, data) }.also {
-            it.send(VoiceService.START, Bundle().apply {
-                putLong(VoiceService.KEY_TOKEN, t)
-                putString(VoiceService.KEY_LANGUAGE, language)
-            })
+            it.send(VoiceService.START, t) { putString(VoiceService.KEY_LANGUAGE, language) }
         }
         state.value = State.Listening(0, 0f)
         record(t)
@@ -88,16 +98,16 @@ object VoiceInput {
     /** Stops listening and recognises what was said. */
     fun finish() {
         if (state.value !is State.Listening) return
-        stopRecording()
         state.value = State.Recognising
-        link?.send(VoiceService.FINISH, Bundle().apply { putLong(VoiceService.KEY_TOKEN, token) })
+        // The recorder sends the end of what was said, then FINISH, in that order
+        rec.stopping = true
     }
 
     /** Stops everything; nothing is inserted. */
     fun cancel() {
-        stopRecording()
+        rec.dropped = true
         link?.let {
-            it.send(VoiceService.CANCEL, Bundle().apply { putLong(VoiceService.KEY_TOKEN, token) })
+            it.send(VoiceService.CANCEL, token)
             it.close()
         }
         link = null
@@ -112,22 +122,19 @@ object VoiceInput {
             VoiceService.TEXT -> {
                 val text = Transcript.clean(data.getString(VoiceService.KEY_TEXT).orEmpty())
                 val deliver = onText
+                close()
                 if (text.isEmpty()) {
                     state.value = State.Failed(R.string.pysanka__voice__nothing)
                 } else {
                     state.value = State.Idle
                     deliver?.invoke(text)
                 }
-                close()
             }
             VoiceService.FAIL -> {
-                state.value = State.Failed(
-                    when (data.getString(VoiceService.KEY_REASON)) {
-                        "silence" -> R.string.pysanka__voice__nothing
-                        else -> R.string.pysanka__voice__failed
-                    },
-                )
                 close()
+                state.value = State.Failed(
+                    if (data.getString(VoiceService.KEY_REASON) == "silence") R.string.pysanka__voice__nothing else R.string.pysanka__voice__failed,
+                )
             }
         }
     }
@@ -144,38 +151,58 @@ object VoiceInput {
         val min = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
         val audio = runCatching {
             AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(min, rate))
-        }.getOrNull()?.takeIf { it.state == AudioRecord.STATE_INITIALIZED }
-        if (audio == null) {
-            fail(R.string.pysanka__voice__no_mic_now)
+        }.getOrNull()
+        if (audio == null || audio.state != AudioRecord.STATE_INITIALIZED) {
+            audio?.release()
+            fail(t, R.string.pysanka__voice__no_mic_now)
             return
         }
-        recording = true
+        val r = Rec()
+        rec = r
         recorder = Thread {
             val piece = ShortArray(rate / 4) // a quarter of a second
             var total = 0
+            fun send(n: Int) {
+                val chunk = piece.copyOf(n)
+                total += n
+                var peak = 0
+                for (s in chunk) peak = maxOf(peak, kotlin.math.abs(s.toInt()))
+                val seconds = total / rate
+                main.post {
+                    var sent = false
+                    if (token == t && !r.dropped) {
+                        sent = link?.send(VoiceService.AUDIO, t) { putShortArray(VoiceService.KEY_SAMPLES, chunk) } == true
+                        if (state.value is State.Listening) {
+                            state.value = State.Listening(seconds, peak / 32768f)
+                            // The longest dictation: recognised as it is
+                            if (seconds >= VoiceService.MAX_SECONDS) finish()
+                        }
+                    }
+                    // Sent (copied to the other process) or not wanted: not kept here; one still
+                    // waiting for the connection is cleared once it is sent
+                    if (sent || token != t || r.dropped) chunk.fill(0)
+                }
+            }
             try {
                 audio.startRecording()
-                while (recording) {
+                check(audio.recordingState == AudioRecord.RECORDSTATE_RECORDING)
+                while (!r.stopping && !r.dropped) {
                     val n = audio.read(piece, 0, piece.size)
-                    if (n <= 0) continue
-                    val chunk = piece.copyOf(n)
-                    total += n
-                    var peak = 0
-                    for (s in chunk) peak = maxOf(peak, kotlin.math.abs(s.toInt()))
-                    val seconds = total / rate
-                    main.post {
-                        if (token != t || !recording) return@post
-                        link?.send(VoiceService.AUDIO, Bundle().apply {
-                            putLong(VoiceService.KEY_TOKEN, t)
-                            putShortArray(VoiceService.KEY_SAMPLES, chunk)
-                        })
-                        state.value = State.Listening(seconds, peak / 32768f)
-                        // The longest dictation: recognised as it is
-                        if (seconds >= VoiceService.MAX_SECONDS) finish()
+                    check(n >= 0) // the microphone failed (another app took it, the audio system restarted)
+                    if (n > 0) send(n)
+                }
+                if (!r.dropped) {
+                    // What was said just before «Готово», still in the microphone's buffer
+                    audio.stop()
+                    while (true) {
+                        val n = audio.read(piece, 0, piece.size)
+                        if (n <= 0) break
+                        send(n)
                     }
+                    main.post { if (token == t && !r.dropped) link?.send(VoiceService.FINISH, t) }
                 }
             } catch (_: Throwable) {
-                main.post { if (token == t) fail(R.string.pysanka__voice__no_mic_now) }
+                main.post { if (token == t && !r.dropped) fail(t, R.string.pysanka__voice__no_mic_now) }
             } finally {
                 piece.fill(0)
                 runCatching { audio.stop() }
@@ -184,16 +211,12 @@ object VoiceInput {
         }.apply { name = "pysanka-voice"; start() }
     }
 
-    private fun fail(@StringRes message: Int) {
-        stopRecording()
-        link?.send(VoiceService.CANCEL, Bundle().apply { putLong(VoiceService.KEY_TOKEN, token) })
+    private fun fail(t: Long, @StringRes message: Int) {
+        if (token != t) return
+        rec.dropped = true
+        link?.send(VoiceService.CANCEL, t)
         close()
         state.value = State.Failed(message)
-    }
-
-    private fun stopRecording() {
-        recording = false
-        recorder = null
     }
 
     /** The connection to [VoiceService]; messages sent before it connects are delivered in order. */
@@ -206,7 +229,7 @@ object VoiceInput {
             .getOrDefault(false)
 
         init {
-            if (!bound) main.post { if (link === this) fail(R.string.pysanka__voice__failed) }
+            if (!bound) main.post { if (link === this) fail(token, R.string.pysanka__voice__failed) }
         }
 
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
@@ -218,20 +241,31 @@ object VoiceInput {
         // The recognition's process ended (out of memory, say)
         override fun onServiceDisconnected(name: ComponentName?) {
             service = null
-            if (link === this && state.value !is State.Idle) fail(R.string.pysanka__voice__failed)
+            if (link === this && state.value !is State.Idle) fail(token, R.string.pysanka__voice__failed)
         }
 
-        fun send(what: Int, data: Bundle) {
+        /** A message for the run [t], filled with [fill]; true if it went at once (not waiting for the connection). */
+        fun send(what: Int, t: Long, fill: Bundle.() -> Unit = {}): Boolean {
             val msg = Message.obtain(null, what).apply {
-                this.data = data
+                data = Bundle().apply {
+                    putLong(VoiceService.KEY_TOKEN, t)
+                    fill()
+                }
                 replyTo = incoming
             }
-            val s = service
-            if (s == null) waiting += msg else deliver(msg)
+            if (service == null) {
+                waiting += msg
+                return false
+            }
+            return deliver(msg)
         }
 
-        private fun deliver(msg: Message) {
-            if (runCatching { service?.send(msg) }.isFailure && link === this) fail(R.string.pysanka__voice__failed)
+        private fun deliver(msg: Message): Boolean {
+            val ok = runCatching { service?.send(msg) }.isSuccess
+            if (!ok && link === this) main.post { fail(token, R.string.pysanka__voice__failed) }
+            // Copied to the other process: what was sent is not kept here
+            msg.data?.getShortArray(VoiceService.KEY_SAMPLES)?.fill(0)
+            return ok
         }
 
         fun close() {

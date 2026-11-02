@@ -13,7 +13,7 @@
 - ✍️ **Підказки й виправлення описок** ✅ українською й англійською; клавіатура вчиться ваших слів (зашифровано, ніколи з полів пароля чи інкогніто). Після пробілу — слова, що у вас зазвичай ідуть далі.
 - 🔍 **Текст із фото й камери** ✅ розпізнається на телефоні.
 - 🤖 **Локальний ШІ (Gemma 4), за бажанням** ✅ ШІ-помічник просто в клавіатурі (✦ — дії плитками, відповідь замість клавіш): стиль, граматика й пунктуація, підсумок довгих текстів (з перевіркою чисел і назв), переклад, русизми, список, таблиця, нотатки, лист за описом, варіанти відповіді, приховати особисте, «Моїм стилем» (за вашими зашифрованими зразками); «Поділитися → Писанка ШІ» з будь-якого застосунку. Далі: інструменти для соцмереж.
-- 🎙️ **Диктування** на телефоні (Whisper), за бажанням.
+- 🎙️ **Диктування на телефоні (Whisper), за бажанням** ✅ звук розпізнається на телефоні й ніде не зберігається; мікрофон — лише якщо ви самі його дозволите.
 
 Зараз це клавіатура на основі FlorisBoard з простішими налаштуваннями, посиленою приватністю й зашифрованим буфером із тегами. Функції з'являтимуться поступово.
 
@@ -24,7 +24,7 @@
 - **Підпис:** відбиток сертифіката SHA-256 `ea082ca6d8620c201948d08a9572c0b74a75101eb71b2752ceddcb4807d038ce`.
 - **Як створено:** код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням авторки.
 
-Kotlin · Jetpack Compose · Rust. Ліцензія GPL-3.0; код із FlorisBoard лишається під Apache 2.0 — що під якою ліцензією, у [NOTICE.md](NOTICE.md).
+Kotlin · Jetpack Compose · Rust · C++ (whisper.cpp). Ліцензія GPL-3.0; код із FlorisBoard лишається під Apache 2.0 — що під якою ліцензією, у [NOTICE.md](NOTICE.md).
 
 ---
 
@@ -41,6 +41,7 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - Word suggestions and careful typo correction in Ukrainian and English; the keyboard learns your words and what usually comes next, kept encrypted and never from password or incognito fields.
 - Optional on-device AI (Gemma 4), as a panel right in the keyboard (✦: actions as tiles, the answer in place of the keys): grammar, style, summaries of long texts (numbers and names checked), translation, Russianisms, list, table, notes, letters, reply options, hiding personal data, «In my style» (from your own encrypted samples); "Share → Pysanka AI" from any app. Planned: social-media tools; on-device dictation (Whisper).
 - On-device text recognition from photos and the camera.
+- Optional on-device dictation (Whisper): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
 
 Today this is a keyboard built on FlorisBoard with simpler settings, stronger privacy and an encrypted clipboard with tags. Features will arrive step by step.
 

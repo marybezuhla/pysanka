@@ -306,7 +306,7 @@
     <string name="pysanka__voice__how_to_use">Торкніться мікрофона на панелі над клавіатурою, говоріть, потім «Готово» — текст зʼявиться в полі. Мова — як у клавіатури. До 2 хвилин за раз. У полях пароля й інкогніто диктування не працює.</string>
     <string name="pysanka__voice__mic">Дозволити мікрофон</string>
     <string name="pysanka__voice__mic_granted">Мікрофон дозволено</string>
-    <string name="pysanka__voice__mic_denied">Без мікрофона диктування не працює. Дозволити його тепер можна лише в налаштуваннях системи: Дозволи → Мікрофон.</string>
+    <string name="pysanka__voice__mic_denied">Без мікрофона диктування не працює. Якщо Android більше не питає, дозвольте його в налаштуваннях системи: Дозволи → Мікрофон.</string>
     <string name="pysanka__voice__system_settings">Відкрити налаштування системи</string>
     <string name="pysanka__settings__voice_ready">Готово: мікрофон на панелі над клавіатурою</string>
     <string name="pysanka__settings__voice_missing">Встановіть модель (≈190 МБ)</string>
