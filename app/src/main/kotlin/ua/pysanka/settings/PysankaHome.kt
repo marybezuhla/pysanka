@@ -251,6 +251,7 @@ private fun LookSettings() {
     // "By the time of day" needs times there is no screen for
     PrefChoice(prefs.theme.mode, stringRes(R.string.pysanka__look__theme_mode), ThemeMode::class, except = setOf(ThemeMode.FOLLOW_TIME))
     ThemeChoices()
+    PrefToggle(prefs.other.pysankaSystemColors, stringRes(R.string.pysanka__look__system_colors), stringRes(R.string.pysanka__look__system_colors_summary))
     PrefToggle(prefs.keyboard.numberRow, stringRes(R.string.pysanka__look__number_row))
     PrefToggle(prefs.keyboard.hintedSymbolsEnabled, stringRes(R.string.pysanka__look__key_hints), stringRes(R.string.pysanka__look__key_hints_summary))
     val fontSize by prefs.keyboard.fontSizeMultiplierPortrait.observeAsState()

@@ -18,6 +18,8 @@ package dev.patrickgold.florisboard.lib.compose
 
 import android.app.Activity
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,6 +27,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import ua.pysanka.ui.PysankaBackdrop
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -155,15 +158,19 @@ private class FlorisScreenScopeImpl : FlorisScreenScope {
             } else {
                 Modifier
             }
-            PreferenceLayout(
-                FlorisPreferenceStore,
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxWidth()
-                    .then(scrollModifier),
-                iconSpaceReserved = iconSpaceReserved,
-                content = content,
-            )
+            // Pysanka: the faint pysanka in the corner, behind the content
+            Box(Modifier.fillMaxSize()) {
+                PysankaBackdrop()
+                PreferenceLayout(
+                    FlorisPreferenceStore,
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxWidth()
+                        .then(scrollModifier),
+                    iconSpaceReserved = iconSpaceReserved,
+                    content = content,
+                )
+            }
         }
     }
 }

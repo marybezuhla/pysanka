@@ -125,6 +125,19 @@ fun LanguagesBlock() {
     }
 }
 
+/** Pysanka's themes by their id, in the language of the settings (in the order they are offered). */
+@Composable
+fun themeNames(): Map<String, String> = linkedMapOf(
+    "kreyda" to stringRes(R.string.pysanka__theme__kreyda),
+    "visk" to stringRes(R.string.pysanka__theme__visk),
+    "nebo" to stringRes(R.string.pysanka__theme__nebo),
+    "floris_day_my" to stringRes(R.string.pysanka__theme__system),
+    "podillia" to stringRes(R.string.pysanka__theme__podillia),
+    "hutsulshchyna" to stringRes(R.string.pysanka__theme__hutsulshchyna),
+    "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
+    "floris_night_my" to stringRes(R.string.pysanka__theme__system_dark),
+)
+
 /** The day and the night theme, from the themes that come with the keyboard. */
 @Composable
 fun ThemeChoices() {
@@ -133,11 +146,11 @@ fun ThemeChoices() {
     val extensionManager by context.extensionManager()
     val scope = rememberCoroutineScope()
     val extensions by extensionManager.themes.collectAsState()
-    // The names without FlorisBoard's brand ("Floris Day" → "Day")
-    val themes = remember(extensions) {
+    val names = themeNames()
+    val themes = remember(extensions, names) {
         extensions.flatMap { ext -> ext.themes.map { ExtensionComponentName(ext.meta.id, it.id) to it } }
-            .map { (id, t) -> Triple(id, t.label.removePrefix("Floris ").trim(), t.isNightTheme) }
-            .sortedBy { it.second }
+            .map { (id, t) -> Triple(id, names[id.componentId] ?: t.label, t.isNightTheme) }
+            .sortedBy { names.keys.indexOf(it.first.componentId).let { i -> if (i < 0) Int.MAX_VALUE else i } }
     }
     val day by prefs.theme.dayThemeId.observeAsState()
     val night by prefs.theme.nightThemeId.observeAsState()

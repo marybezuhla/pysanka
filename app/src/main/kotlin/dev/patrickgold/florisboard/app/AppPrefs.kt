@@ -669,6 +669,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             default = Color.Unspecified,
             serializer = ColorPreferenceSerializer,
         )
+        /** Pysanka: the settings in the phone's own colours (Material You) instead of Pysanka's. */
+        val pysankaSystemColors = boolean(
+            key = "pysanka__other__system_colors",
+            default = false,
+        )
         val settingsLanguage = string(
             key = "other__settings_language",
             default = "auto",
@@ -782,12 +787,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val dayThemeId = custom(
             key = "theme__day_theme_id",
-            default = extCoreTheme("floris_day"),
+            default = extCoreTheme("kreyda"), // Pysanka: its own themes (scripts/themes.py)
             serializer = ExtensionComponentName.Serializer,
         )
         val nightThemeId = custom(
             key = "theme__night_theme_id",
-            default = extCoreTheme("floris_night"),
+            default = extCoreTheme("podillia"),
             serializer = ExtensionComponentName.Serializer,
         )
         val accentColor = custom(
