@@ -23,8 +23,11 @@ those copies keep that licence.
   OpenSubtitles 2018, http://opus.nlpl.eu/OpenSubtitles.php, http://www.opensubtitles.org/),
   licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Changed: limited to the
   most frequent words, rescaled to 1–255, Ukrainian words filtered as below and a few respelled
-  (2019 spelling), and Pysanka's own list of modern words (`scripts/dict/slang_*.txt`) added. The
-  lists are under CC BY-SA 4.0; how they are made: `scripts/dict/`.
+  (2019 spelling). The lists are under CC BY-SA 4.0; how they are made: `scripts/dict/`.
+- `app/src/main/assets/ime/dict/<lang>-<theme>.json` — the extra dictionaries: Pysanka's own lists
+  (`scripts/dict/*_uk.txt`, `*_en.txt`, GPL-3.0) and, for medicines, places and first names, words
+  from dict_uk (https://github.com/brown-uk/dict_uk) with their forms from its uk_UA hunspell
+  dictionary, GPL 3.0+ / LGPL 2.1+ / MPL 1.1, here under GPL-3.0; made by `scripts/dict/themes.py`.
   The Ukrainian filter uses the uk_UA hunspell dictionary (dict_uk project, as in LibreOffice,
   MPL 1.1) only while the lists are made; it is not part of Pysanka.
 

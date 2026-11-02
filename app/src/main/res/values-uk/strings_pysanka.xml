@@ -397,4 +397,14 @@
     <string name="pysanka__ai__panel_actions">Дії на панелі ШІ</string>
     <string name="pysanka__ai__panel_actions_hint">Позначені видно одразу, решта в «Ще».</string>
     <string name="pysanka__ai__panel_actions_done">Готово</string>
+    <string name="pysanka__dicts__title">Додаткові словники</string>
+    <string name="pysanka__dicts__none">жодного</string>
+    <string name="pysanka__dicts__hint">Слова з позначених тем пропонуються й не виправляються. Великі списки (населені пункти, імена) трохи збільшують памʼять клавіатури.</string>
+    <string name="pysanka__dicts__slang">Сучасні слова й сленг (лайк, сторіс, кринж)</string>
+    <string name="pysanka__dicts__military">Військове й воєнний побут (ЗСУ, дрон, укриття)</string>
+    <string name="pysanka__dicts__state">Державне й цифрове (Дія, ЦНАП, ФОП)</string>
+    <string name="pysanka__dicts__brands">Бренди й сервіси (Монобанк, Укрпошта, Телеграм)</string>
+    <string name="pysanka__dicts__medical">Медицина й ліки (МРТ, терапевт, парацетамол)</string>
+    <string name="pysanka__dicts__places">Населені пункти України</string>
+    <string name="pysanka__dicts__names">Імена</string>
 </resources>

@@ -196,6 +196,45 @@ private fun <T : Any> PrefChoice(
     ChoiceRow(title, entries.filter { it.key !in except }.map { it.key to it.label }, value, enabled) { scope.launch { pref.set(it) } }
 }
 
+/** The extra word lists: a list of themes with ticks. */
+@Composable
+private fun ExtraDictionariesRow() {
+    val prefs by FlorisPreferenceStore
+    val scope = rememberCoroutineScope()
+    val saved by prefs.correction.pysankaExtraDicts.observeAsState()
+    val chosen = ua.pysanka.typing.ExtraDictionaries.chosen(saved)
+    var open by remember { mutableStateOf(false) }
+    val themes = ua.pysanka.typing.ExtraDictionaries.Theme.entries
+    val names = themes.filter { it.id in chosen }.map { stringRes(it.label) }
+    ActionRow(stringRes(R.string.pysanka__dicts__title), names.joinToString(", ").ifEmpty { stringRes(R.string.pysanka__dicts__none) }) { open = true }
+    if (open) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { open = false },
+            title = { Text(stringRes(R.string.pysanka__dicts__title)) },
+            text = {
+                Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                    Text(stringRes(R.string.pysanka__dicts__hint), style = MaterialTheme.typography.bodyMedium)
+                    for (t in themes) {
+                        val on = t.id in chosen
+                        Row(
+                            Modifier.fillMaxWidth().toggleable(on, role = androidx.compose.ui.semantics.Role.Checkbox) { v ->
+                                val next = if (v) chosen + t.id else chosen - t.id
+                                scope.launch { prefs.correction.pysankaExtraDicts.set(ua.pysanka.typing.ExtraDictionaries.save(next)) }
+                            }.padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            androidx.compose.material3.Checkbox(checked = on, onCheckedChange = null)
+                            Spacer(Modifier.width(10.dp))
+                            Text(stringRes(t.label))
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { open = false }) { Text(stringRes(R.string.pysanka__ai__panel_actions_done)) } },
+        )
+    }
+}
+
 /** Which AI actions the panel shows before "More": a list of all of them with ticks. */
 @Composable
 private fun PanelActionsRow() {
@@ -256,6 +295,7 @@ private fun TypingSettings() {
     LinkRow(stringRes(R.string.pysanka__shortcuts__title), stringRes(R.string.pysanka__shortcuts__summary)) {
         navController.navigate(Routes.Settings.TextShortcuts)
     }
+    ExtraDictionariesRow()
     BlockDivider()
     PrefToggle(prefs.correction.autoCapitalization, stringRes(R.string.pysanka__typing__auto_caps))
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))
