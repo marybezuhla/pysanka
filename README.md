@@ -18,11 +18,20 @@
 
 Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Модель ШІ ви додаєте самі; без неї клавіатура працює повністю.
 
+## Як встановити
+
+1. Завантажте файл `pysanka-<версія>.apk` з [Releases](../../releases) на телефоні й відкрийте його. Android попросить дозволити встановлення з цього джерела (браузера чи файлового менеджера): дозвольте.
+2. Google Play Protect може попередити про невідомого розробника: це звичайне попередження для застосунків не з Play Market. Справжність можна перевірити відбитком сертифіката нижче (наприклад, через AppVerifier).
+3. Відкрийте Писанку й пройдіть два кроки: увімкнути клавіатуру й обрати її.
+4. Для оновлень зручно Obtainium: «Додати застосунок» → `github.com/Marybezu/pysanka`.
+
+На інший телефон переноситься лише буфер (копією під паролем). Вивчені слова, заміни тексту, зразки стилю й налаштування лишаються на цьому телефоні. Що й де зберігається: [PRIVACY.md](PRIVACY.md).
+
 ## Вимоги
 
 - Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈100 МБ.
-- Диктування: процесор ARMv8.2 (майже всі телефони з 2018 року); на старішому воно просто недоступне.
-- Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі.
+- Диктування: процесор ARMv8.2 (більшість телефонів з 2018 року; у частини дешевих моделей до 2022 року його немає, тоді диктування просто недоступне).
+- Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі (під час встановлення ненадовго ≈5,5 ГБ, поки завантажений файл ще не видалено).
 
 ## Прозорість
 
@@ -31,7 +40,7 @@
 - **Підпис:** відбиток сертифіката SHA-256 `ea082ca6d8620c201948d08a9572c0b74a75101eb71b2752ceddcb4807d038ce`.
 - **Як створено:** код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням авторки.
 
-Kotlin · Jetpack Compose · Rust · C++ (whisper.cpp). Ліцензія GPL-3.0; код із FlorisBoard лишається під Apache 2.0. Що під якою ліцензією: [NOTICE.md](NOTICE.md).
+Kotlin · Jetpack Compose · C++ (whisper.cpp). Ліцензія GPL-3.0; код із FlorisBoard лишається під Apache 2.0. Що під якою ліцензією: [NOTICE.md](NOTICE.md).
 
 ---
 
@@ -53,11 +62,20 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 
 Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI model yourself; without it the keyboard works fully.
 
+## Installing
+
+1. Download `pysanka-<version>.apk` from [Releases](../../releases) on the phone and open it. Android asks to allow installing from that source (the browser or file manager): allow it.
+2. Google Play Protect may warn about an unknown developer: the usual warning for apps not from Google Play. You can check it is genuine by the certificate fingerprint below (with AppVerifier, for example).
+3. Open Pysanka and follow the two steps: turn the keyboard on and choose it.
+4. For updates, Obtainium is handy: "Add app" → `github.com/Marybezu/pysanka`.
+
+Only the clipboard moves to another phone (as a password-protected copy). Learned words, text shortcuts, style samples and settings stay on this phone. What is kept where: [PRIVACY.md](PRIVACY.md).
+
 ## Requirements
 
 - Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈100 MB.
-- Dictation: an ARMv8.2 processor (nearly every phone since 2018); on older ones it is simply unavailable.
-- On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model.
+- Dictation: an ARMv8.2 processor (most phones since 2018; some budget models up to 2022 lack it, and then dictation is simply unavailable).
+- On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model (≈5.5 GB for a moment while installing, until the downloaded file is deleted).
 
 ## Transparency
 

@@ -28,7 +28,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           V="$(tr -d '[:space:]' < version.txt)"
-          echo "$V" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "::error::version.txt must be major.minor.patch, got '$V'"; exit 1; }
+          # minor and patch below 100, so versionCode (major·10000 + minor·100 + patch) never collides
+          echo "$V" | grep -Eq '^[0-9]+\.[0-9]{1,2}\.[0-9]{1,2}$' || { echo "::error::version.txt must be major.minor.patch (minor, patch < 100), got '$V'"; exit 1; }
           # A push to main becomes a release: stop here, before any approval, if this version is already out.
           if [ "${{ github.event_name }}" = push ] && [ "${{ github.ref }}" = refs/heads/main ] \
              && gh api "repos/${{ github.repository }}/releases/tags/v$V" >/dev/null 2>&1; then
@@ -38,8 +39,10 @@ jobs:
       - name: Check strings (unescaped apostrophes)
         run: bash .github/check-strings.sh
 
-      - name: Check the built-in Whisper model (exact pinned file)
-        run: cd app/src/main/assets/voice && sha256sum -c SHA256SUMS
+      - name: Check the built-in models (exact pinned files)
+        run: |
+          (cd app/src/main/assets/voice && sha256sum -c SHA256SUMS)
+          (cd app/src/main/assets/ocr && sha256sum -c SHA256SUMS)
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
@@ -51,13 +54,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
 
-      # The keyboard's native part is written in Rust; the version is pinned to the one upstream uses.
-      - name: Set up Rust and Ninja
-        run: |
-          RUST="$(grep -E '^rustToolchain' gradle/tools.versions.toml | cut -d'"' -f2)"
-          rustup toolchain install "$RUST" --profile minimal --target aarch64-linux-android
-          rustup default "$RUST"
-          sudo apt-get install -y -qq ninja-build
+      # whisper.cpp is built with CMake and Ninja
+      - name: Set up Ninja
+        run: sudo apt-get install -y -qq ninja-build
 
       - name: Test and build (unsigned)
         shell: bash
@@ -96,7 +95,8 @@ jobs:
         if: always()
         shell: bash
         run: |
-          tar -C log -czf - . | base64 -w 4000 | sed 's/^/PYSANKA-LOG /' || true
+          # Without the dependency list (large; the deps workflow has it), and at most 6 MB
+          tar -C log --exclude=./verification-metadata.xml -czf - . | head -c 6000000 | base64 -w 4000 | sed 's/^/PYSANKA-LOG /' || true
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

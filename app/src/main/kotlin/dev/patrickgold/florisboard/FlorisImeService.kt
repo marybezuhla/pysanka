@@ -353,12 +353,21 @@ class FlorisImeService : LifecycleInputMethodService() {
         if (info == null) return
         val editorInfo = FlorisEditorInfo.wrap(info)
         activeState.batchEdit {
-            if (activeState.imeUiMode != ImeUiMode.CLIPBOARD || prefs.clipboard.historyHideOnNextTextField.get()) {
+            // Pysanka: the same field restarted (a rotation, the app resetting its input): the AI
+            // panel and dictation stay, with their work, unless the field became a private one
+            val keepPanel = restarting &&
+                (activeState.imeUiMode == ImeUiMode.PYSANKA_AI || activeState.imeUiMode == ImeUiMode.PYSANKA_VOICE)
+            if (!keepPanel && (activeState.imeUiMode != ImeUiMode.CLIPBOARD || prefs.clipboard.historyHideOnNextTextField.get())) {
                 activeState.imeUiMode = ImeUiMode.TEXT
             }
             activeState.isSelectionMode = editorInfo.initialSelection.isSelectionMode
             editorInstance.handleStartInputView(editorInfo, isRestart = restarting)
+            if (keepPanel && (ua.pysanka.privacy.FieldPrivacy.isPrivate || ua.pysanka.privacy.FieldPrivacy.isPassword)) {
+                activeState.imeUiMode = ImeUiMode.TEXT
+            }
         }
+        // Pysanka: the encrypted history could not open earlier (the keystore said no once): try again
+        this.clipboardManager().value.reopenIfClosed(this)
     }
 
     override fun onEvaluateInputViewShown(): Boolean {

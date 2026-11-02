@@ -1,5 +1,7 @@
 package ua.pysanka.clipboard
 
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -110,6 +112,8 @@ fun ClipboardBackupScreen() = FlorisScreen {
             Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(stringRes(R.string.pysanka__clipboard_copy__export), style = MaterialTheme.typography.titleMedium)
                 Text(stringRes(R.string.pysanka__clipboard_copy__export_hint), style = MaterialTheme.typography.bodyMedium)
+                // What does not move to another phone, said plainly
+                Text(stringRes(R.string.pysanka__clipboard_copy__only_clipboard), style = MaterialTheme.typography.bodyMedium)
                 CheckRow(stringRes(R.string.pysanka__clipboard_copy__text), text) { text = it }
                 CheckRow(stringRes(R.string.pysanka__clipboard_copy__images), images) { images = it }
                 CheckRow(stringRes(R.string.pysanka__clipboard_copy__pinned_only), pinnedOnly) { pinnedOnly = it }
@@ -190,9 +194,16 @@ fun ClipboardBackupScreen() = FlorisScreen {
                     ClipboardBackup.Status.NotACopy -> stringRes(R.string.pysanka__clipboard_copy__not_a_copy)
                     ClipboardBackup.Status.HistoryOff -> stringRes(R.string.pysanka__clipboard_copy__history_off)
                     ClipboardBackup.Status.Failed -> stringRes(R.string.pysanka__clipboard_copy__failed)
+                    ClipboardBackup.Status.TooLarge -> stringRes(R.string.pysanka__clipboard_copy__too_large)
                     else -> if (notACopy) stringRes(R.string.pysanka__clipboard_copy__not_a_copy) else null
                 }
-                message?.let { Text(it, style = MaterialTheme.typography.bodyLarge) }
+                // Read out when it appears (a screen reader would not notice otherwise)
+                message?.let {
+                    Text(
+                        it, style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+                    )
+                }
             }
         }
     }

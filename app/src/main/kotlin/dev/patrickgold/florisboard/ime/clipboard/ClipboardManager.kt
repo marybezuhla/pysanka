@@ -158,16 +158,28 @@ class ClipboardManager(
         }
     }
 
+    /** Pysanka: one opening at a time (start-up, the unlock, a keyboard opening), never two databases. */
+    private val openLock = kotlinx.coroutines.sync.Mutex()
+
+    /** Pysanka: opens the history if it is still closed (called when the keyboard opens in a field). */
+    fun reopenIfClosed(context: Context) {
+        if (clipHistoryDb == null) initializeForContext(context)
+    }
+
     fun initializeForContext(context: Context) {
         ioScope.launch {
-            if (clipHistoryDb == null) {
+            val opened = openLock.withLock {
+                if (clipHistoryDb != null) return@withLock false
                 // Pysanka: the history is encrypted; while the phone is locked the vault stays shut,
                 // so try again as soon as it is unlocked
                 if (!ua.pysanka.clipboard.SecureClipboard.ensureOpen(context)) {
                     retryWhenUnlocked(context.applicationContext)
-                    return@launch
+                    return@withLock false
                 }
                 clipHistoryDb = ClipboardHistoryDatabase.new(context.applicationContext)
+                true
+            }
+            if (opened) {
                 // Pysanka: the owner's tags, kept up to date for the keyboard's tag slider
                 launch {
                     clipHistoryDb?.clipboardTagDao()?.getAllAsFlow()?.collect { tags ->
@@ -325,7 +337,12 @@ class ClipboardManager(
                     // other app copying such an address does not get a second entry pointing to it
                     val ours = systemPrimaryClip.getItemAt(0).uri?.authority ==
                         dev.patrickgold.florisboard.ime.clipboard.provider.ClipboardMediaProvider.AUTHORITY
-                    val keep = !isVideo && !ours && mayKeep(ClipboardItem.isSensitive(systemPrimaryClip), incognito, passwordField)
+                    // Pysanka: a picture is read only from another app's content address: never a file
+                    // path or one of Pysanka's own providers (another app could point it at private files)
+                    val foreign = systemPrimaryClip.getItemAt(0).uri?.let {
+                        dev.patrickgold.florisboard.ime.clipboard.provider.ClipboardMediaProvider.isForeignContent(appContext, it)
+                    } ?: true
+                    val keep = !isVideo && !ours && foreign && mayKeep(ClipboardItem.isSensitive(systemPrimaryClip), incognito, passwordField)
                     val item = ClipboardItem.fromClipData(appContext, systemPrimaryClip, cloneUri = keep).let {
                         // Kept although copied in a password field ("Don't keep passwords" off): mark it
                         // sensitive, so it is masked and the timed clean-up of sensitive items applies.
@@ -406,6 +423,8 @@ class ClipboardManager(
      * Adds a new item to the clipboard history (if enabled).
      */
     private fun insertOrMoveBeginning(newItem: ClipboardItem) {
+        // Pysanka: a text too long for one row of the database would stop the whole history loading
+        if (newItem.type == ItemType.TEXT && (newItem.text?.length ?: 0) > MAX_IMPORT_TEXT) return
         if (prefs.clipboard.historyEnabled.get()) {
             val historyElement = currentHistory.all.firstOrNull { item ->
                 item.type == ItemType.TEXT && item.text == newItem.text && item.isSensitive == newItem.isSensitive
@@ -601,10 +620,11 @@ class ClipboardManager(
      * history. The system clipboard is not changed. Returns the new item's id, or null if it was
      * not added. Call off the main thread.
      */
-    fun addImage(context: Context, uri: android.net.Uri): Long? {
+    fun addImage(context: Context, uri: android.net.Uri, fromPrivateField: Boolean): Long? {
         val dao = clipHistoryDao ?: return null
-        // Like any copy: never in incognito or a field that asks for no learning
-        if (!mayKeep(isSensitive = false, incognito = fieldIncognito, passwordField = false)) return null
+        // Like any copy: never from incognito, a password field or one that asks for no learning (the
+        // screen remembers where it was opened; the keyboard has left the field by now)
+        if (fromPrivateField || !mayKeep(isSensitive = false, incognito = fieldIncognito, passwordField = false)) return null
         val mime = context.contentResolver.getType(uri)?.takeIf { it.startsWith("image/") } ?: "image/jpeg"
         val stored = context.contentResolver.openInputStream(uri)?.use {
             dev.patrickgold.florisboard.ime.clipboard.provider.ClipboardFileStorage.storeStream(appContext, it)
@@ -659,7 +679,8 @@ class ClipboardManager(
     fun deleteClip(item: ClipboardItem, onlyIfUnpinned: Boolean) {
         ioScope.launch {
             if (onlyIfUnpinned) {
-                clipHistoryDao?.deleteIfUnpinned(item.id)
+                // Pysanka: a pinned item stays, and so does its picture
+                if ((clipHistoryDao?.deleteIfUnpinned(item.id) ?: 0) == 0) return@launch
             } else {
                 clipHistoryDao?.delete(item.id)
             }

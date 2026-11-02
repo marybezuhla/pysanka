@@ -16,6 +16,10 @@
 
 package dev.patrickgold.florisboard.ime.clipboard
 
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.outlined.Label
 import androidx.compose.material.icons.filled.Settings
@@ -229,6 +233,8 @@ fun ClipboardInputLayout(
             ) {
                 SnyggIcon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    // Pysanka: every button here is named for screen readers
+                    contentDescription = stringRes(R.string.pysanka__clip_header__back),
                 )
             }
             SnyggText(
@@ -236,10 +242,16 @@ fun ClipboardInputLayout(
                 modifier = Modifier.weight(1f),
                 text = stringRes(R.string.clipboard__header_title),
             )
+            val historyLabel = stringRes(R.string.pysanka__clip_header__history)
+            val historyState = stringRes(if (historyEnabled) R.string.pysanka__clip_header__on else R.string.pysanka__clip_header__off)
             SnyggIconButton(
                 elementName = FlorisImeUi.ClipboardHeaderButton.elementName,
                 onClick = { scope.launch { prefs.clipboard.historyEnabled.set(!historyEnabled) } },
-                modifier = sizeModifier.autoMirrorForRtl(),
+                modifier = sizeModifier.autoMirrorForRtl().semantics {
+                    role = androidx.compose.ui.semantics.Role.Switch
+                    contentDescription = historyLabel
+                    stateDescription = historyState
+                },
                 enabled = !deviceLocked && !isPopupSurfaceActive(),
             ) {
                 SnyggIcon(
@@ -285,6 +297,7 @@ fun ClipboardInputLayout(
             ) {
                 SnyggIcon(
                     imageVector = Icons.Default.DeleteSweep,
+                    contentDescription = stringRes(R.string.pysanka__clip_header__clear),
                 )
             }
             SnyggIconButton(
@@ -299,6 +312,7 @@ fun ClipboardInputLayout(
                     } else {
                         Icons.Default.FilterListOff
                     },
+                    contentDescription = stringRes(R.string.pysanka__clip_header__filter),
                 )
             }
             KeyboardLikeButton(
@@ -307,7 +321,7 @@ fun ClipboardInputLayout(
                 keyData = TextKeyData.DELETE,
                 elementName = FlorisImeUi.ClipboardHeaderButton.elementName,
             ) {
-                SnyggIcon(imageVector = Icons.AutoMirrored.Outlined.Backspace)
+                SnyggIcon(imageVector = Icons.AutoMirrored.Outlined.Backspace, contentDescription = stringRes(R.string.pysanka__voice__backspace))
             }
         }
     }
@@ -330,6 +344,9 @@ fun ClipboardInputLayout(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(),
                 enabled = popupItem == null,
+                // Pysanka: what a tap and a long press do, read out
+                onClickLabel = stringRes(R.string.pysanka__clip__paste),
+                onLongClickLabel = stringRes(R.string.pysanka__clip__actions),
                 onLongClick = {
                     popupItem = item
                 },
@@ -370,7 +387,8 @@ fun ClipboardInputLayout(
                 } else {
                     SnyggText(
                         modifier = Modifier.fillMaxWidth(),
-                        text = bitmap.exceptionOrNull()?.message ?: "Unknown error",
+                        // Pysanka: never an error's own text (it names private file paths)
+                        text = stringRes(R.string.pysanka__clip__image_unavailable),
                     )
                 }
             } else {

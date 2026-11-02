@@ -25,13 +25,7 @@ object PendingInsert {
     fun opened(info: dev.patrickgold.florisboard.ime.editor.FlorisEditorInfo) {
         target = targetOf(info)
         text = null
-        fromPrivateField = ua.pysanka.privacy.FieldPrivacy.isPrivate || ua.pysanka.privacy.FieldPrivacy.isPassword
     }
-
-    /** Opened from a password, incognito or no-learning field: its text never goes to the AI. */
-    @Volatile
-    var fromPrivateField = false
-        private set
 
     /** Whether the screen was opened from a field (so there is somewhere to insert). */
     @Synchronized
@@ -56,7 +50,12 @@ object PendingInsert {
     }
 }
 
-/** Pysanka: opens "text from a photo / the camera" from the keyboard (the keyboard hides meanwhile). */
+/**
+ * Pysanka: opens "text from a photo / the camera" from the keyboard (the keyboard hides meanwhile).
+ * Whether the field is private goes with the screen itself, so it holds even if Android restarts
+ * the app while the camera is open.
+ */
 fun openTextFromImage(source: String) {
-    dev.patrickgold.florisboard.FlorisImeService.pysankaLaunch { TextFromImageActivity.intent(it, source) }
+    val fromPrivate = ua.pysanka.privacy.FieldPrivacy.isPrivate || ua.pysanka.privacy.FieldPrivacy.isPassword
+    dev.patrickgold.florisboard.FlorisImeService.pysankaLaunch { TextFromImageActivity.intent(it, source, fromPrivate) }
 }

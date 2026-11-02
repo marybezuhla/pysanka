@@ -452,7 +452,17 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
      */
     fun pysankaUndoAutoCorrect(original: String, corrected: String): Boolean {
         val content = activeContent
-        if (content.selection.isSelectionMode || !content.textBeforeSelection.endsWith("$corrected ")) return false
+        if (content.selection.isSelectionMode) return false
+        if (!content.textBeforeSelection.endsWith("$corrected ")) {
+            // A replacement longer than the text the keyboard keeps (a long shortcut): read the field
+            val want = "$corrected "
+            if (want.length < content.textBeforeSelection.length) return false
+            val ic = dev.patrickgold.florisboard.FlorisImeService.currentInputConnection() ?: return false
+            if (ic.getTextBeforeCursor(want.length, 0)?.toString() != want) return false
+            autoSpace.setInactive()
+            phantomSpace.setInactive()
+            return ic.deleteSurroundingText(want.length, 0) && commitText(original)
+        }
         autoSpace.setInactive()
         phantomSpace.setInactive()
         // The deletion counts characters as seen (an emoji or a flag is one), not code units:

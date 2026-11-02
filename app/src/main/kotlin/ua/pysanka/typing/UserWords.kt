@@ -168,6 +168,9 @@ object UserWords {
                 writeWhole(file(context, language)) { out ->
                     SealedFile.writer(ClipboardVault.wordsKey(), label(language), out).use { it.write(bytes) }
                 }
+            }.onFailure {
+                // Not written: tried again with the next save
+                dirty.add(language)
             }
             bytes.fill(0)
         }

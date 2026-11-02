@@ -148,15 +148,6 @@ android {
             isShrinkResources = true
         }
 
-        create("benchmark") {
-            initWith(getByName("release"))
-
-            applicationIdSuffix = ".bench"
-            versionNameSuffix = "-bench+${getGitCommitHash(short = true).get()}"
-
-            signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-        }
     }
 
     aboutLibraries {
@@ -166,7 +157,7 @@ android {
     }
 
     lint {
-        baseline = file("lint.xml")
+        lintConfig = file("lint.xml")
     }
 
     // Pysanka: the dictation model is read straight from the APK (mapped, not copied), so it is
@@ -250,7 +241,6 @@ dependencies {
     implementation(projects.lib.color)
     implementation(projects.lib.compose)
     implementation(projects.lib.kotlin)
-    implementation(projects.lib.native)
     // Pysanka: whisper.cpp for dictation
     implementation(projects.lib.whisper)
     implementation(projects.lib.snygg)
@@ -265,12 +255,10 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.ext)
     testRuntimeOnly(libs.junit.vintage.engine)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.espresso.core)
 }
 
 fun getGitCommitHash(short: Boolean = false): Provider<String> {
-    if (!File(".git").exists()) {
+    if (!rootProject.file(".git").exists()) {
         return providers.provider { "null" }
     }
 

@@ -1,5 +1,6 @@
 package ua.pysanka.clipboard
 
+import androidx.compose.material.icons.filled.MoreVert
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -88,17 +89,31 @@ fun ClipboardTagsScreen() = FlorisScreen {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                     Box(Modifier.size(16.dp).background(TagColors.color(tag.color), CircleShape))
                     Text(tag.name, modifier = Modifier.padding(start = 12.dp).weight(1f), style = MaterialTheme.typography.bodyLarge)
+                    // Each button names its tag when read out; edit and delete are in a menu, so the
+                    // name keeps its room with large text
                     IconButton(enabled = i > 0, onClick = { clipboardManager.moveTag(tag.id, up = true) }) {
-                        Icon(Icons.Default.KeyboardArrowUp, stringRes(R.string.pysanka__tag__move_up))
+                        Icon(Icons.Default.KeyboardArrowUp, stringRes(R.string.pysanka__tag__move_up_named, "name" to tag.name))
                     }
                     IconButton(enabled = i < tags.lastIndex, onClick = { clipboardManager.moveTag(tag.id, up = false) }) {
-                        Icon(Icons.Default.KeyboardArrowDown, stringRes(R.string.pysanka__tag__move_down))
+                        Icon(Icons.Default.KeyboardArrowDown, stringRes(R.string.pysanka__tag__move_down_named, "name" to tag.name))
                     }
-                    IconButton(onClick = { editingId = tag.id; name = tag.name; color = tag.color }) {
-                        Icon(Icons.Default.Edit, stringRes(R.string.pysanka__tag__edit))
-                    }
-                    IconButton(onClick = { confirmDelete = tag.id }) {
-                        Icon(Icons.Default.Delete, stringRes(R.string.pysanka__tag__delete))
+                    Box {
+                        var menu by remember { mutableStateOf(false) }
+                        IconButton(onClick = { menu = true }) {
+                            Icon(Icons.Default.MoreVert, stringRes(R.string.pysanka__tag__actions_named, "name" to tag.name))
+                        }
+                        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                            androidx.compose.material3.DropdownMenuItem(
+                                text = { Text(stringRes(R.string.pysanka__tag__edit)) },
+                                leadingIcon = { Icon(Icons.Default.Edit, null) },
+                                onClick = { menu = false; editingId = tag.id; name = tag.name; color = tag.color },
+                            )
+                            androidx.compose.material3.DropdownMenuItem(
+                                text = { Text(stringRes(R.string.pysanka__tag__delete)) },
+                                leadingIcon = { Icon(Icons.Default.Delete, null) },
+                                onClick = { menu = false; confirmDelete = tag.id },
+                            )
+                        }
                     }
                 }
                 if (confirmDelete == tag.id) {
@@ -130,12 +145,12 @@ fun ClipboardTagsScreen() = FlorisScreen {
                         val label = stringRes(TagColors.names[i])
                         Box(
                             Modifier
-                                .size(36.dp)
+                                .size(48.dp)
                                 .background(c, CircleShape)
                                 .then(
                                     if (color == i) Modifier.border(3.dp, MaterialTheme.colorScheme.onSurface, CircleShape) else Modifier,
                                 )
-                                .clickable { color = i }
+                                .clickable(role = androidx.compose.ui.semantics.Role.RadioButton) { color = i }
                                 .semantics { contentDescription = label; selected = color == i },
                         )
                     }

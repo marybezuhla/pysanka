@@ -83,13 +83,15 @@ import kotlin.math.min
 class TextFromImageActivity : ComponentActivity() {
     companion object {
         private const val EXTRA_SOURCE = "source"
+        private const val EXTRA_PRIVATE = "private"
         const val SOURCE_PHOTO = "photo"
         const val SOURCE_CAMERA = "camera"
         /** A photo picked into the clipboard history (with its text kept for finding it later). */
         const val SOURCE_HISTORY = "history"
 
-        fun intent(context: Context, source: String) = Intent(context, TextFromImageActivity::class.java)
+        fun intent(context: Context, source: String, fromPrivate: Boolean) = Intent(context, TextFromImageActivity::class.java)
             .putExtra(EXTRA_SOURCE, source)
+            .putExtra(EXTRA_PRIVATE, fromPrivate)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
     }
 
@@ -102,6 +104,9 @@ class TextFromImageActivity : ComponentActivity() {
         // Never a picture of this screen in the recent apps (it is left out of them anyway)
         if (android.os.Build.VERSION.SDK_INT >= 33) setRecentsScreenshotEnabled(false)
         val source = intent.getStringExtra(EXTRA_SOURCE) ?: SOURCE_PHOTO
+        // Opened from a password, incognito or no-learning field: nothing goes to the AI or the
+        // history. Missing (should not happen): taken as private
+        val fromPrivate = intent.getBooleanExtra(EXTRA_PRIVATE, true)
         setContent {
             // The app's texts (stringRes) are read through this; without it the screen fails at once
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
@@ -109,7 +114,7 @@ class TextFromImageActivity : ComponentActivity() {
             org.florisboard.lib.compose.ProvideLocalizedResources(ua.pysanka.settings.AppLanguage.context(this, language), appName = dev.patrickgold.florisboard.R.string.app_name) {
                 FlorisAppTheme(theme = AppTheme.AUTO) {
                     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                        TextFromImageScreen(source) { finish() }
+                        TextFromImageScreen(source, fromPrivate) { finish() }
                     }
                 }
             }
@@ -135,7 +140,7 @@ private sealed interface Stage {
 }
 
 @Composable
-private fun TextFromImageScreen(source: String, close: () -> Unit) {
+private fun TextFromImageScreen(source: String, fromPrivate: Boolean, close: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     // From the camera: nothing to show while the camera app opens (not "closed without a photo")
@@ -166,7 +171,7 @@ private fun TextFromImageScreen(source: String, close: () -> Unit) {
         stage = Stage.Working
         scope.launch {
             val clipboardManager by context.clipboardManager()
-            val id = withContext(Dispatchers.IO) { runCatching { clipboardManager.addImage(context, uri) }.getOrNull() }
+            val id = withContext(Dispatchers.IO) { runCatching { clipboardManager.addImage(context, uri, fromPrivate) }.getOrNull() }
             if (id == null) {
                 stage = Stage.Failed("not added")
                 return@launch
@@ -283,12 +288,12 @@ private fun TextFromImageScreen(source: String, close: () -> Unit) {
             (s as? Stage.Failed)?.reason?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
             OutlinedButton(onClick = close) { Text(stringRes(R.string.pysanka__ocr__close)) }
         }
-        is Stage.Result -> ResultView(s.bitmap, s.lines, close)
+        is Stage.Result -> ResultView(s.bitmap, s.lines, fromPrivate, close)
     }
 }
 
 @Composable
-private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) {
+private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, fromPrivate: Boolean, close: () -> Unit) {
     val context = LocalContext.current
     val words = remember(lines) { lines.flatMapIndexed { li, l -> l.words.map { li to it } } }
     // Everything is selected at first: the most common wish is "all of it"
@@ -353,7 +358,7 @@ private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) 
             TextButton(onClick = { selected = emptySet() }) { Text(stringRes(R.string.pysanka__ocr__none)) }
             // Pysanka: the AI fixes recognition errors, if the model is installed
             // Not for a password, incognito or no-learning field: nothing from it goes to the AI
-            val aiReady = remember { ua.pysanka.models.ModelStore(context).modelFile() != null && !PendingInsert.fromPrivateField }
+            val aiReady = remember { ua.pysanka.models.ModelStore(context).modelFile() != null && !fromPrivate }
             if (aiReady) {
                 TextButton(enabled = selected.isNotEmpty(), onClick = {
                     ua.pysanka.ai.AiBridge.openFromPhoto(context, selectedText())
@@ -366,16 +371,20 @@ private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) 
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 6.dp, vertical = 8.dp)
-            Button(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
-                PendingInsert.set(selectedText())
-                close()
-            }) { Text(stringRes(R.string.pysanka__ocr__insert), maxLines = 1, softWrap = false) }
+            // Nowhere to insert (Android restarted the app meanwhile): copy instead
+            val canInsert = remember { PendingInsert.hasTarget() }
+            if (canInsert) {
+                Button(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
+                    PendingInsert.set(selectedText())
+                    close()
+                }) { Text(stringRes(R.string.pysanka__ocr__insert), maxLines = 1, softWrap = false) }
+            }
             FilledTonalButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
-                ua.pysanka.privacy.Clip.copy(context, selectedText(), sensitive = PendingInsert.fromPrivateField)
+                ua.pysanka.privacy.Clip.copy(context, selectedText(), sensitive = fromPrivate)
                 close()
             }) { Text(stringRes(R.string.pysanka__ocr__copy), maxLines = 1, softWrap = false) }
             // Not for a password or private field (the history would keep what the field must not)
-            if (!PendingInsert.fromPrivateField) {
+            if (!fromPrivate) {
                 OutlinedButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
                     val clipboardManager by context.clipboardManager()
                     clipboardManager.addNewPlaintext(selectedText())

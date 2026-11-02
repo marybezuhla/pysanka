@@ -9,7 +9,7 @@ Anyone who shares a changed Pysanka must share its source code under the same li
 |---|---|
 | Pysanka's own code: everything in `ua.pysanka` (`app/src/main/kotlin/ua/pysanka`, its tests and resources such as `strings_pysanka.xml`), the build and CI scripts written for Pysanka, the documents | GPL-3.0 |
 | Pysanka's changes inside FlorisBoard files (marked with `Pysanka:` comments) | GPL-3.0 |
-| Code that comes from FlorisBoard (files under `dev.patrickgold.florisboard`, `lib/`, `libnative/` and others with a FlorisBoard copyright header) | Apache 2.0 (`LICENSE-APACHE`), as before; their headers stay |
+| Code that comes from FlorisBoard (files under `dev.patrickgold.florisboard`, `lib/` and others with a FlorisBoard copyright header) | Apache 2.0 (`LICENSE-APACHE`), as before; their headers stay |
 
 Apache 2.0 code may be part of a GPL-3.0 work; the parts from FlorisBoard keep their own licence and
 notices, and can still be taken from here under Apache 2.0 (or from FlorisBoard itself). Releases up

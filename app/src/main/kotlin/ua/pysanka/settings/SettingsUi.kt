@@ -1,5 +1,6 @@
 package ua.pysanka.settings
 
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -201,7 +202,13 @@ fun SliderRow(title: String, value: Int, range: IntRange, step: Int, label: @Com
             Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), color = textColor(enabled))
             Text(label(v.roundToInt()), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        val valueText = label(v.roundToInt())
         Slider(
+            // Read out with its name and value, not as a bare slider
+            modifier = Modifier.semantics {
+                contentDescription = title
+                stateDescription = valueText
+            },
             value = v,
             onValueChange = { v = it },
             onValueChangeFinished = { onChange(v.roundToInt()) },
@@ -210,6 +217,28 @@ fun SliderRow(title: String, value: Int, range: IntRange, step: Int, label: @Com
             enabled = enabled,
         )
     }
+}
+
+/**
+ * Asks before something is deleted or replaced for good ([text]: what exactly). [confirm]: the
+ * button's word ("Видалити" by default).
+ */
+@Composable
+fun ConfirmDialog(text: String, confirm: String? = null, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        text = { Text(text, style = MaterialTheme.typography.bodyLarge) },
+        confirmButton = {
+            androidx.compose.material3.TextButton(onClick = { onDismiss(); onConfirm() }) {
+                Text(confirm ?: org.florisboard.lib.compose.stringRes(dev.patrickgold.florisboard.R.string.pysanka__confirm__delete))
+            }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss) {
+                Text(org.florisboard.lib.compose.stringRes(dev.patrickgold.florisboard.R.string.pysanka__confirm__cancel))
+            }
+        },
+    )
 }
 
 /** A line of explanation inside a block. */

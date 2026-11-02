@@ -83,12 +83,20 @@ private fun StyleSection() {
     Text(stringRes(R.string.pysanka__style__title), style = MaterialTheme.typography.titleMedium)
     Text(stringRes(R.string.pysanka__style__about), style = MaterialTheme.typography.bodyMedium)
     val list = samples ?: return
+    var deleting by remember { mutableStateOf(-1) }
+    if (deleting in list.indices) {
+        ua.pysanka.settings.ConfirmDialog(
+            stringRes(R.string.pysanka__style__remove_ask),
+            onConfirm = { val i = deleting; save(list.filterIndexed { j, _ -> j != i }) },
+            onDismiss = { deleting = -1 },
+        )
+    }
     list.forEachIndexed { i, sample ->
         OutlinedCard(Modifier.fillMaxWidth()) {
             Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(sample, style = MaterialTheme.typography.bodySmall, maxLines = 3, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
-                IconButton(onClick = { save(list.filterIndexed { j, _ -> j != i }) }, enabled = !saving) {
-                    Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__style__remove))
+                IconButton(onClick = { deleting = i }, enabled = !saving) {
+                    Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__style__remove_named, "text" to sample.take(30)))
                 }
             }
         }

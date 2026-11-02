@@ -28,7 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Process
-import android.util.Log
 import dev.patrickgold.florisboard.BuildConfig
 import dev.patrickgold.florisboard.FlorisImeService
 import dev.patrickgold.florisboard.R
@@ -376,7 +375,9 @@ abstract class CrashUtility private constructor() {
                 "Detected application crash, executing custom crash handler."
             }
             val timestamp = System.currentTimeMillis()
-            val stacktrace = Log.getStackTraceString(throwable)
+            // Pysanka: only exception classes and code locations, never their messages (a message can
+            // carry typed or copied text, and this file is not encrypted)
+            val stacktrace = pysankaTrace(throwable)
             val ustFile = ustDir.subFile("$timestamp.$UNHANDLED_STACKTRACE_FILE_EXT")
             writeToFile(ustFile, stacktrace)
             val application = application.get()
@@ -407,5 +408,19 @@ abstract class CrashUtility private constructor() {
             Process.killProcess(Process.myPid())
             exitProcess(10)
         }
+    }
+}
+
+/** Pysanka: a stack trace without exception messages (see [CrashUtility]). */
+internal fun pysankaTrace(throwable: Throwable): String = buildString {
+    var t: Throwable? = throwable
+    var depth = 0
+    val seen = HashSet<Throwable>()
+    while (t != null && depth < 8 && seen.add(t)) {
+        if (depth > 0) append("Caused by: ")
+        appendLine(t.javaClass.name)
+        for (e in t.stackTrace.take(40)) appendLine("    at $e")
+        t = t.cause
+        depth++
     }
 }

@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.florisboard.lib.kotlin.io.deleteContentsRecursively
 import org.florisboard.lib.kotlin.tryOrNull
-import org.florisboard.libnative.dummyAdd
 import java.lang.ref.WeakReference
 
 /**
@@ -62,13 +61,6 @@ class FlorisApplication : Application() {
     companion object {
         /** Pysanka: the app, for code that has no context at hand (the keyboard's own helpers). */
         fun getHack(): FlorisApplication = FlorisApplicationReference.get()!!
-
-        init {
-            try {
-                System.loadLibrary("fl_native")
-            } catch (_: Exception) {
-            }
-        }
     }
 
     private val mainHandler by lazy { Handler(mainLooper) }
@@ -105,7 +97,6 @@ class FlorisApplication : Application() {
             )
             CrashUtility.install(this)
             FlorisEmojiCompat.init(this)
-            flogError { "dummy result: ${dummyAdd(3,4)}" }
 
             if (!UserManagerCompat.isUserUnlocked(this)) {
                 cacheDir?.deleteContentsRecursively()
@@ -127,8 +118,6 @@ class FlorisApplication : Application() {
         runCatching { ua.pysanka.ai.AiEntry.sync(this) }
         // Pysanka: the clipboard's fingerprint lock closes when the screen goes off
         ua.pysanka.clipboard.ClipboardLock.watchScreen(this)
-        // Pysanka: FlorisBoard's own word list (unencrypted, no screen any more; always off) left from earlier
-        runCatching { deleteDatabase(dev.patrickgold.florisboard.ime.dictionary.FlorisUserDictionaryDatabase.DB_FILE_NAME) }
         // Pysanka: a camera shot left by a crash (the camera app may still be writing a fresh one)
         runCatching {
             val now = System.currentTimeMillis()
