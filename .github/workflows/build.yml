@@ -60,7 +60,6 @@ jobs:
           sudo apt-get install -y -qq ninja-build
 
       - name: Test and build (unsigned)
-        env:
         shell: bash
         run: |
           set -o pipefail
