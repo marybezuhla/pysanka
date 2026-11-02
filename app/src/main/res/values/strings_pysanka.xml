@@ -297,9 +297,9 @@
     <string name="pysanka__voice__done">Done</string>
     <string name="pysanka__voice__cancel">Cancel</string>
     <string name="pysanka__voice__recognising">Recognising…</string>
-    <string name="pysanka__voice__nothing">Nothing recognised. Try again closer to the microphone.</string>
-    <string name="pysanka__voice__failed">Could not recognise it. Try again.</string>
-    <string name="pysanka__voice__no_mic_now">The microphone is not available now (another app may be using it).</string>
+    <string name="pysanka__voice__nothing">Didn\'t catch that. Again?</string>
+    <string name="pysanka__voice__failed">Couldn\'t recognise it. Again?</string>
+    <string name="pysanka__voice__no_mic_now">The microphone is busy elsewhere</string>
     <string name="pysanka__voice__not_here">Dictation does not work in password, incognito and "no learning" fields.</string>
     <string name="pysanka__voice__set_up">To dictate, allow the microphone.</string>
     <string name="pysanka__voice__unsupported">This phone\'s processor cannot run dictation.</string>
@@ -393,10 +393,10 @@
     <string name="pysanka__voice__backspace">Delete</string>
     <string name="pysanka__voice__space">Space</string>
     <string name="pysanka__voice__new_line">New line</string>
-    <string name="pysanka__voice__listening_pause">Listening… {time} · a 2-second pause ends it</string>
-    <string name="pysanka__voice__release_hint">Listening… {time} · let go to insert</string>
+    <string name="pysanka__voice__listening_pause">Listening… {time} · pause to insert</string>
+    <string name="pysanka__voice__release_hint">Listening… {time} · let go</string>
     <string name="pysanka__voice__hold_to_speak">Hold the microphone while you speak</string>
-    <string name="pysanka__voice__hold_longer">Keep holding the microphone while you speak</string>
+    <string name="pysanka__voice__hold_longer">Keep holding while you speak</string>
     <string name="pysanka__voice__take_back">Remove</string>
     <string name="pysanka__voice__hold">Hold the microphone while speaking</string>
     <string name="pysanka__voice__hold_summary">The words are recognised when you let go, so you decide exactly what goes in. Off: dictation starts as soon as the panel opens.</string>

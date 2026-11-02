@@ -298,9 +298,9 @@
     <string name="pysanka__voice__done">Готово</string>
     <string name="pysanka__voice__cancel">Скасувати</string>
     <string name="pysanka__voice__recognising">Розпізнаю…</string>
-    <string name="pysanka__voice__nothing">Нічого не розпізнано. Спробуйте ще раз ближче до мікрофона.</string>
-    <string name="pysanka__voice__failed">Не вдалося розпізнати. Спробуйте ще раз.</string>
-    <string name="pysanka__voice__no_mic_now">Мікрофон зараз недоступний (можливо, ним користується інший застосунок).</string>
+    <string name="pysanka__voice__nothing">Нічого не почула. Ще раз?</string>
+    <string name="pysanka__voice__failed">Не вдалося розпізнати. Ще раз?</string>
+    <string name="pysanka__voice__no_mic_now">Мікрофон зайнятий іншим застосунком</string>
     <string name="pysanka__voice__not_here">Диктування не працює в полях пароля, інкогніто й полях «не вчитися».</string>
     <string name="pysanka__voice__set_up">Щоб диктувати, дозвольте мікрофон.</string>
     <string name="pysanka__voice__unsupported">Процесор цього телефона не підтримує диктування.</string>
@@ -394,10 +394,10 @@
     <string name="pysanka__voice__backspace">Стерти</string>
     <string name="pysanka__voice__space">Пробіл</string>
     <string name="pysanka__voice__new_line">Новий рядок</string>
-    <string name="pysanka__voice__listening_pause">Слухаю… {time} · пауза 2 с, і текст зʼявиться</string>
-    <string name="pysanka__voice__release_hint">Слухаю… {time} · відпустіть, щоб вставити</string>
+    <string name="pysanka__voice__listening_pause">Слухаю… {time} · пауза, і вставлю</string>
+    <string name="pysanka__voice__release_hint">Слухаю… {time} · відпустіть</string>
     <string name="pysanka__voice__hold_to_speak">Утримуйте мікрофон, поки говорите</string>
-    <string name="pysanka__voice__hold_longer">Утримуйте мікрофон довше, поки говорите</string>
+    <string name="pysanka__voice__hold_longer">Утримуйте, поки говорите</string>
     <string name="pysanka__voice__take_back">Прибрати</string>
     <string name="pysanka__voice__hold">Утримувати мікрофон, поки говорю</string>
     <string name="pysanka__voice__hold_summary">Слова розпізнаються, щойно відпустите: ви точно знаєте, що потрапить у текст. Вимкнено: диктування починається одразу, як відкривається панель.</string>
