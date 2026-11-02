@@ -1,6 +1,7 @@
 package ua.pysanka.voice
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,26 +9,16 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Messenger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.asCoroutineDispatcher
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ua.pysanka.models.ModelStore
 import ua.pysanka.models.PinnedModel
 import ua.pysanka.whisper.WhisperNative
-import java.util.concurrent.Callable
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 /**
  * Pysanka: dictation's speech recognition (Whisper), in its own process (":voice"): the model never
  * weighs on the keyboard, and it is freed when the keyboard unbinds. The keyboard records and sends
  * the sound here in short pieces; the text goes back in a message. The sound is kept in memory only
- * until it is recognised; nothing is written anywhere.
+ * until it is recognised (then overwritten); nothing is written anywhere.
  *
  * Not exported: only Pysanka itself can bind.
  */
@@ -49,27 +40,25 @@ class VoiceService : Service() {
         const val KEY_TEXT = "text"
         const val KEY_REASON = "reason"
 
-        /** Louder than this somewhere, or it is taken as silence. */
-        private const val SILENCE = 0.02f
-
         /** The longest dictation at once. */
         const val MAX_SECONDS = 120
         private const val MAX_SAMPLES = MAX_SECONDS * WhisperNative.SAMPLE_RATE
+
+        /** Louder than this somewhere, or it is taken as silence. */
+        private const val SILENCE = 0.02f
+
+        private val LANGUAGE = Regex("[a-z]{2,3}|auto")
     }
 
-    /** Every use of the model on one thread, so it is never freed while it works. */
-    private val executor = Executors.newSingleThreadExecutor()
-    private val worker = executor.asCoroutineDispatcher()
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val main = Handler(Looper.getMainLooper())
     private val messenger = Messenger(Handler(Looper.getMainLooper()) { handle(it); true })
 
-    /** Loaded on [executor] once, when dictation first starts. */
-    private var model: Future<WhisperNative.Model?>? = null
     private var token = 0L
     private var language = "auto"
     private val pieces = ArrayList<ShortArray>()
     private var samples = 0
-    private var job: Job? = null
+    /** The recognition running now (to stop it), 0 if none. */
+    private var run = 0L
 
     override fun onBind(intent: Intent): IBinder = messenger.binder
 
@@ -79,22 +68,21 @@ class VoiceService : Service() {
             START -> {
                 cancel()
                 token = data.getLong(KEY_TOKEN)
-                language = data.getString(KEY_LANGUAGE)?.takeIf { it.matches(Regex("[a-z]{2,3}|auto")) } ?: "auto"
+                language = data.getString(KEY_LANGUAGE)?.takeIf { it.matches(LANGUAGE) } ?: "auto"
                 // Loaded while the person speaks
-                if (model == null) {
-                    val file = ModelStore(this, PinnedModel.WHISPER).modelFile()
-                    model = executor.submit(Callable { file?.let(WhisperNative::load) })
-                }
+                VoiceEngine.load(this)
             }
-            AUDIO -> if (data.getLong(KEY_TOKEN) == token && job == null) {
+            AUDIO -> if (data.getLong(KEY_TOKEN) == token && run == 0L) {
                 val piece = data.getShortArray(KEY_SAMPLES) ?: return
                 // Past the limit the keyboard stops by itself; anything more is not kept
                 if (samples + piece.size <= MAX_SAMPLES) {
                     pieces += piece
                     samples += piece.size
+                } else {
+                    piece.fill(0)
                 }
             }
-            FINISH -> msg.replyTo?.let { if (data.getLong(KEY_TOKEN) == token && job == null) finish(it, token) }
+            FINISH -> msg.replyTo?.let { if (data.getLong(KEY_TOKEN) == token && run == 0L) finish(it, token) }
             CANCEL -> if (data.getLong(KEY_TOKEN) == token) cancel()
         }
     }
@@ -112,28 +100,24 @@ class VoiceService : Service() {
         clear()
         // Silence (or nothing at all): Whisper would make up words for it
         if (audio.size < WhisperNative.SAMPLE_RATE / 2 || peak < SILENCE) {
+            audio.fill(0f)
             send(reply, FAIL, token) { putString(KEY_REASON, "silence") }
             return
         }
-        job = scope.launch {
-            try {
-                val m = withContext(worker) { model?.get() }
-                val text = m?.let { withContext(worker) { it.transcribe(audio, language, threads()) } }
-                // A model that could not be loaded is tried again next time
-                if (m == null) model = null
+        val thisRun = WhisperNative.newRun()
+        run = thisRun
+        VoiceEngine.transcribe(audio, language, thisRun) { text, modelMissing ->
+            main.post {
+                if (run != thisRun) return@post
+                run = 0L
                 if (text == null) {
-                    send(reply, FAIL, token) { putString(KEY_REASON, if (m == null) "model" else "failed") }
+                    send(reply, FAIL, token) { putString(KEY_REASON, if (modelMissing) "model" else "failed") }
                 } else {
                     send(reply, TEXT, token) { putString(KEY_TEXT, text) }
                 }
-            } finally {
-                audio.fill(0f)
-                if (this@VoiceService.token == token) job = null
             }
         }
     }
-
-    private fun threads() = Runtime.getRuntime().availableProcessors().coerceIn(1, 4)
 
     private fun clear() {
         for (p in pieces) p.fill(0)
@@ -143,9 +127,8 @@ class VoiceService : Service() {
 
     private fun cancel() {
         clear()
-        if (job != null) WhisperNative.stop()
-        job?.cancel()
-        job = null
+        if (run != 0L) WhisperNative.stop(run)
+        run = 0L
     }
 
     private fun send(to: Messenger, what: Int, token: Long, fill: Bundle.() -> Unit) {
@@ -160,12 +143,46 @@ class VoiceService : Service() {
 
     override fun onDestroy() {
         cancel()
-        scope.cancel()
-        // Freed on the same thread, after anything still running there
-        val m = model
-        model = null
-        executor.execute { runCatching { m?.get()?.close() } }
-        executor.shutdown()
+        VoiceEngine.release()
         super.onDestroy()
+    }
+}
+
+/**
+ * Pysanka: the model in the ":voice" process, one for the whole process and used on one thread
+ * only, so it is never freed while it works and two services (one unbinding, the next binding)
+ * never hold two models.
+ */
+private object VoiceEngine {
+    private val worker = Executors.newSingleThreadExecutor { r -> Thread(r, "pysanka-whisper") }
+
+    // Touched on the worker thread only
+    private var model: WhisperNative.Model? = null
+
+    fun load(context: Context) {
+        val file = ModelStore(context.applicationContext, PinnedModel.WHISPER).modelFile()
+        worker.execute { if (model == null) model = file?.let(WhisperNative::load) }
+    }
+
+    /** [done] (on the worker thread) gets the text, or null and whether there was no model. */
+    fun transcribe(audio: FloatArray, language: String, run: Long, done: (String?, Boolean) -> Unit) {
+        worker.execute {
+            val m = model
+            val threads = Runtime.getRuntime().availableProcessors().coerceIn(1, 4)
+            val text = try {
+                runCatching { m?.transcribe(audio, language, threads, run) }.getOrNull()
+            } finally {
+                audio.fill(0f)
+            }
+            done(text, m == null)
+        }
+    }
+
+    /** Frees the model after whatever runs now (a new [load] loads it again). */
+    fun release() {
+        worker.execute {
+            model?.close()
+            model = null
+        }
     }
 }

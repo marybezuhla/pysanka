@@ -38,5 +38,8 @@ those copies keep that licence.
   unchanged in weights (see `SOURCES.json` and `scripts/ocr_models.py`).
 - LiteRT-LM (Google, Apache 2.0) runs the AI editor's model. The Gemma model is not included; the
   owner downloads it under its own terms, and only the exact published file is accepted.
+- `lib/whisper/src/main/cpp/whisper.cpp` — whisper.cpp v1.9.5 and ggml (The ggml authors, MIT, its
+  `LICENSE` alongside), only the files the phone build needs, unchanged. It runs dictation; the Whisper
+  model (OpenAI, MIT) is not included: the owner downloads it, and only the exact published file is accepted.
 - ONNX Runtime (Microsoft, MIT), Bouncy Castle (MIT-style),
   SQLCipher for Android (BSD-style) are used as dependencies under their own licences.

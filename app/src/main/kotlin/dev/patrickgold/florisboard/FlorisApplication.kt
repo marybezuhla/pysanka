@@ -90,7 +90,7 @@ class FlorisApplication : Application() {
         // Pysanka: the AI editor's own process (":ai", and dictation's ":voice") holds only the model and its screen. It must
         // not open the clipboard database, clear the cache or load settings,
         // which belong to the keyboard's process.
-        if (ua.pysanka.ai.AiProcess.isAiProcess()) {
+        if (ua.pysanka.ai.AiProcess.isModelProcess()) {
             CrashUtility.install(this)
             return
         }

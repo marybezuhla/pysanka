@@ -33,10 +33,9 @@ import org.florisboard.lib.compose.stringRes
 /**
  * Pysanka: getting a model on a settings screen (download in the browser, then pick the file; only
  * the exact published file is accepted) and removing it. [ready]: what to show while it is there.
- * Returns nothing; [onChanged] runs when the model came or went.
  */
 @Composable
-fun ModelSection(import: ModelImport, onChanged: () -> Unit = {}, ready: @Composable () -> Unit) {
+fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
     val context = LocalContext.current
     val model = import.model
     val store = remember { ModelStore(context, model).also { if (!import.running) it.cleanUp() } }
@@ -45,13 +44,15 @@ fun ModelSection(import: ModelImport, onChanged: () -> Unit = {}, ready: @Compos
     // A copy that ended (here or while this screen was gone): read the model's state again
     LaunchedEffect(status.finished) {
         state = store.state()
-        onChanged()
         if (status.originalKept) {
             Toast.makeText(context, R.string.pysanka__ai__original_kept, Toast.LENGTH_LONG).show()
             import.noteShown()
         }
     }
     val progress = status.progress ?: -1f
+    // Sizes written the way the settings' language writes numbers (2,6 or 2.6)
+    val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
+    fun gb(v: Double) = java.text.NumberFormat.getInstance(locale).apply { maximumFractionDigits = 2 }.format(v)
     // Off unless chosen: the same file may serve another app too
     var deleteOriginal by remember { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -62,13 +63,13 @@ fun ModelSection(import: ModelImport, onChanged: () -> Unit = {}, ready: @Compos
         is ModelStore.State.Ready -> {
             Text(stringRes(R.string.pysanka__ai__ready, "size" to s.sizeMb.toString()), style = MaterialTheme.typography.titleMedium)
             ready()
-            OutlinedButton(onClick = { store.delete(); state = store.state(); onChanged() }) {
+            OutlinedButton(onClick = { store.delete(); state = store.state() }) {
                 Text(stringRes(R.string.pysanka__ai__delete))
             }
         }
         ModelStore.State.Missing -> {
             Text(
-                stringRes(R.string.pysanka__ai__step1, "file" to model.downloadName, "size" to model.sizeText),
+                stringRes(R.string.pysanka__ai__step1, "file" to model.downloadName, "size" to gb(model.sizeGb)),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -98,7 +99,7 @@ fun ModelSection(import: ModelImport, onChanged: () -> Unit = {}, ready: @Compos
     }
     status.error?.let {
         Text(
-            stringRes(it, "file" to model.downloadName, "size" to model.spaceText),
+            stringRes(it, "file" to model.downloadName, "size" to gb(model.spaceGb)),
             color = MaterialTheme.colorScheme.error,
         )
     }

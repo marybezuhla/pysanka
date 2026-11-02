@@ -305,7 +305,7 @@
     <string name="pysanka__voice__how_to_use">Tap the microphone above the keyboard, speak, then Done: the text appears in the field. The language is the keyboard\'s. Up to 2 minutes at a time. Not in password or incognito fields.</string>
     <string name="pysanka__voice__mic">Allow the microphone</string>
     <string name="pysanka__voice__mic_granted">Microphone allowed</string>
-    <string name="pysanka__voice__mic_denied">Dictation cannot work without the microphone. It can now be allowed only in the system settings: Permissions → Microphone.</string>
+    <string name="pysanka__voice__mic_denied">Dictation cannot work without the microphone. If Android no longer asks, allow it in the system settings: Permissions → Microphone.</string>
     <string name="pysanka__voice__system_settings">Open the system settings</string>
     <string name="pysanka__settings__voice_ready">Ready: the microphone above the keyboard</string>
     <string name="pysanka__settings__voice_missing">Install the model (about 190 MB)</string>

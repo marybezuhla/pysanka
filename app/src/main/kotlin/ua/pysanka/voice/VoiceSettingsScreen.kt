@@ -43,6 +43,15 @@ fun VoiceSettingsScreen() = FlorisScreen {
         val context = LocalContext.current
         var mic by remember { mutableStateOf(VoiceInput.hasMic(context)) }
         var denied by remember { mutableStateOf(false) }
+        // Back from the system settings: read the permission again
+        val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+        androidx.compose.runtime.DisposableEffect(lifecycle) {
+            val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+                if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) mic = VoiceInput.hasMic(context)
+            }
+            lifecycle.addObserver(observer)
+            onDispose { lifecycle.removeObserver(observer) }
+        }
         val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             mic = granted
             denied = !granted
@@ -61,7 +70,7 @@ fun VoiceSettingsScreen() = FlorisScreen {
             } else {
                 Button(onClick = { ask.launch(Manifest.permission.RECORD_AUDIO) }) { Text(stringRes(R.string.pysanka__voice__mic)) }
                 if (denied) {
-                    // Asked before and refused: Android does not ask again; only its own settings can allow it
+                    // Refused: Android may not ask again; its own settings can always allow it
                     Text(stringRes(R.string.pysanka__voice__mic_denied), style = MaterialTheme.typography.bodyMedium)
                     OutlinedButton(onClick = {
                         runCatching {

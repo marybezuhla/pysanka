@@ -316,7 +316,11 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         val voice = ua.pysanka.voice.VoiceInput
         when (voice.ready(appContext)) {
             ua.pysanka.voice.VoiceInput.Ready.YES -> {
+                val field = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
                 voice.start(appContext, subtypeManager.activeSubtype.primaryLocale.language) { text ->
+                    // Only into the field it was said for, and only if that is still not a private one
+                    val now = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
+                    if (now != field || !voice.allowedHere()) return@start
                     val before = editorInstance.activeContent.textBeforeSelection
                     editorInstance.commitText(if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text)
                 }

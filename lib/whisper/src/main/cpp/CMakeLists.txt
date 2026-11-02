@@ -2,6 +2,8 @@
 # Made after whisper.cpp's own Android example: ggml built by its own CMake (CPU only, no OpenMP,
 # no other backends), whisper.cpp and a small JNI layer in one shared library.
 cmake_minimum_required(VERSION 3.22)
+# Always optimised, in a debug build too: unoptimised, the model code is far too slow to try
+set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
 project(pysanka_whisper C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -30,7 +32,7 @@ target_include_directories(pysanka_whisper PRIVATE
     ${WHISPER_DIR}/ggml/include
 )
 target_compile_definitions(pysanka_whisper PRIVATE GGML_USE_CPU WHISPER_VERSION="1.9.5")
-target_compile_options(pysanka_whisper PRIVATE -O3 -fvisibility=hidden -fvisibility-inlines-hidden
+target_compile_options(pysanka_whisper PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden
     -ffunction-sections -fdata-sections)
 target_link_options(pysanka_whisper PRIVATE -Wl,--gc-sections -Wl,--exclude-libs,ALL
     # 16 KB pages (Android 15+)

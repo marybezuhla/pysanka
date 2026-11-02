@@ -25,10 +25,10 @@ class PinnedModel(
     val bytes: Long?,
     val maxBytes: Long,
     val sha256: String,
-    /** About how big, for the person ("≈2,6 ГБ"). */
-    val sizeText: String,
-    /** About how much free space the copy needs. */
-    val spaceText: String,
+    /** About how big, in GB, for the person. */
+    val sizeGb: Double,
+    /** About how much free space the copy needs, in GB. */
+    val spaceGb: Double,
 ) {
     companion object {
         /** Gemma 4 E2B for the AI (the same file as in Tarilka and Mandat). */
@@ -41,8 +41,8 @@ class PinnedModel(
             bytes = 2_588_147_712L,
             maxBytes = 2_588_147_712L,
             sha256 = "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
-            sizeText = "2,6",
-            spaceText = "2,8",
+            sizeGb = 2.6,
+            spaceGb = 2.8,
         )
 
         /** Whisper small (OpenAI, MIT), whisper.cpp's 5-bit file, for dictation. */
@@ -55,8 +55,8 @@ class PinnedModel(
             bytes = null,
             maxBytes = 200_000_000L,
             sha256 = "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb",
-            sizeText = "0,19",
-            spaceText = "0,4",
+            sizeGb = 0.19,
+            spaceGb = 0.4,
         )
     }
 }
