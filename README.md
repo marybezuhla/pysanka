@@ -18,6 +18,12 @@
 
 Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Модель ШІ ви додаєте самі; без неї клавіатура працює повністю.
 
+## Вимоги
+
+- Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈100 МБ.
+- Диктування: процесор ARMv8.2 (майже всі телефони з 2018 року); на старішому воно просто недоступне.
+- Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі.
+
 ## Прозорість
 
 - **Основа:** [FlorisBoard](https://github.com/florisboard/florisboard) (Apache 2.0), історію змін збережено. Pysanka є незалежним проєктом.
@@ -46,6 +52,12 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - Optional on-device dictation (Whisper, the model comes with the app): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
 
 Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI model yourself; without it the keyboard works fully.
+
+## Requirements
+
+- Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈100 MB.
+- Dictation: an ARMv8.2 processor (nearly every phone since 2018); on older ones it is simply unavailable.
+- On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model.
 
 ## Transparency
 

@@ -90,6 +90,14 @@ jobs:
           grep -h -o -E '<failure message="[^"]{0,300}' app/build/test-results/*/*.xml 2>/dev/null | head -5 \
             | while IFS= read -r l; do echo "::warning title=test::${l#<failure message=\"}"; done || true
 
+      # The same log, packed into this job's own output (read with the GitHub API), so no branch
+      # is needed for it: lines "PYSANKA-LOG <base64 of a tar.gz>"
+      - name: Print the log for review
+        if: always()
+        shell: bash
+        run: |
+          tar -C log -czf - . | base64 -w 4000 | sed 's/^/PYSANKA-LOG /' || true
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -102,28 +110,6 @@ jobs:
           name: pysanka-unsigned
           retention-days: 7
           path: app/build/outputs/apk/release/app-release-unsigned.apk
-
-  # Saves the build log to the ci-logs branch. Runs no project code.
-  logs:
-    needs: build
-    # Also for pull requests from this repository (never from forks, which get no write access)
-    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: build-log
-          path: log
-      - name: Push the log
-        shell: bash
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd log
-          git init -q && git checkout -q -b ci-logs && git add . && git -c user.name=ci -c user.email=ci@localhost commit -qm "build log ${{ github.run_number }}"
-          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" ci-logs
 
   # Signs. Only for main, only in the "release" environment (needs the owner's approval), and with
   # no Gradle or other third-party build code: just the Android SDK's own zipalign and apksigner.

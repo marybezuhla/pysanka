@@ -31,6 +31,12 @@
     <string name="pysanka__clipboard_copy__history_off">Clipboard history is turned off. Turn it on in clipboard settings first.</string>
     <string name="pysanka__about__based_on__title">Based on FlorisBoard</string>
     <string name="pysanka__about__based_on__summary">Pysanka is built on FlorisBoard by The FlorisBoard Contributors (Apache 2.0); an independent project, Pysanka itself is under GPL-3.0</string>
+    <string name="pysanka__about__license__summary">GPL-3.0: free software with no warranty of any kind. Source code: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__data__title">Data sources</string>
+    <string name="pysanka__about__data__summary">Word lists from FrequencyWords (CC BY-SA 4.0) and dict_uk, emoji names from Unicode CLDR, text recognition by PaddleOCR (Apache 2.0), dictation by Whisper (OpenAI, MIT) and whisper.cpp (MIT)</string>
+    <string name="pysanka__error__copy">Could not copy</string>
+    <string name="pysanka__error__license">Could not show the licence text. It is in the repository: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__error__open">Could not open it: no app on the phone can do this</string>
     <string name="pysanka__tag__all">All</string>
     <string name="pysanka__tag__tags">Tags</string>
     <string name="pysanka__tag__manage">Manage tags</string>

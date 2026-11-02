@@ -66,7 +66,8 @@ inline fun <T : Any> Context.launchActivity(kClass: KClass<T>, intentModifier: (
         this.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
         flogError { e.toString() }
-        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
+        // Pysanka: no raw error text for people
+        Toast.makeText(this, dev.patrickgold.florisboard.R.string.pysanka__error__open, Toast.LENGTH_LONG).show()
     }
 }
 
@@ -80,6 +81,7 @@ inline fun Context.launchActivity(intentModifier: (Intent) -> Unit) {
         this.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
         flogError { e.toString() }
-        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
+        // Pysanka: no raw error text for people
+        Toast.makeText(this, dev.patrickgold.florisboard.R.string.pysanka__error__open, Toast.LENGTH_LONG).show()
     }
 }
