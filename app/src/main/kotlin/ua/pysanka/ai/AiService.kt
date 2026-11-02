@@ -42,6 +42,7 @@ class AiService : Service() {
         const val KEY_TARGET = "target"
         const val KEY_TEXT = "text"
         const val KEY_LIMIT = "limit"
+        const val KEY_EMOJI = "emoji"
         const val KEY_PART = "part"
         const val KEY_PARTS = "parts"
         const val KEY_REMOVED = "removed"
@@ -92,7 +93,8 @@ class AiService : Service() {
         run = thisRun
         job = scope.launch {
             try {
-                val out = AiJob.run(this@AiService, thisRun, action, text, target, data.getInt(KEY_LIMIT).coerceAtLeast(0)) { part, parts ->
+                val out = AiJob.run(this@AiService, thisRun, action, text, target, data.getInt(KEY_LIMIT).coerceAtLeast(0),
+                    data.getInt(KEY_EMOJI, AiPrompts.EMOJI_DEFAULT)) { part, parts ->
                     send(reply, PART, token) {
                         putInt(KEY_PART, part)
                         putInt(KEY_PARTS, parts)

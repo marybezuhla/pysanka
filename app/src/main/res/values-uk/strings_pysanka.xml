@@ -326,7 +326,7 @@
     <string name="pysanka__voice__model_small">Точніша — Whisper small (≈190 МБ)</string>
     <string name="pysanka__voice__model_base">Швидша — Whisper base (≈60 МБ), для старіших телефонів</string>
     <string name="pysanka__voice__delete_other">Видалити іншу модель</string>
-    <string name="pysanka__ai__thread_no_history">Частини не вмістяться в історію буфера (вона вимкнена або коротша): копіюйте їх дотиком.</string>
+    <string name="pysanka__ai__thread_no_history">Історія буфера зараз не прийме частини (вона вимкнена, коротша, ще не готова або це приватне поле): копіюйте їх дотиком.</string>
     <string name="pysanka__typing__key_targeting">Точніше влучання в клавіші</string>
     <string name="pysanka__typing__key_targeting_summary">Дотик біля краю між двома літерами йде до тієї, що ймовірніша в слові (клавіші виглядають так само)</string>
     <string name="pysanka__typing__calibrate">Підлаштовуватися під мої дотики</string>
@@ -349,5 +349,10 @@
     <string name="pysanka__ai__drafts_tag">Чернетки</string>
     <string name="pysanka__ai__drafts_done">Версії в історії буфера з тегом «Чернетки»</string>
     <string name="pysanka__clipboard_lock__failed">Не вдалося відкрити екран відбитка.</string>
-    <string name="pysanka__ai__drafts_failed">Версії не вмістяться в історію буфера (вона вимкнена або коротша).</string>
+    <string name="pysanka__ai__drafts_failed">Історія буфера зараз не прийме версії (вона вимкнена, коротша, ще не готова або це приватне поле).</string>
+    <string name="pysanka__ai__emoji">Емодзі в дописах ШІ</string>
+    <string name="pysanka__ai__emoji_none">без емодзі</string>
+    <string name="pysanka__ai__emoji_one">одне</string>
+    <string name="pysanka__ai__emoji_some">2–3</string>
+    <string name="pysanka__ai__emoji_many">багато</string>
 </resources>

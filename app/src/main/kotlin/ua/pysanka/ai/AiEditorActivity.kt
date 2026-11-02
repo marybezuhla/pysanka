@@ -80,6 +80,7 @@ class AiEditorActivity : ComponentActivity() {
         private const val EXTRA_DONE = "done"
         private const val EXTRA_TARGET = "target"
         private const val EXTRA_BACK_TO_PANEL = "back_to_panel"
+        private const val EXTRA_EMOJI = "emoji"
 
         /** An answer as it is handed over (to the keyboard on leaving, from the panel on Expand). */
         internal fun bundleOf(output: AiJob.Output, action: AiAction? = null, language: AiLanguage? = null) = Bundle().apply {
@@ -123,6 +124,8 @@ class AiEditorActivity : ComponentActivity() {
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
             val secure = runCatching { prefs.pysankaOcr.blockScreenshots.get() }.getOrDefault(false)
             val language = runCatching { prefs.other.settingsLanguage.get() }.getOrDefault("auto")
+            // Read here, in the keyboard's process (the editor's own process does not touch the settings)
+            val emoji = runCatching { prefs.pysankaAi.emoji.get() }.getOrDefault(AiPrompts.EMOJI_DEFAULT)
             return Intent(context, AiEditorActivity::class.java)
                 .putExtra(EXTRA_TEXT, text)
                 .putExtra(EXTRA_PRESET, preset?.name)
@@ -131,6 +134,7 @@ class AiEditorActivity : ComponentActivity() {
                 .putExtra(EXTRA_SECURE, secure)
                 .putExtra(EXTRA_FOR_RESULT, forResult)
                 .putExtra(EXTRA_LANGUAGE, language)
+                .putExtra(EXTRA_EMOJI, emoji)
                 .putExtra(EXTRA_TARGET, target?.name)
                 .putExtra(EXTRA_BACK_TO_PANEL, backToPanel && receiver != null)
                 .apply { if (done != null) putExtra(EXTRA_DONE, bundleOf(done)) }
@@ -167,6 +171,7 @@ class AiEditorActivity : ComponentActivity() {
                             preset = preset,
                             done = done,
                             target = intent.getStringExtra(EXTRA_TARGET)?.let { n -> AiLanguage.entries.firstOrNull { it.name == n } },
+                            emoji = intent.getIntExtra(EXTRA_EMOJI, AiPrompts.EMOJI_DEFAULT),
                             replaceLabel = when {
                                 forResult -> if (canReplace) R.string.pysanka__ai__replace else null
                                 receiver == null -> null
@@ -266,6 +271,8 @@ private fun AiEditorScreen(
     preset: AiAction?,
     done: AiJob.Output?,
     target: AiLanguage?,
+    /** How many emoji a post may have (see [AiPrompts.emoji]). */
+    emoji: Int,
     replaceLabel: Int?,
     onUse: (String) -> Unit,
     /** Back to the keyboard's panel with the answer; null when not opened from the keyboard. */
@@ -298,7 +305,7 @@ private fun AiEditorScreen(
         run = thisRun
         job = scope.launch {
             stage = try {
-                val out = AiJob.run(context, thisRun, action, text, language) { part, parts -> stage = AiStage.Working(part, parts) }
+                val out = AiJob.run(context, thisRun, action, text, language, emoji = emoji) { part, parts -> stage = AiStage.Working(part, parts) }
                 result = out.text
                 if (out.text.isBlank()) AiStage.Failed("empty") else AiStage.Done(out)
             } catch (e: CancellationException) {

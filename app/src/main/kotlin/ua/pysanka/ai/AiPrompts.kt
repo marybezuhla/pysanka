@@ -123,10 +123,24 @@ internal object AiPrompts {
 
     /** [text]: what the model will get, to name its language; [style]: the person's samples, for [AiAction.MY_STYLE]. */
     /** [limit]: for [AiAction.SHORTER], the most characters the post may have in its app (0: none). */
-    fun system(action: AiAction, target: AiLanguage, text: String, style: List<String> = emptyList(), limit: Int = 0): String {
+    /** [emoji]: for a post ([AiAction.POST], [AiAction.VERSIONS]), how many emoji (0..3, see [emoji]). */
+    fun system(
+        action: AiAction, target: AiLanguage, text: String, style: List<String> = emptyList(), limit: Int = 0,
+        emoji: Int = EMOJI_DEFAULT,
+    ): String {
         val language = TextLanguage.of(text)
         val fit = if (action == AiAction.SHORTER && limit > 0) " ${fits(limit)}" else ""
-        return BASE + " " + instructions(action, target, language, keep(language), style) + fit
+        return BASE + " " + instructions(action, target, language, keep(language), style, emoji) + fit
+    }
+
+    const val EMOJI_DEFAULT = 2
+
+    /** How many emoji a post may have: none, one, two or three, or several. */
+    fun emoji(level: Int) = when (level.coerceIn(0, 3)) {
+        0 -> "no emoji at all"
+        1 -> "at most one emoji"
+        2 -> "at most two or three emoji where they fit"
+        else -> "four to six emoji where they fit"
     }
 
     fun fits(limit: Int) = "The result must be at most $limit characters long, spaces and emoji included."
@@ -137,6 +151,7 @@ internal object AiPrompts {
         language: String?,
         keepLanguage: String,
         style: List<String>,
+        emoji: Int,
     ) = when (action) {
         AiAction.FIX -> "$keepLanguage Correct spelling, grammar and punctuation. Keep the wording, the meaning, " +
             "the tone and the line breaks; change only what is wrong."
@@ -180,12 +195,12 @@ internal object AiPrompts {
             "Write that message, ready to send, ${inLanguage(language)}, natural and polite. Use only facts " +
             "from the description; where a detail is missing, put a placeholder in square brackets, like [дата] or [date]."
         AiAction.POST -> "Rewrite the text as a short post for social media ${inLanguage(language)}: a first line " +
-            "that makes people want to read on, then short paragraphs in plain words, at most two or three emoji " +
-            "where they fit, no hashtags. Keep every fact, name and number; add none. " +
+            "that makes people want to read on, then short paragraphs in plain words, ${emoji(emoji)}, " +
+            "no hashtags. Keep every fact, name and number; add none. " +
             "Answer only with the post."
         AiAction.VERSIONS -> "The text is a post. Write it for four networks ${inLanguage(language)}: X (at most 280 characters), " +
             "Bluesky (at most 300), Threads (at most 500) and LinkedIn (a little more professional, at most 1300). Keep every " +
-            "fact, add none; no hashtags unless the text has them. Start each version on a new line with the network name " +
+            "fact, add none; ${emoji(emoji)} in each; no hashtags unless the text has them. Start each version on a new line with the network name " +
             "and a colon (X:, Bluesky:, Threads:, LinkedIn:) and put a blank line between the versions."
         AiAction.HASHTAGS -> "Suggest three to eight hashtags for this text as a social media post, " +
             "${inLanguage(language)}: specific to its topic, the most fitting first. Answer with only the hashtags on one line, " +
