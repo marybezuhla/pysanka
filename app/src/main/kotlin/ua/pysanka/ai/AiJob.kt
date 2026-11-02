@@ -70,8 +70,11 @@ object AiJob {
         action: AiAction,
         text: String,
         target: AiLanguage,
+        /** For [AiAction.SHORTER]: the most characters the post may have in its app (0: none). */
+        limit: Int = 0,
         onPart: (Int, Int) -> Unit,
     ): Output {
+        check(action != AiAction.THREAD) { "Done without the model" }
         val started = System.currentTimeMillis()
         // The speed is learnt only when the model was already loaded (loading would skew it)
         val warm = AiEngine.loaded
@@ -97,7 +100,12 @@ object AiJob {
                     for ((i, p) in parts.withIndex()) {
                         onPart(i + 1, parts.size)
                         // Whitespace alone (a part between two breaks) is kept as it is
-                        if (p.text.isBlank()) append(p.text) else append(rewrite(context, run, action, target, p.text, style) { retried = true })
+                        if (p.text.isBlank()) {
+                            append(p.text)
+                        } else {
+                            // A limit counts for a post: a text in one part
+                            append(rewrite(context, run, action, target, p.text, style, if (parts.size == 1) limit else 0) { retried = true })
+                        }
                         append(p.after)
                     }
                 }
@@ -160,11 +168,13 @@ object AiJob {
         target: AiLanguage,
         text: String,
         style: List<String>,
+        limit: Int,
         onRetry: () -> Unit,
     ): String {
-        val system = AiPrompts.system(action, target, text, style)
+        val system = AiPrompts.system(action, target, text, style, limit)
         val first = ask(context, run, system, text, action.temperature, text)
-        if (action !in STYLES || !TextChanges.tooLittle(action, text, first)) return first
+        val tooLong = limit > 0 && SocialApps.length(first) > limit
+        if (!tooLong && (action !in STYLES || !TextChanges.tooLittle(action, text, first))) return first
         onRetry()
         val second = ask(context, run, system + AiPrompts.bolder(action), text, minOf(1.0, action.temperature + 0.3), text)
         return second.ifBlank { first }
