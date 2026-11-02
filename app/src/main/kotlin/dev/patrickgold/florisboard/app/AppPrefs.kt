@@ -206,6 +206,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__voice__auto_stop",
             default = true,
         )
+        /** The microphone is held while speaking (released: recognised) instead of listening at once. */
+        val holdToTalk = boolean(
+            key = "pysanka__voice__hold_to_talk",
+            default = false,
+        )
     }
 
     val correction = Correction()

@@ -43,6 +43,9 @@ object VoiceInput {
     val state: StateFlow<State>
         field = MutableStateFlow<State>(State.Idle)
 
+    /** The text the last dictation put in the field (to take it back), until the panel changes it or closes. */
+    val inserted = MutableStateFlow<String?>(null)
+
     private val main = Handler(Looper.getMainLooper())
     private var link: Link? = null
     private var recorder: Thread? = null
@@ -91,7 +94,8 @@ object VoiceInput {
         }
         state.value = State.Listening(0f, 0f)
         val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
-        record(t, runCatching { prefs.pysankaVoice.autoStop.get() }.getOrDefault(true))
+        // Held to speak: the release ends it, never a pause
+        record(t, runCatching { prefs.pysankaVoice.autoStop.get() && !prefs.pysankaVoice.holdToTalk.get() }.getOrDefault(true))
     }
 
     /** Stops listening and recognises what was said. */
