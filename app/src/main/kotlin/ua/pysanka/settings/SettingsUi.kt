@@ -1,5 +1,6 @@
 package ua.pysanka.settings
 
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,11 +59,16 @@ import kotlin.math.roundToInt
 data class Tint(val container: Color, val ink: Color)
 
 /**
- * One calm colour for every block (the theme's primary, softened: the icon's red, or the phone's
- * own colour with "system colours"): the header is what says "a block".
+ * One calm colour for every block: the icon's red, softened (at night a deep, quiet red rather than
+ * a bright one), or the phone's own with "system colours". The header is what says "a block".
  */
 @Composable
-fun blockTint(): Tint = MaterialTheme.colorScheme.let { Tint(it.primaryContainer, it.onPrimaryContainer) }
+fun blockTint(): Tint {
+    val scheme = MaterialTheme.colorScheme
+    if (dev.patrickgold.florisboard.app.apptheme.LocalSystemColors.current) return Tint(scheme.secondaryContainer, scheme.onSecondaryContainer)
+    val dark = scheme.surface.luminance() < 0.5f
+    return if (dark) Tint(Color(0xFF3A2320), Color(0xFFF3C7BE)) else Tint(Color(0xFFF8E3DE), Color(0xFF7A231B))
+}
 
 /**
  * One theme of the settings. Closed, it shows its [title] and [summary]; a tap opens it.

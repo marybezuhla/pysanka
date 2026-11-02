@@ -32,6 +32,9 @@ import dev.patrickgold.jetpref.datastore.model.observeAsState
 import org.florisboard.lib.color.neutralDynamicColorScheme
 import org.florisboard.lib.color.systemAccentOrDefault
 
+/** Pysanka: whether the settings are in the phone's colours (Material You) rather than Pysanka's. */
+val LocalSystemColors = androidx.compose.runtime.staticCompositionLocalOf { false }
+
 /** Pysanka: the colours of its icon (the red egg, the gold star) and a warm cream for surfaces. */
 val PysankaRed = Color(0xFFB3261E)
 val PysankaGold = Color(0xFFC9962B)
@@ -89,9 +92,13 @@ fun FlorisAppTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
-        content = content,
-    )
+    val prefs by FlorisPreferenceStore
+    val systemColors by prefs.other.pysankaSystemColors.observeAsState()
+    androidx.compose.runtime.CompositionLocalProvider(LocalSystemColors provides systemColors) {
+        MaterialTheme(
+            colorScheme = colors,
+            typography = Typography,
+            content = content,
+        )
+    }
 }
