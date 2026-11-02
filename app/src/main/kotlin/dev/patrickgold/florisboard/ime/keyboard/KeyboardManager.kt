@@ -312,21 +312,15 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     /**
-     * Pysanka: dictation (see [ua.pysanka.voice.VoiceInput]): the panel opens and listens at once;
-     * its microphone starts the next one.
+     * Pysanka: dictation (see [ua.pysanka.voice.VoiceInput]): the panel opens and, if [listen],
+     * listens at once (unless the person holds the microphone to speak); its microphone starts the
+     * next one.
      */
-    fun pysankaDictate() {
+    fun pysankaDictate(listen: Boolean = !prefs.pysankaVoice.holdToTalk.get()) {
         val voice = ua.pysanka.voice.VoiceInput
         when (voice.ready(appContext)) {
             ua.pysanka.voice.VoiceInput.Ready.YES -> {
-                val field = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
-                voice.start(appContext, subtypeManager.activeSubtype.primaryLocale.language) { text ->
-                    // Only into the field it was said for, and only if that is still not a private one
-                    val now = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
-                    if (now != field || !voice.allowedHere()) return@start
-                    val before = editorInstance.activeContent.textBeforeSelection
-                    editorInstance.commitText(if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text)
-                }
+                if (listen) pysankaListen()
                 activeState.imeUiMode = ImeUiMode.PYSANKA_VOICE
             }
             ua.pysanka.voice.VoiceInput.Ready.NOT_HERE -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
@@ -335,6 +329,20 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 appContext.showShortToastSync(R.string.pysanka__voice__set_up)
                 ua.pysanka.voice.openVoiceSettings(appContext)
             }
+        }
+    }
+
+    private fun pysankaListen() {
+        val voice = ua.pysanka.voice.VoiceInput
+        val field = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
+        voice.start(appContext, subtypeManager.activeSubtype.primaryLocale.language) { text ->
+            // Only into the field it was said for, and only if that is still not a private one
+            val now = editorInstance.activeInfo.let { it.packageName to it.base.fieldId }
+            if (now != field || !voice.allowedHere()) return@start
+            val before = editorInstance.activeContent.textBeforeSelection
+            val piece = if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text
+            // Remembered (in memory, while the panel is open) so «Прибрати» can take it back
+            if (editorInstance.commitText(piece)) voice.inserted.value = piece
         }
     }
 

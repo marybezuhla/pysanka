@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import dev.patrickgold.florisboard.R
@@ -70,12 +71,22 @@ fun VoiceSettingsScreen() = FlorisScreen {
             Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
             // A pause ends the dictation by itself (or only «Готово» does)
             val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
-            Row(Modifier.fillMaxWidth().toggleable(autoStop, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.autoStop.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
+            val holding by prefs.pysankaVoice.holdToTalk.observeAsState()
+            Row(Modifier.fillMaxWidth().alpha(if (holding) 0.5f else 1f).toggleable(autoStop, enabled = !holding, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.autoStop.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(stringRes(R.string.pysanka__voice__auto_stop), style = MaterialTheme.typography.bodyLarge)
                     Text(stringRes(R.string.pysanka__voice__auto_stop_summary), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                androidx.compose.material3.Switch(checked = autoStop, onCheckedChange = null)
+                androidx.compose.material3.Switch(checked = autoStop, onCheckedChange = null, enabled = !holding)
+            }
+            // Hold to speak: what is recognised is exactly what was said while held
+            val hold by prefs.pysankaVoice.holdToTalk.observeAsState()
+            Row(Modifier.fillMaxWidth().toggleable(hold, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.holdToTalk.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringRes(R.string.pysanka__voice__hold), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringRes(R.string.pysanka__voice__hold_summary), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                androidx.compose.material3.Switch(checked = hold, onCheckedChange = null)
             }
             HorizontalDivider()
             if (mic) {
