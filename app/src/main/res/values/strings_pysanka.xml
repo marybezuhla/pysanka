@@ -342,4 +342,9 @@
     <string name="pysanka__templates__new">New template</string>
     <string name="pysanka__templates__add">Add</string>
     <string name="pysanka__templates__delete">Delete</string>
+    <string name="pysanka__ai__action_versions">For several networks</string>
+    <string name="pysanka__ai__versions_note">Versions for X, Bluesky, Threads, LinkedIn. A tap puts one in place of the text.</string>
+    <string name="pysanka__ai__versions_drafts">All to the clipboard · Drafts</string>
+    <string name="pysanka__ai__drafts_tag">Drafts</string>
+    <string name="pysanka__ai__drafts_done">The versions are in the clipboard history, tagged “Drafts”</string>
 </resources>

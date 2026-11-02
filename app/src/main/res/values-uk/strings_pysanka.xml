@@ -343,4 +343,9 @@
     <string name="pysanka__templates__new">Новий шаблон</string>
     <string name="pysanka__templates__add">Додати</string>
     <string name="pysanka__templates__delete">Видалити</string>
+    <string name="pysanka__ai__action_versions">Для кількох мереж</string>
+    <string name="pysanka__ai__versions_note">Версії для X, Bluesky, Threads, LinkedIn. Дотик — вставити замість тексту.</string>
+    <string name="pysanka__ai__versions_drafts">Усі в буфер · Чернетки</string>
+    <string name="pysanka__ai__drafts_tag">Чернетки</string>
+    <string name="pysanka__ai__drafts_done">Версії в історії буфера з тегом «Чернетки»</string>
 </resources>
