@@ -124,19 +124,25 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         isPrivateSession: Boolean,
     ): List<SuggestionCandidate> {
         val word = content.composingText
-        val dict = suggester(subtype) ?: return emptyList()
+        val dict = suggester(subtype)
+        if (dict == null) {
+            // Pysanka: a language without a word list: taps as drawn
+            ua.pysanka.typing.KeyTargeting.publish(null)
+            return emptyList()
+        }
+        val own = if (mayShowOwn(isPrivateSession)) withContext(Dispatchers.IO) { own(subtype) } else null
         // Pysanka: the likely next letters, for a tap near the edge between two keys (KeyTargeting);
-        // never in a private or password field
+        // never in a private or password field, nor while a word the person taught is being typed
         ua.pysanka.typing.KeyTargeting.publish(
             if (prefs.correction.pysankaKeyTargeting.get() && !isPrivateSession && keyboardManager.activeState.isComposingEnabled &&
-                !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword
+                !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword &&
+                (word.isEmpty() || own?.withPrefix(PersonalWords.key(word), 1).isNullOrEmpty())
             ) {
                 ua.pysanka.typing.KeyTargeting.Priors(PersonalWords.key(word), dict.nextLetters(word))
             } else {
                 null
             },
         )
-        val own = if (mayShowOwn(isPrivateSession)) withContext(Dispatchers.IO) { own(subtype) } else null
         // Pysanka: before a word is begun, the words that usually follow the one before (also
         // right after a tapped suggestion, whose space comes with the next word)
         if (word.isEmpty()) {

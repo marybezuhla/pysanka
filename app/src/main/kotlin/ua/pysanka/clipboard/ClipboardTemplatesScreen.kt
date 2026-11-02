@@ -43,36 +43,39 @@ fun ClipboardTemplatesScreen() = FlorisScreen {
     previewFieldVisible = false
 
     content {
-        val context = LocalContext.current
-        val clipboardManager by context.clipboardManager()
-        val prefs by FlorisPreferenceStore
-        val historyOn by prefs.clipboard.historyEnabled.observeAsState()
-        val history by clipboardManager.historyFlow.collectAsState()
-        var draft by remember { mutableStateOf("") }
+        // Pysanka: texts from the history only after the fingerprint, if chosen
+        GuardedByLock {
+            val context = LocalContext.current
+            val clipboardManager by context.clipboardManager()
+            val prefs by FlorisPreferenceStore
+            val historyOn by prefs.clipboard.historyEnabled.observeAsState()
+            val history by clipboardManager.historyFlow.collectAsState()
+            var draft by remember { mutableStateOf("") }
 
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(stringRes(R.string.pysanka__templates__about), style = MaterialTheme.typography.bodyMedium)
-            if (!historyOn) {
-                Text(stringRes(R.string.pysanka__templates__history_off), color = MaterialTheme.colorScheme.error)
-                return@Column
-            }
-            OutlinedTextField(
-                value = draft,
-                onValueChange = { draft = it.take(MAX_CHARS) },
-                label = { Text(stringRes(R.string.pysanka__templates__new)) },
-                minLines = 2,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Button(enabled = draft.isNotBlank(), onClick = {
-                clipboardManager.pysankaAddPinned(draft.trim())
-                draft = ""
-            }) { Text(stringRes(R.string.pysanka__templates__add)) }
-            for (item in history.pinned.filter { it.type == ItemType.TEXT && !it.isSensitive }) {
-                OutlinedCard(Modifier.fillMaxWidth()) {
-                    Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(item.text.orEmpty(), style = MaterialTheme.typography.bodySmall, maxLines = 3, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
-                        IconButton(onClick = { clipboardManager.clearExactHistory(listOf(item)) }) {
-                            Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__templates__delete))
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringRes(R.string.pysanka__templates__about), style = MaterialTheme.typography.bodyMedium)
+                if (!historyOn) {
+                    Text(stringRes(R.string.pysanka__templates__history_off), color = MaterialTheme.colorScheme.error)
+                    return@Column
+                }
+                OutlinedTextField(
+                    value = draft,
+                    onValueChange = { draft = it.take(MAX_CHARS) },
+                    label = { Text(stringRes(R.string.pysanka__templates__new)) },
+                    minLines = 2,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Button(enabled = draft.isNotBlank(), onClick = {
+                    clipboardManager.pysankaAddPinned(draft.trim())
+                    draft = ""
+                }) { Text(stringRes(R.string.pysanka__templates__add)) }
+                for (item in history.pinned.filter { it.type == ItemType.TEXT && !it.isSensitive }) {
+                    OutlinedCard(Modifier.fillMaxWidth()) {
+                        Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text(item.text.orEmpty(), style = MaterialTheme.typography.bodySmall, maxLines = 3, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
+                            IconButton(onClick = { clipboardManager.clearExactHistory(listOf(item)) }) {
+                                Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__templates__delete))
+                            }
                         }
                     }
                 }

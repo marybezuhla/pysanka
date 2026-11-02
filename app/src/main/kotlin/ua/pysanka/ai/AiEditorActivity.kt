@@ -450,7 +450,7 @@ private fun AiEditorScreen(
                     Text(stringRes(R.string.pysanka__ai__fact_unconfirmed), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    if (replaceLabel != null && action.replaces) {
+                    if (replaceLabel != null && action.replaces && action != AiAction.VERSIONS) {
                         Button(onClick = { onUse(result) }, enabled = result.isNotBlank(), modifier = Modifier.weight(1f)) {
                             Text(stringRes(replaceLabel))
                         }

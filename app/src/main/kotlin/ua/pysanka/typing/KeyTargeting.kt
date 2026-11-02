@@ -7,17 +7,22 @@ import kotlin.math.ln
  * word being typed (an invisible, slightly larger key; the keyboard looks the same). Only for
  * letters, only within [MARGIN] of a key's edge (a tap well inside a key is always that key), only
  * while the likely letters were worked out for exactly the word typed now, and never in password,
- * incognito or "no learning" fields (the keyboard does not publish them there).
+ * incognito or "no learning" fields (the keyboard does not publish them there), nor while a word
+ * the person taught the keyboard is being typed.
  *
- * The chosen key is the one with the best score: how likely its letter is next ([Priors], from the
- * word list), less how far the tap is from its middle (a normal spread of taps around a key).
+ * A neighbour takes the tap only if its letter is more likely than the one drawn there, and by
+ * more the deeper the tap is inside the drawn key: at the edge any better odds will do, at
+ * [MARGIN] inside they must be about [AT_MARGIN] times better.
  */
 object KeyTargeting {
-    /** How far past its edge (a share of the key's width or height) a key may take a tap. */
-    const val MARGIN = 0.25f
+    /** How far into a key (a share of its width or height) a neighbour may take a tap. */
+    const val MARGIN = 0.15f
 
     /** A letter never in any word after this beginning still counts a little. */
-    private const val FLOOR = 0.01
+    private const val FLOOR = 0.05
+
+    /** How much better the odds must be at [MARGIN] inside the drawn key. */
+    private const val AT_MARGIN = 7.0
 
     /** The likely next letters after [prefix] (in small letters), summing to 1. */
     class Priors(val prefix: String, val next: Map<Char, Double>)
@@ -49,25 +54,28 @@ object KeyTargeting {
      * are letters whose edge is within [MARGIN] of the tap.
      */
     fun pick(x: Float, y: Float, targets: List<Target>, priors: Priors): Int {
+        if (priors.next.isEmpty()) return 0
+        val drawn = prior(targets[0], priors)
         var best = 0
-        var bestScore = score(x, y, targets[0], priors)
+        var bestGain = 0.0
         for (i in 1 until targets.size) {
-            val s = score(x, y, targets[i], priors)
-            if (s > bestScore) {
+            val t = targets[i]
+            val p = prior(t, priors)
+            if (p <= drawn) continue
+            // How far outside this key the tap is, as a share of the margin (0..1 for a candidate)
+            val ox = maxOf(t.left - x, x - t.right, 0f) / (t.width * MARGIN)
+            val oy = maxOf(t.top - y, y - t.bottom, 0f) / (t.height * MARGIN)
+            val needed = (ox * ox + oy * oy) * ln(AT_MARGIN)
+            val gain = ln(p / drawn) - needed
+            if (gain > bestGain) {
                 best = i
-                bestScore = s
+                bestGain = gain
             }
         }
         return best
     }
 
-    private fun score(x: Float, y: Float, t: Target, priors: Priors): Double {
-        // Taps spread around a key's middle with about half its size
-        val dx = (x - (t.left + t.right) / 2) / (t.width / 2)
-        val dy = (y - (t.top + t.bottom) / 2) / (t.height / 2)
-        val p = (priors.next[t.letter] ?: 0.0).coerceAtLeast(FLOOR)
-        return ln(p) - (dx * dx + dy * dy) / 2
-    }
+    private fun prior(t: Target, priors: Priors) = (priors.next[t.letter] ?: 0.0).coerceAtLeast(FLOOR)
 
     /**
      * Pysanka: where this person's taps land around a key's middle, on average (in shares of a key's
@@ -80,7 +88,7 @@ object KeyTargeting {
         private const val RATE = 0.03f
 
         /** The most it corrects, as a share of a key. */
-        private const val MAX = 0.35f
+        private const val MAX = 0.2f
 
         @Volatile var dx = 0f
             private set

@@ -335,7 +335,7 @@
     <string name="pysanka__clipboard_lock__title">Історія буфера відкривається відбитком</string>
     <string name="pysanka__clipboard_lock__open">Відкрити</string>
     <string name="pysanka__clipboard_lock__setting">Відкривати історію відбитком</string>
-    <string name="pysanka__clipboard_lock__setting_summary">Відбиток чи блокування екрана перед історією буфера; відкрита — 5 хвилин або доки телефон не заблоковано</string>
+    <string name="pysanka__clipboard_lock__setting_summary">Відбиток чи блокування екрана перед історією буфера; відкрита — 5 хвилин або доки не згасне екран</string>
     <string name="pysanka__templates__title">Шаблони</string>
     <string name="pysanka__templates__summary">Тексти, що вставляються одним дотиком: адреса, підпис, відповідь</string>
     <string name="pysanka__templates__about">Наберіть текст, який часто вставляєте. Він закріпиться в історії буфера (зашифровано) — завжди зверху, вставляється дотиком. Нижче — усі закріплені тексти.</string>
@@ -348,4 +348,6 @@
     <string name="pysanka__ai__versions_drafts">Усі в буфер · Чернетки</string>
     <string name="pysanka__ai__drafts_tag">Чернетки</string>
     <string name="pysanka__ai__drafts_done">Версії в історії буфера з тегом «Чернетки»</string>
+    <string name="pysanka__clipboard_lock__failed">Не вдалося відкрити екран відбитка.</string>
+    <string name="pysanka__ai__drafts_failed">Версії не вмістяться в історію буфера (вона вимкнена або коротша).</string>
 </resources>

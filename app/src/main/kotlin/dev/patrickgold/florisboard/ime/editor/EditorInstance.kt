@@ -138,7 +138,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         // Pysanka: another field, a clipboard search left open ends, and the likely letters of the last one go
         ua.pysanka.clipboard.ClipSearch.stop()
         ua.pysanka.typing.KeyTargeting.publish(null)
-        // Back from the fingerprint screen: the clipboard history, now open
+        // Pysanka: back from the fingerprint screen, the clipboard history, now open
         if (ua.pysanka.clipboard.ClipboardLock.reopen) {
             ua.pysanka.clipboard.ClipboardLock.reopen = false
             if (ua.pysanka.clipboard.ClipboardLock.isOpen()) keyboardManager.activeState.imeUiMode = dev.patrickgold.florisboard.ime.ImeUiMode.CLIPBOARD
