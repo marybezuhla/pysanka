@@ -299,13 +299,15 @@ class ClipboardManager(
                         val clean = ua.pysanka.clipboard.LinkCleaner.clean(text)
                         if (clean != text) {
                             val label = systemPrimaryClip.description.label
+                            var stillSame = true
                             val set = withContext(Dispatchers.Main) {
                                 // Only if nothing newer was copied meanwhile (a password, say): never over it
-                                val still = runCatching { systemClipboardManager.primaryClip?.getItemAt(0)?.text?.toString() == text }.getOrDefault(false)
-                                still && runCatching { systemClipboardManager.setPrimaryClip(ClipData.newPlainText(label, clean)) }.isSuccess
+                                stillSame = runCatching { systemClipboardManager.primaryClip?.getItemAt(0)?.text?.toString() == text }.getOrDefault(false)
+                                stillSame && runCatching { systemClipboardManager.setPrimaryClip(ClipData.newPlainText(label, clean)) }.isSuccess
                             }
-                            // Set: the next call stores the clean text. Not set: go on with the original
-                            if (set) return@launch
+                            // Set: the next call stores the clean text. Not set (a newer clip came): that
+                            // clip's own call handles it, and the old link is not kept uncleaned
+                            if (set || !stillSame) return@launch
                         }
                     }
                 }

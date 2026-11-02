@@ -371,7 +371,7 @@ private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) 
                 close()
             }) { Text(stringRes(R.string.pysanka__ocr__insert), maxLines = 1, softWrap = false) }
             FilledTonalButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
-                ua.pysanka.privacy.Clip.copy(context, selectedText())
+                ua.pysanka.privacy.Clip.copy(context, selectedText(), sensitive = PendingInsert.fromPrivateField)
                 close()
             }) { Text(stringRes(R.string.pysanka__ocr__copy), maxLines = 1, softWrap = false) }
             // Not for a password or private field (the history would keep what the field must not)
