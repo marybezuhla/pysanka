@@ -181,14 +181,17 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
     }
 
     override fun handleFinishInputView() {
-        // Pysanka: the keyboard hidden (or the screen locked): the clipboard search ends, its query is not kept
+        // Pysanka: the keyboard hidden (or the screen locked): the clipboard search ends, its query is not
+        // kept, and dictation stops listening
         ua.pysanka.clipboard.ClipSearch.stop()
+        ua.pysanka.voice.VoiceInput.cancel()
         super.handleFinishInputView()
     }
 
     override fun handleFinishInput() {
-        // Pysanka: the clipboard search ends with the field
+        // Pysanka: the clipboard search and dictation end with the field
         ua.pysanka.clipboard.ClipSearch.stop()
+        ua.pysanka.voice.VoiceInput.cancel()
         ua.pysanka.typing.AutoCorrect.clear()
         // Pysanka: learned words are written when a field is left
         ua.pysanka.typing.UserWords.flush(appContext)

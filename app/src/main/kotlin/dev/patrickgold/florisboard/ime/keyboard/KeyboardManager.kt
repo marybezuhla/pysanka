@@ -311,6 +311,26 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         editorInstance.commitGesture(fixCase(word))
     }
 
+    /** Pysanka: dictation (see [ua.pysanka.voice.VoiceInput]): the panel opens and listens at once. */
+    private fun pysankaDictate() {
+        val voice = ua.pysanka.voice.VoiceInput
+        when (voice.ready(appContext)) {
+            ua.pysanka.voice.VoiceInput.Ready.YES -> {
+                voice.start(appContext, subtypeManager.activeSubtype.primaryLocale.language) { text ->
+                    val before = editorInstance.activeContent.textBeforeSelection
+                    editorInstance.commitText(if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text)
+                }
+                activeState.imeUiMode = ImeUiMode.PYSANKA_VOICE
+            }
+            ua.pysanka.voice.VoiceInput.Ready.NOT_HERE -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
+            ua.pysanka.voice.VoiceInput.Ready.UNSUPPORTED -> appContext.showShortToastSync(R.string.pysanka__voice__unsupported)
+            else -> {
+                appContext.showShortToastSync(R.string.pysanka__voice__set_up)
+                ua.pysanka.voice.openVoiceSettings(appContext)
+            }
+        }
+    }
+
     /** Pysanka: the keys type into the clipboard search (shown over the text keys), not the field. */
     private fun pysankaSearching() = activeState.imeUiMode == ImeUiMode.TEXT && ua.pysanka.clipboard.ClipSearch.active
 
@@ -901,7 +921,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                     else ua.pysanka.ocr.TextFromImageActivity.SOURCE_CAMERA,
                 )
             }
-            KeyCode.VOICE_INPUT -> FlorisImeService.switchToVoiceInputMethod()
+            // Pysanka: its own dictation on the phone (or what is missing for it)
+            KeyCode.VOICE_INPUT -> pysankaDictate()
             KeyCode.KANA_SWITCHER -> handleKanaSwitch()
             KeyCode.KANA_HIRA -> handleKanaHira()
             KeyCode.KANA_KATA -> handleKanaKata()

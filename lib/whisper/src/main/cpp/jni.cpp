@@ -41,7 +41,8 @@ Java_ua_pysanka_whisper_WhisperNative_transcribe(
     const char * lang = env->GetStringUTFChars(language, nullptr);
     whisper_full_params params = whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
     params.n_threads = threads;
-    params.language = lang;
+    // A language Whisper does not know: it finds out by itself
+    params.language = whisper_lang_id(lang) >= 0 ? lang : "auto";
     params.detect_language = false;
     params.translate = false;
     params.no_context = true;
