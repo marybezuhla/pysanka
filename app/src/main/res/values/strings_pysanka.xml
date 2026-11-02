@@ -326,4 +326,8 @@
     <string name="pysanka__voice__model_base">Faster: Whisper base (about 60 MB), for older phones</string>
     <string name="pysanka__voice__delete_other">Delete the other model</string>
     <string name="pysanka__ai__thread_no_history">The parts will not fit in the clipboard history (it is off or shorter): copy them with a tap.</string>
+    <string name="pysanka__typing__key_targeting">More accurate key taps</string>
+    <string name="pysanka__typing__key_targeting_summary">A tap near the edge between two letters goes to the one more likely in the word (the keys look the same)</string>
+    <string name="pysanka__typing__calibrate">Adapt to my taps</string>
+    <string name="pysanka__typing__calibrate_summary">If you always tap a little low or to one side, the keyboard notices and corrects it (in memory only, not in password or incognito fields)</string>
 </resources>

@@ -43,6 +43,45 @@ class TextKeyboard(
         return null
     }
 
+    /**
+     * Pysanka: the key for a tap: as drawn, except that near the edge between two letters the one
+     * more likely next in [composing] takes it (see [ua.pysanka.typing.KeyTargeting]).
+     */
+    fun pysankaKeyForTap(rawX: Float, rawY: Float, composing: String, calibrate: Boolean): TextKey? {
+        val calibration = ua.pysanka.typing.KeyTargeting.Calibration
+        // The person's usual offset taken off first (only where it may be learned)
+        val (pointerX, pointerY) = getKeyForPos(rawX, rawY)?.takeIf { calibrate && pysankaLetter(it) != null }
+            ?.touchBounds?.let { calibration.adjust(rawX, rawY, it.right - it.left, it.bottom - it.top) } ?: (rawX to rawY)
+        val hit = getKeyForPos(pointerX, pointerY) ?: getKeyForPos(rawX, rawY) ?: return null
+        val letter = pysankaLetter(hit) ?: return hit
+        val priors = ua.pysanka.typing.KeyTargeting.current(composing)
+        val near = if (priors == null) {
+            emptyList()
+        } else {
+            keys().asSequence().filter { it !== hit && it.isEnabled }
+                .mapNotNull { k -> pysankaLetter(k)?.let { k to pysankaTarget(k, it) } }
+                .filter { (_, t) -> t.near(pointerX, pointerY) }.toList()
+        }
+        val i = if (near.isEmpty()) 0 else {
+            ua.pysanka.typing.KeyTargeting.pick(pointerX, pointerY, listOf(pysankaTarget(hit, letter)) + near.map { it.second }, priors!!)
+        }
+        val chosen = if (i == 0) hit else near[i - 1].first
+        // Learned from taps that went to the key they were on (a tap given to a neighbour says little)
+        if (calibrate && i == 0) calibration.learn(pointerX, pointerY, pysankaTarget(hit, letter))
+        return chosen
+    }
+
+    private fun pysankaLetter(key: TextKey): Char? {
+        val data = key.computedData
+        if (data.type != dev.patrickgold.florisboard.ime.text.key.KeyType.CHARACTER || data.code <= 0) return null
+        if (!Character.isLetter(data.code) || Character.charCount(data.code) != 1) return null
+        return ua.pysanka.typing.PersonalWords.key(data.code.toChar().toString()).singleOrNull()
+    }
+
+    private fun pysankaTarget(key: TextKey, letter: Char) = key.touchBounds.let {
+        ua.pysanka.typing.KeyTargeting.Target(it.left, it.top, it.right, it.bottom, letter)
+    }
+
     override fun layout(
         keyboardWidth: Float,
         keyboardHeight: Float,

@@ -192,6 +192,8 @@ private fun TypingSettings() {
     PrefToggle(prefs.glide.showTrail, stringRes(R.string.pysanka__typing__glide_trail), enabled = glide)
     PrefToggle(prefs.suggestion.enabled, stringRes(R.string.pysanka__typing__suggestions), stringRes(R.string.pysanka__typing__suggestions_summary))
     PrefToggle(prefs.correction.pysankaAutoCorrect, stringRes(R.string.pysanka__typing__auto_correct), stringRes(R.string.pysanka__typing__auto_correct_summary), enabled = suggestions)
+    PrefToggle(prefs.correction.pysankaKeyTargeting, stringRes(R.string.pysanka__typing__key_targeting), stringRes(R.string.pysanka__typing__key_targeting_summary), enabled = suggestions)
+    PrefToggle(prefs.correction.pysankaCalibrate, stringRes(R.string.pysanka__typing__calibrate), stringRes(R.string.pysanka__typing__calibrate_summary))
     PrefToggle(prefs.correction.pysankaLearnWords, stringRes(R.string.pysanka__typing__learn_words), stringRes(R.string.pysanka__typing__learn_words_summary), enabled = suggestions)
     ActionRow(stringRes(R.string.pysanka__typing__forget_words), stringRes(R.string.pysanka__typing__forget_words_summary)) { confirmForget = true }
     BlockDivider()

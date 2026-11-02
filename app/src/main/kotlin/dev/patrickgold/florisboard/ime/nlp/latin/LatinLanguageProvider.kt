@@ -125,6 +125,17 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
     ): List<SuggestionCandidate> {
         val word = content.composingText
         val dict = suggester(subtype) ?: return emptyList()
+        // Pysanka: the likely next letters, for a tap near the edge between two keys (KeyTargeting);
+        // never in a private or password field
+        ua.pysanka.typing.KeyTargeting.publish(
+            if (prefs.correction.pysankaKeyTargeting.get() && !isPrivateSession && keyboardManager.activeState.isComposingEnabled &&
+                !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword
+            ) {
+                ua.pysanka.typing.KeyTargeting.Priors(PersonalWords.key(word), dict.nextLetters(word))
+            } else {
+                null
+            },
+        )
         val own = if (mayShowOwn(isPrivateSession)) withContext(Dispatchers.IO) { own(subtype) } else null
         // Pysanka: before a word is begun, the words that usually follow the one before (also
         // right after a tapped suggestion, whose space comes with the next word)
