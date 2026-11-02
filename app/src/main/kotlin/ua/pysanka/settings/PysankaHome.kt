@@ -209,6 +209,10 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.pysankaCalibrate, stringRes(R.string.pysanka__typing__calibrate), stringRes(R.string.pysanka__typing__calibrate_summary))
     PrefToggle(prefs.correction.pysankaLearnWords, stringRes(R.string.pysanka__typing__learn_words), stringRes(R.string.pysanka__typing__learn_words_summary), enabled = suggestions)
     ActionRow(stringRes(R.string.pysanka__typing__forget_words), stringRes(R.string.pysanka__typing__forget_words_summary)) { confirmForget = true }
+    val navController = LocalNavController.current
+    LinkRow(stringRes(R.string.pysanka__shortcuts__title), stringRes(R.string.pysanka__shortcuts__summary)) {
+        navController.navigate(Routes.Settings.TextShortcuts)
+    }
     BlockDivider()
     PrefToggle(prefs.correction.autoCapitalization, stringRes(R.string.pysanka__typing__auto_caps))
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))

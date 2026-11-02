@@ -153,7 +153,13 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
                 NextWordCandidate(text = it, previous = previous, sourceProvider = this@LatinLanguageProvider)
             }
         }
-        val autoCorrect = prefs.correction.pysankaAutoCorrect.get()
+        // Pysanka: a shortcut the person made («дд» → «Добрий день!»), first and applied by a space;
+        // never in a password field
+        val shortcut = if (ua.pysanka.privacy.FieldPrivacy.isPassword) null else {
+            ua.pysanka.typing.TextShortcuts.load(appContext)
+            ua.pysanka.typing.TextShortcuts.find(word)?.let { listOf(ua.pysanka.typing.ShortcutCandidate(word, it)) }
+        }
+        val autoCorrect = prefs.correction.pysankaAutoCorrect.get() && shortcut == null
         val previous = PreviousWord.of(content.textBeforeSelection.dropLast(word.length))
         val found = dict.suggest(word, maxCandidateCount, AutoCorrect.rejected, own, previous)
         AutoCorrect.suggestedFor = word
@@ -169,6 +175,7 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         }
         // The word as typed is offered next to its correction, so it can be kept with a tap
         val corrected = list.firstOrNull()?.isEligibleForAutoCommit == true
+        if (shortcut != null) return shortcut + list.take(maxCandidateCount - 1)
         return if (corrected) {
             listOf(
                 list.first(),

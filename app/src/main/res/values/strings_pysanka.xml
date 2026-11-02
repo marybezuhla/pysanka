@@ -373,4 +373,11 @@
     <string name="pysanka__welcome__promise">No internet. Your words and clipboard are encrypted. The AI, if you want it, runs right on your phone.</string>
     <string name="pysanka__privacy__crash_notifications">Notify me about crashes</string>
     <string name="pysanka__privacy__crash_notifications_summary">If Pysanka breaks, a notification shows the report (without anything you typed). Android will ask for permission.</string>
+    <string name="pysanka__shortcuts__title">Text replacement</string>
+    <string name="pysanka__shortcuts__summary">A short word → a whole text: “gm” → “Good morning!”</string>
+    <string name="pysanka__shortcuts__about">Type the shortcut on the keyboard: its text appears in the suggestions, and a space puts it in place of the shortcut (Backspace right after takes it back). Kept encrypted; not in password fields.</string>
+    <string name="pysanka__shortcuts__shortcut">Shortcut (letters and digits)</string>
+    <string name="pysanka__shortcuts__text">Text</string>
+    <string name="pysanka__shortcuts__add">Save</string>
+    <string name="pysanka__shortcuts__delete">Delete “{shortcut}”</string>
 </resources>
