@@ -154,13 +154,7 @@ fun ClipboardInputLayout(
     val lockUntil by ua.pysanka.clipboard.ClipboardLock.until.collectAsState()
     if (phoneLocked) ua.pysanka.clipboard.ClipboardLock.close()
     // Closes by itself when its time is up, also with the panel open
-    LaunchedEffect(lockUntil) {
-        val left = lockUntil - android.os.SystemClock.elapsedRealtime()
-        if (lockUntil > 0 && left > 0) {
-            kotlinx.coroutines.delay(left)
-            ua.pysanka.clipboard.ClipboardLock.close()
-        }
-    }
+    LaunchedEffect(lockUntil) { ua.pysanka.clipboard.ClipboardLock.closeWhenDue(lockUntil) }
     val fingerprintLocked = remember(fingerprint, lockUntil, phoneLocked, historyEnabled) {
         fingerprint && historyEnabled && ua.pysanka.clipboard.ClipboardLock.supported(context) && !ua.pysanka.clipboard.ClipboardLock.isOpen()
     }

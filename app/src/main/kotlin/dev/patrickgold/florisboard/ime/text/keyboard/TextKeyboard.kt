@@ -61,7 +61,8 @@ class TextKeyboard(
             rawX to rawY
         }
         val hit = getKeyForPos(pointerX, pointerY)?.takeIf { pysankaLetter(it) != null } ?: drawn
-        val (x, y) = if (hit === drawn && getKeyForPos(pointerX, pointerY) !== drawn) rawX to rawY else pointerX to pointerY
+        val adjusted = !(hit === drawn && getKeyForPos(pointerX, pointerY) !== drawn)
+        val (x, y) = if (adjusted) pointerX to pointerY else rawX to rawY
         val letter = pysankaLetter(hit) ?: drawnLetter
         val priors = ua.pysanka.typing.KeyTargeting.current(composing)
         val near = if (priors == null || priors.next.isEmpty()) {
@@ -74,8 +75,9 @@ class TextKeyboard(
         val i = if (near.isEmpty()) 0 else {
             ua.pysanka.typing.KeyTargeting.pick(x, y, listOf(pysankaTarget(hit, letter)) + near.map { it.second }, priors!!)
         }
-        // Learned from taps that went to the key they were on (a tap given to a neighbour says little)
-        if (calibrate && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter))
+        // Learned from taps that went to the key they were on (a tap given to a neighbour says little),
+        // and only where the offset was taken off (a raw tap still has it in)
+        if (calibrate && adjusted && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter))
         return if (i == 0) hit else near[i - 1].first
     }
 

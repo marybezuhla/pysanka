@@ -149,7 +149,6 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
             android:exported="false"
             android:excludeFromRecents="true"
-            android:noHistory="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Pysanka: dictation (Whisper) in its own process, so the model never weighs on the keyboard -->

@@ -356,7 +356,16 @@ private fun ClipboardSettings() {
         stringRes(R.string.pysanka__clipboard__clear_affects_summary), enabled = history,
     )
     if (ua.pysanka.clipboard.ClipboardLock.supported(LocalContext.current)) {
-        PrefToggle(prefs.clipboard.pysankaFingerprint, stringRes(R.string.pysanka__clipboard_lock__setting), stringRes(R.string.pysanka__clipboard_lock__setting_summary))
+        // Turning the lock off asks for the fingerprint too, or it would be no lock at all
+        val context = LocalContext.current
+        val locked by prefs.clipboard.pysankaFingerprint.observeAsState()
+        ToggleRow(stringRes(R.string.pysanka__clipboard_lock__setting), locked, stringRes(R.string.pysanka__clipboard_lock__setting_summary)) { on ->
+            if (on) {
+                scope.launch { prefs.clipboard.pysankaFingerprint.set(true) }
+            } else {
+                ua.pysanka.clipboard.ClipboardLock.afterUnlock(context) { scope.launch { prefs.clipboard.pysankaFingerprint.set(false) } }
+            }
+        }
     }
     PrefToggle(prefs.clipboard.suggestionEnabled, stringRes(R.string.pysanka__clipboard__suggest), stringRes(R.string.pysanka__clipboard__suggest_summary))
     BlockDivider()

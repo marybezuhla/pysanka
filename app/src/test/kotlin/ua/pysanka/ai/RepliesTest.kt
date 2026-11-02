@@ -24,10 +24,10 @@ class RepliesTest : FunSpec({
         )
     }
     test("versions: bold names, paragraphs kept, a sentence with a name is not a new version") {
-        Replies.versions("Ось версії:\n\n**X (Twitter):** Короткий пост.\n\n**Bluesky:**\nТрохи довший пост.\n\n### LinkedIn\nПерший абзац.\n\nX is not a header: це текст.") shouldBe listOf(
+        Replies.versions("Ось версії:\n\n**X (Twitter):** Короткий пост.\n\n**Bluesky:**\nТрохи довший пост.\n\n### LinkedIn\nПерший абзац.\n\nX is not a header: це текст.\n#LinkedIn #робота\n\n---\nСподіваюся, це допоможе!") shouldBe listOf(
             Replies.Reply("X", "Короткий пост."),
             Replies.Reply("Bluesky", "Трохи довший пост."),
-            Replies.Reply("LinkedIn", "Перший абзац.\n\nX is not a header: це текст."),
+            Replies.Reply("LinkedIn", "Перший абзац.\n\nX is not a header: це текст.\n#LinkedIn #робота"),
         )
     }
 })

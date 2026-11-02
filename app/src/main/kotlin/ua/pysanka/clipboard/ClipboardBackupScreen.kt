@@ -66,6 +66,11 @@ fun ClipboardBackupScreen() = FlorisScreen {
                     repeat = ""
                     importPassword = ""
                     ClipboardBackup.clearStatus()
+                    // Pysanka: locked (the screen went off) while the file was being picked: the
+                    // answer would come to nothing, so the password is not kept for it
+                    val activity = generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }
+                        .firstOrNull { it is android.app.Activity } as? android.app.Activity
+                    if (activity?.isChangingConfigurations != true) ClipboardBackup.cancelExport()
                 }
             }
 
