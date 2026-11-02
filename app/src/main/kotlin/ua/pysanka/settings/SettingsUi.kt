@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
@@ -58,12 +57,12 @@ import kotlin.math.roundToInt
 /** A block's colours: the header's fill and the ink on it. */
 data class Tint(val container: Color, val ink: Color)
 
-/** One calm colour for every block (the red of the icon, softened): the header is what says "a block". */
+/**
+ * One calm colour for every block (the theme's primary, softened: the icon's red, or the phone's
+ * own colour with "system colours"): the header is what says "a block".
+ */
 @Composable
-fun blockTint(): Tint {
-    val dark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
-    return if (dark) Tint(Color(0xFF3A2320), Color(0xFFF3C7BE)) else Tint(Color(0xFFF8E3DE), Color(0xFF7A231B))
-}
+fun blockTint(): Tint = MaterialTheme.colorScheme.let { Tint(it.primaryContainer, it.onPrimaryContainer) }
 
 /**
  * One theme of the settings. Closed, it shows its [title] and [summary]; a tap opens it.

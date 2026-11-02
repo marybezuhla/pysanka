@@ -87,7 +87,7 @@ class AiPanelScreensTest {
         more: Boolean = false,
         message: String = MESSAGE,
     ) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
-        val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/${if (dark) "floris_night" else "floris_day"}.json")
+        val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/${if (dark) "podillia" else "kreyda"}.json")
             .bufferedReader().use { it.readText() }
         val stylesheet = SnyggStylesheet.fromJson(json).getOrThrow()
         scenario.onActivity { activity ->
