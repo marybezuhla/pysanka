@@ -21,7 +21,7 @@
 
     "--incognito-icon-color": "#00000011",
 
-    "--on-primary": "#f0f0f0",
+    "--on-primary": "#000000",
     "--on-background": "#121212",
     "--on-background-disabled": "rgb(175,175,175)",
     "--on-surface": "#000000",
@@ -42,7 +42,7 @@
   },
   "window-move-handle[windowmode=`fixed`]": {
     "background": "var(--surface)",
-    "foreground": "var(--primary)",
+    "foreground": "var(--primary-variant)",
     "font-size": "24sp",
     "margin": "16dp 0dp",
     "padding": "8dp",
@@ -60,7 +60,7 @@
   },
   "window-resize-action[windowmode=`floating`]": {
     "background": "var(--surface)",
-    "foreground": "var(--primary)",
+    "foreground": "var(--primary-variant)",
     "shape": "circle()"
   },
   "floating-dock-to-fixed-indicator": {
@@ -81,11 +81,11 @@
   },
   "key[code=10]": {
     "background": "var(--primary)",
-    "foreground": "var(--on-surface)"
+    "foreground": "var(--on-primary)"
   },
   "key[code=10]:pressed": {
     "background": "var(--primary-variant)",
-    "foreground": "var(--on-surface)"
+    "foreground": "var(--on-primary)"
   },
   "key[code=32]": {
     "background": "var(--surface)",
@@ -103,7 +103,7 @@
     "text-max-lines": "2"
   },
   "key[code=-11][shiftstate=`caps_lock`]": {
-    "foreground": "var(--secondary)"
+    "foreground": "#bf360c"
   },
   "key-hint": {
     "background": "transparent",
@@ -407,7 +407,7 @@
   },
   "extracted-landscape-input-action": {
     "background": "var(--primary)",
-    "foreground": "var(--on-surface)",
+    "foreground": "var(--on-primary)",
     "shape": "rounded-corner(4dp, 4dp, 4dp, 4dp)"
   },
 

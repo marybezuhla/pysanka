@@ -4,6 +4,7 @@
 - ✋ **Підлаштування під ваші дотики:** клавіатура помічає, якщо ви звично влучаєте трохи нижче чи вбік, і враховує це. Лише в пам'яті.
 - 📌 **Шаблони буфера:** Налаштування → Буфер → Шаблони — набрані там тексти закріплюються в історії буфера.
 - 🔒 **Історія буфера за відбитком** (Android 10+, за бажанням): відкривається на 5 хвилин або до згасання екрана.
+- 🌗 **Чіткіші клавіші:** у вшитих темах підвищено контраст — Enter, підпис пробілу, підказки клавіш і виділене у вікні довгого натискання читаються краще, особливо в нічній темі.
 - 🌐 **«Для кількох мереж»** (ШІ): версії допису для X, Bluesky, Threads і LinkedIn з довжиною й ✓/✗; «Усі в буфер · Чернетки».
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень — Obtainium: «Додати застосунок» → `github.com/Marybezu/pysanka`.
@@ -16,4 +17,5 @@
 - Adapts to your taps: if you usually hit a little low or to one side, the keyboard allows for it. Memory only.
 - Clipboard templates: Settings → Clipboard → Templates; texts typed there are pinned in the clipboard history.
 - Clipboard history behind your fingerprint (Android 10+, optional): open for 5 minutes or until the screen turns off.
+- Clearer keys: higher contrast in the built-in themes (Enter, the space bar label, key hints, the long-press popup), especially at night.
 - "For several networks" (AI): versions of a post for X, Bluesky, Threads and LinkedIn with length and ✓/✗; "All to clipboard · Drafts".

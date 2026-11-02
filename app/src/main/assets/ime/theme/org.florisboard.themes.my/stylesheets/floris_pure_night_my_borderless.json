@@ -25,7 +25,7 @@
     "--on-background": "dynamic-dark-color(onBackground)",
     "--on-background-disabled": "rgb(175,175,175)",
     "--on-surface": "dynamic-dark-color(onSurface)",
-    "--on-surface-variant": "#5f5f5f",
+    "--on-surface-variant": "dynamic-dark-color(onSurfaceVariant)",
 
     "--shape": "rounded-corner(8dp, 8dp, 8dp, 8dp)",
     "--shape-variant": "rounded-corner(12dp, 12dp, 12dp, 12dp)",
