@@ -18,9 +18,19 @@ package dev.patrickgold.florisboard.app.setup
 
 import android.content.Context
 import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,12 +61,10 @@ import dev.patrickgold.florisboard.lib.compose.FlorisScreenScope
 import dev.patrickgold.florisboard.lib.util.InputMethodUtils
 import dev.patrickgold.florisboard.lib.util.launchActivity
 import dev.patrickgold.florisboard.lib.util.launchUrl
-import dev.patrickgold.jetpref.datastore.model.observeAsState
 import dev.patrickgold.jetpref.datastore.ui.PreferenceUiScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.florisboard.lib.android.AndroidVersion
 import org.florisboard.lib.compose.FlorisBulletSpacer
 import org.florisboard.lib.compose.FlorisStep
 import org.florisboard.lib.compose.FlorisStepLayout
@@ -77,26 +85,13 @@ fun SetupScreen() = FlorisScreen {
 
     val isFlorisBoardEnabled by InputMethodUtils.observeIsFlorisboardEnabled(foregroundOnly = true)
     val isFlorisBoardSelected by InputMethodUtils.observeIsFlorisboardSelected(foregroundOnly = true)
-    val hasNotificationPermission by prefs.internal.notificationPermissionState.observeAsState()
 
-    val requestNotification =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            scope.launch {
-                if (isGranted) {
-                    prefs.internal.notificationPermissionState.set(NotificationPermissionState.GRANTED)
-                } else {
-                    prefs.internal.notificationPermissionState.set(NotificationPermissionState.DENIED)
-                }
-            }
-        }
-
+    // Pysanka: no permission asked on the first start (crash notifications: in the settings, if wanted)
     content(
         isFlorisBoardEnabled,
         isFlorisBoardSelected,
         context,
         navController,
-        requestNotification,
-        hasNotificationPermission,
         scope,
     )
 }
@@ -107,8 +102,6 @@ private fun FlorisScreenScope.content(
     isFlorisBoardSelected: Boolean,
     context: Context,
     navController: NavController,
-    requestNotification: ManagedActivityResultLauncher<String, Boolean>,
-    hasNotificationPermission: NotificationPermissionState,
     scope: CoroutineScope,
 ) {
 
@@ -116,19 +109,17 @@ private fun FlorisScreenScope.content(
         val initStep = when {
             !isFlorisBoardEnabled -> Steps.EnableIme.id
             !isFlorisBoardSelected -> Steps.SelectIme.id
-            hasNotificationPermission == NotificationPermissionState.NOT_SET && AndroidVersion.ATLEAST_API33_T -> Steps.SelectNotification.id
             else -> Steps.FinishUp.id
         }
         FlorisStepState.new(init = initStep)
     }
 
     content {
-        LaunchedEffect(isFlorisBoardEnabled, isFlorisBoardSelected, hasNotificationPermission) {
+        LaunchedEffect(isFlorisBoardEnabled, isFlorisBoardSelected) {
             stepState.setCurrentAuto(
                 when {
                     !isFlorisBoardEnabled -> Steps.EnableIme.id
                     !isFlorisBoardSelected -> Steps.SelectIme.id
-                    hasNotificationPermission == NotificationPermissionState.NOT_SET && AndroidVersion.ATLEAST_API33_T -> Steps.SelectNotification.id
                     else -> Steps.FinishUp.id
                 }
             )
@@ -144,7 +135,6 @@ private fun FlorisScreenScope.content(
                     stepState.getCurrentManual().value == -1 &&
                     !isFlorisBoardEnabled &&
                     !isFlorisBoardSelected &&
-                    hasNotificationPermission == NotificationPermissionState.NOT_SET &&
                     isEnabled
                 ) {
                     context.launchActivity(FlorisAppActivity::class) {
@@ -161,15 +151,43 @@ private fun FlorisScreenScope.content(
                 .padding(horizontal = 16.dp),
             stepState = stepState,
             header = {
-                StepText(stringRes(R.string.setup__intro_message))
+                PysankaWelcome()
                 Spacer(modifier = Modifier.height(16.dp))
             },
             steps = steps(
-                context, navController, requestNotification, scope
+                context, navController, scope
             ),
             footer = {
                 footer(context)
             },
+        )
+    }
+}
+
+/** Pysanka: the icon and a short, warm welcome: what Pysanka is and what it keeps to itself. */
+@Composable
+internal fun PysankaWelcome() {
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            Modifier.size(88.dp).clip(CircleShape).background(colorResource(R.color.ic_app_icon_background)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(painterResource(R.drawable.ic_app_icon_foreground), contentDescription = null, modifier = Modifier.size(132.dp))
+        }
+        Spacer(Modifier.height(12.dp))
+        Text(
+            stringRes(R.string.pysanka__welcome__title),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading() },
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(stringRes(R.string.pysanka__welcome__lead), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(10.dp))
+        Text(
+            stringRes(R.string.pysanka__welcome__promise),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -199,7 +217,6 @@ private fun footer(context: Context) {
 private fun PreferenceUiScope<FlorisPreferenceModel>.steps(
     context: Context,
     navController: NavController,
-    requestNotification: ManagedActivityResultLauncher<String, Boolean>,
     scope: CoroutineScope,
 ): List<FlorisStep> {
 
@@ -222,22 +239,16 @@ private fun PreferenceUiScope<FlorisPreferenceModel>.steps(
                 InputMethodUtils.showImePicker(context)
             }
         },
-        if (AndroidVersion.ATLEAST_API33_T) {
-            FlorisStep(
-                id = Steps.SelectNotification.id,
-                title = stringRes(R.string.setup__grant_notification_permission__title),
-            ) {
-                StepText(stringRes(R.string.setup__grant_notification_permission__description))
-                StepButton(stringRes(R.string.setup__grant_notification_permission__btn)) {
-                    requestNotification.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-                }
-            }
-        } else null,
         FlorisStep(
             id = Steps.FinishUp.id,
             title = stringRes(R.string.setup__finish_up__title),
         ) {
             StepText(stringRes(R.string.setup__finish_up__description_p1))
+            // Pysanka: "your" Pysanka at once: the day and the night theme as small keyboards
+            Text(stringRes(R.string.pysanka__look__day_theme), style = MaterialTheme.typography.titleSmall)
+            ua.pysanka.settings.ThemePicker(night = false)
+            Text(stringRes(R.string.pysanka__look__night_theme), style = MaterialTheme.typography.titleSmall)
+            ua.pysanka.settings.ThemePicker(night = true)
             StepText(stringRes(R.string.setup__finish_up__description_p2))
             StepButton(label = stringRes(R.string.setup__finish_up__finish_btn)) {
                 scope.launch { this@steps.prefs.internal.isImeSetUp.set(true) }
@@ -254,6 +265,5 @@ private fun PreferenceUiScope<FlorisPreferenceModel>.steps(
 private sealed class Steps(val id: Int) {
     data object EnableIme : Steps(id = 1)
     data object SelectIme : Steps(id = 2)
-    data object SelectNotification : Steps(id = 3)
-    data object FinishUp : Steps(id = 4)
+    data object FinishUp : Steps(id = 3)
 }

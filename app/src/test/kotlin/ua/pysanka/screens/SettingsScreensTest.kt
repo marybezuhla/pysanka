@@ -1,5 +1,6 @@
 package ua.pysanka.screens
 
+import ua.pysanka.ui.PysankaBackdrop
 import android.app.Application
 import android.content.ComponentName
 import android.graphics.Bitmap
@@ -60,12 +61,22 @@ class SettingsScreensTest {
             activity.setContent {
                 // The settings' own way of finding texts in the chosen language
                 org.florisboard.lib.compose.ProvideLocalizedResources(activity, appName = dev.patrickgold.florisboard.R.string.app_name) {
-                MaterialTheme(colorScheme = if (dark) darkColorScheme() else lightColorScheme()) {
+                // Pysanka's own colours of the settings, with the faint pysanka in the corner
+                val scheme = org.florisboard.lib.color.neutralDynamicColorScheme(
+                    primary = dev.patrickgold.florisboard.app.apptheme.PysankaRed, isDark = dark,
+                    tertiary = dev.patrickgold.florisboard.app.apptheme.PysankaGold,
+                    neutral = dev.patrickgold.florisboard.app.apptheme.PysankaCream,
+                    neutralVariant = dev.patrickgold.florisboard.app.apptheme.PysankaCream,
+                )
+                MaterialTheme(colorScheme = scheme) {
+                    androidx.compose.foundation.layout.Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+                    PysankaBackdrop()
                     Column(
-                        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(12.dp),
+                        Modifier.fillMaxSize().padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        Text("Офлайн-клавіатура · без доступу до інтернету", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        // The welcome screen's greeting above the closed blocks
+                        if (!openTyping) dev.patrickgold.florisboard.app.setup.PysankaWelcome()
                         Block("Мови", "Українська, Англійська (Сполучені Штати)", icon = Icons.Default.Language) {}
                         Block("Набір", "Свайп: увімкнено · підказки: увімкнено · виправлення: увімкнено", icon = Icons.Outlined.Keyboard, startOpen = openTyping) {
                             ToggleRow("Набір проведенням (свайп)", true, "Проводьте пальцем по літерах") {}
@@ -82,6 +93,10 @@ class SettingsScreensTest {
                         Block("ШІ на телефоні", "Модель встановлено", icon = ua.pysanka.ui.AiMark) {
                             LinkRow("Модель і налаштування ШІ", "Завантажити чи видалити модель, «Мій стиль»") {}
                         }
+                        // The themes as the settings and the welcome screen show them
+                        ua.pysanka.settings.ThemeRow(false, androidx.compose.ui.graphics.Color(0xFF6750A4), "kreyda") {}
+                        ua.pysanka.settings.ThemeRow(true, androidx.compose.ui.graphics.Color(0xFF6750A4), "podillia") {}
+                    }
                     }
                 }
                 }
