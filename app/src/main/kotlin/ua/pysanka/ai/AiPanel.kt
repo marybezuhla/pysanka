@@ -48,6 +48,8 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DocumentScanner
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.ViewAgenda
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.ExpandLess
@@ -71,6 +73,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -189,8 +193,21 @@ fun AiPanel(modifier: Modifier = Modifier) {
 
     fun input(action: AiAction) = if (fromClip(action)) clip!! else source
 
+    // The app being written in, if it limits a post (X, Threads…): shown with the count, and a post
+    // longer than that can be shortened to fit or split into a thread
+    val app = remember { SocialApps.of(panel.info.packageName) }
+    val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
+    val showCount = remember { prefs.pysankaAi.showCount.get() }
+    fun overLimit(t: String) = app != null && SocialApps.length(t) > app.limit
+
     fun runAction(action: AiAction) {
         val text = input(action)
+        // A thread is split here, at once, without the model
+        if (action == AiAction.THREAD) {
+            val a = app ?: return
+            stage = PanelStage.Done(action, false, ThreadSplit.split(text, a.limit).joinToString(THREAD_SEPARATOR), 0, false, 0, "")
+            return
+        }
         if (text.isBlank() || link == null) return
         if (text.length > AiJob.limit(context, action)) {
             stage = PanelStage.TooLong(action)
@@ -203,6 +220,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
             putString(AiService.KEY_ACTION, action.name)
             putString(AiService.KEY_TARGET, target.name)
             putString(AiService.KEY_TEXT, text)
+            if (action == AiAction.SHORTER && overLimit(text)) putInt(AiService.KEY_LIMIT, app!!.limit)
         })
     }
 
@@ -245,7 +263,10 @@ fun AiPanel(modifier: Modifier = Modifier) {
         intoEmptyField = panel.taken.mode == AiBridge.Mode.INSERT,
         canExpand = panel.canExpand,
         canRun = { input(it).isNotBlank() },
-        available = { it != AiAction.MY_STYLE || hasStyle },
+        available = { (it != AiAction.MY_STYLE || hasStyle) && (it != AiAction.THREAD || overLimit(source)) },
+        lead = if (overLimit(source)) listOf(AiAction.THREAD, AiAction.SHORTER) else emptyList(),
+        app = app,
+        length = if (showCount) SocialApps.length(source) else null,
         modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
         headerHeight = FlorisImeSizing.smartbarHeight,
         actions = object : PanelActions {
@@ -265,6 +286,15 @@ fun AiPanel(modifier: Modifier = Modifier) {
             override fun expand(action: AiAction) = openFull(action)
             override fun place(text: String, insert: Boolean) = placeText(text, insert)
             override fun copy(text: String) = ua.pysanka.privacy.Clip.copy(context, text)
+            override fun thread(parts: List<String>) {
+                // The rest into the history first (the second part on top), then the first in place of
+                // the text; if the history cannot keep them all, the text stays as it is
+                if (clipboardManager.pysankaAddToHistory(parts.drop(1))) {
+                    placeText(parts.first(), insert = false)
+                } else {
+                    android.widget.Toast.makeText(context, R.string.pysanka__ai__thread_no_history, android.widget.Toast.LENGTH_LONG).show()
+                }
+            }
             override fun change(text: String) {
                 source = text
                 stage = PanelStage.Menu
@@ -288,6 +318,8 @@ internal interface PanelActions {
     fun expand(action: AiAction)
     fun place(text: String, insert: Boolean)
     fun copy(text: String)
+    /** A thread: the first part into the field, the rest into the clipboard history. */
+    fun thread(parts: List<String>)
     /** Another action on this answer (it still goes in place of the field's text). */
     fun change(text: String)
     fun settings()
@@ -306,6 +338,12 @@ internal fun AiPanelView(
     canRun: (AiAction) -> Boolean,
     /** Whether an action is shown at all («Моїм стилем» only with samples). */
     available: (AiAction) -> Boolean = { true },
+    /** Shown first (for a post too long for its app: the thread and "shorter"). */
+    lead: List<AiAction> = emptyList(),
+    /** The app being written in, if it limits a post. */
+    app: SocialApps.App? = null,
+    /** The post's length, when the counter is on (see [Counter]). */
+    length: Int? = null,
     modifier: Modifier,
     headerHeight: Dp,
     actions: PanelActions,
@@ -341,10 +379,11 @@ internal fun AiPanelView(
                 }
                 PanelStage.Menu -> Column(Modifier.fillMaxSize()) {
                     Note(stringRes(note))
+                    if (length != null && length > 0) Counter(length, app)
                     val shown = if (more) {
-                        (MAIN + AiAction.entries).distinct().filter(available)
+                        (lead + MAIN + AiAction.entries).distinct().filter(available)
                     } else {
-                        MAIN.filter(available).take(MAIN_SHOWN)
+                        (lead + MAIN).distinct().filter(available).take(MAIN_SHOWN)
                     }
                     // At least 112 dp a tile (three across on a phone): narrower, longer words broke in the
                     // middle («Граматик-а»), above all with large text
@@ -388,6 +427,9 @@ internal fun AiPanelView(
                     },
                     onPlace = actions::place,
                     onCopy = { actions.copy(s.text) },
+                    onCopyPart = { actions.copy(it) },
+                    onThread = { actions.thread(it) },
+                    app = app,
                     onAgain = { actions.again(s.action) },
                     onChange = if (s.action.kind == AiAction.Kind.ADVICE || s.action == AiAction.REPLIES) null else {
                         { actions.change(s.text) }
@@ -416,6 +458,8 @@ private fun icon(action: AiAction): ImageVector = when (action) {
     AiAction.FRIENDLY -> Icons.Default.SentimentSatisfied
     AiAction.FORMAL -> Icons.Default.BusinessCenter
     AiAction.SHORTER -> Icons.Default.ContentCut
+    AiAction.CALMER -> Icons.Default.Spa
+    AiAction.THREAD -> Icons.Default.ViewAgenda
     AiAction.LIST -> Icons.AutoMirrored.Filled.FormatListBulleted
     AiAction.TABLE -> Icons.Default.TableChart
     AiAction.NOTES -> Icons.Default.EditNote
@@ -538,10 +582,18 @@ private fun Done(
     replaceLabel: Int?,
     onPlace: (String, Boolean) -> Unit,
     onCopy: () -> Unit,
+    onCopyPart: (String) -> Unit,
+    onThread: (List<String>) -> Unit,
     onAgain: () -> Unit,
     onChange: (() -> Unit)?,
     onExpand: (() -> Unit)?,
+    /** The app being written in, if it limits a post (its length after "shorter" is shown). */
+    app: SocialApps.App?,
 ) {
+    if (s.action == AiAction.THREAD) {
+        Thread(s.text.split(THREAD_SEPARATOR), onCopyPart, onThread)
+        return
+    }
     val replies = remember(s) { if (s.action == AiAction.REPLIES) Replies.parse(s.text).takeIf { it.size >= 2 } else null }
     Column(Modifier.fillMaxSize()) {
         if (replies != null) {
@@ -568,6 +620,13 @@ private fun Done(
         Note(
             buildString {
                 append(stringRes(R.string.pysanka__ai__done_in, "s" to s.seconds.toString(), "where" to s.backend))
+                if (app != null && s.action == AiAction.SHORTER) {
+                    append(" · ").append(
+                        SocialApps.length(s.text).let { n ->
+                            stringRes(R.string.pysanka__ai__length, "n" to n) + " · ${app.name}: ${app.limit} " + if (n <= app.limit) "✓" else "✗"
+                        },
+                    )
+                }
                 if (s.unconfirmed) {
                     append(" · ").append(stringRes(R.string.pysanka__ai__fact_unconfirmed))
                 } else if (s.removed > 0) {
@@ -589,6 +648,58 @@ private fun Done(
             } else {
                 Chip(stringRes(R.string.pysanka__ocr__copy), primary = true, onClick = onCopy)
             }
+        }
+    }
+}
+
+/**
+ * The post's length, and how it fits its app ("312 знаків · X: 280"); a tap shows what every network
+ * allows, so the same post can be checked for another one, and hides it again.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Counter(length: Int, app: SocialApps.App?) {
+    var open by remember { mutableStateOf(false) }
+    fun mark(limit: Int) = if (length <= limit) "✓" else "✗"
+    val state = stringRes(if (open) R.string.pysanka__settings__block_open else R.string.pysanka__settings__block_closed)
+    Column(
+        Modifier.fillMaxWidth()
+            .semantics { stateDescription = state }
+            .clickable(onClickLabel = stringRes(R.string.pysanka__ai__limits)) { open = !open }
+            .padding(horizontal = 12.dp, vertical = 2.dp),
+    ) {
+        SnyggText(
+            text = stringRes(R.string.pysanka__ai__length, "n" to length) +
+                (app?.let { " · ${it.name}: ${it.limit} ${mark(it.limit)}" } ?: "") + if (open) "  ▴" else "  ▾",
+        )
+        if (open) FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            for (n in SocialApps.NETWORKS) SnyggText(text = "${n.name} ${n.limit} ${mark(n.limit)}")
+        }
+    }
+}
+
+/** Between the parts of a thread in [PanelStage.Done.text] (a part never has a line break). */
+private const val THREAD_SEPARATOR = "\n\n"
+
+/** A thread: each part (a tap copies it), and the first into the field with the rest into the history. */
+@Composable
+private fun Thread(parts: List<String>, onCopyPart: (String) -> Unit, onThread: (List<String>) -> Unit) {
+    Column(Modifier.fillMaxSize()) {
+        Note(stringRes(R.string.pysanka__ai__thread_note, "n" to parts.size))
+        Column(Modifier.fillMaxWidth().weight(1f).florisVerticalScroll()) {
+            for (p in parts) {
+                SnyggBox(
+                    FlorisImeUi.ClipboardItem.elementName,
+                    modifier = Modifier.fillMaxWidth(),
+                    clickAndSemanticsModifier = Modifier.clickable { onCopyPart(p) },
+                ) {
+                    SnyggText(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp), text = p)
+                }
+            }
+        }
+        Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Spacer(Modifier.weight(1f))
+            Chip(stringRes(R.string.pysanka__ai__thread_place), primary = true) { onThread(parts) }
         }
     }
 }

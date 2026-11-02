@@ -127,6 +127,7 @@ fun PysankaHome() {
             LinkRow(stringRes(R.string.pysanka__settings__ai_open), stringRes(R.string.pysanka__settings__ai_open_hint)) {
                 navController.navigate(Routes.Settings.PysankaAi)
             }
+            PrefToggle(prefs.pysankaAi.showCount, stringRes(R.string.pysanka__ai__show_count), stringRes(R.string.pysanka__ai__show_count_summary))
         }
 
         val voiceState = stringRes(

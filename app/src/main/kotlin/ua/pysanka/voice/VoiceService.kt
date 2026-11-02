@@ -36,6 +36,7 @@ class VoiceService : Service() {
 
         const val KEY_TOKEN = "token"
         const val KEY_LANGUAGE = "language"
+        const val KEY_MODEL = "model"
         const val KEY_SAMPLES = "samples"
         const val KEY_TEXT = "text"
         const val KEY_REASON = "reason"
@@ -70,7 +71,7 @@ class VoiceService : Service() {
                 token = data.getLong(KEY_TOKEN)
                 language = data.getString(KEY_LANGUAGE)?.takeIf { it.matches(LANGUAGE) } ?: "auto"
                 // Loaded while the person speaks
-                VoiceEngine.load(this)
+                VoiceEngine.load(this, PinnedModel.whisper(data.getString(KEY_MODEL)))
             }
             AUDIO -> if (data.getLong(KEY_TOKEN) == token && run == 0L) {
                 val piece = data.getShortArray(KEY_SAMPLES) ?: return
@@ -158,10 +159,17 @@ private object VoiceEngine {
 
     // Touched on the worker thread only
     private var model: WhisperNative.Model? = null
+    private var file: java.io.File? = null
 
-    fun load(context: Context) {
-        val file = ModelStore(context.applicationContext, PinnedModel.WHISPER).modelFile()
-        worker.execute { if (model == null) model = file?.let(WhisperNative::load) }
+    /** Loads [which] (if another one is loaded, that one is freed first). */
+    fun load(context: Context, which: PinnedModel) {
+        val f = ModelStore(context.applicationContext, which).modelFile()
+        worker.execute {
+            if (model != null && f == file) return@execute
+            model?.close()
+            model = f?.let(WhisperNative::load)
+            file = f
+        }
     }
 
     /** [done] (on the worker thread) gets the text, or null and whether there was no model. */
@@ -183,6 +191,7 @@ private object VoiceEngine {
         worker.execute {
             model?.close()
             model = null
+            file = null
         }
     }
 }
