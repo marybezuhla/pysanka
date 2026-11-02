@@ -326,8 +326,8 @@
     <string name="pysanka__ai__show_count">Лічильник знаків</string>
     <string name="pysanka__ai__show_count_summary">Над плитками ШІ: скільки знаків у тексті; дотик показує ліміти X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
     <string name="pysanka__voice__model">Модель</string>
-    <string name="pysanka__voice__model_small">Точніша: Whisper small (≈190 МБ)</string>
-    <string name="pysanka__voice__model_base">Швидша: Whisper base (≈60 МБ), для старіших телефонів</string>
+    <string name="pysanka__voice__model_small">Точніша, повільніша: Whisper small (≈190 МБ)</string>
+    <string name="pysanka__voice__model_base">Швидша (рекомендована): Whisper base (≈60 МБ)</string>
     <string name="pysanka__voice__delete_other">Видалити іншу модель</string>
     <string name="pysanka__ai__thread_no_history">Історія буфера зараз не прийме частини (вона вимкнена, коротша, ще не готова або це приватне поле): копіюйте їх дотиком.</string>
     <string name="pysanka__typing__key_targeting">Точніше влучання в клавіші</string>
@@ -391,4 +391,14 @@
     <string name="pysanka__shortcuts__not_saved">Не вдалося зберегти скорочення. Спробуйте ще раз.</string>
     <string name="pysanka__shortcuts__full">Скорочень уже {n}, більше не вміщається. Видаліть зайве.</string>
     <string name="pysanka__setup__done">виконано</string>
+    <string name="pysanka__voice__speak">Говоріть… {time}</string>
+    <string name="pysanka__voice__auto_stop">Зупинятися самій після паузи</string>
+    <string name="pysanka__voice__auto_stop_summary">Замовкніть на 2 секунди, і текст зʼявиться сам. «Готово» лишається, щоб закінчити раніше.</string>
+    <string name="pysanka__voice__pause_hint">Пауза на 2 секунди, і текст зʼявиться сам</string>
+    <string name="pysanka__ai__keep_title">Відповідь готова</string>
+    <string name="pysanka__ai__keep_text">Що з нею зробити?</string>
+    <string name="pysanka__ai__keep_drop">Відкинути</string>
+    <string name="pysanka__ai__panel_actions">Дії на панелі ШІ</string>
+    <string name="pysanka__ai__panel_actions_hint">Позначені видно одразу, решта в «Ще».</string>
+    <string name="pysanka__ai__panel_actions_done">Готово</string>
 </resources>

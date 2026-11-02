@@ -34,7 +34,8 @@ import ua.pysanka.whisper.WhisperNative
 object VoiceInput {
     sealed interface State {
         data object Idle : State
-        data class Listening(val seconds: Int, val level: Float) : State
+        /** [seconds] listened so far (of [VoiceService.MAX_SECONDS]); [heard]: speech has begun. */
+        data class Listening(val seconds: Float, val level: Float, val heard: Boolean = false) : State
         data object Recognising : State
         data class Failed(@StringRes val message: Int) : State
     }
@@ -58,6 +59,7 @@ object VoiceInput {
     private var rec = Rec()
     private var token = 0L
     private var onText: ((String) -> Unit)? = null
+    private var language = ""
 
     /**
      * The Whisper to use: the one chosen in the settings ([PinnedModel.WHISPER] or the faster
@@ -65,7 +67,7 @@ object VoiceInput {
      */
     fun model(context: Context): PinnedModel {
         val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
-        val chosen = PinnedModel.whisper(runCatching { prefs.pysankaVoice.model.get() }.getOrDefault("small"))
+        val chosen = PinnedModel.whisper(runCatching { prefs.pysankaVoice.model.get() }.getOrDefault("base"))
         val other = if (chosen === PinnedModel.WHISPER) PinnedModel.WHISPER_BASE else PinnedModel.WHISPER
         return if (ModelStore(context, chosen).modelFile() == null && ModelStore(context, other).modelFile() != null) other else chosen
     }
@@ -97,6 +99,7 @@ object VoiceInput {
         recorder?.join(500)
         val app = context.applicationContext
         this.onText = onText
+        this.language = language
         token++
         val t = token
         link = Link(app) { what, data -> if (data.getLong(VoiceService.KEY_TOKEN) == t) answer(what, data) }.also {
@@ -105,8 +108,9 @@ object VoiceInput {
                 putString(VoiceService.KEY_MODEL, if (model(app) === PinnedModel.WHISPER_BASE) "base" else "small")
             }
         }
-        state.value = State.Listening(0, 0f)
-        record(t)
+        state.value = State.Listening(0f, 0f)
+        val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
+        record(t, runCatching { prefs.pysankaVoice.autoStop.get() }.getOrDefault(true))
     }
 
     /** Stops listening and recognises what was said. */
@@ -134,7 +138,7 @@ object VoiceInput {
         if (state.value !is State.Recognising) return
         when (what) {
             VoiceService.TEXT -> {
-                val text = Transcript.clean(data.getString(VoiceService.KEY_TEXT).orEmpty())
+                val text = Transcript.clean(data.getString(VoiceService.KEY_TEXT).orEmpty(), language)
                 val deliver = onText
                 close()
                 if (text.isEmpty()) {
@@ -159,8 +163,13 @@ object VoiceInput {
         onText = null
     }
 
+    /** Louder than this (of 32768) is speech; quieter than [QUIET], a pause. */
+    private const val SPEECH = 2000
+    private const val QUIET = 1000
+    private const val PAUSE_SECONDS = 2
+
     @SuppressLint("MissingPermission") // checked in ready() before the panel opens
-    private fun record(t: Long) {
+    private fun record(t: Long, autoStop: Boolean) {
         val rate = WhisperNative.SAMPLE_RATE
         val min = AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
         val audio = runCatching {
@@ -175,26 +184,43 @@ object VoiceInput {
         rec = r
         recorder = Thread {
             val piece = ShortArray(rate / 4) // a quarter of a second
-            var total = 0
+            var elapsed = 0
+            // Silence before the first words is not sent (Whisper makes words up for it); the last
+            // quarter second before them is, so the first sound is not cut
+            var heard = false
+            var before: ShortArray? = null
+            var quiet = 0
+            fun peakOf(a: ShortArray, n: Int): Int {
+                var p = 0
+                for (k in 0 until n) p = maxOf(p, kotlin.math.abs(a[k].toInt()))
+                return p
+            }
+            fun ship(chunk: ShortArray) = main.post {
+                var sent = false
+                if (token == t && !r.dropped) sent = link?.send(VoiceService.AUDIO, t) { putShortArray(VoiceService.KEY_SAMPLES, chunk) } == true
+                // Sent (copied to the other process) or not wanted: not kept here; one still
+                // waiting for the connection is cleared once it is sent
+                if (sent || token != t || r.dropped) chunk.fill(0)
+            }
             fun send(n: Int) {
-                val chunk = piece.copyOf(n)
-                total += n
-                var peak = 0
-                for (s in chunk) peak = maxOf(peak, kotlin.math.abs(s.toInt()))
-                val seconds = total / rate
+                val peak = peakOf(piece, n)
+                elapsed += n
+                if (!heard && peak >= SPEECH) {
+                    heard = true
+                    before?.let(::ship)
+                    before = null
+                }
+                if (heard) ship(piece.copyOf(n)) else before = piece.copyOf(n).also { before?.fill(0) }
+                // A pause after the words: done, as if «Готово» was tapped (if chosen)
+                quiet = if (heard && peak < QUIET) quiet + n else 0
+                val pause = autoStop && quiet >= rate * PAUSE_SECONDS
+                val seconds = elapsed.toFloat() / rate
                 main.post {
-                    var sent = false
-                    if (token == t && !r.dropped) {
-                        sent = link?.send(VoiceService.AUDIO, t) { putShortArray(VoiceService.KEY_SAMPLES, chunk) } == true
-                        if (state.value is State.Listening) {
-                            state.value = State.Listening(seconds, peak / 32768f)
-                            // The longest dictation: recognised as it is
-                            if (seconds >= VoiceService.MAX_SECONDS) finish()
-                        }
+                    if (token == t && !r.dropped && state.value is State.Listening) {
+                        state.value = State.Listening(seconds, peak / 32768f, heard)
+                        // The longest dictation: recognised as it is
+                        if (seconds >= VoiceService.MAX_SECONDS || pause) finish()
                     }
-                    // Sent (copied to the other process) or not wanted: not kept here; one still
-                    // waiting for the connection is cleared once it is sent
-                    if (sent || token != t || r.dropped) chunk.fill(0)
                 }
             }
             try {
@@ -219,6 +245,7 @@ object VoiceInput {
                 main.post { if (token == t && !r.dropped) fail(t, R.string.pysanka__voice__no_mic_now) }
             } finally {
                 piece.fill(0)
+                before?.fill(0)
                 runCatching { audio.stop() }
                 audio.release()
             }

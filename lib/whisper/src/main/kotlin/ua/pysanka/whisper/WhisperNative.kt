@@ -42,9 +42,10 @@ object WhisperNative {
          * The text of [audio] (16 kHz mono, -1..1) in [language] ("uk", "en"…); null if it failed or
          * [run] was stopped.
          */
-        fun transcribe(audio: FloatArray, language: String, threads: Int, run: Long): String? {
+        /** [prompt]: a sample of text in the language, written as the result should be (punctuation). */
+        fun transcribe(audio: FloatArray, language: String, prompt: String, threads: Int, run: Long): String? {
             check(handle != 0L) { "Closed" }
-            return transcribe(handle, audio, language, threads, run)?.toString(Charsets.UTF_8)
+            return transcribe(handle, audio, language, prompt, threads, run)?.toString(Charsets.UTF_8)
         }
 
         override fun close() {
@@ -66,7 +67,7 @@ object WhisperNative {
     }
 
     private external fun init(path: String): Long
-    private external fun transcribe(handle: Long, audio: FloatArray, language: String, threads: Int, gen: Long): ByteArray?
+    private external fun transcribe(handle: Long, audio: FloatArray, language: String, prompt: String, threads: Int, gen: Long): ByteArray?
     private external fun nativeStop(gen: Long)
     private external fun free(handle: Long)
 }

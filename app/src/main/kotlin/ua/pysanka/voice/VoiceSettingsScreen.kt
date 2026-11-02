@@ -28,6 +28,7 @@ import dev.patrickgold.florisboard.lib.compose.FlorisScreen
 import org.florisboard.lib.compose.stringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.RadioButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
@@ -77,7 +78,7 @@ fun VoiceSettingsScreen() = FlorisScreen {
             val scope = androidx.compose.runtime.rememberCoroutineScope()
             val chosen by prefs.pysankaVoice.model.observeAsState()
             Text(stringRes(R.string.pysanka__voice__model), style = MaterialTheme.typography.titleMedium)
-            for ((name, label) in listOf("small" to R.string.pysanka__voice__model_small, "base" to R.string.pysanka__voice__model_base)) {
+            for ((name, label) in listOf("base" to R.string.pysanka__voice__model_base, "small" to R.string.pysanka__voice__model_small)) {
                 Row(
                     Modifier.fillMaxWidth().selectable(selected = chosen == name, role = Role.RadioButton) {
                         scope.launch { prefs.pysankaVoice.model.set(name) }
@@ -103,6 +104,15 @@ fun VoiceSettingsScreen() = FlorisScreen {
                         Text(stringRes(R.string.pysanka__voice__delete_other))
                     }
                 }
+            }
+            // A pause ends the dictation by itself (or only «Готово» does)
+            val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
+            Row(Modifier.fillMaxWidth().toggleable(autoStop, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.autoStop.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringRes(R.string.pysanka__voice__auto_stop), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringRes(R.string.pysanka__voice__auto_stop_summary), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                androidx.compose.material3.Switch(checked = autoStop, onCheckedChange = null)
             }
             HorizontalDivider()
             if (mic) {

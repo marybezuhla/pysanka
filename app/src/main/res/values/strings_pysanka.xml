@@ -325,8 +325,8 @@
     <string name="pysanka__ai__show_count">Character counter</string>
     <string name="pysanka__ai__show_count_summary">Above the AI tiles: how many characters; a tap shows the limits of X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
     <string name="pysanka__voice__model">Model</string>
-    <string name="pysanka__voice__model_small">More accurate: Whisper small (about 190 MB)</string>
-    <string name="pysanka__voice__model_base">Faster: Whisper base (about 60 MB), for older phones</string>
+    <string name="pysanka__voice__model_small">More accurate, slower: Whisper small (about 190 MB)</string>
+    <string name="pysanka__voice__model_base">Faster (recommended): Whisper base (about 60 MB)</string>
     <string name="pysanka__voice__delete_other">Delete the other model</string>
     <string name="pysanka__ai__thread_no_history">The clipboard history cannot take the parts now (it is off, shorter, not ready yet, or this is a private field): copy them with a tap.</string>
     <string name="pysanka__typing__key_targeting">More accurate key taps</string>
@@ -390,4 +390,14 @@
     <string name="pysanka__shortcuts__not_saved">The shortcuts could not be saved. Please try again.</string>
     <string name="pysanka__shortcuts__full">There are already {n} shortcuts, no more fit. Delete some first.</string>
     <string name="pysanka__setup__done">done</string>
+    <string name="pysanka__voice__speak">Speak… {time}</string>
+    <string name="pysanka__voice__auto_stop">Stop by itself after a pause</string>
+    <string name="pysanka__voice__auto_stop_summary">Be quiet for 2 seconds and the text appears by itself. «Done» still finishes sooner.</string>
+    <string name="pysanka__voice__pause_hint">Pause for 2 seconds and the text appears by itself</string>
+    <string name="pysanka__ai__keep_title">The answer is ready</string>
+    <string name="pysanka__ai__keep_text">What should happen to it?</string>
+    <string name="pysanka__ai__keep_drop">Discard</string>
+    <string name="pysanka__ai__panel_actions">Actions on the AI panel</string>
+    <string name="pysanka__ai__panel_actions_hint">Ticked ones show at once, the rest under “More”.</string>
+    <string name="pysanka__ai__panel_actions_done">Done</string>
 </resources>

@@ -186,6 +186,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__ai__show_count",
             default = true,
         )
+        /** The actions on the AI panel before "More" (ua.pysanka.ai.AiPanelActions); empty: the usual ones. */
+        val panelActions = string(
+            key = "pysanka__ai__panel_actions",
+            default = "",
+        )
         /** How many emoji a post written by the AI may have: 0 none … 3 many (see AiPrompts.emoji). */
         val emoji = int(
             key = "pysanka__ai__emoji",
@@ -196,10 +201,15 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {
-        /** Which Whisper: "small" (more accurate) or "base" (faster). */
+        /** Which Whisper: "base" (faster; the one to start with) or "small" (more accurate, slower). */
         val model = string(
             key = "pysanka__voice__model",
-            default = "small",
+            default = "base",
+        )
+        /** A pause of two seconds after the words ends the dictation, without «Готово». */
+        val autoStop = boolean(
+            key = "pysanka__voice__auto_stop",
+            default = true,
         )
     }
 

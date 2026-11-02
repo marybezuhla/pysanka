@@ -267,6 +267,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
         canRun = { input(it).isNotBlank() },
         available = { (it != AiAction.MY_STYLE || hasStyle) && (it != AiAction.THREAD || overLimit(source)) },
         lead = if (overLimit(source)) listOf(AiAction.THREAD, AiAction.SHORTER) else emptyList(),
+        main = remember { AiPanelActions.chosen(prefs.pysankaAi.panelActions.get()) },
         app = app,
         length = if (showCount) SocialApps.length(source) else null,
         modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
@@ -351,6 +352,8 @@ internal fun AiPanelView(
     available: (AiAction) -> Boolean = { true },
     /** Shown first (for a post too long for its app: the thread and "shorter"). */
     lead: List<AiAction> = emptyList(),
+    /** The actions on the panel before "More" (the person's choice, see [AiPanelActions]). */
+    main: List<AiAction> = AiPanelActions.DEFAULT,
     /** The app being written in, if it limits a post. */
     app: SocialApps.App? = null,
     /** The post's length, when the counter is on (see [Counter]). */
@@ -392,9 +395,9 @@ internal fun AiPanelView(
                     Note(stringRes(note))
                     if (length != null && length > 0) Counter(length, app)
                     val shown = if (more) {
-                        (lead + MAIN + AiAction.entries).distinct().filter(available)
+                        (lead + main + AiAction.entries).distinct().filter(available)
                     } else {
-                        (lead + MAIN).distinct().filter(available).take(MAIN_SHOWN)
+                        (lead + main).distinct().filter(available)
                     }
                     // At least 112 dp a tile (three across on a phone): narrower, longer words broke in the
                     // middle («Граматик-а»), above all with large text
@@ -454,13 +457,26 @@ internal fun AiPanelView(
     }
 }
 
-/** The actions shown first (the first [MAIN_SHOWN] of them that are available); "More" shows all. */
-private val MAIN = listOf(
-    AiAction.FIX, AiAction.MY_STYLE, AiAction.FRIENDLY, AiAction.FORMAL, AiAction.SHORTER, AiAction.REPLIES,
-)
+/**
+ * Pysanka: which actions the panel shows before "More" (all of them are under "More"). The person
+ * chooses them in the settings; the order is the actions' own.
+ */
+object AiPanelActions {
+    /** As before the choice: five and "More", two rows on a phone. */
+    val DEFAULT = listOf(AiAction.FIX, AiAction.MY_STYLE, AiAction.FRIENDLY, AiAction.FORMAL, AiAction.SHORTER, AiAction.REPLIES)
 
-/** Five and "More": two rows on a phone, so the short list is clearly short. */
-private const val MAIN_SHOWN = 5
+    /** Every action that can be chosen (a thread is offered by itself when a post is too long). */
+    val CHOOSABLE = AiAction.entries.filter { it != AiAction.THREAD }
+
+    /** The saved choice ("FIX,FORMAL,…"); empty or unknown: [DEFAULT]. */
+    fun chosen(saved: String): List<AiAction> {
+        if (saved.isBlank()) return DEFAULT
+        val names = saved.split(',').map { it.trim() }.toSet()
+        return CHOOSABLE.filter { it.name in names }.ifEmpty { DEFAULT }
+    }
+
+    fun save(actions: Collection<AiAction>): String = CHOOSABLE.filter { it in actions }.joinToString(",") { it.name }
+}
 
 private fun icon(action: AiAction): ImageVector = when (action) {
     AiAction.FIX -> Icons.Default.Spellcheck

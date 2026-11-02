@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import dev.patrickgold.jetpref.datastore.model.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -50,6 +51,8 @@ fun VoicePanel(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val keyboardManager by context.keyboardManager()
     val state by VoiceInput.state.collectAsState()
+    val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
+    val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
     fun close() {
         VoiceInput.cancel()
         keyboardManager.activeState.imeUiMode = ImeUiMode.TEXT
@@ -77,18 +80,38 @@ fun VoicePanel(modifier: Modifier = Modifier) {
             ) {
                 when (val s = state) {
                     is VoiceInput.State.Listening -> {
-                        // The microphone grows with the voice, so it is plain that it hears
-                        Box(Modifier.size(64.dp), contentAlignment = Alignment.Center) {
+                        // The microphone grows with the voice, so it is plain that it hears; the ring
+                        // around it empties as the time for one dictation runs out
+                        val ink = androidx.compose.material3.LocalContentColor.current
+                        val left = (1f - s.seconds / VoiceService.MAX_SECONDS).coerceIn(0f, 1f)
+                        Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
+                            androidx.compose.foundation.Canvas(Modifier.size(96.dp)) {
+                                val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 5.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
+                                drawCircle(ink.copy(alpha = 0.18f), style = stroke, radius = size.minDimension / 2 - stroke.width)
+                                val inset = stroke.width
+                                drawArc(
+                                    ink, startAngle = -90f, sweepAngle = 360f * left, useCenter = false, style = stroke,
+                                    topLeft = androidx.compose.ui.geometry.Offset(inset, inset),
+                                    size = androidx.compose.ui.geometry.Size(size.width - 2 * inset, size.height - 2 * inset),
+                                )
+                            }
                             SnyggIcon(
                                 imageVector = Icons.Default.KeyboardVoice,
                                 modifier = Modifier.size(40.dp).scale(1f + (s.level * 3f).coerceAtMost(0.6f)),
                             )
                         }
-                        SnyggText(text = stringRes(R.string.pysanka__voice__listening, "time" to "%d:%02d".format(s.seconds / 60, s.seconds % 60)))
+                        val secs = s.seconds.toInt()
+                        SnyggText(
+                            text = stringRes(
+                                if (s.heard) R.string.pysanka__voice__listening else R.string.pysanka__voice__speak,
+                                "time" to "%d:%02d".format(secs / 60, secs % 60),
+                            ),
+                        )
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Chip(stringRes(R.string.pysanka__voice__cancel)) { close() }
                             Chip(stringRes(R.string.pysanka__voice__done), primary = true) { VoiceInput.finish() }
                         }
+                        if (autoStop) SnyggText(text = stringRes(R.string.pysanka__voice__pause_hint))
                     }
                     VoiceInput.State.Recognising -> {
                         SnyggText(text = stringRes(R.string.pysanka__voice__recognising))
