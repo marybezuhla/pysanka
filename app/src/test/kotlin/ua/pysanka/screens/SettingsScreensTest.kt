@@ -102,7 +102,8 @@ class SettingsScreensTest {
                 }
             }
         }
-        repeat(8) { shadowOf(Looper.getMainLooper()).idle() }
+        // The theme pictures are read off the main thread: a moment for them
+        repeat(8) { shadowOf(Looper.getMainLooper()).idle(); Thread.sleep(100) }
         var bitmap: Bitmap? = null
         scenario.onActivity { activity ->
             val view = activity.window.decorView
