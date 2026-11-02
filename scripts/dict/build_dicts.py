@@ -125,7 +125,7 @@ def main() -> None:
         data = build(lang, fw / "content" / "2018" / lang / f"{lang}_full.txt", known)
         (out / f"{lang}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(lang, len(data), list(data)[:15])
-    # Then the extra lists a person can turn on: themes.py
+    # Then the words by theme, added to the same lists: themes.py
 
 
 if __name__ == "__main__":

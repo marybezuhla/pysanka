@@ -43,8 +43,12 @@ object VoiceInput {
     val state: StateFlow<State>
         field = MutableStateFlow<State>(State.Idle)
 
-    /** The text the last dictation put in the field (to take it back), until the panel changes it or closes. */
-    val inserted = MutableStateFlow<String?>(null)
+    /**
+     * The text the last dictation put in the field and where the cursor was after it (to take it
+     * back), until the panel changes the text or closes.
+     */
+    data class Inserted(val text: String, val end: Int)
+    val inserted = MutableStateFlow<Inserted?>(null)
 
     private val main = Handler(Looper.getMainLooper())
     private var link: Link? = null
@@ -149,8 +153,8 @@ object VoiceInput {
     }
 
     /** Louder than this (of 32768) is speech; quieter than [QUIET], a pause. */
-    private const val SPEECH = 2000
-    private const val QUIET = 1000
+    private const val SPEECH = 1200
+    private const val QUIET = 700
     private const val PAUSE_SECONDS = 2
 
     @SuppressLint("MissingPermission") // checked in ready() before the panel opens

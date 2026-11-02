@@ -462,7 +462,7 @@ internal fun AiPanelView(
  * chooses them in the settings; the order is the actions' own.
  */
 object AiPanelActions {
-    /** As before the choice: five and "More", two rows on a phone. */
+    /** As before the choice: six and "More", two rows on a phone. */
     val DEFAULT = listOf(AiAction.FIX, AiAction.MY_STYLE, AiAction.FRIENDLY, AiAction.FORMAL, AiAction.SHORTER, AiAction.REPLIES)
 
     /** Every action that can be chosen (a thread is offered by itself when a post is too long). */

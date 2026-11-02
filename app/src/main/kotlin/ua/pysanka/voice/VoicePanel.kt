@@ -129,12 +129,14 @@ fun VoicePanel(modifier: Modifier = Modifier) {
         editorInstance.commitText(mark)
     }
     fun undo() {
-        val piece = VoiceInput.inserted.value ?: return
+        val last = VoiceInput.inserted.value ?: return
         VoiceInput.inserted.value = null
-        // Only if it is still right before the cursor, untouched and nothing selected
+        // Only if the cursor is still right after it (not moved elsewhere), nothing is selected and
+        // the text there is still the same
         val ic = FlorisImeService.currentInputConnection() ?: return
-        if (editorInstance.activeContent.selection.isSelectionMode) return
-        if (ic.getTextBeforeCursor(piece.length, 0)?.toString() == piece) ic.deleteSurroundingText(piece.length, 0)
+        val sel = editorInstance.activeContent.selection
+        if (sel.isSelectionMode || sel.start != last.end) return
+        if (ic.getTextBeforeCursor(last.text.length, 0)?.toString() == last.text) ic.deleteSurroundingText(last.text.length, 0)
     }
     DisposableEffect(Unit) {
         onDispose {
@@ -163,7 +165,8 @@ fun VoicePanel(modifier: Modifier = Modifier) {
                 else -> listen()
             }
             override fun holdStart() {
-                if (VoiceInput.state.value != VoiceInput.State.Recognising) listen()
+                // Already listening (a screen reader's double tap) or recognising: nothing new
+                if (VoiceInput.state.value == VoiceInput.State.Idle || VoiceInput.state.value is VoiceInput.State.Failed) listen()
             }
             override fun holdEnd(long: Boolean) {
                 if (VoiceInput.state.value is VoiceInput.State.Listening) {
@@ -261,6 +264,7 @@ fun VoicePanelView(
                         onTap = actions::tap,
                         onHoldStart = actions::holdStart,
                         onHoldEnd = actions::holdEnd,
+                        onHoldCancel = actions::cancel,
                     )
                 }
                 Key(Modifier.width(72.dp).fillMaxHeight(0.62f), icon = Icons.AutoMirrored.Outlined.Backspace, label = stringRes(R.string.pysanka__voice__backspace), repeat = true) { actions.backspace() }
@@ -302,6 +306,7 @@ private fun Microphone(
     onTap: () -> Unit,
     onHoldStart: () -> Unit,
     onHoldEnd: (long: Boolean) -> Unit,
+    onHoldCancel: () -> Unit,
 ) {
     val listening = state as? VoiceInput.State.Listening
     val level by animateFloatAsState((listening?.level ?: 0f).coerceIn(0f, 0.3f) / 0.3f, label = "level")
@@ -315,6 +320,7 @@ private fun Microphone(
     val tap by rememberUpdatedState(onTap)
     val start by rememberUpdatedState(onHoldStart)
     val end by rememberUpdatedState(onHoldEnd)
+    val cancel by rememberUpdatedState(onHoldCancel)
     Box(Modifier.size(diameter), contentAlignment = Alignment.Center) {
         val core = diameter * 0.72f
         Canvas(Modifier.fillMaxSize()) {
@@ -341,10 +347,11 @@ private fun Microphone(
                 .semantics { onClick(label) { tap(); true }; role = Role.Button; contentDescription = label }
                 .pointerInput(Unit) {
                     detectTapGestures(onPress = {
-                        val at = System.currentTimeMillis()
                         start()
-                        tryAwaitRelease()
-                        end(System.currentTimeMillis() - at >= 600)
+                        // Counted from when it listens (starting can wait for the last recording to let go)
+                        val at = System.currentTimeMillis()
+                        // A gesture taken away (not a release): nothing is recognised
+                        if (tryAwaitRelease()) end(System.currentTimeMillis() - at >= 600) else cancel()
                     })
                 }
         } else {
@@ -398,9 +405,12 @@ private fun Key(
                         }
                     }
                 } else null
-                tryAwaitRelease()
-                job?.cancel()
-                pressed = false
+                try {
+                    tryAwaitRelease()
+                } finally {
+                    job?.cancel()
+                    pressed = false
+                }
             })
         }
     SnyggBox(
