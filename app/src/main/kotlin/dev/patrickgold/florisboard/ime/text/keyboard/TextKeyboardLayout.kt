@@ -595,7 +595,9 @@ private class TextKeyboardLayoutController(
                         KeyCode.SPACE, KeyCode.CJK_SPACE -> {
                             // Pysanka: a long press on space makes the keyboard a trackpad for the cursor
                             // (not while the keys type into the clipboard search: it would move the field's cursor)
-                            if (prefs.gestures.pysankaSpaceTrackpad.get() && !ua.pysanka.clipboard.ClipSearch.active) {
+                            if (ua.pysanka.clipboard.ClipSearch.active) {
+                                // nothing while searching
+                            } else if (prefs.gestures.pysankaSpaceTrackpad.get()) {
                                 pointer.pysankaTrackpad = true
                                 pointer.hasTriggeredGestureMove = true
                                 inputFeedbackController?.keyLongPress(key.computedData)

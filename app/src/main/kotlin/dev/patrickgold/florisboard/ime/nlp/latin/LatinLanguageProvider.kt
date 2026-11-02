@@ -131,6 +131,8 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
             return emptyList()
         }
         val own = if (mayShowOwn(isPrivateSession)) withContext(Dispatchers.IO) { own(subtype) } else null
+        // Pysanka: the shortcuts in memory before taps are judged (see TextShortcuts.startsWith)
+        if (!ua.pysanka.privacy.FieldPrivacy.isPassword) ua.pysanka.typing.TextShortcuts.load(appContext)
         // Pysanka: the likely next letters, for a tap near the edge between two keys (KeyTargeting);
         // never in a private or password field, nor while a word the person taught is being typed
         ua.pysanka.typing.KeyTargeting.publish(
@@ -158,7 +160,6 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         // Pysanka: a shortcut the person made («дд» → «Добрий день!»), first and applied by a space;
         // never in a password field
         val shortcut = if (ua.pysanka.privacy.FieldPrivacy.isPassword || AutoCorrect.isRejected(word)) null else {
-            ua.pysanka.typing.TextShortcuts.load(appContext)
             ua.pysanka.typing.TextShortcuts.find(word)?.let { listOf(ua.pysanka.typing.ShortcutCandidate(word, it)) }
         }
         val autoCorrect = prefs.correction.pysankaAutoCorrect.get() && shortcut == null
