@@ -225,8 +225,16 @@ class NlpManager(context: Context) {
             internalSuggestionsGuard.withLock {
                 if (internalSuggestions.first < reqTime) {
                     internalSuggestions = reqTime to buildList {
-                        addAll(emojiSuggestions)
-                        addAll(suggestions)
+                        if (prefs.emoji.suggestionType.get().prefix.isEmpty()) {
+                            // Pysanka: for a word, the words first and one emoji third (it never
+                            // pushes the typed word or the correction out of sight)
+                            addAll(suggestions.take(2))
+                            addAll(emojiSuggestions.take(1))
+                            addAll(suggestions.drop(2))
+                        } else {
+                            addAll(emojiSuggestions)
+                            addAll(suggestions)
+                        }
                     }
                 }
             }

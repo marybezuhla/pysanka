@@ -27,6 +27,11 @@ those copies keep that licence.
   The Ukrainian filter uses the uk_UA hunspell dictionary (dict_uk project, as in LibreOffice,
   MPL 1.1) only while the lists are made; it is not part of Pysanka.
 
+- `app/src/main/assets/ime/media/emoji/uk.txt` — Ukrainian emoji names and keywords from the Unicode
+  Common Locale Data Repository (CLDR) v48, © Unicode, Inc., Unicode License v3
+  (https://www.unicode.org/license.txt); made by `scripts/emoji_uk.py`. The other emoji files come
+  from FlorisBoard, made from the same CLDR data.
+
 - Pysanka is based on **FlorisBoard** by The FlorisBoard Contributors
   (https://github.com/florisboard/florisboard), Apache License 2.0. The full history of FlorisBoard
   is kept in this repository; files from FlorisBoard keep their copyright headers. Pysanka is an
