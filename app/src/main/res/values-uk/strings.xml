@@ -438,7 +438,7 @@
     <string name="about__third_party_licenses__summary" comment="Preference summary">Ліцензії сторонніх бібліотек, що входять до цього застосунку</string>
     <!-- Setup UI strings -->
     <string name="setup__title" comment="Title of Setup">Ласкаво просимо!</string>
-    <string name="setup__intro_message" comment="Short intro message welcoming new users">Дякуємо, що обрали Писанку! Кілька кроків — і нею можна користуватися.</string>
+    <string name="setup__intro_message" comment="Short intro message welcoming new users">Дякуємо, що обрали Писанку! Кілька кроків, і нею можна користуватися.</string>
     <string name="setup__footer__privacy_policy" comment="Privacy policy label for URL">Політика конфіденційності</string>
     <string name="setup__footer__repository" comment="Repository label for URL">Код проєкту</string>
     <string name="setup__enable_ime__title">Увімкнути Писанку</string>

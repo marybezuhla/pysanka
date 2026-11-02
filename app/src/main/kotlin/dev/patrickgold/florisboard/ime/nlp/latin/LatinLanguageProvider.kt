@@ -136,7 +136,9 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         ua.pysanka.typing.KeyTargeting.publish(
             if (prefs.correction.pysankaKeyTargeting.get() && !isPrivateSession && keyboardManager.activeState.isComposingEnabled &&
                 !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword &&
-                (word.isEmpty() || own?.withPrefix(PersonalWords.key(word), 1).isNullOrEmpty())
+                (word.isEmpty() || own?.withPrefix(PersonalWords.key(word), 1).isNullOrEmpty()) &&
+                // nor while a text-replacement shortcut is being typed (it is no word of the list)
+                !ua.pysanka.typing.TextShortcuts.startsWith(word)
             ) {
                 ua.pysanka.typing.KeyTargeting.Priors(PersonalWords.key(word), dict.nextLetters(word))
             } else {
@@ -155,7 +157,7 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         }
         // Pysanka: a shortcut the person made («дд» → «Добрий день!»), first and applied by a space;
         // never in a password field
-        val shortcut = if (ua.pysanka.privacy.FieldPrivacy.isPassword) null else {
+        val shortcut = if (ua.pysanka.privacy.FieldPrivacy.isPassword || AutoCorrect.isRejected(word)) null else {
             ua.pysanka.typing.TextShortcuts.load(appContext)
             ua.pysanka.typing.TextShortcuts.find(word)?.let { listOf(ua.pysanka.typing.ShortcutCandidate(word, it)) }
         }

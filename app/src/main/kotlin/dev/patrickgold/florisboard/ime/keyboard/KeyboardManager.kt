@@ -491,8 +491,11 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         // Pysanka: Backspace right after an auto-correction brings back what was typed
         val undo = pysankaUndoReady
         if (undo != null && unit == OperationUnit.CHARACTERS && editorInstance.pysankaUndoAutoCorrect(undo.typed, undo.corrected)) {
-            // A shortcut taken back stays a shortcut: nothing is learned or rejected
-            if (undo.shortcut) return
+            // A shortcut taken back stays as typed while the field is open, and is never learned
+            if (undo.shortcut) {
+                ua.pysanka.typing.AutoCorrect.reject(undo.typed)
+                return
+            }
             // Taken back: this word is left as typed from now on (while the field is open), and
             // learned as the person's own word
             ua.pysanka.typing.AutoCorrect.reject(undo.typed)
@@ -618,7 +621,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * but skips handling changing to characters keyboard and double space periods.
      */
     fun handleHardwareKeyboardSpace() {
-        val candidate = pysankaAutoCommitCandidate()
+        val candidate = pysankaAutoCommitCandidate(bySpace = true)
         candidate?.let { commitCandidate(it) }
         // Skip handling changing to characters keyboard and double space periods
         // TODO: this is whether we commit space after selecting candidate. Should be determined by SuggestionProvider
@@ -635,7 +638,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     private fun handleSpace(data: KeyData) {
         val typed = editorInstance.activeContent.composingText
         // Pysanka: a correction worked out for an earlier keystroke is not applied
-        val candidate = pysankaAutoCommitCandidate()
+        val candidate = pysankaAutoCommitCandidate(bySpace = true)
         val midSentence = pysankaMidSentence(typed)
         val previous = pysankaPreviousWord(typed)
         pysankaLearn(typed, candidate, previous = previous)
@@ -792,11 +795,12 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * Pysanka: the candidate to apply by itself, but never a word correction worked out for an
      * earlier keystroke (suggestions are made in the background and may lag behind fast typing).
      */
-    private fun pysankaAutoCommitCandidate() = nlpManager.getAutoCommitCandidate()?.takeIf {
+    private fun pysankaAutoCommitCandidate(bySpace: Boolean = false) = nlpManager.getAutoCommitCandidate()?.takeIf {
         val typed = editorInstance.activeContent.composingText
         when {
-            // A shortcut's text only for exactly that shortcut
-            it is ua.pysanka.typing.ShortcutCandidate -> it.shortcut == typed
+            // A shortcut's text only for exactly that shortcut, and only by a space (a comma or a
+            // hyphen after it keeps it as typed: "пн-пт")
+            it is ua.pysanka.typing.ShortcutCandidate -> bySpace && it.shortcut == typed
             it.sourceProvider !is dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider -> true
             else -> ua.pysanka.typing.AutoCorrect.suggestedFor == typed
         }
