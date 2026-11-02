@@ -557,7 +557,13 @@ private class TextKeyboardLayoutController(
     private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer) {
         flogDebug(LogTopic.TEXT_KEYBOARD_VIEW) { "pointer=$pointer" }
 
-        val key = keyboard.getKeyForPos(event.getX(pointer.index), event.getY(pointer.index))
+        // Pysanka: near the edge between two letters, the likelier one (KeyTargeting)
+        val key = keyboard.pysankaKeyForTap(
+            event.getX(pointer.index), event.getY(pointer.index), editorInstance.activeContent.composingText,
+            // Pysanka: the person's usual tap offset, learned and used only outside private fields
+            calibrate = prefs.correction.pysankaCalibrate.get() && !ua.pysanka.privacy.FieldPrivacy.isPrivate &&
+                !ua.pysanka.privacy.FieldPrivacy.isPassword,
+        )
         if (key != null && key.isEnabled) {
             key.computedDataOnDown = key.computedData
             pointer.pressedKeyInfo = inputEventDispatcher.sendDown(

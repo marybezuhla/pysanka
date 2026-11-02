@@ -327,4 +327,8 @@
     <string name="pysanka__voice__model_base">Швидша — Whisper base (≈60 МБ), для старіших телефонів</string>
     <string name="pysanka__voice__delete_other">Видалити іншу модель</string>
     <string name="pysanka__ai__thread_no_history">Частини не вмістяться в історію буфера (вона вимкнена або коротша): копіюйте їх дотиком.</string>
+    <string name="pysanka__typing__key_targeting">Точніше влучання в клавіші</string>
+    <string name="pysanka__typing__key_targeting_summary">Дотик біля краю між двома літерами йде до тієї, що ймовірніша в слові (клавіші виглядають так само)</string>
+    <string name="pysanka__typing__calibrate">Підлаштовуватися під мої дотики</string>
+    <string name="pysanka__typing__calibrate_summary">Якщо ви завжди влучаєте трохи нижче чи вбік, клавіатура це помічає й виправляє (лише в памʼяті, не в полях пароля й інкогніто)</string>
 </resources>
