@@ -27,8 +27,8 @@ fun BoxScope.PysankaBackdrop() {
         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .offset(x = 120.dp, y = 90.dp)
-            .size(420.dp)
+            .offset(x = 170.dp, y = 130.dp)
+            .size(580.dp)
             .rotate(-20f)
             .alpha(0.06f),
     )
