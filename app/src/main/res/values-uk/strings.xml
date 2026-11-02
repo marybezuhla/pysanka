@@ -43,7 +43,7 @@
     <string name="emoji__category__objects" comment="Emoji category name">Об\'єкти</string>
     <string name="emoji__category__symbols" comment="Emoji category name">Символи</string>
     <string name="emoji__category__flags" comment="Emoji category name">Прапори</string>
-    <string name="emoji__history__empty_message" comment="Message if the emoji history is empty">Нещодавно використані емодзі не знайдено. Як тільки ви почнете вводити їх, вони автоматично з\'являться тут.</string>
+    <string name="emoji__history__empty_message" comment="Message if the emoji history is empty">Нещодавно використані емодзі не знайдено. Щойно ви почнете їх вводити, вони зʼявляться тут.</string>
     <string name="emoji__history__phone_locked_message" comment="Message to show if phone is locked">Щоб отримати доступ до історії емодзі, спочатку розблокуйте свій пристрій.</string>
     <string name="emoji__history__usage_tip" comment="Feature discoverability for actions of emoji history">Порада: Натисніть і утримуйте емодзі в історії емодзі, щоб закріпити або видалити їх!</string>
     <string name="emoji__history__removal_success_message" comment="Toast message if user has used the delete action on an emoji in the emoji history">Видалено «{emoji}» з історії емодзі</string>
@@ -438,7 +438,7 @@
     <string name="about__third_party_licenses__summary" comment="Preference summary">Ліцензії сторонніх бібліотек, що входять до цього застосунку</string>
     <!-- Setup UI strings -->
     <string name="setup__title" comment="Title of Setup">Ласкаво просимо!</string>
-    <string name="setup__intro_message" comment="Short intro message welcoming new users">Дякуємо, що обрали Писанку! Кілька кроків — і нею можна користуватися.</string>
+    <string name="setup__intro_message" comment="Short intro message welcoming new users">Дякуємо, що обрали Писанку! Кілька кроків, і нею можна користуватися.</string>
     <string name="setup__footer__privacy_policy" comment="Privacy policy label for URL">Політика конфіденційності</string>
     <string name="setup__footer__repository" comment="Repository label for URL">Код проєкту</string>
     <string name="setup__enable_ime__title">Увімкнути Писанку</string>
@@ -489,7 +489,7 @@
     <!-- Crash Dialog strings -->
     <string name="crash_dialog__title" comment="Title of crash dialog">Звіт про помилку Писанки</string>
     <string name="crash_dialog__description" comment="Description of crash dialog">Вибачте за незручності, але стався збій у Писанці через несподівану помилку.</string>
-    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">Якщо ви хочете повідомити про цю помилку, спочатку перевірте відстеження проблем на GitHub, якщо про ваш збій ще не повідомлялося.\nЯкщо ні, скопіюйте згенерований журнал збоїв і створіть нову проблему. Використовуйте шаблон «%s» і заповніть опис, кроки для відтворення, а в кінці вставте згенерований лог збоїв. Це допоможе зробити Писанку кращою і стабільнішою для всіх. Дякуємо!</string>
+    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">Якщо ви хочете повідомити про цю помилку, спершу перевірте на GitHub, чи про цей збій ще не повідомляли.\nЯкщо ні, скопіюйте згенерований журнал збоїв і створіть нову проблему. Використовуйте шаблон «%s» і заповніть опис, кроки для відтворення, а в кінці вставте згенерований журнал збоїв. Це допоможе зробити Писанку кращою і стабільнішою для всіх. Дякуємо!</string>
     <string name="crash_dialog__copy_to_clipboard" comment="Label of Copy to clipboard button in crash dialog">Зкопіювати в системний буфер обміну</string>
     <string name="crash_dialog__copy_to_clipboard_success" comment="Label of Copy to clipboard success message in crash dialog">Зкопійовано в системний буфер обміну</string>
     <string name="crash_dialog__copy_to_clipboard_failure" comment="Label of Copy to clipboard failure message in crash dialog">Не вдається скопіювати до системного буфера обміну: Не знайдено екземпляр диспетчера буфера обміну</string>

@@ -105,8 +105,8 @@
     <string name="pysanka__look__key_hints">Підказки символів на клавішах</string>
     <string name="pysanka__look__key_hints_summary">Що надрукує довге натискання</string>
     <string name="pysanka__look__font_size">Розмір літер на клавішах (коли телефон тримаєте вертикально)</string>
-    <string name="pysanka__sound__haptic">Вібрація при натисканні</string>
-    <string name="pysanka__sound__audio">Звук при натисканні</string>
+    <string name="pysanka__sound__haptic">Вібрація клавіш</string>
+    <string name="pysanka__sound__audio">Звук клавіш</string>
     <string name="pysanka__sound__volume">Гучність</string>
     <string name="pysanka__privacy__fact_offline">Дозволу на інтернет немає: ніщо з набраного не може залишити телефон</string>
     <string name="pysanka__privacy__fact_encrypted">Історія буфера зашифрована; ключ в апаратному сховищі телефона</string>
@@ -180,7 +180,7 @@
     <string name="pysanka__ai__import_failed">Не вдалося скопіювати файл. Спробуйте ще раз.</string>
     <string name="pysanka__ai__original_kept">Не вдалося видалити завантажений файл: видаліть його у «Файлах».</string>
     <string name="pysanka__ai__ready">Модель встановлено ({size} МБ).</string>
-    <string name="pysanka__ai__how_to_use">Торкніться ✦ на панелі над клавіатурою: замість клавіш відкриється ШІ-помічник для виділеного тексту (або всього поля): граматика, стиль, підсумок, переклад, варіанти відповіді на повідомлення з буфера тощо. «Розгорнути» відкриває великий редактор. У полях пароля й інкогніто ШІ не працює ніколи.</string>
+    <string name="pysanka__ai__how_to_use">Торкніться ✦ на панелі над клавіатурою: замість клавіш відкриється ШІ-помічник для виділеного тексту (або всього поля): граматика, стиль, підсумок, переклад, варіанти відповіді на повідомлення з буфера тощо. «Розгорнути» відкриває великий редактор. У полях пароля, інкогніто й полях «не вчитися» ШІ не працює ніколи.</string>
     <string name="pysanka__ai__delete">Видалити модель</string>
     <string name="pysanka__ai__copied_instead">Відповідь не вдалося безпечно вставити, тож її скопійовано: вставте, куди треба.</string>
     <string name="pysanka__links__group">Посилання</string>
@@ -222,7 +222,7 @@
     <string name="pysanka__ai__panel_all">Увесь текст поля</string>
     <string name="pysanka__ai__panel_previous">Попередній результат: виберіть, що зробити далі</string>
     <string name="pysanka__ai__panel_empty">Виділіть текст або напишіть його в полі</string>
-    <string name="pysanka__ai__panel_clip">Відповіді на повідомлення з буфера обміну. Торкніться варіанта, і він вставиться в поле</string>
+    <string name="pysanka__ai__panel_clip">Відповіді на повідомлення з буфера обміну. Торкніться варіанта, і він вставиться в поле.</string>
     <string name="pysanka__ai__panel_tap_reply">Торкніться варіанта, і він вставиться в поле</string>
     <string name="pysanka__ai__panel_too_long">Цей текст задовгий для панелі: відкрийте його у великому редакторі.</string>
     <string name="pysanka__ai__translate_into">Перекласти на:</string>
@@ -302,7 +302,7 @@
     <string name="pysanka__voice__nothing">Нічого не розпізнано. Спробуйте ще раз ближче до мікрофона.</string>
     <string name="pysanka__voice__failed">Не вдалося розпізнати. Спробуйте ще раз.</string>
     <string name="pysanka__voice__no_mic_now">Мікрофон зараз недоступний (можливо, ним користується інший застосунок).</string>
-    <string name="pysanka__voice__not_here">Диктування не працює в полях пароля й інкогніто.</string>
+    <string name="pysanka__voice__not_here">Диктування не працює в полях пароля, інкогніто й полях «не вчитися».</string>
     <string name="pysanka__voice__set_up">Щоб диктувати, встановіть модель і дозвольте мікрофон.</string>
     <string name="pysanka__voice__unsupported">Процесор цього телефона не підтримує диктування.</string>
     <string name="pysanka__voice__about">Whisper (OpenAI) розпізнає мову повністю на телефоні: звук нікуди не надсилається й ніде не зберігається, лише в памʼяті, доки розпізнається. Модель ви завантажуєте самі; приймається лише точний опублікований файл.</string>
@@ -385,4 +385,10 @@
     <string name="pysanka__typing__smart_punctuation_summary">«ялинки» й ʼ в українській, “ ” в англійській</string>
     <string name="pysanka__typing__trackpad">Пробіл як трекпад</string>
     <string name="pysanka__typing__trackpad_summary">Утримайте пробіл і ведіть пальцем, курсор рухатиметься за ним</string>
+    <string name="pysanka__setup__enable">Android просить окремо ввімкнути кожну нову клавіатуру: відкрийте його налаштування й увімкніть «Писанка». Він попередить, що клавіатура може бачити все, що ви набираєте. Так він каже про будь-яку клавіатуру, а Писанка не має доступу до інтернету, тож нічого нікуди не надішле.</string>
+    <string name="pysanka__setup__look">Вигляд клавіатури. Можна обрати зараз або будь-коли в налаштуваннях.</string>
+    <string name="pysanka__shortcuts__not_ready">Скорочення ще не відкрилися. Розблокуйте телефон і зайдіть сюди знову.</string>
+    <string name="pysanka__shortcuts__not_saved">Не вдалося зберегти скорочення. Спробуйте ще раз.</string>
+    <string name="pysanka__shortcuts__full">Скорочень уже {n}, більше не вміщається. Видаліть зайве.</string>
+    <string name="pysanka__setup__done">виконано</string>
 </resources>

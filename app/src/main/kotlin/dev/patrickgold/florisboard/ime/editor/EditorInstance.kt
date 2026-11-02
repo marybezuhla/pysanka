@@ -455,8 +455,20 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         if (content.selection.isSelectionMode || !content.textBeforeSelection.endsWith("$corrected ")) return false
         autoSpace.setInactive()
         phantomSpace.setInactive()
+        // The deletion counts characters as seen (an emoji or a flag is one), not code units:
+        // how many of them make up the replacement and its space, counted the same way
+        val text = content.textBeforeSelection
+        val start = text.length - corrected.length - 1
+        val iterator = android.icu.text.BreakIterator.getCharacterInstance().apply { setText(text) }
+        var n = 0
+        var at = iterator.last()
+        while (at > start && at != android.icu.text.BreakIterator.DONE) {
+            at = iterator.previous()
+            n++
+        }
+        if (at != start) return false
         val deleted = runBlocking {
-            deleteAroundCursor(OperationUnit.CHARACTERS, OperationScope.BEFORE_CURSOR, n = corrected.length + 1)
+            deleteAroundCursor(OperationUnit.CHARACTERS, OperationScope.BEFORE_CURSOR, n = n)
         }
         return deleted && commitText(original)
     }

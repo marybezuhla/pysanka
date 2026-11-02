@@ -46,13 +46,18 @@ object TextShortcuts {
     /** The text for [typed] if it is a shortcut (any case); never reads a file (for the keyboard). */
     fun find(typed: String): String? = if (typed.isEmpty()) null else byKey[typed.lowercase()]
 
+    /** Whether [typed] begins a shortcut (then a tap is not moved to a likelier letter). */
+    fun startsWith(typed: String): Boolean = typed.isNotEmpty() && typed.lowercase().let { t -> byKey.keys.any { it.startsWith(t) } }
+
     /** Reads them (once the vault is open; a locked phone is tried again after a while). Off the main thread. */
-    fun load(context: Context) {
+    fun load(context: Context, now: Boolean = false) {
         if (all.value != null) return
+        val time = android.os.SystemClock.elapsedRealtime()
+        // A locked phone or a read that failed: tried again after a while, not on every key
+        // (the settings screen, opened by the person, tries [now])
+        if (!now && (!ClipboardVault.isOpen() || readFailures > 0) && lastTry != 0L && time - lastTry < 30_000L) return
+        lastTry = time
         if (!ClipboardVault.isOpen()) {
-            val now = android.os.SystemClock.elapsedRealtime()
-            if (lastTry != 0L && now - lastTry < 30_000L) return
-            lastTry = now
             // Outside this object's lock: opening the vault may wipe, and the wipe takes it
             if (!SecureClipboard.ensureOpen(context) || !ClipboardVault.isOpen()) return
         }
@@ -67,9 +72,16 @@ object TextShortcuts {
             if (!file.isFile) return@runCatching emptyList()
             val bytes = file.inputStream().use { SealedFile.readAll(ClipboardVault.shortcutsKey(), LABEL, it) }
             try { decode(bytes) } finally { bytes.fill(0) }
-        }.getOrDefault(emptyList())
+        }.getOrElse {
+            // A read that failed is tried again (an empty list now would let the next save
+            // overwrite them all); a file that never reads is started over after a few tries
+            if (++readFailures < 3) return
+            emptyList()
+        }
         set(list)
     }
+
+    @Volatile private var readFailures = 0
 
     /** Keeps [list] (the settings' whole list). Off the main thread; false if it could not be kept. */
     @Synchronized
@@ -77,7 +89,8 @@ object TextShortcuts {
         if (!ClipboardVault.isOpen()) return false
         val clean = list.filter { isValidShortcut(it.shortcut) && it.text.isNotBlank() }
             .map { it.copy(text = it.text.take(MAX_TEXT)) }
-            .distinctBy { it.shortcut.lowercase() }.take(MAX)
+            .distinctBy { it.shortcut.lowercase() }
+        if (clean.size > MAX) return false
         val bytes = encode(clean)
         return try {
             writeWhole(file(context)) { out -> SealedFile.writer(ClipboardVault.shortcutsKey(), LABEL, out).use { it.write(bytes) } }
@@ -93,11 +106,13 @@ object TextShortcuts {
     /** Removes them from memory and the phone (also when the vault's key is lost; without the lock, see [load]). */
     fun wipe(context: Context) {
         file(context).delete()
+        readFailures = 0
         all.value = null
         byKey = emptyMap()
     }
 
     private fun set(list: List<Shortcut>) {
+        readFailures = 0
         all.value = list
         byKey = list.associate { it.shortcut.lowercase() to it.text }
     }
