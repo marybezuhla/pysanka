@@ -464,7 +464,7 @@ private fun AiEditorScreen(
                     OutlinedButton(onClick = { run() }, modifier = Modifier.weight(1f)) {
                         Text(stringRes(R.string.pysanka__ai__again))
                     }
-                    if (action.kind != AiAction.Kind.ADVICE && action != AiAction.REPLIES) {
+                    if (action.kind != AiAction.Kind.ADVICE && action != AiAction.REPLIES && action != AiAction.VERSIONS) {
                         OutlinedButton(
                             onClick = { source = result; stage = AiStage.Idle },
                             enabled = result.isNotBlank(),

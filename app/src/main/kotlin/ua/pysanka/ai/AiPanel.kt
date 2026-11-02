@@ -48,6 +48,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DocumentScanner
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material.icons.filled.Tag
@@ -286,6 +287,13 @@ fun AiPanel(modifier: Modifier = Modifier) {
             override fun expand(action: AiAction) = openFull(action)
             override fun place(text: String, insert: Boolean) = placeText(text, insert)
             override fun copy(text: String) = ua.pysanka.privacy.Clip.copy(context, text)
+            override fun drafts(texts: List<String>) {
+                val ok = clipboardManager.pysankaAddToHistory(texts, context.getString(R.string.pysanka__ai__drafts_tag))
+                android.widget.Toast.makeText(
+                    context, if (ok) R.string.pysanka__ai__drafts_done else R.string.pysanka__ai__thread_no_history, android.widget.Toast.LENGTH_LONG,
+                ).show()
+                if (ok) closePanel()
+            }
             override fun thread(parts: List<String>) {
                 // The rest into the history first (the second part on top), then the first in place of
                 // the text; if the history cannot keep them all, the text stays as it is
@@ -320,6 +328,8 @@ internal interface PanelActions {
     fun copy(text: String)
     /** A thread: the first part into the field, the rest into the clipboard history. */
     fun thread(parts: List<String>)
+    /** Versions of a post into the clipboard history, tagged "Чернетки". */
+    fun drafts(texts: List<String>)
     /** Another action on this answer (it still goes in place of the field's text). */
     fun change(text: String)
     fun settings()
@@ -423,15 +433,17 @@ internal fun AiPanelView(
                     replaceLabel = when {
                         !s.action.replaces -> null
                         intoEmptyField || s.action == AiAction.REPLIES -> R.string.pysanka__ai__insert
+                        s.action == AiAction.VERSIONS -> null
                         else -> R.string.pysanka__ai__replace
                     },
                     onPlace = actions::place,
                     onCopy = { actions.copy(s.text) },
                     onCopyPart = { actions.copy(it) },
                     onThread = { actions.thread(it) },
+                    onDrafts = { actions.drafts(it) },
                     app = app,
                     onAgain = { actions.again(s.action) },
-                    onChange = if (s.action.kind == AiAction.Kind.ADVICE || s.action == AiAction.REPLIES) null else {
+                    onChange = if (s.action.kind == AiAction.Kind.ADVICE || s.action == AiAction.REPLIES || s.action == AiAction.VERSIONS) null else {
                         { actions.change(s.text) }
                     },
                     onExpand = if (canExpand) { { actions.expand(s.action) } } else null,
@@ -466,6 +478,7 @@ private fun icon(action: AiAction): ImageVector = when (action) {
     AiAction.LETTER -> Icons.Default.Email
     AiAction.POST -> Icons.Default.Campaign
     AiAction.HASHTAGS -> Icons.Default.Tag
+    AiAction.VERSIONS -> Icons.Default.Layers
     AiAction.REPLIES -> Icons.Default.QuestionAnswer
     AiAction.TONE -> Icons.Default.TheaterComedy
     AiAction.REDACT -> Icons.Default.VisibilityOff
@@ -584,6 +597,8 @@ private fun Done(
     onCopy: () -> Unit,
     onCopyPart: (String) -> Unit,
     onThread: (List<String>) -> Unit,
+    /** The versions of a post into the clipboard history, tagged as drafts. */
+    onDrafts: (List<String>) -> Unit,
     onAgain: () -> Unit,
     onChange: (() -> Unit)?,
     onExpand: (() -> Unit)?,
@@ -594,19 +609,37 @@ private fun Done(
         Thread(s.text.split(THREAD_SEPARATOR), onCopyPart, onThread)
         return
     }
-    val replies = remember(s) { if (s.action == AiAction.REPLIES) Replies.parse(s.text).takeIf { it.size >= 2 } else null }
+    val versions = s.action == AiAction.VERSIONS
+    val replies = remember(s) { if (s.action == AiAction.REPLIES || versions) Replies.parse(s.text).takeIf { it.size >= 2 } else null }
     Column(Modifier.fillMaxSize()) {
         if (replies != null) {
-            Note(stringRes(if (s.fromClip) R.string.pysanka__ai__panel_clip else R.string.pysanka__ai__panel_tap_reply))
+            Note(
+                stringRes(
+                    when {
+                        versions -> R.string.pysanka__ai__versions_note
+                        s.fromClip -> R.string.pysanka__ai__panel_clip
+                        else -> R.string.pysanka__ai__panel_tap_reply
+                    },
+                ),
+            )
             Column(Modifier.fillMaxWidth().weight(1f).florisVerticalScroll()) {
                 for (r in replies) {
                     SnyggBox(
                         FlorisImeUi.ClipboardItem.elementName,
                         modifier = Modifier.fillMaxWidth(),
-                        clickAndSemanticsModifier = Modifier.clickable { onPlace(r.text, true) },
+                        // A reply goes in at the cursor; a version in place of the post
+                        clickAndSemanticsModifier = Modifier.clickable { onPlace(r.text, !versions) },
                     ) {
                         Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
-                            r.label?.let { SnyggText(FlorisImeUi.ClipboardItemDescription.elementName, text = it) }
+                            r.label?.let { label ->
+                                // A version with its length against its network's limit
+                                val limit = if (versions) SocialApps.NETWORKS.firstOrNull { it.name.equals(label, ignoreCase = true) }?.limit else null
+                                val n = SocialApps.length(r.text)
+                                SnyggText(
+                                    FlorisImeUi.ClipboardItemDescription.elementName,
+                                    text = if (limit == null) label else "$label · $n / $limit " + if (n <= limit) "✓" else "✗",
+                                )
+                            }
                             SnyggText(text = r.text)
                         }
                     }
@@ -642,8 +675,10 @@ private fun Done(
             if (onChange != null) ActionIcon(Icons.Default.EditNote, stringRes(R.string.pysanka__ai__change), onChange)
             if (onExpand != null) ActionIcon(Icons.Default.OpenInFull, stringRes(R.string.pysanka__ai__expand), onExpand)
             Spacer(Modifier.weight(1f))
-            // Replies are put in by tapping one; advice is only copied
-            if (primary) {
+            // Replies are put in by tapping one; advice is only copied; versions can all go to the history
+            if (versions && replies != null) {
+                Chip(stringRes(R.string.pysanka__ai__versions_drafts), primary = true) { onDrafts(replies.map { it.text }) }
+            } else if (primary) {
                 Chip(stringRes(replaceLabel!!), primary = true) { onPlace(s.text, s.action == AiAction.REPLIES) }
             } else {
                 Chip(stringRes(R.string.pysanka__ocr__copy), primary = true, onClick = onCopy)

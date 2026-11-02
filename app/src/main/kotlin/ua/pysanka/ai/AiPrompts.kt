@@ -28,6 +28,8 @@ enum class AiAction(@StringRes val label: Int, val temperature: Double, val kind
     NOTES(R.string.pysanka__ai__action_notes, 0.3, Kind.WHOLE),
     LETTER(R.string.pysanka__ai__action_letter, 0.6, Kind.WHOLE),
     POST(R.string.pysanka__ai__action_post, 0.6, Kind.WHOLE),
+    /** The post for several networks at once, each within its limit ([SocialApps]). */
+    VERSIONS(R.string.pysanka__ai__action_versions, 0.6, Kind.WHOLE),
 
     /** The model only names the hashtags; they are added under the text as it is ([Hashtags]). */
     HASHTAGS(R.string.pysanka__ai__action_hashtags, 0.4, Kind.WHOLE),
@@ -181,6 +183,10 @@ internal object AiPrompts {
             "that makes people want to read on, then short paragraphs in plain words, at most two or three emoji " +
             "where they fit, no hashtags. Keep every fact, name and number; add none. " +
             "Answer only with the post."
+        AiAction.VERSIONS -> "The text is a post. Write it for four networks ${inLanguage(language)}: X (at most 280 characters), " +
+            "Bluesky (at most 300), Threads (at most 500) and LinkedIn (a little more professional, at most 1300). Keep every " +
+            "fact, add none; no hashtags unless the text has them. Start each version on a new line with the network name " +
+            "and a colon (X:, Bluesky:, Threads:, LinkedIn:) and put a blank line between the versions."
         AiAction.HASHTAGS -> "Suggest three to eight hashtags for this text as a social media post, " +
             "${inLanguage(language)}: specific to its topic, the most fitting first. Answer with only the hashtags on one line, " +
             "separated by spaces, each starting with #, without spaces inside a hashtag. Do not repeat the text."
