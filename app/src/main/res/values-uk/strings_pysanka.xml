@@ -366,4 +366,9 @@
     <string name="pysanka__theme__system_dark">Кольори системи, темна</string>
     <string name="pysanka__look__system_colors">Налаштування в кольорах системи</string>
     <string name="pysanka__look__system_colors_summary">Material You замість червоного й кремового Писанки</string>
+    <string name="pysanka__welcome__title">Вітаємо в Писанці!</string>
+    <string name="pysanka__welcome__lead">Клавіатура, що пише разом із вами — і нікому не переказує.</string>
+    <string name="pysanka__welcome__promise">Без інтернету. Ваші слова й буфер — зашифровані. ШІ, якщо захочете, працює просто на телефоні.</string>
+    <string name="pysanka__privacy__crash_notifications">Сповіщати про збої</string>
+    <string name="pysanka__privacy__crash_notifications_summary">Якщо Писанка зламається, сповіщення покаже звіт (без тексту, який ви набирали). Android попросить дозволу.</string>
 </resources>

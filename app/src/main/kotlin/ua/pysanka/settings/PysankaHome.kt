@@ -336,6 +336,32 @@ private fun PrivacySettings() {
     PrefToggle(prefs.clipboard.cleanLinks, stringRes(R.string.pysanka__links__clean), stringRes(R.string.pysanka__links__clean_summary))
     PrefToggle(prefs.pysankaOcr.blockScreenshots, stringRes(R.string.pysanka__privacy__block_screenshots), stringRes(R.string.pysanka__privacy__block_screenshots_summary))
     PrefChoice(prefs.suggestion.incognitoMode, stringRes(R.string.pysanka__privacy__incognito), IncognitoMode::class)
+    if (android.os.Build.VERSION.SDK_INT >= 33) CrashNotifications()
+}
+
+/**
+ * Crash notifications (Android 13+ asks for them): asked for here, only if the person wants them,
+ * not on the first start. Turning them off again is the system's own setting.
+ */
+@androidx.annotation.RequiresApi(33)
+@Composable
+private fun CrashNotifications() {
+    val context = LocalContext.current
+    fun granted() = androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) ==
+        android.content.pm.PackageManager.PERMISSION_GRANTED
+    var on by remember { mutableStateOf(granted()) }
+    val ask = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { on = it }
+    ToggleRow(stringRes(R.string.pysanka__privacy__crash_notifications), on, stringRes(R.string.pysanka__privacy__crash_notifications_summary)) { want ->
+        if (want) {
+            ask.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            val intent = android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
+            runCatching { context.startActivity(intent) }
+        }
+    }
 }
 
 @Composable

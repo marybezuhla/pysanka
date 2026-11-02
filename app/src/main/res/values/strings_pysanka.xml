@@ -365,4 +365,9 @@
     <string name="pysanka__theme__system_dark">System colours, dark</string>
     <string name="pysanka__look__system_colors">Settings in the system\'s colours</string>
     <string name="pysanka__look__system_colors_summary">Material You instead of Pysanka\'s red and cream</string>
+    <string name="pysanka__welcome__title">Welcome to Pysanka!</string>
+    <string name="pysanka__welcome__lead">A keyboard that writes with you — and tells no one.</string>
+    <string name="pysanka__welcome__promise">No internet. Your words and clipboard are encrypted. The AI, if you want it, runs right on your phone.</string>
+    <string name="pysanka__privacy__crash_notifications">Notify me about crashes</string>
+    <string name="pysanka__privacy__crash_notifications_summary">If Pysanka breaks, a notification shows the report (without anything you typed). Android will ask for permission.</string>
 </resources>

@@ -32,11 +32,9 @@ import androidx.compose.ui.unit.dp
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.app.FlorisPreferenceStore
 import dev.patrickgold.florisboard.app.PYSANKA_SETTINGS_LANGUAGES
-import dev.patrickgold.florisboard.extensionManager
 import dev.patrickgold.florisboard.ime.core.Subtype
 import dev.patrickgold.florisboard.keyboardManager
 import dev.patrickgold.florisboard.lib.FlorisLocale
-import dev.patrickgold.florisboard.lib.ext.ExtensionComponentName
 import dev.patrickgold.florisboard.subtypeManager
 import dev.patrickgold.jetpref.datastore.model.observeAsState
 import kotlinx.coroutines.launch
@@ -138,31 +136,13 @@ fun themeNames(): Map<String, String> = linkedMapOf(
     "floris_night_my" to stringRes(R.string.pysanka__theme__system_dark),
 )
 
-/** The day and the night theme, from the themes that come with the keyboard. */
+/** The day and the night theme, as small pictures of the keyboard (see [ThemePicker]). */
 @Composable
 fun ThemeChoices() {
-    val prefs by FlorisPreferenceStore
-    val context = LocalContext.current
-    val extensionManager by context.extensionManager()
-    val scope = rememberCoroutineScope()
-    val extensions by extensionManager.themes.collectAsState()
-    val names = themeNames()
-    val themes = remember(extensions, names) {
-        extensions.flatMap { ext -> ext.themes.map { ExtensionComponentName(ext.meta.id, it.id) to it } }
-            .map { (id, t) -> Triple(id, names[id.componentId] ?: t.label, t.isNightTheme) }
-            .sortedBy { names.keys.indexOf(it.first.componentId).let { i -> if (i < 0) Int.MAX_VALUE else i } }
-    }
-    val day by prefs.theme.dayThemeId.observeAsState()
-    val night by prefs.theme.nightThemeId.observeAsState()
-    // A theme chosen that is not of that kind (a night theme by day) is still shown as chosen
-    fun options(night: Boolean, chosen: ExtensionComponentName) =
-        themes.filter { it.third == night || it.first == chosen }.map { it.first to it.second }
-    ChoiceRow(stringRes(R.string.pysanka__look__day_theme), options(false, day), day) {
-        scope.launch { prefs.theme.dayThemeId.set(it) }
-    }
-    ChoiceRow(stringRes(R.string.pysanka__look__night_theme), options(true, night), night) {
-        scope.launch { prefs.theme.nightThemeId.set(it) }
-    }
+    Text(stringRes(R.string.pysanka__look__day_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
+    ThemePicker(night = false)
+    Text(stringRes(R.string.pysanka__look__night_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
+    ThemePicker(night = true)
 }
 
 /** The language of these settings: as the phone, Ukrainian or English (each named in itself). */
