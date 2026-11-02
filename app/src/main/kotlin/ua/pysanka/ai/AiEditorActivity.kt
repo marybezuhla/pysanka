@@ -296,6 +296,28 @@ private fun AiEditorScreen(
     var result by remember { mutableStateOf(done?.text.orEmpty()) }
     var job by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     var run by remember { mutableStateOf(0L) }
+    // Back with an answer on screen: it is not lost. From the keyboard's panel it goes back there;
+    // otherwise the person chooses: put it in, copy it, or let it go
+    var asking by remember { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = stage is AiStage.Done && result.isNotBlank()) {
+        if (collapse != null) collapse() else asking = true
+    }
+    if (asking) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { asking = false },
+            title = { Text(stringRes(R.string.pysanka__ai__keep_title)) },
+            text = { Text(stringRes(R.string.pysanka__ai__keep_text)) },
+            confirmButton = {
+                Row {
+                    if (replaceLabel != null && action.replaces && action != AiAction.VERSIONS) {
+                        TextButton(onClick = { asking = false; onUse(result) }) { Text(stringRes(replaceLabel)) }
+                    }
+                    TextButton(onClick = { asking = false; copy(context, result); close() }) { Text(stringRes(R.string.pysanka__ocr__copy)) }
+                }
+            },
+            dismissButton = { TextButton(onClick = { asking = false; close() }) { Text(stringRes(R.string.pysanka__ai__keep_drop)) } },
+        )
+    }
     // Start loading the model while the person chooses what to do
     if (installed) androidx.compose.runtime.LaunchedEffect(Unit) { runCatching { AiEngine.warmUp(context) } }
 

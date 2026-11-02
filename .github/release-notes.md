@@ -1,19 +1,19 @@
-**Писанка 0.20.1**: приватна клавіатура для Android без доступу до інтернету. Тестова версія.
+**Писанка 0.21.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія.
 
-- 👋 **Простіше привітання:** одна сторінка, теми видно одразу, їх можна обрати ще до ввімкнення клавіатури. Пояснено, чому Android попереджає про «збирання тексту»: так він каже про будь-яку клавіатуру.
-- ✂️ **Заміна тексту надійніша:** Backspace точно повертає скорочення (і з емодзі), повернене більше не замінюється знову, а кома чи дефіс після скорочення лишають його як є («пн-пт»).
-- 🖱️ Трекпад не рухає курсор, поки відкритий пошук у буфері.
-- 🤖 Відповідь ШІ, залишена у великому редакторі, чекає до 10 хвилин, навіть якщо дорогою відкрити інше поле.
-- Дрібні виправлення текстів і доступності після повного аудиту.
+- 🎙️ **Диктування без «Готово»:** замовкніть на 2 секунди, і текст зʼявиться сам (вимикається в налаштуваннях диктування). Кільце навколо мікрофона показує, скільки часу лишилось.
+- ✍️ **Менше зайвих ком і вигадок у диктуванні:** тиша до слів не йде в модель, а Whisper ставить коми за граматикою. Типова модель тепер base: швидша й стабільніша.
+- ✦ **Дії на панелі ШІ на ваш вибір:** Налаштування → ШІ → «Дії на панелі ШІ», решта в «Ще».
+- 🔙 **ШІ-редактор не губить відповідь** на «назад»: можна вставити, скопіювати або відкинути. «Виправити розпізнане» не змінює імена й слова латиницею.
+- 🎨 Рівні підписи тонів шкіри емодзі.
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
 
 ---
 
-**Pysanka 0.20.1**: a private keyboard for Android with no internet access. Test version.
+**Pysanka 0.21.0**: a private keyboard for Android with no internet access. Test version.
 
-- A simpler welcome: one page, themes visible at once and choosable before the keyboard is turned on; Android's "may collect text" warning explained.
-- Text replacement is sturdier: Backspace brings the shortcut back exactly (emoji too), it is not replaced again, and a comma or hyphen after it keeps it as typed.
-- The trackpad does not move the cursor while the clipboard search is open.
-- An AI answer left in the big editor waits up to 10 minutes even if another field opens on the way.
-- Small text and accessibility fixes after a full audit.
+- Dictation without “Done”: stay quiet for 2 seconds and the text appears (can be turned off). A ring around the microphone shows the time left.
+- Fewer extra commas and made-up words in dictation; base is now the default model.
+- AI panel actions of your choice; the rest under “More”.
+- The AI editor keeps its answer on “back”: insert, copy or discard. “Fix recognised text” leaves names and Latin words alone.
+- Even labels for emoji skin tones.

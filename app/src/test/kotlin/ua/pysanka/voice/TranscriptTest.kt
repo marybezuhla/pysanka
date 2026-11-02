@@ -12,4 +12,9 @@ class TranscriptTest : FunSpec({
         Transcript.clean(" ... ") shouldBe ""
         Transcript.clean("Зустріч о 10:30") shouldBe "Зустріч о 10:30"
     }
+    test("Whisper's own sample said back for near-silence is dropped; a short greeting is kept") {
+        Transcript.clean(" " + Transcript.prompt("uk"), "uk") shouldBe ""
+        Transcript.clean("Пишу коротко й зрозуміло, ставлю коми там, де їх вимагає граматика", "uk") shouldBe ""
+        Transcript.clean("Добрий день.", "uk") shouldBe "Добрий день."
+    }
 })

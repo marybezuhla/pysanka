@@ -50,13 +50,19 @@ Java_ua_pysanka_whisper_WhisperNative_init(JNIEnv * env, jobject, jstring path) 
 // The text as UTF-8 bytes (decoded in Kotlin: NewStringUTF would garble emoji and broken bytes)
 JNIEXPORT jbyteArray JNICALL
 Java_ua_pysanka_whisper_WhisperNative_transcribe(
-        JNIEnv * env, jobject, jlong handle, jfloatArray audio, jstring language, jint threads, jlong gen) {
+        JNIEnv * env, jobject, jlong handle, jfloatArray audio, jstring language, jstring prompt, jint threads, jlong gen) {
     auto * ctx = reinterpret_cast<whisper_context *>(handle);
     if (ctx == nullptr) return nullptr;
     const char * lang = env->GetStringUTFChars(language, nullptr);
     if (lang == nullptr) return nullptr;
+    const char * hint = env->GetStringUTFChars(prompt, nullptr);
+    if (hint == nullptr) {
+        env->ReleaseStringUTFChars(language, lang);
+        return nullptr;
+    }
     jfloat * samples = env->GetFloatArrayElements(audio, nullptr);
     if (samples == nullptr) {
+        env->ReleaseStringUTFChars(prompt, hint);
         env->ReleaseStringUTFChars(language, lang);
         return nullptr;
     }
@@ -80,6 +86,9 @@ Java_ua_pysanka_whisper_WhisperNative_transcribe(
         params.print_timestamps = false;
         params.suppress_blank = true;
         params.suppress_nst = true;
+        // Pysanka: a sample of well-punctuated text in the language, so commas follow the grammar
+        // (an empty one: none)
+        params.initial_prompt = hint[0] != '\0' ? hint : nullptr;
         params.abort_callback = abort_requested;
         params.abort_callback_user_data = &run;
         rc = whisper_full(ctx, params, samples, n);
@@ -96,6 +105,7 @@ Java_ua_pysanka_whisper_WhisperNative_transcribe(
         rc = -1;
     }
     env->ReleaseFloatArrayElements(audio, samples, JNI_ABORT);
+    env->ReleaseStringUTFChars(prompt, hint);
     env->ReleaseStringUTFChars(language, lang);
     if (rc != 0) return nullptr;
 

@@ -178,7 +178,7 @@ private object VoiceEngine {
             val m = model
             val threads = Runtime.getRuntime().availableProcessors().coerceIn(1, 4)
             val text = try {
-                runCatching { m?.transcribe(audio, language, threads, run) }.getOrNull()
+                runCatching { m?.transcribe(audio, language, Transcript.prompt(language), threads, run) }.getOrNull()
             } finally {
                 audio.fill(0f)
             }
