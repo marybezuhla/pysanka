@@ -1061,7 +1061,6 @@ private val PYSANKA_FIXED_KEYS = setOf(
             "correction__remember_caps_lock_state",
             "suggestion__enable_floris_user_dictionary",
             "suggestion__enable_system_user_dictionary",
-            "emoji__suggestion_type",
             "gestures__delete_key_long_press",
             "gestures__space_bar_long_press",
             "gestures__space_bar_swipe_up",
