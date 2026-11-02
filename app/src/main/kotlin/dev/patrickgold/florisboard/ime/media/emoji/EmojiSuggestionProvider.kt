@@ -42,7 +42,8 @@ class EmojiSuggestionProvider(private val context: Context) : SuggestionProvider
     override val providerId = "org.florisboard.nlp.providers.emoji"
 
     private val prefs by FlorisPreferenceStore
-    private val lettersRegex = "^[A-Za-z]*$".toRegex()
+    // Pysanka: letters of any alphabet (it was Latin only, so ":кава" found nothing), and apostrophes
+    private val lettersRegex = "^[\\p{L}'ʼ’]*$".toRegex()
 
     private val cachedEmojiMappings = Cache.Builder<FlorisLocale, EmojiDataBySkinTone>().build()
 
@@ -68,6 +69,11 @@ class EmojiSuggestionProvider(private val context: Context) : SuggestionProvider
         val showName = prefs.emoji.suggestionCandidateShowName.get()
         val query = validateInputQuery(content.composingText) ?: return emptyList()
         val emojis = cachedEmojiMappings.get(subtype.primaryLocale)?.get(preferredSkinTone) ?: emptyList()
+        // Pysanka: for a word as it is typed (as Apple does), only an emoji the word really names:
+        // a keyword that is the word, or (from 4 letters) begins with it; "при" offers nothing
+        if (prefs.emoji.suggestionType.get() == EmojiSuggestionType.INLINE_TEXT) {
+            return withContext(Dispatchers.Default) { inline(emojis, query, maxCandidateCount, showName) }
+        }
         val candidates = withContext(Dispatchers.Default) {
             emojis.parallelStream()
                 .map { emoji ->
@@ -91,6 +97,9 @@ class EmojiSuggestionProvider(private val context: Context) : SuggestionProvider
         }
         return candidates
     }
+
+    private fun inline(emojis: List<Emoji>, query: String, max: Int, showName: Boolean): List<SuggestionCandidate> =
+        pysankaEmojiFor(emojis, query, max).map { EmojiSuggestionCandidate(emoji = it, showName = showName, sourceProvider = this) }
 
     override suspend fun notifySuggestionAccepted(subtype: Subtype, candidate: SuggestionCandidate) {
         val updateHistory = prefs.emoji.suggestionUpdateHistory.get()
@@ -140,4 +149,21 @@ private fun String.containsWeighted(other: String, ignoreCase: Boolean = false):
     } else {
         0.0
     }
+}
+
+/**
+ * Pysanka: the emoji a typed word names, the closest first: a keyword (or the name) that is the
+ * word, then, from 4 letters, one with a word that begins with it ("кав" offers nothing, "кава" ☕).
+ */
+internal fun pysankaEmojiFor(emojis: List<Emoji>, query: String, max: Int): List<Emoji> {
+    val q = query.lowercase()
+    fun score(e: Emoji): Int {
+        val words = e.keywords.map { it.lowercase() } + e.name.lowercase()
+        return when {
+            words.any { it == q } -> 2
+            q.length >= 4 && words.any { w -> w.split(' ').any { it.startsWith(q) } } -> 1
+            else -> 0
+        }
+    }
+    return emojis.map { it to score(it) }.filter { it.second > 0 }.sortedByDescending { it.second }.take(max).map { it.first }
 }

@@ -278,6 +278,16 @@ private fun EmojiSettings() {
     PrefChoice(prefs.emoji.preferredSkinTone, stringRes(R.string.prefs__media__emoji_preferred_skin_tone), EmojiSkinTone::class)
     PrefToggle(prefs.emoji.historyEnabled, stringRes(R.string.pysanka__emoji__history), stringRes(R.string.pysanka__emoji__history_summary))
     PrefToggle(prefs.emoji.suggestionEnabled, stringRes(R.string.pysanka__emoji__suggest), stringRes(R.string.pysanka__emoji__suggest_summary))
+    val suggest by prefs.emoji.suggestionEnabled.observeAsState()
+    val type by prefs.emoji.suggestionType.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__emoji__suggest_how),
+        listOf(
+            dev.patrickgold.florisboard.ime.media.emoji.EmojiSuggestionType.INLINE_TEXT to stringRes(R.string.pysanka__emoji__suggest_word),
+            dev.patrickgold.florisboard.ime.media.emoji.EmojiSuggestionType.LEADING_COLON to stringRes(R.string.pysanka__emoji__suggest_colon),
+        ),
+        type, enabled = suggest,
+    ) { scope.launch { prefs.emoji.suggestionType.set(it) } }
     if (history) {
         ActionRow(stringRes(R.string.pysanka__emoji__clear_recent)) { clearing = false }
         ActionRow(stringRes(R.string.pysanka__emoji__clear_pinned)) { clearing = true }
