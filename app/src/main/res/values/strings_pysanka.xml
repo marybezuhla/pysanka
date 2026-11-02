@@ -396,4 +396,14 @@
     <string name="pysanka__ai__panel_actions">Actions on the AI panel</string>
     <string name="pysanka__ai__panel_actions_hint">Ticked ones show at once, the rest under “More”.</string>
     <string name="pysanka__ai__panel_actions_done">Done</string>
+    <string name="pysanka__dicts__title">Extra dictionaries</string>
+    <string name="pysanka__dicts__none">none</string>
+    <string name="pysanka__dicts__hint">Words from the ticked themes are suggested and never corrected. The large lists (places, names) take a little more memory.</string>
+    <string name="pysanka__dicts__slang">Modern words and slang</string>
+    <string name="pysanka__dicts__military">Military and wartime life (Ukrainian)</string>
+    <string name="pysanka__dicts__state">Government and digital services (Ukrainian)</string>
+    <string name="pysanka__dicts__brands">Brands and services</string>
+    <string name="pysanka__dicts__medical">Medicine and medicines (Ukrainian)</string>
+    <string name="pysanka__dicts__places">Places in Ukraine</string>
+    <string name="pysanka__dicts__names">First names (Ukrainian)</string>
 </resources>

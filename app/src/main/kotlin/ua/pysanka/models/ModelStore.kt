@@ -45,10 +45,7 @@ class PinnedModel(
             spaceGb = 2.8,
         )
 
-        /**
-         * Whisper base (OpenAI, MIT), whisper.cpp's 5-bit file, for dictation. (Small, more accurate
-         * on paper, was slower and less steady on a phone; its folder "voice_model" is removed.)
-         */
+        /** Whisper base (OpenAI, MIT), whisper.cpp's 5-bit file, for dictation. */
         val WHISPER = PinnedModel(
             dir = "voice_model_base",
             name = "model.bin",

@@ -230,6 +230,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__smart_punctuation",
             default = true,
         )
+        // Pysanka: the extra word lists turned on (ua.pysanka.typing.ExtraDictionaries); modern words at first
+        val pysankaExtraDicts = string(
+            key = "pysanka__correction__extra_dicts",
+            default = "slang",
+        )
         // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         val pysankaLearnWords = boolean(
             key = "pysanka__correction__learn_words",
@@ -830,9 +835,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             "other__settings_language" -> if (entry.rawValue in PYSANKA_SETTINGS_LANGUAGES) entry.keepAsIs() else entry.reset()
             // Pysanka: "by the time of day" needs times nobody can set any more
             "theme__mode" -> if (entry.rawValue == "FOLLOW_TIME") entry.reset() else entry.keepAsIs()
-            // Pysanka: a theme that no longer comes with the keyboard (FlorisBoard's) goes back to Pysanka's
-            "theme__day_theme_id", "theme__night_theme_id" ->
-                if (entry.rawValue.substringAfter(':') in PYSANKA_THEMES) entry.keepAsIs() else entry.reset()
 
 
             // Migrate media prefs to emoji prefs
@@ -1006,11 +1008,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
 
 /** Pysanka: keys of settings that have no screen any more (see [AppPrefs.migrate]). */
-/** Pysanka: the themes that come with the keyboard (scripts/themes.py and the two Material You ones). */
-private val PYSANKA_THEMES = setOf(
-    "kreyda", "visk", "nebo", "podillia", "hutsulshchyna", "chornozem", "floris_day_my", "floris_night_my",
-)
-
 private val PYSANKA_FIXED_KEYS = setOf(
             // The theme editor and the language screens were cut (November 2026)
             "theme__accent_color",

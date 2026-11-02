@@ -10,9 +10,16 @@
   (https://github.com/brown-uk/dict_uk, uk_UA.dic/.aff as in LibreOffice; GPL 3.0+ / LGPL 2.1+ /
   MPL 1.1), used only to keep Ukrainian words (no Russian words or misspellings from subtitles).
 
-- **Pysanka's own lists** `slang_uk.txt`, `slang_en.txt` (GPL-3.0): modern words from social media
-  and chat (лайк, сторіс, кринж, донат; rizz, lowkey…) that subtitles lack, added by `slang.py` at a
-  middle frequency. No Russian words, no swearing.
+- **Extra dictionaries** (`<lang>-<theme>.json`, turned on in the settings), made by `themes.py`
+  from Pysanka's own lists here (`slang_*`, `military_uk`, `state_uk`, `brands_*`, `medical_uk`;
+  GPL-3.0; no Russian words, no swearing) and dict_uk's lists of medicines, Ukrainian settlements
+  and first names (https://github.com/brown-uk/dict_uk), with forms from the uk_UA hunspell
+  dictionary. `themes.py` also takes the Russian words (`STOP` in `build_dicts.py`) out of `uk.json`:
+
+  ```sh
+  git clone --depth 1 --filter=blob:none --sparse https://github.com/brown-uk/dict_uk && (cd dict_uk && git sparse-checkout set data/dict)
+  python3 -I scripts/dict/themes.py dict_uk lo/uk_UA app/src/main/assets/ime/dict
+  ```
 
 ```sh
 git clone --depth 1 https://github.com/hermitdave/FrequencyWords fw
