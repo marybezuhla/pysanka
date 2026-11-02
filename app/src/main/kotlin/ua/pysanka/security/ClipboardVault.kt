@@ -2,24 +2,16 @@ package ua.pysanka.security
 
 import android.app.KeyguardManager
 import android.content.Context
-import android.os.Build
-import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
-import android.security.keystore.KeyProperties
 import android.security.keystore.UserNotAuthenticatedException
 import androidx.core.os.UserManagerCompat
-import android.system.Os
-import android.system.OsConstants
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
-import java.io.FileOutputStream
 import java.security.InvalidKeyException
-import java.security.KeyStore
 import java.security.SecureRandom
 import javax.crypto.AEADBadTagException
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.Mac
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
@@ -30,10 +22,8 @@ import javax.crypto.spec.SecretKeySpec
  * and video files), and for the learned words.
  *
  * A random 32-byte secret is stored only wrapped with an AES-256-GCM key in the phone's hardware
- * keystore (StrongBox when the phone has it). That key never leaves the hardware and, on Android 9+,
- * works only while the phone is unlocked. The keyboard has no screen of its own to ask for a
- * fingerprint, so the key itself needs no confirmation; an optional fingerprint lock for the
- * clipboard is a separate, later step.
+ * keystore ([HardwareKey]: StrongBox when the phone has it, usable only while it is unlocked). The
+ * key itself needs no fingerprint; the optional fingerprint lock is [ua.pysanka.clipboard.ClipboardLock].
  *
  * From the secret: the database passphrase (the secret itself) and separate keys for files and
  * for learned words (HMAC-SHA256 with a fixed label each), so no two share a key.
@@ -60,7 +50,6 @@ object ClipboardVault {
     private const val FORMAT = 1
     private const val SECRET_BYTES = 32
     private const val GCM_TAG_BITS = 128
-    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
     private const val TRANSFORMATION = "AES/GCM/NoPadding"
     private val FILE_KEY_LABEL = "pysanka/clipboard-files/v1".toByteArray()
     private val WORDS_KEY_LABEL = "pysanka/user-words/v1".toByteArray()
@@ -84,44 +73,44 @@ object ClipboardVault {
         val dir = context.noBackupFilesDir
         val file = File(dir, WRAPPED_FILE)
         val ks = try {
-            KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+            HardwareKey.keyStore()
         } catch (e: Exception) {
             return State.Locked
         }
         if (!file.exists()) {
             // First start (or the app stopped before the first key was saved): nothing encrypted
             // with a key of ours can exist, so starting fresh loses nothing
-            fresh(ks, file, wipe)
+            fresh(file, wipe)
             return State.Open
         }
         val key = try {
             ks.getKey(KEY_ALIAS, null) as? SecretKey
         } catch (e: Exception) {
             return State.Locked
-        } ?: return missOrLost(context, ks, file, wipe)
+        } ?: return missOrLost(context, file, wipe)
         return try {
             secret = unwrap(key, file)
             File(dir, MISSES_FILE).delete()
             State.Open
         } catch (e: KeyPermanentlyInvalidatedException) {
-            missOrLost(context, ks, file, wipe)
+            missOrLost(context, file, wipe)
         } catch (e: UserNotAuthenticatedException) {
             State.Locked
         } catch (e: InvalidKeyException) {
             // Usually the phone is locked (the key works only while it is unlocked); if it is not,
             // this counts as a failed attempt (missOrLost checks the lock itself)
-            missOrLost(context, ks, file, wipe)
+            missOrLost(context, file, wipe)
         } catch (e: AEADBadTagException) {
-            missOrLost(context, ks, file, wipe)
+            missOrLost(context, file, wipe)
         } catch (e: IllegalArgumentException) {
-            missOrLost(context, ks, file, wipe)
+            missOrLost(context, file, wipe)
         } catch (e: java.io.IOException) {
-            missOrLost(context, ks, file, wipe)
+            missOrLost(context, file, wipe)
         }
     }
 
     /** One more failed attempt; after [LOST_AFTER] of them, while unlocked, the key counts as lost. */
-    private fun missOrLost(context: Context, ks: KeyStore, file: File, wipe: () -> Unit): State {
+    private fun missOrLost(context: Context, file: File, wipe: () -> Unit): State {
         val keyguard = context.getSystemService(KeyguardManager::class.java)
         if (keyguard?.isDeviceLocked == true) return State.Locked
         val misses = File(context.noBackupFilesDir, MISSES_FILE)
@@ -138,7 +127,7 @@ object ClipboardVault {
             return State.Locked
         }
         misses.delete()
-        fresh(ks, file, wipe)
+        fresh(file, wipe)
         return State.Lost
     }
 
@@ -178,37 +167,13 @@ object ClipboardVault {
 
     fun isOpen(): Boolean = secret != null
 
-    private fun fresh(ks: KeyStore, file: File, wipe: () -> Unit) {
+    private fun fresh(file: File, wipe: () -> Unit) {
         wipe()
-        if (ks.containsAlias(KEY_ALIAS)) ks.deleteEntry(KEY_ALIAS)
-        val key = createKey()
+        val key = HardwareKey.create(KEY_ALIAS)
         val s = ByteArray(SECRET_BYTES).also { SecureRandom().nextBytes(it) }
         val cipher = Cipher.getInstance(TRANSFORMATION).apply { init(Cipher.ENCRYPT_MODE, key) }
         write(file, cipher.iv, cipher.doFinal(s))
         secret = s
-    }
-
-    private fun createKey(): SecretKey {
-        fun spec(strongBox: Boolean) = KeyGenParameterSpec.Builder(
-            KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
-        ).apply {
-            setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-            setKeySize(256)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setUnlockedDeviceRequired(true)
-                if (strongBox) setIsStrongBoxBacked(true)
-            }
-        }.build()
-        val gen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
-        return try {
-            gen.init(spec(strongBox = true))
-            gen.generateKey()
-        } catch (e: java.security.ProviderException) {
-            // No StrongBox (StrongBoxUnavailableException is a ProviderException; some phones throw the base class)
-            gen.init(spec(strongBox = false))
-            gen.generateKey()
-        }
     }
 
     private fun unwrap(key: SecretKey, file: File): ByteArray {
@@ -225,25 +190,14 @@ object ClipboardVault {
         return cipher.doFinal(data).also { require(it.size == SECRET_BYTES) { "Damaged clipboard key" } }
     }
 
-    private fun write(file: File, iv: ByteArray, data: ByteArray) {
-        val tmp = File(file.parentFile, "$WRAPPED_FILE.tmp")
-        FileOutputStream(tmp).use { stream ->
-            DataOutputStream(stream).apply {
-                writeByte(FORMAT)
-                writeByte(iv.size)
-                write(iv)
-                writeInt(data.size)
-                write(data)
-                flush()
-            }
-            stream.fd.sync()
-        }
-        check(tmp.renameTo(file)) { "Could not save the clipboard key" }
-        try {
-            val fd = Os.open(file.parentFile!!.path, OsConstants.O_RDONLY, 0)
-            try { Os.fsync(fd) } finally { Os.close(fd) }
-        } catch (e: Exception) {
-            // Best effort; the file itself is synced
+    private fun write(file: File, iv: ByteArray, data: ByteArray) = writeWhole(file) { stream ->
+        DataOutputStream(stream).apply {
+            writeByte(FORMAT)
+            writeByte(iv.size)
+            write(iv)
+            writeInt(data.size)
+            write(data)
+            flush()
         }
     }
 }
