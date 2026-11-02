@@ -184,6 +184,16 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: dictation
+    val pysankaVoice = PysankaVoice()
+    inner class PysankaVoice {
+        /** Which Whisper: "small" (more accurate) or "base" (faster). */
+        val model = string(
+            key = "pysanka__voice__model",
+            default = "small",
+        )
+    }
+
     val correction = Correction()
     inner class Correction {
         // Pysanka: a clear typing error is corrected when a space follows (careful; see WordSuggester)
