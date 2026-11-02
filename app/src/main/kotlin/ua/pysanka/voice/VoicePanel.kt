@@ -111,7 +111,6 @@ fun VoicePanel(modifier: Modifier = Modifier) {
     // Released too soon to have said anything (hold to speak): a hint instead of «nothing heard»
     var tooShort by remember { mutableStateOf(false) }
 
-    fun feedback() = FlorisImeService.inputFeedbackController()?.keyPress()
     /** Any key of the panel: the text changes, so the last piece can no longer be taken back. */
     fun edit(action: () -> Unit) {
         VoiceInput.inserted.value = null
@@ -122,14 +121,14 @@ fun VoicePanel(modifier: Modifier = Modifier) {
         tooShort = false
         keyboardManager.pysankaDictate(listen = true)
     }
-    fun punctuation(mark: String) = edit {
+    fun punctuate(mark: String) = edit {
         // «слово .» → «слово.»: the next dictation adds its own space
         if (editorInstance.activeContent.textBeforeSelection.endsWith(' ')) {
             editorInstance.deleteBackwards(OperationUnit.CHARACTERS)
         }
         editorInstance.commitText(mark)
     }
-    fun takeBack() {
+    fun undo() {
         val piece = VoiceInput.inserted.value ?: return
         VoiceInput.inserted.value = null
         // Only if it is still right before the cursor, untouched and nothing selected
@@ -144,9 +143,78 @@ fun VoicePanel(modifier: Modifier = Modifier) {
         }
     }
 
+    VoicePanelView(
+        state = state,
+        canTakeBack = inserted != null,
+        autoStop = autoStop,
+        hold = hold,
+        tooShort = tooShort,
+        emoji = remember(history) {
+            (history.pinned + history.recent).map { it.value }.plus(COMMON_EMOJI).distinct().take(16)
+        },
+        actions = object : VoiceActions {
+            override fun keys() {
+                VoiceInput.cancel()
+                keyboardManager.activeState.imeUiMode = ImeUiMode.TEXT
+            }
+            override fun tap() = when (VoiceInput.state.value) {
+                is VoiceInput.State.Listening -> VoiceInput.finish()
+                VoiceInput.State.Recognising -> Unit
+                else -> listen()
+            }
+            override fun holdStart() {
+                if (VoiceInput.state.value != VoiceInput.State.Recognising) listen()
+            }
+            override fun holdEnd(long: Boolean) {
+                if (VoiceInput.state.value is VoiceInput.State.Listening) {
+                    if (long) VoiceInput.finish() else { VoiceInput.cancel(); tooShort = true }
+                }
+            }
+            override fun cancel() = VoiceInput.cancel()
+            override fun takeBack() = undo()
+            override fun backspace() = edit { editorInstance.deleteBackwards(OperationUnit.CHARACTERS) }
+            override fun punctuation(mark: String) = punctuate(mark)
+            override fun space() = edit { editorInstance.commitText(" ") }
+            override fun newLine() = edit { editorInstance.commitText("\n") }
+            override fun emoji(e: String) {
+                edit { editorInstance.commitText(e) }
+                scope.launch { EmojiHistoryHelper.markEmojiUsed(prefs, Emoji(e, "", emptyList())) }
+            }
+        },
+        modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
+    )
+}
+
+/** What the panel's controls do (the keyboard's, or nothing in the screenshots). */
+interface VoiceActions {
+    fun keys()
+    fun tap()
+    fun holdStart()
+    fun holdEnd(long: Boolean)
+    fun cancel()
+    fun takeBack()
+    fun backspace()
+    fun punctuation(mark: String)
+    fun space()
+    fun newLine()
+    fun emoji(e: String)
+}
+
+/** The panel itself, from its state only (drawn on the computer for review, too). */
+@Composable
+fun VoicePanelView(
+    state: VoiceInput.State,
+    canTakeBack: Boolean,
+    autoStop: Boolean,
+    hold: Boolean,
+    tooShort: Boolean,
+    emoji: List<String>,
+    actions: VoiceActions,
+    modifier: Modifier = Modifier,
+) {
     SnyggColumn(
         FlorisImeUi.ClipboardContent.elementName,
-        modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
+        modifier = modifier,
     ) {
         Column(Modifier.fillMaxSize().padding(horizontal = 4.dp, vertical = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             // State
@@ -176,63 +244,39 @@ fun VoicePanel(modifier: Modifier = Modifier) {
                 SnyggText(FlorisImeUi.ClipboardHeaderText.elementName, modifier = Modifier.weight(1f), text = line)
                 when {
                     s is VoiceInput.State.Listening || s == VoiceInput.State.Recognising ->
-                        Chip(Icons.Default.Close, stringRes(R.string.pysanka__voice__cancel)) { VoiceInput.cancel() }
-                    inserted != null ->
-                        Chip(Icons.AutoMirrored.Filled.Undo, stringRes(R.string.pysanka__voice__take_back)) { takeBack() }
+                        Chip(Icons.Default.Close, stringRes(R.string.pysanka__voice__cancel)) { actions.cancel() }
+                    canTakeBack ->
+                        Chip(Icons.AutoMirrored.Filled.Undo, stringRes(R.string.pysanka__voice__take_back)) { actions.takeBack() }
                 }
             }
             // ⌨ · microphone · ⌫
             Row(Modifier.fillMaxWidth().weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Key(Modifier.width(72.dp).fillMaxHeight(0.62f), icon = Icons.Default.Keyboard, label = stringRes(R.string.pysanka__voice__keys)) {
-                    VoiceInput.cancel()
-                    keyboardManager.activeState.imeUiMode = ImeUiMode.TEXT
-                }
+                Key(Modifier.width(72.dp).fillMaxHeight(0.62f), icon = Icons.Default.Keyboard, label = stringRes(R.string.pysanka__voice__keys)) { actions.keys() }
                 BoxWithConstraints(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                     val d = minOf(maxWidth, maxHeight * 0.92f, 120.dp)
                     Microphone(
                         diameter = d,
                         state = state,
                         hold = hold,
-                        onTap = {
-                            when (state) {
-                                is VoiceInput.State.Listening -> VoiceInput.finish()
-                                VoiceInput.State.Recognising -> Unit
-                                else -> listen()
-                            }
-                        },
-                        onHoldStart = { if (state != VoiceInput.State.Recognising) listen() },
-                        onHoldEnd = { long ->
-                            if (state is VoiceInput.State.Listening) {
-                                if (long) VoiceInput.finish() else { VoiceInput.cancel(); tooShort = true }
-                            }
-                        },
+                        onTap = actions::tap,
+                        onHoldStart = actions::holdStart,
+                        onHoldEnd = actions::holdEnd,
                     )
                 }
-                Key(Modifier.width(72.dp).fillMaxHeight(0.62f), icon = Icons.AutoMirrored.Outlined.Backspace, label = stringRes(R.string.pysanka__voice__backspace), repeat = true) {
-                    edit { editorInstance.deleteBackwards(OperationUnit.CHARACTERS) }
-                }
+                Key(Modifier.width(72.dp).fillMaxHeight(0.62f), icon = Icons.AutoMirrored.Outlined.Backspace, label = stringRes(R.string.pysanka__voice__backspace), repeat = true) { actions.backspace() }
             }
             // , . ? !  space  ↵
             Row(Modifier.fillMaxWidth().height(46.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                for (mark in listOf(",", ".", "?", "!")) Key(Modifier.weight(1f), text = mark) { punctuation(mark) }
-                Key(Modifier.weight(3f), icon = Icons.Default.SpaceBar, label = stringRes(R.string.pysanka__voice__space), code = KeyCode.SPACE) {
-                    edit { editorInstance.commitText(" ") }
-                }
-                Key(Modifier.weight(1.4f), icon = Icons.AutoMirrored.Filled.KeyboardReturn, label = stringRes(R.string.pysanka__voice__new_line)) {
-                    edit { editorInstance.commitText("\n") }
-                }
-            }
-            // The person's pinned and recent emoji (the keyboard's own history), the usual ones until there are enough
-            val emoji = remember(history) {
-                (history.pinned + history.recent).map { it.value }.plus(COMMON_EMOJI).distinct().take(16)
+                for (mark in listOf(",", ".", "?", "!")) Key(Modifier.weight(1f), text = mark) { actions.punctuation(mark) }
+                Key(Modifier.weight(3f), icon = Icons.Default.SpaceBar, label = stringRes(R.string.pysanka__voice__space), code = KeyCode.SPACE) { actions.space() }
+                Key(Modifier.weight(1.4f), icon = Icons.AutoMirrored.Filled.KeyboardReturn, label = stringRes(R.string.pysanka__voice__new_line)) { actions.newLine() }
             }
             LazyRow(Modifier.fillMaxWidth().height(40.dp), contentPadding = PaddingValues(horizontal = 4.dp)) {
                 items(emoji) { e ->
                     Box(
                         Modifier.fillMaxHeight().width(44.dp).clip(CircleShape).clickable(onClickLabel = e, role = Role.Button) {
-                            feedback()
-                            edit { editorInstance.commitText(e) }
-                            scope.launch { EmojiHistoryHelper.markEmojiUsed(prefs, Emoji(e, "", emptyList())) }
+                            FlorisImeService.inputFeedbackController()?.keyPress()
+                            actions.emoji(e)
                         },
                         contentAlignment = Alignment.Center,
                     ) {
