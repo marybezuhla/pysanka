@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """
-Pysanka: the extra word lists a person can turn on (Settings → Typing → Extra dictionaries):
-app/src/main/assets/ime/dict/<lang>-<theme>.json, each {"word": frequency}.
+Pysanka: words the subtitle lists lack, added to the main lists (app/src/main/assets/ime/dict/
+<lang>.json): modern words and slang, military and wartime life, government and digital services,
+brands, medicine, Ukraine's main cities and regions, first names.
 
 Sources:
 - Pysanka's own lists here (GPL-3.0): <theme>_<lang>.txt, one word per line. A word the Ukrainian
   hunspell dictionary knows gets all its forms from it («дрон» → дрона, дронів…).
 - dict_uk (https://github.com/brown-uk/dict_uk, GPL 3.0+ / LGPL 2.1+ / MPL 1.1): names of medicines
-  (pharm.lst), Ukrainian settlements (geo-ukr-koatuu.lst) and first names (names-anim.lst), their
-  forms from the uk_UA hunspell dictionary (made from dict_uk, as in LibreOffice).
+  (pharm.lst) and first names (names-anim.lst), their forms from the uk_UA hunspell dictionary
+  (made from dict_uk, as in LibreOffice).
 
 Each theme has its own frequency: high enough to be offered and never "corrected", low enough not
 to push everyday words aside. A word already in the main list is left out.
@@ -16,7 +17,7 @@ to push everyday words aside. A word already in the main list is left out.
 It also takes from the main Ukrainian list the Russian words the subtitles brought in (STOP in
 build_dicts.py).
 
-Usage: python3 -I scripts/dict/themes.py <dict_uk dir> <uk_UA hunspell dir> app/src/main/assets/ime/dict
+Usage (after build_dicts.py): python3 -I scripts/dict/themes.py <dict_uk dir> <uk_UA hunspell dir> app/src/main/assets/ime/dict
 """
 import json
 import re
@@ -34,7 +35,7 @@ THEMES = {
     "state": (("uk",), 100),
     "brands": (("uk", "en"), 100),
     "medical": (("uk",), 70),
-    "places": (("uk",), 40),
+    "places": (("uk",), 90),
     "names": (("uk",), 50),
 }
 
@@ -93,30 +94,29 @@ def main() -> None:
     dicts = dict_uk / "data" / "dict"
     from_dict_uk = {
         "medical": lemmas(dicts / "pharm.lst", lambda t: True),
-        # Nouns only (not the adjectives made from the names)
-        "places": lemmas(dicts / "geo-ukr-koatuu.lst", lambda t: t.startswith("/n")),
         # First names: tagged "<" (a surname is "<+")
         "names": lemmas(dicts / "names-anim.lst", lambda t: "<" in t and "<+" not in t and "patr" not in t),
     }
-    base_cache: dict[str, dict[str, int]] = {}
-    for theme, (langs, freq) in THEMES.items():
-        for lang in langs:
-            base = base_cache.setdefault(lang, json.loads((out / f"{lang}.json").read_text(encoding="utf-8")))
-            known = {w.lower() for w in base}
-            words = own_list(theme, lang) + (from_dict_uk.get(theme, []) if lang == "uk" else [])
-            data: dict[str, int] = {}
-            for w in words:
-                forms = stems.get(w, {w}) if lang == "uk" else {w}
-                for f in forms:
-                    if f.lower() not in known and f not in data:
-                        data[f] = freq
-            (out / f"{lang}-{theme}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-            print(lang, theme, len(data))
-    # The main list without the Russian words the subtitles brought in
-    uk = base_cache["uk"]
-    cleaned = {w: n for w, n in uk.items() if w not in STOP["uk"]}
-    (out / "uk.json").write_text(json.dumps(cleaned, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print("uk main list: removed", len(uk) - len(cleaned))
+    for lang in ("uk", "en"):
+        path = out / f"{lang}.json"
+        base: dict[str, int] = json.loads(path.read_text(encoding="utf-8"))
+        # Without the Russian words the subtitles brought in
+        base = {w: n for w, n in base.items() if w not in STOP[lang]}
+        known = {w.lower() for w in base}
+        for theme, (langs, freq) in THEMES.items():
+            if lang not in langs:
+                continue
+            added = 0
+            for w in own_list(theme, lang) + (from_dict_uk.get(theme, []) if lang == "uk" else []):
+                for f in (stems.get(w, {w}) if lang == "uk" else {w}):
+                    if f.lower() not in known:
+                        base[f] = freq
+                        known.add(f.lower())
+                        added += 1
+            print(lang, theme, added)
+        base = dict(sorted(base.items(), key=lambda kv: -kv[1]))
+        path.write_text(json.dumps(base, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        print(lang, "words", len(base))
 
 
 if __name__ == "__main__":

@@ -9,8 +9,6 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Messenger
-import ua.pysanka.models.ModelStore
-import ua.pysanka.models.PinnedModel
 import ua.pysanka.whisper.WhisperNative
 import java.util.concurrent.Executors
 
@@ -70,7 +68,7 @@ class VoiceService : Service() {
                 token = data.getLong(KEY_TOKEN)
                 language = data.getString(KEY_LANGUAGE)?.takeIf { it.matches(LANGUAGE) } ?: "auto"
                 // Loaded while the person speaks
-                VoiceEngine.load(this, PinnedModel.WHISPER)
+                VoiceEngine.load(this)
             }
             AUDIO -> if (data.getLong(KEY_TOKEN) == token && run == 0L) {
                 val piece = data.getShortArray(KEY_SAMPLES) ?: return
@@ -106,12 +104,12 @@ class VoiceService : Service() {
         }
         val thisRun = WhisperNative.newRun()
         run = thisRun
-        VoiceEngine.transcribe(audio, language, thisRun) { text, modelMissing ->
+        VoiceEngine.transcribe(audio, language, thisRun) { text ->
             main.post {
                 if (run != thisRun) return@post
                 run = 0L
                 if (text == null) {
-                    send(reply, FAIL, token) { putString(KEY_REASON, if (modelMissing) "model" else "failed") }
+                    send(reply, FAIL, token) { putString(KEY_REASON, "failed") }
                 } else {
                     send(reply, TEXT, token) { putString(KEY_TEXT, text) }
                 }
@@ -158,21 +156,18 @@ private object VoiceEngine {
 
     // Touched on the worker thread only
     private var model: WhisperNative.Model? = null
-    private var file: java.io.File? = null
 
-    /** Loads [which] (if another one is loaded, that one is freed first). */
-    fun load(context: Context, which: PinnedModel) {
-        val f = ModelStore(context.applicationContext, which).modelFile()
+    /** Loads the model that comes with the app (once; read from the APK, see [VoiceModel]). */
+    fun load(context: Context) {
+        val app = context.applicationContext
         worker.execute {
-            if (model != null && f == file) return@execute
-            model?.close()
-            model = f?.let(WhisperNative::load)
-            file = f
+            if (model != null) return@execute
+            model = VoiceModel.map(app)?.let(WhisperNative::load)
         }
     }
 
-    /** [done] (on the worker thread) gets the text, or null and whether there was no model. */
-    fun transcribe(audio: FloatArray, language: String, run: Long, done: (String?, Boolean) -> Unit) {
+    /** [done] (on the worker thread) gets the text, or null if it failed. */
+    fun transcribe(audio: FloatArray, language: String, run: Long, done: (String?) -> Unit) {
         worker.execute {
             val m = model
             val threads = Runtime.getRuntime().availableProcessors().coerceIn(1, 4)
@@ -181,7 +176,7 @@ private object VoiceEngine {
             } finally {
                 audio.fill(0f)
             }
-            done(text, m == null)
+            done(text)
         }
     }
 
@@ -190,7 +185,24 @@ private object VoiceEngine {
         worker.execute {
             model?.close()
             model = null
-            file = null
         }
     }
+}
+
+/**
+ * Pysanka: Whisper base (OpenAI, MIT; whisper.cpp's 5-bit file) comes with the app
+ * (assets/voice, its SHA-256 and source next to it), stored uncompressed so it is mapped from the
+ * APK rather than copied.
+ */
+object VoiceModel {
+    private const val ASSET = "voice/ggml-base-q5_1.bin"
+
+    /** The file, mapped; whisper copies what it needs while loading, then this can go. */
+    fun map(context: Context): java.nio.ByteBuffer? = runCatching {
+        context.assets.openFd(ASSET).use { fd ->
+            java.io.FileInputStream(fd.fileDescriptor).channel.use { ch ->
+                ch.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.length)
+            }
+        }
+    }.getOrNull()
 }

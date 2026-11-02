@@ -38,6 +38,9 @@ jobs:
       - name: Check strings (unescaped apostrophes)
         run: bash .github/check-strings.sh
 
+      - name: Check the built-in Whisper model (exact pinned file)
+        run: cd app/src/main/assets/voice && sha256sum -c SHA256SUMS
+
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin

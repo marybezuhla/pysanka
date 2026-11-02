@@ -162,6 +162,12 @@ android {
         baseline = file("lint.xml")
     }
 
+    // Pysanka: the dictation model is read straight from the APK (mapped, not copied), so it is
+    // stored uncompressed
+    androidResources {
+        noCompress += "bin"
+    }
+
     // Pysanka: LiteRT-LM loads its native parts from files (as in Tarilka)
     packaging {
         jniLibs {

@@ -27,24 +27,16 @@ import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.lib.compose.FlorisScreen
 import org.florisboard.lib.compose.stringRes
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.RadioButton
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.Role
 import dev.patrickgold.jetpref.datastore.model.observeAsState
 import kotlinx.coroutines.launch
-import ua.pysanka.models.ModelImport
-import ua.pysanka.models.ModelStore
-import ua.pysanka.models.PinnedModel
-import ua.pysanka.models.ModelSection
 import ua.pysanka.whisper.WhisperNative
 
 /**
- * Pysanka: dictation in the settings: the model (downloaded by the person, only the exact published
- * file) and the microphone, asked for here, never from the keyboard.
+ * Pysanka: dictation in the settings: how it works, the pause that ends it and the microphone,
+ * asked for here, never from the keyboard (the model comes with the app).
  */
 @Composable
 fun VoiceSettingsScreen() = FlorisScreen {
@@ -75,9 +67,7 @@ fun VoiceSettingsScreen() = FlorisScreen {
             }
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
             val scope = androidx.compose.runtime.rememberCoroutineScope()
-            ModelSection(ModelImport.VOICE) {
-                Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
-            }
+            Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
             // A pause ends the dictation by itself (or only «Готово» does)
             val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
             Row(Modifier.fillMaxWidth().toggleable(autoStop, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.autoStop.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
