@@ -363,6 +363,16 @@ class ClipboardManager(
     }
 
     /**
+     * Pysanka: several texts into the history at once (the first ends up on top), as copied in the
+     * field open now (so never kept from a private one); the clipboard itself is not changed.
+     */
+    fun pysankaAddToHistory(texts: List<String>) {
+        if (!mayKeep(false, fieldIncognito, fieldPassword)) return
+        val now = System.currentTimeMillis()
+        texts.asReversed().forEachIndexed { i, t -> insertOrMoveBeginning(ClipboardItem.text(t).copy(creationTimestampMs = now + i)) }
+    }
+
+    /**
      * Adds a new item to the clipboard history (if enabled).
      */
     private fun insertOrMoveBeginning(newItem: ClipboardItem) {

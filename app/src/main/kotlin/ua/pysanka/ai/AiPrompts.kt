@@ -21,6 +21,8 @@ enum class AiAction(@StringRes val label: Int, val temperature: Double, val kind
     FRIENDLY(R.string.pysanka__ai__action_friendly, 0.6, Kind.REWRITE),
     FORMAL(R.string.pysanka__ai__action_formal, 0.5, Kind.REWRITE),
     SHORTER(R.string.pysanka__ai__action_shorter, 0.4, Kind.REWRITE),
+    /** A calm, respectful version of the person's own reply in a heated discussion. */
+    CALMER(R.string.pysanka__ai__action_calmer, 0.5, Kind.REWRITE),
     LIST(R.string.pysanka__ai__action_list, 0.2, Kind.WHOLE),
     TABLE(R.string.pysanka__ai__action_table, 0.2, Kind.WHOLE),
     NOTES(R.string.pysanka__ai__action_notes, 0.3, Kind.WHOLE),
@@ -29,6 +31,9 @@ enum class AiAction(@StringRes val label: Int, val temperature: Double, val kind
 
     /** The model only names the hashtags; they are added under the text as it is ([Hashtags]). */
     HASHTAGS(R.string.pysanka__ai__action_hashtags, 0.4, Kind.WHOLE),
+
+    /** Done without the model ([ThreadSplit]), only in the panel, for a post longer than its app allows. */
+    THREAD(R.string.pysanka__ai__action_thread, 0.0, Kind.WHOLE),
     REPLIES(R.string.pysanka__ai__action_replies, 0.7, Kind.WHOLE),
     TONE(R.string.pysanka__ai__action_tone, 0.3, Kind.ADVICE),
     REDACT(R.string.pysanka__ai__action_redact, 0.1, Kind.REWRITE),
@@ -94,6 +99,13 @@ internal object AiPrompts {
                 "hey, send me the report by friday, we're stuck without it" to
                     "Hello, could you please send the report by Friday? We are unable to proceed without it. Thank you."
             }
+            AiAction.CALMER -> if (uk) {
+                "Ви взагалі читали, що я писав?! Це повна нісенітниця, і ви це знаєте." to
+                    "Здається, ми бачимо це по-різному. Я писав про інше — і, на мою думку, факти тут кажуть протилежне."
+            } else {
+                "Did you even read what I wrote?! This is complete nonsense and you know it." to
+                    "I think we see this differently. My point was a different one, and the facts here seem to say otherwise."
+            }
             AiAction.SHORTER -> if (uk) {
                 "Я хотіла б вам повідомити, що, на жаль, у зв'язку з обставинами, які від мене не залежать, я не зможу прийти на зустріч, яка запланована на завтра." to
                     "На жаль, завтра не зможу прийти на зустріч."
@@ -108,10 +120,14 @@ internal object AiPrompts {
     private const val POINTS = "Start each point with \"• \" on its own line."
 
     /** [text]: what the model will get, to name its language; [style]: the person's samples, for [AiAction.MY_STYLE]. */
-    fun system(action: AiAction, target: AiLanguage, text: String, style: List<String> = emptyList()): String {
+    /** [limit]: for [AiAction.SHORTER], the most characters the post may have in its app (0: none). */
+    fun system(action: AiAction, target: AiLanguage, text: String, style: List<String> = emptyList(), limit: Int = 0): String {
         val language = TextLanguage.of(text)
-        return BASE + " " + instructions(action, target, language, keep(language), style)
+        val fit = if (action == AiAction.SHORTER && limit > 0) " ${fits(limit)}" else ""
+        return BASE + " " + instructions(action, target, language, keep(language), style) + fit
     }
+
+    fun fits(limit: Int) = "The result must be at most $limit characters long, spaces and emoji included."
 
     private fun instructions(
         action: AiAction,
@@ -139,6 +155,11 @@ internal object AiPrompts {
         AiAction.SHORTER -> "$keepLanguage Make the text at least a third shorter: drop repeats, filler and " +
             "needless words, join sentences. Keep every important fact, name and number, and the tone. " +
             example(action, language)
+        AiAction.CALMER -> "$keepLanguage The text is the person's own reply in a heated discussion. Rewrite it so it " +
+            "reads calm and respectful: keep their point and every fact, drop insults, sarcasm, shouting in capitals and " +
+            "blame, acknowledge the other view briefly where it fits, no lecturing. $CHANGE ${example(action, language)}"
+        // Never asked of the model (see ThreadSplit)
+        AiAction.THREAD -> ""
         AiAction.SUMMARY -> "$keepLanguage Summarise the text in two to five short points: the main things a reader " +
             "must know. $POINTS Copy names, numbers and dates exactly as they are written in the text. " +
             "Do not add opinions, conclusions or anything the text does not say."

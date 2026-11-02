@@ -373,7 +373,7 @@ private fun AiEditorScreen(
             modifier = Modifier.fillMaxWidth().heightIn(min = 96.dp, max = 260.dp),
         )
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (a in AiAction.entries.filter { it != AiAction.MY_STYLE || hasStyle }) {
+            for (a in AiAction.entries.filter { (it != AiAction.MY_STYLE || hasStyle) && it != AiAction.THREAD }) {
                 FilterChip(
                     selected = a == action, enabled = !busy,
                     onClick = { action = a; if (stage !is AiStage.Working) stage = AiStage.Idle },
