@@ -316,8 +316,8 @@
     <string name="pysanka__ai__action_calmer">Calmer</string>
     <string name="pysanka__ai__action_thread">Split into a thread</string>
     <string name="pysanka__ai__thread_note">Parts: {n}. Tap a part to copy it.</string>
-    <string name="pysanka__ai__thread_place">First into the field, the rest to the clipboard</string>
-    <string name="pysanka__ai__length">{n} characters</string>
+    <string name="pysanka__ai__thread_place">First into the field, the rest to the clipboard history</string>
+    <string name="pysanka__ai__length">Characters: {n}</string>
     <string name="pysanka__ai__limits">Social media limits</string>
     <string name="pysanka__ai__show_count">Character counter</string>
     <string name="pysanka__ai__show_count_summary">Above the AI tiles: how many characters; a tap shows the limits of X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
@@ -325,4 +325,5 @@
     <string name="pysanka__voice__model_small">More accurate: Whisper small (about 190 MB)</string>
     <string name="pysanka__voice__model_base">Faster: Whisper base (about 60 MB), for older phones</string>
     <string name="pysanka__voice__delete_other">Delete the other model</string>
+    <string name="pysanka__ai__thread_no_history">The parts will not fit in the clipboard history (it is off or shorter): copy them with a tap.</string>
 </resources>

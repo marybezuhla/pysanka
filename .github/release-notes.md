@@ -1,15 +1,17 @@
-**Писанка 0.16.0** — приватна клавіатура для Android без доступу до інтернету. Тестова версія.
+**Писанка 0.17.0** — приватна клавіатура для Android без доступу до інтернету. Тестова версія.
 
-- 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Налаштування → Диктування: завантажте модель (≈190 МБ; приймається лише точний файл) і дозвольте мікрофон. Потім мікрофон на панелі над клавіатурою: говоріть, «Готово» — і текст у полі. Звук розпізнається на телефоні й ніде не зберігається; у полях пароля й інкогніто диктування не працює.
-- 🔐 Новий дозвіл — **мікрофон**: Писанка просить його лише тоді, коли ви самі натискаєте «Дозволити мікрофон» у налаштуваннях диктування. Інтернету, як і раніше, немає.
-- ✦ **Для соцмереж** (ШІ, у «Ще»): «Допис для соцмереж» і «Хештеги» — хештеги додаються під ваш текст, сам текст не змінюється.
+- 🔢 **Лічильник знаків** над плитками ШІ: «Знаків: 312 · X: 280 ✗». Дотик — ліміти всіх мереж (X, Bluesky, Threads, Mastodon, Instagram, LinkedIn) з ✓/✗. Вимикається в Налаштуваннях → ШІ на телефоні.
+- 🧵 **Задовгий допис** (у X, Bluesky, Threads, Mastodon, Instagram, LinkedIn): «Розбити на тред» — без ШІ, одразу, частини з «1/3»; «Першу — в поле, решту — в історію буфера». «Коротше» тепер вкладається в ліміт мережі.
+- 🕊️ **«Спокійніше»** (ШІ, у «Ще»): ваша відповідь у суперечці — спокійно й шанобливо, з тією самою думкою.
+- 🎙️ **Диктування: дві моделі на вибір** — точніша (Whisper small, ≈190 МБ) або швидша для старіших телефонів (Whisper base, ≈60 МБ).
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень — Obtainium: «Додати застосунок» → `github.com/Marybezu/pysanka`.
 
 ---
 
-**Pysanka 0.16.0** — a private keyboard for Android with no internet access. Test version.
+**Pysanka 0.17.0** — a private keyboard for Android with no internet access. Test version.
 
-- On-device dictation (Whisper), optional: Settings → Dictation, download the model (about 190 MB; only the exact file is accepted) and allow the microphone. Then tap the microphone above the keyboard, speak, tap Done. The sound is recognised on the phone and never saved; not in password or incognito fields.
-- New permission: the microphone, asked for only when you tap "Allow the microphone" in the dictation settings. Still no internet.
-- For social media (AI, under "More"): "Social media post" and "Hashtags" (added under your text, which stays as it is).
+- Character counter above the AI tiles; a tap shows every network's limit with ✓/✗. Can be turned off in Settings → AI on the phone.
+- A post too long for its network: "Split into a thread" (no AI, at once, parts numbered "1/3"; the first into the field, the rest to the clipboard history); "Shorter" now fits the network's limit.
+- "Calmer" (AI, under "More"): your reply in an argument, calm and respectful, with the same point.
+- Dictation: two models to choose from: more accurate (Whisper small, about 190 MB) or faster for older phones (Whisper base, about 60 MB).

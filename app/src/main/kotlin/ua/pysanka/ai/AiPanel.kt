@@ -73,6 +73,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -285,9 +287,13 @@ fun AiPanel(modifier: Modifier = Modifier) {
             override fun place(text: String, insert: Boolean) = placeText(text, insert)
             override fun copy(text: String) = ua.pysanka.privacy.Clip.copy(context, text)
             override fun thread(parts: List<String>) {
-                // The rest into the history first (the second part on top), then the first in place of the text
-                clipboardManager.pysankaAddToHistory(parts.drop(1))
-                placeText(parts.first(), insert = false)
+                // The rest into the history first (the second part on top), then the first in place of
+                // the text; if the history cannot keep them all, the text stays as it is
+                if (clipboardManager.pysankaAddToHistory(parts.drop(1))) {
+                    placeText(parts.first(), insert = false)
+                } else {
+                    android.widget.Toast.makeText(context, R.string.pysanka__ai__thread_no_history, android.widget.Toast.LENGTH_LONG).show()
+                }
             }
             override fun change(text: String) {
                 source = text
@@ -373,7 +379,7 @@ internal fun AiPanelView(
                 }
                 PanelStage.Menu -> Column(Modifier.fillMaxSize()) {
                     Note(stringRes(note))
-                    if (length != null) Counter(length, app)
+                    if (length != null && length > 0) Counter(length, app)
                     val shown = if (more) {
                         (lead + MAIN + AiAction.entries).distinct().filter(available)
                     } else {
@@ -616,7 +622,9 @@ private fun Done(
                 append(stringRes(R.string.pysanka__ai__done_in, "s" to s.seconds.toString(), "where" to s.backend))
                 if (app != null && s.action == AiAction.SHORTER) {
                     append(" · ").append(
-                        stringRes(R.string.pysanka__ai__length, "n" to SocialApps.length(s.text)) + " · ${app.name}: ${app.limit}",
+                        SocialApps.length(s.text).let { n ->
+                            stringRes(R.string.pysanka__ai__length, "n" to n) + " · ${app.name}: ${app.limit} " + if (n <= app.limit) "✓" else "✗"
+                        },
                     )
                 }
                 if (s.unconfirmed) {
@@ -653,8 +661,11 @@ private fun Done(
 private fun Counter(length: Int, app: SocialApps.App?) {
     var open by remember { mutableStateOf(false) }
     fun mark(limit: Int) = if (length <= limit) "✓" else "✗"
+    val state = stringRes(if (open) R.string.pysanka__settings__block_open else R.string.pysanka__settings__block_closed)
     Column(
-        Modifier.fillMaxWidth().clickable(onClickLabel = stringRes(R.string.pysanka__ai__limits)) { open = !open }
+        Modifier.fillMaxWidth()
+            .semantics { stateDescription = state }
+            .clickable(onClickLabel = stringRes(R.string.pysanka__ai__limits)) { open = !open }
             .padding(horizontal = 12.dp, vertical = 2.dp),
     ) {
         SnyggText(
