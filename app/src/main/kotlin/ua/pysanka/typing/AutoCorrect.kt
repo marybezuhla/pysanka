@@ -15,8 +15,13 @@ object AutoCorrect {
     var suggestedFor: String? = null
 
     fun reject(word: String) {
-        rejected.add(word.lowercase().replace('’', '\'').replace('ʼ', '\''))
+        rejected.add(key(word))
     }
+
+    /** Whether [word]'s correction (or its shortcut's text) was taken back while this field is open. */
+    fun isRejected(word: String) = key(word) in rejected
+
+    private fun key(word: String) = word.lowercase().replace('’', '\'').replace('ʼ', '\'')
 
     fun clear() {
         rejected.clear()

@@ -48,11 +48,11 @@ fun TextShortcutsScreen() = FlorisScreen {
         val list by TextShortcuts.all.collectAsState()
         var shortcut by remember { mutableStateOf("") }
         var text by remember { mutableStateOf("") }
-        LaunchedEffect(Unit) { withContext(Dispatchers.IO) { TextShortcuts.load(context) } }
+        LaunchedEffect(Unit) { withContext(Dispatchers.IO) { TextShortcuts.load(context, now = true) } }
 
         fun keep(new: List<TextShortcuts.Shortcut>, done: () -> Unit = {}) = scope.launch {
             val ok = withContext(Dispatchers.IO) { TextShortcuts.save(context, new) }
-            if (ok) done() else android.widget.Toast.makeText(context, R.string.pysanka__templates__not_ready, android.widget.Toast.LENGTH_LONG).show()
+            if (ok) done() else android.widget.Toast.makeText(context, R.string.pysanka__shortcuts__not_saved, android.widget.Toast.LENGTH_LONG).show()
         }
 
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -72,11 +72,14 @@ fun TextShortcutsScreen() = FlorisScreen {
                 modifier = Modifier.fillMaxWidth(),
             )
             val current = list
-            Button(enabled = current != null && TextShortcuts.isValidShortcut(shortcut) && text.isNotBlank(), onClick = {
+            // At the most there are (a new one only in place of one with the same word)
+            val full = current != null && current.size >= TextShortcuts.MAX && current.none { it.shortcut.equals(shortcut, ignoreCase = true) }
+            Button(enabled = current != null && !full && TextShortcuts.isValidShortcut(shortcut) && text.isNotBlank(), onClick = {
                 val rest = current.orEmpty().filter { !it.shortcut.equals(shortcut, ignoreCase = true) }
                 keep(rest + TextShortcuts.Shortcut(shortcut, text.trim())) { shortcut = ""; text = "" }
             }) { Text(stringRes(R.string.pysanka__shortcuts__add)) }
-            if (current == null) Text(stringRes(R.string.pysanka__templates__not_ready), color = MaterialTheme.colorScheme.error)
+            if (current == null) Text(stringRes(R.string.pysanka__shortcuts__not_ready), color = MaterialTheme.colorScheme.error)
+            if (full) Text(stringRes(R.string.pysanka__shortcuts__full, "n" to TextShortcuts.MAX), color = MaterialTheme.colorScheme.error)
             for (item in current.orEmpty()) {
                 OutlinedCard(Modifier.fillMaxWidth()) {
                     Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {

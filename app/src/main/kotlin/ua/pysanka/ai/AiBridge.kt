@@ -185,17 +185,19 @@ object AiBridge {
 
     /**
      * Back in the field the editor was opened from, with an answer left in it: the panel opens
-     * with that answer (true). Anywhere else, or later, it is dropped.
+     * with that answer (true). Another field opened first leaves it waiting (only in memory) until
+     * it is too old; then, or in that field if it has become private, it is dropped.
      */
     @Synchronized
     fun reopenDraft(info: FlorisEditorInfo, isPassword: Boolean): Boolean {
         val d = draft ?: return false
         val t = target ?: return false
         if (info.packageName == FlorisApplication.getHack().packageName) return false
+        val fresh = System.currentTimeMillis() - at < DRAFT_AGE_MS
+        if (fresh && t.field != fieldOf(info)) return false
         draft = null
         target = null
-        val fresh = System.currentTimeMillis() - at < DRAFT_AGE_MS
-        if (!fresh || isPassword || FieldPrivacy.isPrivate || t.field != fieldOf(info)) return false
+        if (!fresh || isPassword || FieldPrivacy.isPrivate) return false
         panel = Panel(info, t.taken, d)
         return true
     }

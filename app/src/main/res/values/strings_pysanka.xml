@@ -181,7 +181,7 @@
     <string name="pysanka__ai__import_failed">The file could not be copied. Try again.</string>
     <string name="pysanka__ai__original_kept">The downloaded file could not be deleted: delete it in Files.</string>
     <string name="pysanka__ai__ready">Model installed ({size} MB).</string>
-    <string name="pysanka__ai__how_to_use">Tap ✦ on the bar above the keyboard: the AI assistant opens in place of the keys for the selected text (or the whole field): grammar, style, summary, translation, replies to the message on the clipboard and more. “Expand” opens the full editor. The AI never works in password fields or incognito.</string>
+    <string name="pysanka__ai__how_to_use">Tap ✦ on the bar above the keyboard: the AI assistant opens in place of the keys for the selected text (or the whole field): grammar, style, summary, translation, replies to the message on the clipboard and more. “Expand” opens the full editor. The AI never works in password, incognito or "no learning" fields.</string>
     <string name="pysanka__ai__delete">Delete the model</string>
     <string name="pysanka__ai__copied_instead">The answer could not be put back safely, so it was copied: paste it where you need it.</string>
     <string name="pysanka__links__group">Links</string>
@@ -301,7 +301,7 @@
     <string name="pysanka__voice__nothing">Nothing recognised. Try again closer to the microphone.</string>
     <string name="pysanka__voice__failed">Could not recognise it. Try again.</string>
     <string name="pysanka__voice__no_mic_now">The microphone is not available now (another app may be using it).</string>
-    <string name="pysanka__voice__not_here">Dictation does not work in password and incognito fields.</string>
+    <string name="pysanka__voice__not_here">Dictation does not work in password, incognito and "no learning" fields.</string>
     <string name="pysanka__voice__set_up">To dictate, install the model and allow the microphone.</string>
     <string name="pysanka__voice__unsupported">This phone\'s processor cannot run dictation.</string>
     <string name="pysanka__voice__about">Whisper (OpenAI) recognises speech entirely on the phone: the sound is never sent anywhere or saved, only kept in memory while it is recognised. You download the model yourself; only the exact published file is accepted.</string>
@@ -386,4 +386,7 @@
     <string name="pysanka__typing__trackpad_summary">Hold the space bar and slide: the cursor follows your finger</string>
     <string name="pysanka__setup__enable">Android asks for every new keyboard to be turned on separately: open its settings and turn on “Pysanka”. It will warn that a keyboard can see everything you type. It says so about any keyboard; Pysanka has no internet access, so it sends nothing anywhere.</string>
     <string name="pysanka__setup__look">How the keyboard looks. Choose now or any time in the settings.</string>
+    <string name="pysanka__shortcuts__not_ready">The shortcuts are not open yet. Unlock the phone and come back here.</string>
+    <string name="pysanka__shortcuts__not_saved">The shortcuts could not be saved. Please try again.</string>
+    <string name="pysanka__shortcuts__full">There are already {n} shortcuts, no more fit. Delete some first.</string>
 </resources>
