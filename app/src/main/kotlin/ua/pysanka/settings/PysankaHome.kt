@@ -120,7 +120,7 @@ fun PysankaHome() {
             icon = Icons.Outlined.Lock,
         ) { PrivacySettings() }
 
-        val aiReady = remember { ua.pysanka.ai.ModelStore(context).modelFile() != null }
+        val aiReady = remember { ua.pysanka.models.ModelStore(context).modelFile() != null }
         val aiState = stringRes(if (aiReady) R.string.pysanka__settings__ai_ready else R.string.pysanka__settings__ai_missing)
         Block(stringRes(R.string.pysanka__settings__ai), aiState, icon = ua.pysanka.ui.AiMark) {
             LinkRow(stringRes(R.string.pysanka__settings__ai_open), stringRes(R.string.pysanka__settings__ai_open_hint)) {

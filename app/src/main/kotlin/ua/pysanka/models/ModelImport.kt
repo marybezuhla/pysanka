@@ -1,4 +1,4 @@
-package ua.pysanka.ai
+package ua.pysanka.models
 
 import android.content.Context
 import android.net.Uri
@@ -13,10 +13,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
- * Pysanka: copying the model in (2.6 GB, a minute or two) runs on its own, not with the settings
- * screen, so turning the phone or leaving the screen does not break it off.
+ * Pysanka: copying a model in (up to 2.6 GB, a minute or two) runs on its own, not with the
+ * settings screen, so turning the phone or leaving the screen does not break it off. One copy per
+ * model at a time.
  */
-object ModelImport {
+class ModelImport private constructor(val model: PinnedModel) {
+    companion object {
+        val AI = ModelImport(PinnedModel.GEMMA)
+        val VOICE = ModelImport(PinnedModel.WHISPER)
+
+        private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    }
+
     data class Status(
         /** 0..1 while copying; null when not copying. */
         val progress: Float? = null,
@@ -27,8 +35,6 @@ object ModelImport {
         val finished: Int = 0,
     )
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
     val status: StateFlow<Status>
         field = MutableStateFlow(Status())
 
@@ -36,7 +42,8 @@ object ModelImport {
     fun start(context: Context, uri: Uri, deleteOriginal: Boolean) {
         if (status.value.progress != null) return
         status.value = status.value.copy(progress = 0f, error = null, originalKept = false)
-        val store = ModelStore(context.applicationContext)
+        val app = context.applicationContext
+        val store = ModelStore(app, model)
         scope.launch {
             var error: Int? = null
             var kept = false
@@ -51,7 +58,7 @@ object ModelImport {
             } catch (e: Throwable) {
                 error = R.string.pysanka__ai__import_failed
             } finally {
-                AiEntry.sync(context.applicationContext)
+                if (model === PinnedModel.GEMMA) ua.pysanka.ai.AiEntry.sync(app)
                 status.value = Status(progress = null, error = error, originalKept = kept, finished = status.value.finished + 1)
             }
         }

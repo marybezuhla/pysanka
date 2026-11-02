@@ -168,7 +168,7 @@
     <string name="pysanka__ai__lang_fr">French</string>
     <string name="pysanka__ai__lang_es">Spanish</string>
     <string name="pysanka__ai__about">Gemma 4 (Google) works fully on the phone: nothing is sent anywhere, and without the model the keyboard works as usual. Pysanka has no internet access, so you download the model yourself; only the exact published file is accepted.</string>
-    <string name="pysanka__ai__step1">1. Download {file} (about 2.6 GB) in your browser.</string>
+    <string name="pysanka__ai__step1">1. Download {file} (about {size} GB) in your browser.</string>
     <string name="pysanka__ai__download">Download</string>
     <string name="pysanka__ai__copy_link">Copy link</string>
     <string name="pysanka__ai__no_browser">No browser to open the link: copy it instead.</string>
@@ -177,7 +177,7 @@
     <string name="pysanka__ai__pick">Pick the file</string>
     <string name="pysanka__ai__checking">Copying and checking… Keep this screen open.</string>
     <string name="pysanka__ai__wrong_file">This is not the right file. Download {file} with the button above.</string>
-    <string name="pysanka__ai__no_space">Not enough free space: about 2.8 GB is needed.</string>
+    <string name="pysanka__ai__no_space">Not enough free space: about {size} GB is needed.</string>
     <string name="pysanka__ai__import_failed">The file could not be copied. Try again.</string>
     <string name="pysanka__ai__original_kept">The downloaded file could not be deleted: delete it in Files.</string>
     <string name="pysanka__ai__ready">Model installed ({size} MB).</string>
