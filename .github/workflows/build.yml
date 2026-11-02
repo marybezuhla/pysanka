@@ -95,8 +95,12 @@ jobs:
         if: always()
         shell: bash
         run: |
-          # Without the dependency list (large; the deps workflow has it), and at most 6 MB
-          tar -C log --exclude=./verification-metadata.xml -czf - . | head -c 6000000 | base64 -w 4000 | sed 's/^/PYSANKA-LOG /' || true
+          # Without the dependency list (large; the deps workflow has it); over 6 MB, without the screens
+          tar -C log --exclude=./verification-metadata.xml -czf "$RUNNER_TEMP/log.tgz" . || true
+          if [ "$(stat -c %s "$RUNNER_TEMP/log.tgz" 2>/dev/null || echo 0)" -gt 6000000 ]; then
+            tar -C log --exclude=./verification-metadata.xml --exclude=./screens -czf "$RUNNER_TEMP/log.tgz" . || true
+          fi
+          base64 -w 4000 "$RUNNER_TEMP/log.tgz" | sed 's/^/PYSANKA-LOG /' || true
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

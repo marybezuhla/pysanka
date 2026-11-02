@@ -81,7 +81,8 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
                 (context.getSystemService(android.content.Context.ACTIVITY_SERVICE) as android.app.ActivityManager).getMemoryInfo(info)
                 info.totalMem / 1_000_000_000.0
             }
-            if (ramGb < 5.5) {
+            // Android reports less than the marketed size (a 6 GB phone says about 5.3–5.6)
+            if (ramGb < 5.0) {
                 Text(
                     stringRes(R.string.pysanka__ai__low_memory, "ram" to gb(ramGb)),
                     style = MaterialTheme.typography.bodyMedium,

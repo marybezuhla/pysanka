@@ -289,7 +289,7 @@ object ClipboardBackup {
         val files = HashSet<String>()
         val tagDefs = json.optJSONArray("tags")?.let { a ->
             (0 until minOf(a.length(), 200)).mapNotNull { a.optJSONObject(it) }
-                .map { it.optString("name").take(40) to it.optInt("color") }.filter { it.first.isNotBlank() }
+                .map { it.optString("name").trim().take(40) to it.optInt("color") }.filter { it.first.isNotBlank() }
         } ?: emptyList()
         for (i in 0 until minOf(list.length(), MAX_ITEMS)) {
             val o = list.optJSONObject(i) ?: continue

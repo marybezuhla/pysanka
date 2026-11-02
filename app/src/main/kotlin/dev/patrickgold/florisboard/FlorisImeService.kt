@@ -355,7 +355,12 @@ class FlorisImeService : LifecycleInputMethodService() {
         activeState.batchEdit {
             // Pysanka: the same field restarted (a rotation, the app resetting its input): the AI
             // panel and dictation stay, with their work, unless the field became a private one
-            val keepPanel = restarting &&
+            // (browsers restart input when focus moves to another field of the page: only when it
+            // looks like the very same field)
+            val before = editorInstance.activeInfo
+            val sameField = before.packageName == editorInfo.packageName && before.base.fieldId == editorInfo.base.fieldId &&
+                before.base.inputType == editorInfo.base.inputType && before.base.fieldName == editorInfo.base.fieldName
+            val keepPanel = restarting && sameField &&
                 (activeState.imeUiMode == ImeUiMode.PYSANKA_AI || activeState.imeUiMode == ImeUiMode.PYSANKA_VOICE)
             if (!keepPanel && (activeState.imeUiMode != ImeUiMode.CLIPBOARD || prefs.clipboard.historyHideOnNextTextField.get())) {
                 activeState.imeUiMode = ImeUiMode.TEXT

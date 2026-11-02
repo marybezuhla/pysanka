@@ -403,7 +403,7 @@
     <string name="pysanka__voice__take_back">Прибрати</string>
     <string name="pysanka__voice__hold">Утримувати мікрофон, поки говорю</string>
     <string name="pysanka__voice__hold_summary">Слова розпізнаються, щойно відпустите: ви точно знаєте, що потрапить у текст. Вимкнено: диктування починається одразу, як відкривається панель.</string>
-    <string name="pysanka__ai__replaced_kept">Попередній текст у історії буфера, якщо захочете повернути</string>
+    <string name="pysanka__ai__replaced_kept">Попередній текст в історії буфера, якщо захочете повернути</string>
     <string name="pysanka__ai__keep_title">Відповідь готова</string>
     <string name="pysanka__ai__keep_text">Що з нею зробити?</string>
     <string name="pysanka__ai__keep_drop">Відкинути</string>

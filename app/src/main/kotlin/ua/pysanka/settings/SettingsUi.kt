@@ -229,7 +229,7 @@ fun ConfirmDialog(text: String, confirm: String? = null, onConfirm: () -> Unit, 
         onDismissRequest = onDismiss,
         text = { Text(text, style = MaterialTheme.typography.bodyLarge) },
         confirmButton = {
-            androidx.compose.material3.TextButton(onClick = { onDismiss(); onConfirm() }) {
+            androidx.compose.material3.TextButton(onClick = { onConfirm(); onDismiss() }) {
                 Text(confirm ?: org.florisboard.lib.compose.stringRes(dev.patrickgold.florisboard.R.string.pysanka__confirm__delete))
             }
         },
