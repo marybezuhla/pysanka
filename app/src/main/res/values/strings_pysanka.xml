@@ -296,7 +296,6 @@
     <string name="pysanka__voice__listening">Listening… {time}</string>
     <string name="pysanka__voice__done">Done</string>
     <string name="pysanka__voice__cancel">Cancel</string>
-    <string name="pysanka__voice__close">Close</string>
     <string name="pysanka__voice__recognising">Recognising…</string>
     <string name="pysanka__voice__nothing">Nothing recognised. Try again closer to the microphone.</string>
     <string name="pysanka__voice__failed">Could not recognise it. Try again.</string>
@@ -389,6 +388,12 @@
     <string name="pysanka__voice__auto_stop">Stop by itself after a pause</string>
     <string name="pysanka__voice__auto_stop_summary">Be quiet for 2 seconds and the text appears by itself. «Done» still finishes sooner.</string>
     <string name="pysanka__voice__pause_hint">Pause for 2 seconds and the text appears by itself</string>
+    <string name="pysanka__voice__tap_to_speak">Tap the microphone and speak</string>
+    <string name="pysanka__voice__speak_again">Dictate</string>
+    <string name="pysanka__voice__keys">Back to the keys</string>
+    <string name="pysanka__voice__backspace">Delete</string>
+    <string name="pysanka__voice__space">Space</string>
+    <string name="pysanka__voice__new_line">New line</string>
     <string name="pysanka__ai__keep_title">The answer is ready</string>
     <string name="pysanka__ai__keep_text">What should happen to it?</string>
     <string name="pysanka__ai__keep_drop">Discard</string>

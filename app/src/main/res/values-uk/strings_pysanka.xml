@@ -297,7 +297,6 @@
     <string name="pysanka__voice__listening">Слухаю… {time}</string>
     <string name="pysanka__voice__done">Готово</string>
     <string name="pysanka__voice__cancel">Скасувати</string>
-    <string name="pysanka__voice__close">Закрити</string>
     <string name="pysanka__voice__recognising">Розпізнаю…</string>
     <string name="pysanka__voice__nothing">Нічого не розпізнано. Спробуйте ще раз ближче до мікрофона.</string>
     <string name="pysanka__voice__failed">Не вдалося розпізнати. Спробуйте ще раз.</string>
@@ -390,6 +389,12 @@
     <string name="pysanka__voice__auto_stop">Зупинятися самій після паузи</string>
     <string name="pysanka__voice__auto_stop_summary">Замовкніть на 2 секунди, і текст зʼявиться сам. «Готово» лишається, щоб закінчити раніше.</string>
     <string name="pysanka__voice__pause_hint">Пауза на 2 секунди, і текст зʼявиться сам</string>
+    <string name="pysanka__voice__tap_to_speak">Торкніться мікрофона й говоріть</string>
+    <string name="pysanka__voice__speak_again">Диктувати</string>
+    <string name="pysanka__voice__keys">До клавіш</string>
+    <string name="pysanka__voice__backspace">Стерти</string>
+    <string name="pysanka__voice__space">Пробіл</string>
+    <string name="pysanka__voice__new_line">Новий рядок</string>
     <string name="pysanka__ai__keep_title">Відповідь готова</string>
     <string name="pysanka__ai__keep_text">Що з нею зробити?</string>
     <string name="pysanka__ai__keep_drop">Відкинути</string>

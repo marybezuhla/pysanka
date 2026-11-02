@@ -15,7 +15,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.automirrored.filled.KeyboardReturn
+import androidx.compose.material.icons.automirrored.outlined.Backspace
+import androidx.compose.material.icons.filled.Keyboard
+import androidx.compose.material.icons.filled.SpaceBar
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import dev.patrickgold.florisboard.editorInstance
+import dev.patrickgold.florisboard.ime.editor.OperationUnit
+import dev.patrickgold.florisboard.ime.media.emoji.Emoji
+import dev.patrickgold.florisboard.ime.media.emoji.EmojiHistoryHelper
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import androidx.compose.material.icons.filled.KeyboardVoice
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -42,20 +64,37 @@ import org.florisboard.lib.snygg.ui.SnyggRow
 import org.florisboard.lib.snygg.ui.SnyggText
 
 /**
- * Pysanka: dictation in place of the keys (see [VoiceInput]): listening (how long, how loud), then
- * «Готово» recognises and puts the text at the cursor; «Скасувати» or ✕ drops it. Leaving the panel
- * (another field, the keyboard hidden) drops it too.
+ * Pysanka: dictation in place of the keys (see [VoiceInput]), as in WhisperPlus: the big microphone
+ * in the middle listens (how long, how loud; a tap or «Готово» recognises, the text goes to the
+ * cursor), and the panel stays for the next sentence. Beside it: punctuation on the left, ⌫ (held:
+ * repeats), space and a new line on the right, and recent emoji below. ⌨ goes back to the keys.
+ * Leaving the panel (another field, the keyboard hidden) drops what is being said.
  */
 @Composable
 fun VoicePanel(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val keyboardManager by context.keyboardManager()
+    val editorInstance by context.editorInstance()
     val state by VoiceInput.state.collectAsState()
     val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
     val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
+    val history by prefs.emoji.historyData.observeAsState()
+    val scope = rememberCoroutineScope()
     fun close() {
         VoiceInput.cancel()
         keyboardManager.activeState.imeUiMode = ImeUiMode.TEXT
+    }
+    fun mic() = when (state) {
+        is VoiceInput.State.Listening -> VoiceInput.finish()
+        VoiceInput.State.Recognising -> Unit
+        else -> keyboardManager.pysankaDictate()
+    }
+    fun punctuation(mark: String) {
+        // «слово .» → «слово.»: the next dictation adds its own space
+        if (editorInstance.activeContent.textBeforeSelection.endsWith(' ')) {
+            editorInstance.deleteBackwards(OperationUnit.CHARACTERS)
+        }
+        editorInstance.commitText(mark)
     }
     DisposableEffect(Unit) { onDispose { VoiceInput.cancel() } }
 
@@ -69,64 +108,152 @@ fun VoicePanel(modifier: Modifier = Modifier) {
             SnyggIcon(imageVector = Icons.Default.KeyboardVoice, modifier = size.padding(10.dp))
             SnyggText(FlorisImeUi.ClipboardHeaderText.elementName, modifier = Modifier.weight(1f), text = stringRes(R.string.pysanka__voice__title))
             SnyggIconButton(FlorisImeUi.ClipboardHeaderButton.elementName, onClick = { close() }, modifier = size) {
-                SnyggIcon(imageVector = Icons.Default.Close, contentDescription = stringRes(R.string.pysanka__voice__cancel))
+                SnyggIcon(imageVector = Icons.Default.Keyboard, contentDescription = stringRes(R.string.pysanka__voice__keys))
             }
         }
         SnyggBox(FlorisImeUi.ClipboardContent.elementName, modifier = Modifier.fillMaxWidth().weight(1f)) {
-            Column(
-                Modifier.fillMaxSize().padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-            ) {
-                when (val s = state) {
-                    is VoiceInput.State.Listening -> {
-                        // The microphone grows with the voice, so it is plain that it hears; the ring
-                        // around it empties as the time for one dictation runs out
+            Column(Modifier.fillMaxSize().padding(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    // Punctuation
+                    Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        for (pair in listOf(listOf(".", ","), listOf("?", "!"))) {
+                            Row(Modifier.fillMaxWidth().weight(1f), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                for (mark in pair) {
+                                    Key(Modifier.weight(1f), mark) { punctuation(mark) }
+                                }
+                            }
+                        }
+                    }
+                    // The microphone
+                    Column(
+                        Modifier.weight(1.5f).fillMaxHeight(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
+                    ) {
+                        val s = state
                         val ink = androidx.compose.material3.LocalContentColor.current
-                        val left = (1f - s.seconds / VoiceService.MAX_SECONDS).coerceIn(0f, 1f)
-                        Box(Modifier.size(96.dp), contentAlignment = Alignment.Center) {
-                            androidx.compose.foundation.Canvas(Modifier.size(96.dp)) {
+                        val listening = s as? VoiceInput.State.Listening
+                        val micLabel = stringRes(if (listening != null) R.string.pysanka__voice__done else R.string.pysanka__voice__speak_again)
+                        Box(
+                            Modifier.weight(1f, fill = false).sizeIn(maxWidth = 88.dp, maxHeight = 88.dp).aspectRatio(1f)
+                                .clip(CircleShape)
+                                .clickable(enabled = s !is VoiceInput.State.Recognising, onClickLabel = micLabel, role = Role.Button) { mic() },
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            // The ring empties as the time for one dictation runs out; the
+                            // microphone grows with the voice, so it is plain that it hears
+                            val left = listening?.let { (1f - it.seconds / VoiceService.MAX_SECONDS).coerceIn(0f, 1f) } ?: 1f
+                            androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
                                 val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 5.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
-                                drawCircle(ink.copy(alpha = 0.18f), style = stroke, radius = size.minDimension / 2 - stroke.width)
                                 val inset = stroke.width
-                                drawArc(
-                                    ink, startAngle = -90f, sweepAngle = 360f * left, useCenter = false, style = stroke,
-                                    topLeft = androidx.compose.ui.geometry.Offset(inset, inset),
-                                    size = androidx.compose.ui.geometry.Size(size.width - 2 * inset, size.height - 2 * inset),
-                                )
+                                val box = androidx.compose.ui.geometry.Size(size.width - 2 * inset, size.height - 2 * inset)
+                                val at = androidx.compose.ui.geometry.Offset(inset, inset)
+                                drawCircle(ink.copy(alpha = 0.18f), style = stroke, radius = size.minDimension / 2 - stroke.width)
+                                if (listening != null) {
+                                    drawArc(ink, -90f, 360f * left, useCenter = false, style = stroke, topLeft = at, size = box)
+                                }
                             }
                             SnyggIcon(
                                 imageVector = Icons.Default.KeyboardVoice,
-                                modifier = Modifier.size(40.dp).scale(1f + (s.level * 3f).coerceAtMost(0.6f)),
+                                contentDescription = micLabel,
+                                modifier = Modifier.fillMaxSize(0.45f).scale(1f + ((listening?.level ?: 0f) * 3f).coerceAtMost(0.6f))
+                                    .alpha(if (s is VoiceInput.State.Recognising) 0.4f else 1f),
                             )
                         }
-                        val secs = s.seconds.toInt()
-                        SnyggText(
-                            text = stringRes(
-                                if (s.heard) R.string.pysanka__voice__listening else R.string.pysanka__voice__speak,
-                                "time" to "%d:%02d".format(secs / 60, secs % 60),
-                            ),
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Chip(stringRes(R.string.pysanka__voice__cancel)) { close() }
-                            Chip(stringRes(R.string.pysanka__voice__done), primary = true) { VoiceInput.finish() }
+                        when (s) {
+                            is VoiceInput.State.Listening -> {
+                                val secs = s.seconds.toInt()
+                                SnyggText(
+                                    text = stringRes(
+                                        if (s.heard) R.string.pysanka__voice__listening else R.string.pysanka__voice__speak,
+                                        "time" to "%d:%02d".format(secs / 60, secs % 60),
+                                    ),
+                                )
+                                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    Chip(stringRes(R.string.pysanka__voice__cancel)) { VoiceInput.cancel() }
+                                    Chip(stringRes(R.string.pysanka__voice__done), primary = true) { VoiceInput.finish() }
+                                }
+                            }
+                            VoiceInput.State.Recognising -> SnyggText(text = stringRes(R.string.pysanka__voice__recognising))
+                            is VoiceInput.State.Failed -> SnyggText(text = stringRes(s.message))
+                            VoiceInput.State.Idle -> SnyggText(text = stringRes(R.string.pysanka__voice__tap_to_speak))
                         }
-                        if (autoStop) SnyggText(text = stringRes(R.string.pysanka__voice__pause_hint))
+                        if (autoStop && listening != null) SnyggText(text = stringRes(R.string.pysanka__voice__pause_hint))
                     }
-                    VoiceInput.State.Recognising -> {
-                        SnyggText(text = stringRes(R.string.pysanka__voice__recognising))
-                        Chip(stringRes(R.string.pysanka__voice__cancel)) { close() }
+                    // Editing
+                    Column(Modifier.weight(1f).fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Key(Modifier.weight(1f), icon = Icons.AutoMirrored.Outlined.Backspace, label = stringRes(R.string.pysanka__voice__backspace), repeat = true) {
+                            editorInstance.deleteBackwards(OperationUnit.CHARACTERS)
+                        }
+                        Key(Modifier.weight(1f), icon = Icons.Default.SpaceBar, label = stringRes(R.string.pysanka__voice__space)) {
+                            editorInstance.commitText(" ")
+                        }
+                        Key(Modifier.weight(1f), icon = Icons.AutoMirrored.Filled.KeyboardReturn, label = stringRes(R.string.pysanka__voice__new_line)) {
+                            editorInstance.commitText("\n")
+                        }
                     }
-                    is VoiceInput.State.Failed -> {
-                        SnyggText(text = stringRes(s.message))
-                        Chip(stringRes(R.string.pysanka__voice__close), primary = true) { close() }
-                    }
-                    // Done (the text is in the field) or not started: back to the keys
-                    VoiceInput.State.Idle -> androidx.compose.runtime.LaunchedEffect(Unit) {
-                        keyboardManager.activeState.imeUiMode = ImeUiMode.TEXT
+                }
+                // Recent emoji (the keyboard's own history), the usual ones until there are enough
+                val emoji = remember(history) {
+                    (history.pinned + history.recent).map { it.value }.plus(COMMON_EMOJI).distinct().take(8)
+                }
+                Row(Modifier.fillMaxWidth().height(40.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    for (e in emoji) {
+                        Key(Modifier.weight(1f), e) {
+                            editorInstance.commitText(e)
+                            scope.launch { EmojiHistoryHelper.markEmojiUsed(prefs, Emoji(e, "", emptyList())) }
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+private val COMMON_EMOJI = listOf("🙂", "😂", "❤️", "👍", "🙏", "🔥", "😢", "🎉")
+
+/** A key of the panel: text or an icon (its name read out); [repeat]: held, it repeats like ⌫. */
+@Composable
+private fun Key(
+    modifier: Modifier,
+    text: String? = null,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
+    label: String = text.orEmpty(),
+    repeat: Boolean = false,
+    onClick: () -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    val action by androidx.compose.runtime.rememberUpdatedState(onClick)
+    val press = if (repeat) {
+        Modifier
+            .semantics { onClick(label) { action(); true }; role = Role.Button }
+            .pointerInput(Unit) {
+                detectTapGestures(onPress = {
+                    action()
+                    val job = scope.launch {
+                        delay(400)
+                        while (true) {
+                            action()
+                            delay(60)
+                        }
+                    }
+                    tryAwaitRelease()
+                    job.cancel()
+                })
+            }
+    } else {
+        Modifier.clickable(onClickLabel = label, role = Role.Button) { action() }
+    }
+    SnyggBox(
+        FlorisImeUi.SmartbarActionTile.elementName,
+        modifier = modifier.fillMaxHeight(),
+        clickAndSemanticsModifier = press,
+        contentAlignment = Alignment.Center,
+    ) {
+        if (icon != null) {
+            SnyggIcon(imageVector = icon, contentDescription = label)
+        } else {
+            SnyggText(FlorisImeUi.SmartbarActionTileText.elementName, text = text.orEmpty())
         }
     }
 }
