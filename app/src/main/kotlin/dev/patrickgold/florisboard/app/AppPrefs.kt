@@ -230,11 +230,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__smart_punctuation",
             default = true,
         )
-        // Pysanka: the extra word lists turned on (ua.pysanka.typing.ExtraDictionaries); modern words at first
-        val pysankaExtraDicts = string(
-            key = "pysanka__correction__extra_dicts",
-            default = "slang",
-        )
         // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         val pysankaLearnWords = boolean(
             key = "pysanka__correction__learn_words",

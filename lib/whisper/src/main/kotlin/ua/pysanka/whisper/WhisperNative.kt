@@ -54,10 +54,13 @@ object WhisperNative {
         }
     }
 
-    /** The model in [file], or null if it cannot be read (or this phone cannot run it). */
-    fun load(file: File): Model? {
-        if (!loaded) return null
-        val h = init(file.absolutePath)
+    /**
+     * The model in [buffer] (the file that comes with the app, mapped from the APK), or null if it
+     * cannot be read (or this phone cannot run it).
+     */
+    fun load(buffer: java.nio.ByteBuffer): Model? {
+        if (!loaded || !buffer.isDirect) return null
+        val h = init(buffer)
         return if (h == 0L) null else Model(h)
     }
 
@@ -66,7 +69,7 @@ object WhisperNative {
         if (loaded) nativeStop(run)
     }
 
-    private external fun init(path: String): Long
+    private external fun init(buffer: java.nio.ByteBuffer): Long
     private external fun transcribe(handle: Long, audio: FloatArray, language: String, prompt: String, threads: Int, gen: Long): ByteArray?
     private external fun nativeStop(gen: Long)
     private external fun free(handle: Long)

@@ -55,30 +55,20 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
 
     private val prefs by FlorisPreferenceStore
 
-    // Pysanka: a word list per language (assets/ime/dict/<language>.json) with the extra lists the
-    // person turned on (<language>-<theme>.json: slang, military…), loaded when a language is first
-    // used, and the person's own words (UserWords, encrypted)
+    // Pysanka: a word list per language (assets/ime/dict/<language>.json), loaded when a language
+    // is first used, and the person's own words (UserWords, encrypted)
     private val suggesters = guardedByLock { mutableMapOf<String, WordSuggester?>() }
     private val wordDataSerializer = MapSerializer(String.serializer(), Int.serializer())
 
     private suspend fun suggester(subtype: Subtype): WordSuggester? {
         val lang = subtype.primaryLocale.language
-        val themes = ua.pysanka.typing.ExtraDictionaries.chosen(prefs.correction.pysankaExtraDicts.get())
-        val key = "$lang|${themes.joinToString(",")}"
         return suggesters.withLock { map ->
             // A language without a list is remembered as such (not looked for on every key)
-            if (key in map) return@withLock map[key]
-            // Other extra lists chosen: the old combination goes (only one per language in memory)
-            map.keys.removeAll { it.startsWith("$lang|") }
+            if (lang in map) return@withLock map[lang]
             runCatching {
-                val words = HashMap(Json.decodeFromString(wordDataSerializer, appContext.assets.readText("ime/dict/$lang.json")))
-                for (theme in themes) {
-                    // A theme without a list for this language: nothing
-                    val extra = runCatching { appContext.assets.readText("ime/dict/$lang-$theme.json") }.getOrNull() ?: continue
-                    for ((w, f) in Json.decodeFromString(wordDataSerializer, extra)) words.putIfAbsent(w, f)
-                }
-                WordSuggester(words, KeyNeighbours.forLanguage(lang))
-            }.getOrNull().also { map[key] = it }
+                val raw = appContext.assets.readText("ime/dict/$lang.json")
+                WordSuggester(Json.decodeFromString(wordDataSerializer, raw), KeyNeighbours.forLanguage(lang))
+            }.getOrNull().also { map[lang] = it }
         }
     }
 

@@ -1,5 +1,5 @@
-// Pysanka: the JNI side of dictation (see WhisperNative.kt). Loads a model from a file in Pysanka's
-// own storage and turns 16 kHz mono audio into text. No logging of the text or the audio: whisper's
+// Pysanka: the JNI side of dictation (see WhisperNative.kt). Loads the model that comes with the app
+// (mapped from the APK) and turns 16 kHz mono audio into text. No logging of the text or the audio: whisper's
 // (and ggml's) log output is switched off.
 #include <jni.h>
 #include <atomic>
@@ -30,20 +30,21 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *, void *) {
     return JNI_VERSION_1_6;
 }
 
+// The model from a direct buffer (the file mapped from the APK); whisper copies what it needs
 JNIEXPORT jlong JNICALL
-Java_ua_pysanka_whisper_WhisperNative_init(JNIEnv * env, jobject, jstring path) {
-    const char * p = env->GetStringUTFChars(path, nullptr);
-    if (p == nullptr) return 0;
+Java_ua_pysanka_whisper_WhisperNative_init(JNIEnv * env, jobject, jobject buffer) {
+    void * data = env->GetDirectBufferAddress(buffer);
+    const jlong size = env->GetDirectBufferCapacity(buffer);
+    if (data == nullptr || size <= 0) return 0;
     whisper_context * ctx = nullptr;
     try {
         whisper_context_params params = whisper_context_default_params();
         params.use_gpu = false;
         params.flash_attn = true;
-        ctx = whisper_init_from_file_with_params(p, params);
+        ctx = whisper_init_from_buffer_with_params(data, static_cast<size_t>(size), params);
     } catch (...) {
         ctx = nullptr;
     }
-    env->ReleaseStringUTFChars(path, p);
     return reinterpret_cast<jlong>(ctx);
 }
 

@@ -20,8 +20,6 @@ import androidx.annotation.StringRes
 import dev.patrickgold.florisboard.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ua.pysanka.models.ModelStore
-import ua.pysanka.models.PinnedModel
 import ua.pysanka.privacy.FieldPrivacy
 import ua.pysanka.whisper.WhisperNative
 
@@ -40,7 +38,7 @@ object VoiceInput {
         data class Failed(@StringRes val message: Int) : State
     }
 
-    enum class Ready { YES, NOT_HERE, NO_MODEL, NO_MIC, UNSUPPORTED }
+    enum class Ready { YES, NOT_HERE, NO_MIC, UNSUPPORTED }
 
     val state: StateFlow<State>
         field = MutableStateFlow<State>(State.Idle)
@@ -61,8 +59,6 @@ object VoiceInput {
     private var onText: ((String) -> Unit)? = null
     private var language = ""
 
-    fun hasModel(context: Context) = ModelStore(context, PinnedModel.WHISPER).modelFile() != null
-
     fun hasMic(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
 
@@ -73,7 +69,6 @@ object VoiceInput {
     fun ready(context: Context): Ready = when {
         !allowedHere() -> Ready.NOT_HERE
         !WhisperNative.supported -> Ready.UNSUPPORTED
-        !hasModel(context) -> Ready.NO_MODEL
         !hasMic(context) -> Ready.NO_MIC
         else -> Ready.YES
     }
