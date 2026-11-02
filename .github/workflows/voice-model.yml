@@ -1,0 +1,35 @@
+name: Prepare the dictation model
+
+# Run by hand (or by a push to voice-prepare). Downloads Whisper base (whisper.cpp's 5-bit file,
+# MIT) at a pinned revision, checks its SHA-256 and pushes it with SHA256SUMS and SOURCE.md to the
+# voice-model branch for review. Nothing goes into the app until it is reviewed and copied over.
+on:
+  workflow_dispatch:
+  push:
+    branches: [voice-prepare]
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download and check
+        env:
+          URL: https://huggingface.co/ggerganov/whisper.cpp/resolve/f281eb45af861ab5e5297d23694b7d46e090c02c/ggml-base-q5_1.bin
+          SHA: 422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898
+        run: |
+          mkdir out && cd out
+          curl -fsSL --retry 3 -o ggml-base-q5_1.bin "$URL"
+          echo "$SHA  ggml-base-q5_1.bin" > SHA256SUMS
+          sha256sum -c SHA256SUMS
+          printf '%s\n' "Whisper base (OpenAI, MIT), whisper.cpp 5-bit file." "Source: $URL" "Hugging Face ggerganov/whisper.cpp at f281eb45af861ab5e5297d23694b7d46e090c02c" > SOURCE.md
+      - name: Push for review
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q && git checkout -q -b voice-model && git add . && git -c user.name=ci -c user.email=ci@localhost commit -qm "Whisper base ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" voice-model
