@@ -73,37 +73,10 @@ fun VoiceSettingsScreen() = FlorisScreen {
             if (!WhisperNative.supported) {
                 Text(stringRes(R.string.pysanka__voice__unsupported), color = MaterialTheme.colorScheme.error)
             }
-            // Which Whisper: the more accurate or the faster
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
             val scope = androidx.compose.runtime.rememberCoroutineScope()
-            val chosen by prefs.pysankaVoice.model.observeAsState()
-            Text(stringRes(R.string.pysanka__voice__model), style = MaterialTheme.typography.titleMedium)
-            for ((name, label) in listOf("base" to R.string.pysanka__voice__model_base, "small" to R.string.pysanka__voice__model_small)) {
-                Row(
-                    Modifier.fillMaxWidth().selectable(selected = chosen == name, role = Role.RadioButton) {
-                        scope.launch { prefs.pysankaVoice.model.set(name) }
-                    },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(selected = chosen == name, onClick = null)
-                    Text(stringRes(label), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 8.dp))
-                }
-            }
-            val import = if (chosen == "base") ModelImport.VOICE_BASE else ModelImport.VOICE
-            key(import) {
-                ModelSection(import) {
-                    Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
-                }
-                // The other one, if it is still on the phone, can go
-                val other = remember { ModelStore(context, if (import === ModelImport.VOICE) PinnedModel.WHISPER_BASE else PinnedModel.WHISPER) }
-                var otherThere by remember { mutableStateOf(other.modelFile() != null) }
-                // Not while either is being copied in (its temporary file is in its folder)
-                val copying by import.status.collectAsState()
-                if (otherThere && copying.progress == null && !ModelImport.VOICE.running && !ModelImport.VOICE_BASE.running) {
-                    OutlinedButton(onClick = { other.delete(); otherThere = false }) {
-                        Text(stringRes(R.string.pysanka__voice__delete_other))
-                    }
-                }
+            ModelSection(ModelImport.VOICE) {
+                Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
             }
             // A pause ends the dictation by itself (or only «Готово» does)
             val autoStop by prefs.pysankaVoice.autoStop.observeAsState()

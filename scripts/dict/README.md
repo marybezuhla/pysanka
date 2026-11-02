@@ -10,6 +10,10 @@
   (https://github.com/brown-uk/dict_uk, uk_UA.dic/.aff as in LibreOffice; GPL 3.0+ / LGPL 2.1+ /
   MPL 1.1), used only to keep Ukrainian words (no Russian words or misspellings from subtitles).
 
+- **Pysanka's own lists** `slang_uk.txt`, `slang_en.txt` (GPL-3.0): modern words from social media
+  and chat (лайк, сторіс, кринж, донат; rizz, lowkey…) that subtitles lack, added by `slang.py` at a
+  middle frequency. No Russian words, no swearing.
+
 ```sh
 git clone --depth 1 https://github.com/hermitdave/FrequencyWords fw
 git clone --depth 1 --filter=blob:none --sparse https://github.com/LibreOffice/dictionaries lo && (cd lo && git sparse-checkout set uk_UA)

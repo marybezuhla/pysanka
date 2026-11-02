@@ -324,10 +324,6 @@
     <string name="pysanka__ai__limits">Social media limits</string>
     <string name="pysanka__ai__show_count">Character counter</string>
     <string name="pysanka__ai__show_count_summary">Above the AI tiles: how many characters; a tap shows the limits of X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
-    <string name="pysanka__voice__model">Model</string>
-    <string name="pysanka__voice__model_small">More accurate, slower: Whisper small (about 190 MB)</string>
-    <string name="pysanka__voice__model_base">Faster (recommended): Whisper base (about 60 MB)</string>
-    <string name="pysanka__voice__delete_other">Delete the other model</string>
     <string name="pysanka__ai__thread_no_history">The clipboard history cannot take the parts now (it is off, shorter, not ready yet, or this is a private field): copy them with a tap.</string>
     <string name="pysanka__typing__key_targeting">More accurate key taps</string>
     <string name="pysanka__typing__key_targeting_summary">A tap near the edge between two letters goes to the one more likely in the word (the keys look the same)</string>
