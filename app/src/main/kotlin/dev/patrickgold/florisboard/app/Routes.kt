@@ -78,6 +78,11 @@ object Routes {
         @Deeplink("settings/pysanka/ai")
         object PysankaAi
 
+        // Pysanka: dictation (the model and the microphone)
+        @Serializable
+        @Deeplink("settings/pysanka/voice")
+        object PysankaVoice
+
         // Pysanka: the owner's clipboard tags
         @Serializable
         @Deeplink("settings/clipboard/tags")
@@ -127,6 +132,7 @@ object Routes {
             composableWithDeepLink(Settings.ClipboardCopy::class) { ua.pysanka.clipboard.ClipboardBackupScreen() }
             composableWithDeepLink(Settings.ClipboardTags::class) { ua.pysanka.clipboard.ClipboardTagsScreen() }
             composableWithDeepLink(Settings.PysankaAi::class) { ua.pysanka.ai.AiSettingsScreen() }
+            composableWithDeepLink(Settings.PysankaVoice::class) { ua.pysanka.voice.VoiceSettingsScreen() }
 
             composableWithDeepLink(Settings.About::class) { AboutScreen() }
             composableWithDeepLink(Settings.ProjectLicense::class) { ProjectLicenseScreen() }
