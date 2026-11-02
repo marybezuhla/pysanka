@@ -160,7 +160,7 @@ data class ClipboardItem @OptIn(ExperimentalSerializationApi::class) constructor
                     dataItem.uri
                 } else {
                     // Pysanka: a plain name, not the source's (a screenshot's name tells the app and time)
-                    val ext = data.description.filterMimeTypes("*/*")?.firstOrNull()
+                    val ext = data.description.filterMimeTypes(if (type == ItemType.IMAGE) "image/*" else "video/*")?.firstOrNull()
                         ?.let { android.webkit.MimeTypeMap.getSingleton().getExtensionFromMimeType(it) }
                     val displayName = when (type) {
                         ItemType.IMAGE -> "Image"
