@@ -67,6 +67,7 @@ class AiPanelScreensTest {
         override fun expand(action: AiAction) {}
         override fun place(text: String, insert: Boolean) {}
         override fun copy(text: String) {}
+        override fun thread(parts: List<String>) {}
         override fun change(text: String) {}
         override fun settings() {}
     }
@@ -113,6 +114,7 @@ class AiPanelScreensTest {
                                     intoEmptyField = false,
                                     canExpand = true,
                                     canRun = { true },
+                                    available = { it != AiAction.THREAD },
                                     modifier = Modifier.fillMaxWidth().height(300.dp),
                                     headerHeight = 40.dp,
                                     actions = none,

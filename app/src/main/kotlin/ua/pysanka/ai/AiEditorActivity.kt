@@ -152,7 +152,7 @@ class AiEditorActivity : ComponentActivity() {
         if (intent.getBooleanExtra(EXTRA_SECURE, false)) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         if (Build.VERSION.SDK_INT >= 33) setRecentsScreenshotEnabled(false)
         val text = intent.getStringExtra(EXTRA_TEXT).orEmpty().take(AiJob.HARD_MAX)
-        val preset = intent.getStringExtra(EXTRA_PRESET)?.let { n -> AiAction.entries.firstOrNull { it.name == n } }
+        val preset = intent.getStringExtra(EXTRA_PRESET)?.let { n -> AiAction.entries.firstOrNull { it.name == n && it != AiAction.THREAD } }
         val canReplace = intent.getBooleanExtra(EXTRA_CAN_REPLACE, false)
         val forResult = intent.getBooleanExtra(EXTRA_FOR_RESULT, false) && callingActivity?.packageName == packageName
         val done = intent.getBundleExtra(EXTRA_DONE)?.let(::outputOf)
@@ -373,7 +373,7 @@ private fun AiEditorScreen(
             modifier = Modifier.fillMaxWidth().heightIn(min = 96.dp, max = 260.dp),
         )
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (a in AiAction.entries.filter { it != AiAction.MY_STYLE || hasStyle }) {
+            for (a in AiAction.entries.filter { (it != AiAction.MY_STYLE || hasStyle) && it != AiAction.THREAD }) {
                 FilterChip(
                     selected = a == action, enabled = !busy,
                     onClick = { action = a; if (stage !is AiStage.Working) stage = AiStage.Idle },
