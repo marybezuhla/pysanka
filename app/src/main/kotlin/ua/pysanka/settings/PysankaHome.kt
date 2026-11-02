@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -120,11 +121,24 @@ fun PysankaHome() {
             icon = Icons.Outlined.Lock,
         ) { PrivacySettings() }
 
-        val aiReady = remember { ua.pysanka.ai.ModelStore(context).modelFile() != null }
+        val aiReady = remember { ua.pysanka.models.ModelStore(context).modelFile() != null }
         val aiState = stringRes(if (aiReady) R.string.pysanka__settings__ai_ready else R.string.pysanka__settings__ai_missing)
         Block(stringRes(R.string.pysanka__settings__ai), aiState, icon = ua.pysanka.ui.AiMark) {
             LinkRow(stringRes(R.string.pysanka__settings__ai_open), stringRes(R.string.pysanka__settings__ai_open_hint)) {
                 navController.navigate(Routes.Settings.PysankaAi)
+            }
+        }
+
+        val voiceState = stringRes(
+            when {
+                !ua.pysanka.voice.VoiceInput.hasModel(context) -> R.string.pysanka__settings__voice_missing
+                !ua.pysanka.voice.VoiceInput.hasMic(context) -> R.string.pysanka__settings__voice_no_mic
+                else -> R.string.pysanka__settings__voice_ready
+            },
+        )
+        Block(stringRes(R.string.pysanka__voice__title), voiceState, icon = Icons.Outlined.Mic) {
+            LinkRow(stringRes(R.string.pysanka__settings__voice_open), voiceState) {
+                navController.navigate(Routes.Settings.PysankaVoice)
             }
         }
 

@@ -11,6 +11,8 @@
 
     <!-- Permission needed to create notifications on devices running Android 13+ -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Pysanka: dictation only; asked for when the person turns it on in the settings -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <!-- Android 11+ only: Define that FlorisBoard requests to see all apps that
           ship with an IME or Spell Check service. This is used to guide the user
@@ -138,6 +140,11 @@
             android:name="ua.pysanka.ai.AiService"
             android:exported="false"
             android:process=":ai" />
+        <!-- Pysanka: dictation (Whisper) in its own process, so the model never weighs on the keyboard -->
+        <service
+            android:name="ua.pysanka.voice.VoiceService"
+            android:exported="false"
+            android:process=":voice" />
 
         <!-- Pysanka: the AI editor from "Share" and the text selection menu of any app (only plain text);
              turned on only while the AI model is installed (AiEntry.sync) -->

@@ -3,11 +3,9 @@ package ua.pysanka.ai
 import android.app.Application
 import android.os.Build
 
-/** Pysanka: tells the AI editor's own process (":ai") apart from the keyboard's. */
+/** Pysanka: tells the model processes (the AI's ":ai", dictation's ":voice") apart from the keyboard's. */
 object AiProcess {
-    const val SUFFIX = ":ai"
-
-    fun isAiProcess(): Boolean = name()?.endsWith(SUFFIX) == true
+    fun isModelProcess(): Boolean = name()?.let { it.endsWith(":ai") || it.endsWith(":voice") } == true
 
     private fun name(): String? {
         if (Build.VERSION.SDK_INT >= 28) return Application.getProcessName()
