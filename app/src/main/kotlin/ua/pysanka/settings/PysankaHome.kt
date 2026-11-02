@@ -217,10 +217,12 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.autoCapitalization, stringRes(R.string.pysanka__typing__auto_caps))
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))
     PrefToggle(prefs.correction.autoSpacePunctuation, stringRes(R.string.pysanka__typing__auto_space))
+    PrefToggle(prefs.correction.pysankaSmartPunctuation, stringRes(R.string.pysanka__typing__smart_punctuation), stringRes(R.string.pysanka__typing__smart_punctuation_summary))
     BlockDivider()
     PrefChoice(prefs.gestures.deleteKeySwipeLeft, stringRes(R.string.pysanka__typing__delete_swipe), SwipeAction::class, "deleteSwipe")
     PrefChoice(prefs.gestures.spaceBarSwipeLeft, stringRes(R.string.pysanka__typing__space_swipe_left), SwipeAction::class, "general")
     PrefChoice(prefs.gestures.spaceBarSwipeRight, stringRes(R.string.pysanka__typing__space_swipe_right), SwipeAction::class, "general")
+    PrefToggle(prefs.gestures.pysankaSpaceTrackpad, stringRes(R.string.pysanka__typing__trackpad), stringRes(R.string.pysanka__typing__trackpad_summary))
     BlockDivider()
     val delay by prefs.keyboard.longPressDelay.observeAsState()
     SliderRow(stringRes(R.string.pysanka__typing__long_press), delay, 100..700, 10, { stringRes(R.string.pysanka__typing__ms, "n" to it) }) {

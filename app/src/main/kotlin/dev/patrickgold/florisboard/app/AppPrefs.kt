@@ -221,6 +221,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__calibrate",
             default = true,
         )
+        // Pysanka: «» and ʼ in Ukrainian, “” in English (KeyboardManager.pysankaSmartChar)
+        val pysankaSmartPunctuation = boolean(
+            key = "pysanka__correction__smart_punctuation",
+            default = true,
+        )
         // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         val pysankaLearnWords = boolean(
             key = "pysanka__correction__learn_words",
@@ -388,6 +393,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         val spaceBarLongPress = enum(
             key = "gestures__space_bar_long_press",
             default = SwipeAction.SHOW_INPUT_METHOD_PICKER,
+        )
+        // Pysanka: a long press on space turns the keyboard into a trackpad for the cursor (as on the iPhone)
+        val pysankaSpaceTrackpad = boolean(
+            key = "pysanka__gestures__space_trackpad",
+            default = true,
         )
         val deleteKeySwipeLeft = enum(
             key = "gestures__delete_key_swipe_left",

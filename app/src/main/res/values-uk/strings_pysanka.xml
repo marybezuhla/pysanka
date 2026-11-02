@@ -381,4 +381,8 @@
     <string name="pysanka__shortcuts__text">Текст</string>
     <string name="pysanka__shortcuts__add">Зберегти</string>
     <string name="pysanka__shortcuts__delete">Видалити «{shortcut}»</string>
+    <string name="pysanka__typing__smart_punctuation">Розумні лапки й апостроф</string>
+    <string name="pysanka__typing__smart_punctuation_summary">«ялинки» й ʼ в українській, “ ” в англійській</string>
+    <string name="pysanka__typing__trackpad">Пробіл — трекпад</string>
+    <string name="pysanka__typing__trackpad_summary">Утримайте пробіл і ведіть пальцем — курсор рухається за ним</string>
 </resources>

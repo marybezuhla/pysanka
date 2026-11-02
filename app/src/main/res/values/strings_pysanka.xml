@@ -380,4 +380,8 @@
     <string name="pysanka__shortcuts__text">Text</string>
     <string name="pysanka__shortcuts__add">Save</string>
     <string name="pysanka__shortcuts__delete">Delete “{shortcut}”</string>
+    <string name="pysanka__typing__smart_punctuation">Smart quotes and apostrophe</string>
+    <string name="pysanka__typing__smart_punctuation_summary">«» and ʼ in Ukrainian, “ ” in English</string>
+    <string name="pysanka__typing__trackpad">Space bar as a trackpad</string>
+    <string name="pysanka__typing__trackpad_summary">Hold the space bar and slide: the cursor follows your finger</string>
 </resources>

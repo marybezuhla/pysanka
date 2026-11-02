@@ -479,6 +479,10 @@ private class TextKeyboardLayoutController(
                     val pointer = pointerMap.findById(pointerId)
                     if (pointer != null) {
                         pointer.index = pointerIndex
+                        if (pointer.pysankaTrackpad) {
+                            pysankaTrackpadMove(event, pointer)
+                            continue
+                        }
                         val alwaysTriggerOnMove = (pointer.hasTriggeredGestureMove
                             && (pointer.initialKey?.computedData?.code == KeyCode.DELETE
                             && prefs.gestures.deleteKeySwipeLeft.get().let {
@@ -503,7 +507,11 @@ private class TextKeyboardLayoutController(
                 val pointer = pointerMap.findById(pointerId)
                 if (pointer != null) {
                     pointer.index = pointerIndex
-                    if (swipeGestureDetector.onTouchUp(event, pointer) || pointer.hasTriggeredGestureMove) {
+                    // Pysanka: a trackpad finger lifted is no swipe and no space
+                    if (pointer.pysankaTrackpad) {
+                        swipeGestureDetector.onTouchCancel(event, pointer)
+                        onTouchCancelInternal(event, pointer)
+                    } else if (swipeGestureDetector.onTouchUp(event, pointer) || pointer.hasTriggeredGestureMove) {
                         if (pointer.hasTriggeredGestureMove && pointer.initialKey?.computedData?.code == KeyCode.DELETE) {
                             val selection = editorInstance.activeContent.selection
                             if (selection.isSelectionMode) {
@@ -523,7 +531,10 @@ private class TextKeyboardLayoutController(
                 for (pointer in pointerMap) {
                     if (pointer.id == pointerId) {
                         pointer.index = pointerIndex
-                        if (swipeGestureDetector.onTouchUp(event, pointer) || pointer.hasTriggeredGestureMove) {
+                        if (pointer.pysankaTrackpad) {
+                            swipeGestureDetector.onTouchCancel(event, pointer)
+                            onTouchCancelInternal(event, pointer)
+                        } else if (swipeGestureDetector.onTouchUp(event, pointer) || pointer.hasTriggeredGestureMove) {
                             if (pointer.hasTriggeredGestureMove &&
                                 pointer.initialKey?.computedData?.code == KeyCode.DELETE &&
                                 prefs.gestures.deleteKeySwipeLeft.get() != SwipeAction.SELECT_CHARACTERS_PRECISELY &&
@@ -582,7 +593,12 @@ private class TextKeyboardLayoutController(
                     pointer.hasTriggeredLongPress = true
                     when (key.computedData.code) {
                         KeyCode.SPACE, KeyCode.CJK_SPACE -> {
-                            when (prefs.gestures.spaceBarLongPress.get()) {
+                            // Pysanka: a long press on space makes the keyboard a trackpad for the cursor
+                            if (prefs.gestures.pysankaSpaceTrackpad.get()) {
+                                pointer.pysankaTrackpad = true
+                                pointer.hasTriggeredGestureMove = true
+                                inputFeedbackController?.keyLongPress(key.computedData)
+                            } else when (prefs.gestures.spaceBarLongPress.get()) {
                                 SwipeAction.NO_ACTION,
                                 SwipeAction.INSERT_SPACE -> {
                                 }
@@ -632,6 +648,34 @@ private class TextKeyboardLayoutController(
             initSelectionEnd = editorInstance.activeContent.selection.end
         } else {
             pointer.activeKey = null
+        }
+    }
+
+    /**
+     * Pysanka: the finger on the space bar after a long press moves the cursor, as a trackpad: half a
+     * letter key's width across is one character, a row's height up or down is one line.
+     */
+    private fun pysankaTrackpadMove(event: MotionEvent, pointer: TouchPointer) {
+        val x = event.getX(pointer.index)
+        val y = event.getY(pointer.index)
+        if (pointer.pysankaAnchorX.isNaN()) {
+            pointer.pysankaAnchorX = x
+            pointer.pysankaAnchorY = y
+            return
+        }
+        val stepX = (measuredWidth / 20f).coerceAtLeast(1f)
+        val stepY = (measuredHeight / 4f).coerceAtLeast(1f)
+        val across = ((x - pointer.pysankaAnchorX) / stepX).toInt()
+        val down = ((y - pointer.pysankaAnchorY) / stepY).toInt()
+        if (across != 0) {
+            keyboardManager.handleArrow(if (across < 0) KeyCode.ARROW_LEFT else KeyCode.ARROW_RIGHT, abs(across))
+            pointer.pysankaAnchorX += across * stepX
+            inputFeedbackController?.gestureMovingSwipe(TextKeyData.SPACE)
+        }
+        if (down != 0) {
+            keyboardManager.handleArrow(if (down < 0) KeyCode.ARROW_UP else KeyCode.ARROW_DOWN, abs(down))
+            pointer.pysankaAnchorY += down * stepY
+            inputFeedbackController?.gestureMovingSwipe(TextKeyData.SPACE)
         }
     }
 
@@ -1015,10 +1059,17 @@ private class TextKeyboardLayoutController(
         var pressedKeyInfo: InputEventDispatcher.PressedKeyInfo? = null
         // Pysanka: the key drawn where the finger went down (it may have been given to a neighbour)
         var pysankaDrawnKey: TextKey? = null
+        // Pysanka: the space bar held: the finger moves the cursor (from where it was when it began)
+        var pysankaTrackpad: Boolean = false
+        var pysankaAnchorX: Float = Float.NaN
+        var pysankaAnchorY: Float = Float.NaN
 
         override fun reset() {
             super.reset()
             pysankaDrawnKey = null
+            pysankaTrackpad = false
+            pysankaAnchorX = Float.NaN
+            pysankaAnchorY = Float.NaN
             initialKey = null
             activeKey = null
             hasTriggeredGestureMove = false

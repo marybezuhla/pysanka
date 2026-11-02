@@ -84,7 +84,7 @@ import org.florisboard.lib.kotlin.collectLatestIn
 private val DoubleSpacePeriodMatcher = """([^.!?‽\s]\s)""".toRegex()
 
 // Pysanka: marks that end a word, so it is learned (an apostrophe or hyphen may be inside one)
-private val PYSANKA_WORD_ENDS = setOf(".", ",", "!", "?", ";", ":", "…", ")", "»", "\"")
+private val PYSANKA_WORD_ENDS = setOf(".", ",", "!", "?", ";", ":", "…", ")", "»", "\"", "”")
 
 // Pysanka: fields whose words are never learned (besides password, incognito and "no learning" ones)
 private val PYSANKA_NO_LEARNING = setOf(
@@ -800,6 +800,21 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
+    /**
+     * Pysanka: smart punctuation, as on the iPhone: a straight quote becomes «» in Ukrainian and “”
+     * in English (opening after a space, a bracket or a dash, closing otherwise), and an apostrophe
+     * after a letter in Ukrainian becomes ʼ. Not in password, web address or e-mail fields.
+     */
+    private fun pysankaSmartChar(text: String): String {
+        if (text != "\"" && text != "'") return text
+        if (!prefs.correction.pysankaSmartPunctuation.get() || ua.pysanka.privacy.FieldPrivacy.isPassword) return text
+        val variation = editorInstance.activeInfo.inputAttributes.variation
+        if (variation == InputAttributes.Variation.URI || variation == InputAttributes.Variation.EMAIL_ADDRESS ||
+            variation == InputAttributes.Variation.WEB_EMAIL_ADDRESS) return text
+        val language = subtypeManager.activeSubtype.primaryLocale.language
+        return ua.pysanka.typing.SmartPunctuation.of(text, language, editorInstance.activeContent.textBeforeSelection.lastOrNull())
+    }
+
     /** Pysanka: the last auto-correction, until the next key. */
     private data class PysankaUndo(val typed: String, val corrected: String, val midSentence: Boolean, val previous: String?)
     private var pysankaUndo: PysankaUndo? = null
@@ -992,7 +1007,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                     }
                     else -> when (data.type) {
                         KeyType.CHARACTER, KeyType.NUMERIC ->{
-                            val text = data.asString(isForDisplay = false)
+                            val text = pysankaSmartChar(data.asString(isForDisplay = false))
                             if (!UCharacter.isUAlphabetic(UCharacter.codePointAt(text, 0))) {
                                 val typed = editorInstance.activeContent.composingText
                                 val candidate = pysankaAutoCommitCandidate()
