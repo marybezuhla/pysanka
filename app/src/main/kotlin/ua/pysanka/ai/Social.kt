@@ -20,6 +20,9 @@ internal object SocialApps {
 
     fun of(packageName: String?): App? = packageName?.let(APPS::get)
 
+    /** Every network once, for the list of limits. */
+    val NETWORKS: List<App> = APPS.values.distinctBy { it.name }.sortedBy { it.limit }
+
     /** How long a post is: letters and emoji, each counted once. */
     fun length(text: String): Int = text.trim().let { it.codePointCount(0, it.length) }
 }
