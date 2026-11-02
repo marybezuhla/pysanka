@@ -34,6 +34,6 @@ class SocialTest : FunSpec({
 
     test("the apps known by their package") {
         SocialApps.of("com.twitter.android")?.limit shouldBe 280
-        SocialApps.of("org.telegram.messenger") shouldBe null
+        SocialApps.of("com.example.chat") shouldBe null
     }
 })

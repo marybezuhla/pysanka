@@ -1,7 +1,6 @@
 package ua.pysanka.ocr
 
 import ua.pysanka.privacy.followScreenshotBlock
-import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -372,15 +371,17 @@ private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) 
                 close()
             }) { Text(stringRes(R.string.pysanka__ocr__insert), maxLines = 1, softWrap = false) }
             FilledTonalButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
-                val cm = context.getSystemService(android.content.ClipboardManager::class.java)
-                cm?.setPrimaryClip(ClipData.newPlainText("text", selectedText()))
+                ua.pysanka.privacy.Clip.copy(context, selectedText(), sensitive = PendingInsert.fromPrivateField)
                 close()
             }) { Text(stringRes(R.string.pysanka__ocr__copy), maxLines = 1, softWrap = false) }
-            OutlinedButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
-                val clipboardManager by context.clipboardManager()
-                clipboardManager.addNewPlaintext(selectedText())
-                close()
-            }) { Text(stringRes(R.string.pysanka__ocr__to_history), maxLines = 1, softWrap = false) }
+            // Not for a password or private field (the history would keep what the field must not)
+            if (!PendingInsert.fromPrivateField) {
+                OutlinedButton(enabled = count > 0, modifier = Modifier.weight(1f), contentPadding = pad, onClick = {
+                    val clipboardManager by context.clipboardManager()
+                    clipboardManager.addNewPlaintext(selectedText())
+                    close()
+                }) { Text(stringRes(R.string.pysanka__ocr__to_history), maxLines = 1, softWrap = false) }
+            }
         }
     }
 }

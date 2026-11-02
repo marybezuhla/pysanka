@@ -128,6 +128,19 @@ fun PysankaHome() {
                 navController.navigate(Routes.Settings.PysankaAi)
             }
             PrefToggle(prefs.pysankaAi.showCount, stringRes(R.string.pysanka__ai__show_count), stringRes(R.string.pysanka__ai__show_count_summary))
+            // How many emoji a post written by the AI may have
+            val emoji by prefs.pysankaAi.emoji.observeAsState()
+            val scope = rememberCoroutineScope()
+            SliderRow(stringRes(R.string.pysanka__ai__emoji), emoji.coerceIn(0, 3), 0..3, 1, {
+                stringRes(
+                    when (it) {
+                        0 -> R.string.pysanka__ai__emoji_none
+                        1 -> R.string.pysanka__ai__emoji_one
+                        2 -> R.string.pysanka__ai__emoji_some
+                        else -> R.string.pysanka__ai__emoji_many
+                    },
+                )
+            }) { v -> scope.launch { prefs.pysankaAi.emoji.set(v) } }
         }
 
         val voiceState = stringRes(
