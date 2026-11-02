@@ -50,6 +50,7 @@ object SecureClipboard {
         File(context.noBackupFilesDir, OPEN_DIR).listFiles()?.forEach { it.delete() }
         // The learned words share the vault: without its key they cannot be read either
         ua.pysanka.typing.UserWords.wipe(context)
+        ua.pysanka.typing.TextShortcuts.wipe(context)
     }
 
     /**

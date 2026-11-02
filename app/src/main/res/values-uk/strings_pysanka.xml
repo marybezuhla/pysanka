@@ -374,4 +374,11 @@
     <string name="pysanka__welcome__promise">Без інтернету. Ваші слова й буфер — зашифровані. ШІ, якщо захочете, працює просто на телефоні.</string>
     <string name="pysanka__privacy__crash_notifications">Сповіщати про збої</string>
     <string name="pysanka__privacy__crash_notifications_summary">Якщо Писанка зламається, сповіщення покаже звіт (без тексту, який ви набирали). Android попросить дозволу.</string>
+    <string name="pysanka__shortcuts__title">Заміна тексту</string>
+    <string name="pysanka__shortcuts__summary">Коротке слово → цілий текст: «дд» → «Добрий день!»</string>
+    <string name="pysanka__shortcuts__about">Наберіть скорочення на клавіатурі — у підказках зʼявиться його текст, а пробіл поставить його замість скорочення (Backspace одразу після — поверне). Зберігається зашифрованим; у полях пароля не діє.</string>
+    <string name="pysanka__shortcuts__shortcut">Скорочення (літери й цифри)</string>
+    <string name="pysanka__shortcuts__text">Текст</string>
+    <string name="pysanka__shortcuts__add">Зберегти</string>
+    <string name="pysanka__shortcuts__delete">Видалити «{shortcut}»</string>
 </resources>

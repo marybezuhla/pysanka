@@ -25,8 +25,8 @@ import javax.crypto.spec.SecretKeySpec
  * keystore ([HardwareKey]: StrongBox when the phone has it, usable only while it is unlocked). The
  * key itself needs no fingerprint; the optional fingerprint lock is [ua.pysanka.clipboard.ClipboardLock].
  *
- * From the secret: the database passphrase (the secret itself) and separate keys for files and
- * for learned words (HMAC-SHA256 with a fixed label each), so no two share a key.
+ * From the secret: the database passphrase (the secret itself) and separate keys for files,
+ * learned words and text replacement (HMAC-SHA256 with a fixed label each), so no two share a key.
  *
  * If the hardware key is really gone (the keystore was reset), old clipboard data cannot be read:
  * after several attempts [open] reports [State.Lost] and the clipboard and learned words start empty.
@@ -53,6 +53,7 @@ object ClipboardVault {
     private const val TRANSFORMATION = "AES/GCM/NoPadding"
     private val FILE_KEY_LABEL = "pysanka/clipboard-files/v1".toByteArray()
     private val WORDS_KEY_LABEL = "pysanka/user-words/v1".toByteArray()
+    private val SHORTCUTS_KEY_LABEL = "pysanka/text-shortcuts/v1".toByteArray()
 
     @Volatile
     private var secret: ByteArray? = null
@@ -157,6 +158,9 @@ object ClipboardVault {
 
     /** The key for the learned words ([ua.pysanka.typing.UserWords]). Only after [open] returned [State.Open]. */
     fun wordsKey(): SecretKey = derivedKey(WORDS_KEY_LABEL)
+
+    /** The key for text replacement ([ua.pysanka.typing.TextShortcuts]). Only after [open] returned [State.Open]. */
+    fun shortcutsKey(): SecretKey = derivedKey(SHORTCUTS_KEY_LABEL)
 
     /** A separate AES key for each [label], so no two kinds of data share a key. */
     private fun derivedKey(label: ByteArray): SecretKey {

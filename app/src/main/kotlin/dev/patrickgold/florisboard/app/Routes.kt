@@ -83,6 +83,11 @@ object Routes {
         @Deeplink("settings/pysanka/voice")
         object PysankaVoice
 
+        // Pysanka: text replacement (shortcuts → texts)
+        @Serializable
+        @Deeplink("settings/typing/shortcuts")
+        object TextShortcuts
+
         // Pysanka: templates (pinned texts typed in the settings)
         @Serializable
         @Deeplink("settings/clipboard/templates")
@@ -137,6 +142,7 @@ object Routes {
             composableWithDeepLink(Settings.ClipboardCopy::class) { ua.pysanka.clipboard.ClipboardBackupScreen() }
             composableWithDeepLink(Settings.ClipboardTags::class) { ua.pysanka.clipboard.ClipboardTagsScreen() }
             composableWithDeepLink(Settings.ClipboardTemplates::class) { ua.pysanka.clipboard.ClipboardTemplatesScreen() }
+            composableWithDeepLink(Settings.TextShortcuts::class) { ua.pysanka.typing.TextShortcutsScreen() }
             composableWithDeepLink(Settings.PysankaAi::class) { ua.pysanka.ai.AiSettingsScreen() }
             composableWithDeepLink(Settings.PysankaVoice::class) { ua.pysanka.voice.VoiceSettingsScreen() }
 

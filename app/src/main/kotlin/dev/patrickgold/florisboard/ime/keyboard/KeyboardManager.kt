@@ -791,8 +791,13 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * earlier keystroke (suggestions are made in the background and may lag behind fast typing).
      */
     private fun pysankaAutoCommitCandidate() = nlpManager.getAutoCommitCandidate()?.takeIf {
-        it.sourceProvider !is dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider ||
-            ua.pysanka.typing.AutoCorrect.suggestedFor == editorInstance.activeContent.composingText
+        val typed = editorInstance.activeContent.composingText
+        when {
+            // A shortcut's text only for exactly that shortcut
+            it is ua.pysanka.typing.ShortcutCandidate -> it.shortcut == typed
+            it.sourceProvider !is dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider -> true
+            else -> ua.pysanka.typing.AutoCorrect.suggestedFor == typed
+        }
     }
 
     /** Pysanka: the last auto-correction, until the next key. */
