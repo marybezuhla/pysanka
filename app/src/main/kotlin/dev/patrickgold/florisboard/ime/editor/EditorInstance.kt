@@ -135,8 +135,14 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
      */
     private fun pysankaStartField(editorInfo: FlorisEditorInfo) {
         pysankaUpdatePrivacy(editorInfo)
-        // Pysanka: another field, a clipboard search left open ends
+        // Pysanka: another field, a clipboard search left open ends, and the likely letters of the last one go
         ua.pysanka.clipboard.ClipSearch.stop()
+        ua.pysanka.typing.KeyTargeting.publish(null)
+        // Pysanka: back from the fingerprint screen, the clipboard history, now open
+        if (ua.pysanka.clipboard.ClipboardLock.reopen) {
+            ua.pysanka.clipboard.ClipboardLock.reopen = false
+            if (ua.pysanka.clipboard.ClipboardLock.isOpen()) keyboardManager.activeState.imeUiMode = dev.patrickgold.florisboard.ime.ImeUiMode.CLIPBOARD
+        }
         val isPasswordField = ua.pysanka.privacy.FieldPrivacy.isPassword
         val isPrivate = ua.pysanka.privacy.FieldPrivacy.isPrivate
         ua.pysanka.ocr.PendingInsert.takeFor(editorInfo.packageName, editorInfo.base.fieldId, isPasswordField, isPrivate)

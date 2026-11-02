@@ -554,10 +554,26 @@ private class TextKeyboardLayoutController(
         }
     }
 
-    private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer) {
+    /** [pysankaFresh]: a finger put down now (not a finger that slid onto another key). */
+    private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer, pysankaFresh: Boolean = true) {
         flogDebug(LogTopic.TEXT_KEYBOARD_VIEW) { "pointer=$pointer" }
 
-        val key = keyboard.getKeyForPos(event.getX(pointer.index), event.getY(pointer.index))
+        val x = event.getX(pointer.index)
+        val y = event.getY(pointer.index)
+        // Pysanka: near the edge between two letters, the likelier one (KeyTargeting), with the
+        // person's usual tap offset taken off (learned and used only outside private fields); a
+        // finger that slid onto another key gets that key as drawn
+        val key = if (pysankaFresh) {
+            keyboard.pysankaKeyForTap(
+                x, y, editorInstance.activeContent.composingText,
+                calibrate = prefs.correction.pysankaCalibrate.get() && !ua.pysanka.privacy.FieldPrivacy.isPrivate &&
+                    !ua.pysanka.privacy.FieldPrivacy.isPassword,
+            )
+        } else {
+            keyboard.getKeyForPos(x, y)
+        }
+        // Pysanka: the key drawn under the finger, so a small slide does not count as leaving the chosen one
+        pointer.pysankaDrawnKey = keyboard.getKeyForPos(x, y)
         if (key != null && key.isEnabled) {
             key.computedDataOnDown = key.computedData
             pointer.pressedKeyInfo = inputEventDispatcher.sendDown(
@@ -630,16 +646,17 @@ private class TextKeyboardLayoutController(
                 val y = event.getY(pointer.index)
                 if (!popupUiController.propagateMotionEvent(activeKey, x, y)) {
                     onTouchCancelInternal(event, pointer)
-                    onTouchDownInternal(event, pointer)
+                    onTouchDownInternal(event, pointer, pysankaFresh = false)
                 }
             } else {
-                if ((event.getX(pointer.index) < activeKey.visibleBounds.left - 0.1f * activeKey.visibleBounds.width)
-                    || (event.getX(pointer.index) > activeKey.visibleBounds.right + 0.1f * activeKey.visibleBounds.width)
-                    || (event.getY(pointer.index) < activeKey.visibleBounds.top - 0.35f * activeKey.visibleBounds.height)
-                    || (event.getY(pointer.index) > activeKey.visibleBounds.bottom + 0.35f * activeKey.visibleBounds.height)
-                ) {
+                fun leftKey(k: TextKey) = (event.getX(pointer.index) < k.visibleBounds.left - 0.1f * k.visibleBounds.width)
+                    || (event.getX(pointer.index) > k.visibleBounds.right + 0.1f * k.visibleBounds.width)
+                    || (event.getY(pointer.index) < k.visibleBounds.top - 0.35f * k.visibleBounds.height)
+                    || (event.getY(pointer.index) > k.visibleBounds.bottom + 0.35f * k.visibleBounds.height)
+                // Pysanka: left both the chosen key and the one drawn where the finger went down
+                if (leftKey(activeKey) && pointer.pysankaDrawnKey.let { it == null || leftKey(it) }) {
                     onTouchCancelInternal(event, pointer)
-                    onTouchDownInternal(event, pointer)
+                    onTouchDownInternal(event, pointer, pysankaFresh = false)
                 }
             }
         }
@@ -996,9 +1013,12 @@ private class TextKeyboardLayoutController(
         var hasTriggeredLongPress: Boolean = false
         var hasTriggeredMassSelection: Boolean = false
         var pressedKeyInfo: InputEventDispatcher.PressedKeyInfo? = null
+        // Pysanka: the key drawn where the finger went down (it may have been given to a neighbour)
+        var pysankaDrawnKey: TextKey? = null
 
         override fun reset() {
             super.reset()
+            pysankaDrawnKey = null
             initialKey = null
             activeKey = null
             hasTriggeredGestureMove = false

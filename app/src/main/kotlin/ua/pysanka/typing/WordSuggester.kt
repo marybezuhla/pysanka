@@ -168,6 +168,32 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
         }
     }
 
+    /** The likely next letters after one of no or one letter (worked out once). */
+    private val shortNext = java.util.concurrent.ConcurrentHashMap<String, Map<Char, Double>>()
+
+    /**
+     * How likely each letter is to follow [prefix] in the list's words (weighted by how common each
+     * word is; summing to 1; empty when no word begins so). For [KeyTargeting].
+     */
+    fun nextLetters(prefix: String): Map<Char, Double> {
+        val p = norm(prefix)
+        return if (p.length <= 1) shortNext.getOrPut(p) { scanNext(p) } else scanNext(p)
+    }
+
+    private fun scanNext(p: String): Map<Char, Double> {
+        var i = sorted.binarySearch(p).let { if (it < 0) -it - 1 else it }
+        val sums = HashMap<Char, Double>()
+        while (i < sorted.size && sorted[i].startsWith(p)) {
+            val w = sorted[i++]
+            if (w.length > p.length) {
+                // The frequencies are on a log scale: 255 is about 100 000 times 1
+                sums.merge(w[p.length], Math.pow(10.0, freq.getValue(w) / 51.0), Double::plus)
+            }
+        }
+        val total = sums.values.sum()
+        return if (total == 0.0) emptyMap() else sums.mapValues { it.value / total }
+    }
+
     /** Words starting with [prefix], most frequent first (at most 50). */
     private fun withPrefix(prefix: String): List<String> {
         if (prefix.length <= 2) return shortPrefixes.getOrPut(prefix) { scanPrefix(prefix) }

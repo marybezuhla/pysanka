@@ -450,7 +450,7 @@ private fun AiEditorScreen(
                     Text(stringRes(R.string.pysanka__ai__fact_unconfirmed), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    if (replaceLabel != null && action.replaces) {
+                    if (replaceLabel != null && action.replaces && action != AiAction.VERSIONS) {
                         Button(onClick = { onUse(result) }, enabled = result.isNotBlank(), modifier = Modifier.weight(1f)) {
                             Text(stringRes(replaceLabel))
                         }
@@ -464,7 +464,7 @@ private fun AiEditorScreen(
                     OutlinedButton(onClick = { run() }, modifier = Modifier.weight(1f)) {
                         Text(stringRes(R.string.pysanka__ai__again))
                     }
-                    if (action.kind != AiAction.Kind.ADVICE && action != AiAction.REPLIES) {
+                    if (action.kind != AiAction.Kind.ADVICE && action != AiAction.REPLIES && action != AiAction.VERSIONS) {
                         OutlinedButton(
                             onClick = { source = result; stage = AiStage.Idle },
                             enabled = result.isNotBlank(),

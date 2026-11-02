@@ -147,8 +147,18 @@ fun ClipboardInputLayout(
     val keyboardManager by context.keyboardManager()
     val androidKeyguardManager = remember { context.systemService(AndroidKeyguardManager::class) }
 
-    val deviceLocked = androidKeyguardManager.let { it.isDeviceLocked || it.isKeyguardLocked }
     val historyEnabled by prefs.clipboard.historyEnabled.observeAsState()
+    val phoneLocked = androidKeyguardManager.let { it.isDeviceLocked || it.isKeyguardLocked }
+    // Pysanka: the history behind a fingerprint, if chosen (closed again when the phone locks)
+    val fingerprint by prefs.clipboard.pysankaFingerprint.observeAsState()
+    val lockUntil by ua.pysanka.clipboard.ClipboardLock.until.collectAsState()
+    if (phoneLocked) ua.pysanka.clipboard.ClipboardLock.close()
+    // Closes by itself when its time is up, also with the panel open
+    LaunchedEffect(lockUntil) { ua.pysanka.clipboard.ClipboardLock.closeWhenDue(lockUntil) }
+    val fingerprintLocked = remember(fingerprint, lockUntil, phoneLocked, historyEnabled) {
+        fingerprint && historyEnabled && ua.pysanka.clipboard.ClipboardLock.supported(context) && !ua.pysanka.clipboard.ClipboardLock.isOpen()
+    }
+    val deviceLocked = phoneLocked || fingerprintLocked
 
     // Pysanka: the tag slider is shown by default (the filter button hides it)
     var isFilterRowShown by remember { mutableStateOf(true) }
@@ -733,7 +743,23 @@ fun ClipboardInputLayout(
             .height(FlorisImeSizing.imeUiHeight()),
     ) {
         HeaderRow()
-        if (deviceLocked) {
+        if (fingerprintLocked && !phoneLocked) {
+            // Pysanka: one tap asks for the fingerprint; the history opens here again after it
+            SnyggColumn(FlorisImeUi.ClipboardContent.elementName,
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                SnyggText(
+                    elementName = FlorisImeUi.ClipboardHistoryLockedTitle.elementName,
+                    text = stringRes(R.string.pysanka__clipboard_lock__title),
+                )
+                SnyggButton(FlorisImeUi.ClipboardHistoryDisabledButton.elementName,
+                    onClick = { ua.pysanka.clipboard.ClipboardLock.ask(context) },
+                ) {
+                    SnyggText(text = stringRes(R.string.pysanka__clipboard_lock__open))
+                }
+            }
+        } else if (deviceLocked) {
             HistoryLockedView()
         } else {
             if (historyEnabled) {
