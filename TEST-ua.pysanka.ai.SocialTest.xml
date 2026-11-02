@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.ai.SocialTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:12.136Z" hostname="runnervmnwato" time="0.053">
+  <properties/>
+  <testcase name="a post that fits stays as it is" classname="ua.pysanka.ai.SocialTest" time="0.003"/>
+  <testcase name="whole sentences per part, each numbered, none over the limit" classname="ua.pysanka.ai.SocialTest" time="0.009"/>
+  <testcase name="a sentence longer than a part goes by words; a word longer than a part is cut" classname="ua.pysanka.ai.SocialTest" time="0.005"/>
+  <testcase name="emoji count once as seen and are never cut" classname="ua.pysanka.ai.SocialTest" time="0.026"/>
+  <testcase name="the apps known by their package" classname="ua.pysanka.ai.SocialTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

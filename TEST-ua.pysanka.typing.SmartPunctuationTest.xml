@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.typing.SmartPunctuationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:13.948Z" hostname="runnervmnwato" time="0.021">
+  <properties/>
+  <testcase name="Ukrainian quotes open after a space and close after a word" classname="ua.pysanka.typing.SmartPunctuationTest" time="0.006"/>
+  <testcase name="English quotes" classname="ua.pysanka.typing.SmartPunctuationTest" time="0.004"/>
+  <testcase name="the Ukrainian apostrophe only after a letter; English keeps its own" classname="ua.pysanka.typing.SmartPunctuationTest" time="0.001"/>
+  <testcase name="other languages and characters are left alone" classname="ua.pysanka.typing.SmartPunctuationTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

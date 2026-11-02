@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.screens.VoicePanelScreensTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:53:37.767Z" hostname="runnervmnwato" time="1.598">
+  <properties/>
+  <testcase name="failed" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.249"/>
+  <testcase name="listening" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.237"/>
+  <testcase name="listeningDark" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.199"/>
+  <testcase name="hold" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.186"/>
+  <testcase name="ready" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.183"/>
+  <testcase name="recognising" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.189"/>
+  <testcase name="inserted" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.183"/>
+  <testcase name="insertedDark" classname="ua.pysanka.screens.VoicePanelScreensTest" time="0.169"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

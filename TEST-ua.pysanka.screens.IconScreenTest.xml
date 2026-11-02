@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.screens.IconScreenTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:53:33.213Z" hostname="runnervmnwato" time="0.124">
+  <properties/>
+  <testcase name="themed" classname="ua.pysanka.screens.IconScreenTest" time="0.074"/>
+  <testcase name="icon" classname="ua.pysanka.screens.IconScreenTest" time="0.049"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

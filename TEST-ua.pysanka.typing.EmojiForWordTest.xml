@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.typing.EmojiForWordTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:13.515Z" hostname="runnervmnwato" time="0.127">
+  <properties/>
+  <testcase name="a word that names an emoji" classname="ua.pysanka.typing.EmojiForWordTest" time="0.005"/>
+  <testcase name="a beginning: only from four letters, and after whole words" classname="ua.pysanka.typing.EmojiForWordTest" time="0.004"/>
+  <testcase name="Ukrainian names come with the keyboard, in the same order as English" classname="ua.pysanka.typing.EmojiForWordTest" time="0.113"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

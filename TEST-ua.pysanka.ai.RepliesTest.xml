@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.ai.RepliesTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:12.120Z" hostname="runnervmnwato" time="0.01">
+  <properties/>
+  <testcase name="labelled replies with blank lines between them" classname="ua.pysanka.ai.RepliesTest" time="0.003"/>
+  <testcase name="one per line, with bold labels" classname="ua.pysanka.ai.RepliesTest" time="0.0"/>
+  <testcase name="a colon inside the reply is not a label" classname="ua.pysanka.ai.RepliesTest" time="0.001"/>
+  <testcase name="versions: bold names, paragraphs kept, a sentence with a name is not a new version" classname="ua.pysanka.ai.RepliesTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

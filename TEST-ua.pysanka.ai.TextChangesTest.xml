@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.ai.TextChangesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:12.335Z" hostname="runnervmnwato" time="0.015">
+  <properties/>
+  <testcase name="a change of style that changed almost nothing" classname="ua.pysanka.ai.TextChangesTest" time="0.006"/>
+  <testcase name="shorter must really be shorter" classname="ua.pysanka.ai.TextChangesTest" time="0.001"/>
+  <testcase name="a short text is never judged (it may need no change)" classname="ua.pysanka.ai.TextChangesTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

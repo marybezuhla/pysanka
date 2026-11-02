@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.typing.KeyTargetingTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:13.667Z" hostname="runnervmnwato" time="0.058">
+  <properties/>
+  <testcase name="a tap well inside a key is that key, however unlikely" classname="ua.pysanka.typing.KeyTargetingTest" time="0.001"/>
+  <testcase name="near the edge the likelier letter takes it; with even odds the closer key" classname="ua.pysanka.typing.KeyTargetingTest" time="0.003"/>
+  <testcase name="with no odds, or a diagonal neighbour no likelier, the key as drawn" classname="ua.pysanka.typing.KeyTargetingTest" time="0.001"/>
+  <testcase name="priors count only for the word they were worked out for" classname="ua.pysanka.typing.KeyTargetingTest" time="0.003"/>
+  <testcase name="the word list's likely next letters" classname="ua.pysanka.typing.KeyTargetingTest" time="0.019"/>
+  <testcase name="a hand that always taps low is learned and taken off; never more than a third of a key" classname="ua.pysanka.typing.KeyTargetingTest" time="0.014"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

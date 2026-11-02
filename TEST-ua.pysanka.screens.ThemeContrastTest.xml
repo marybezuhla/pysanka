@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ua.pysanka.screens.ThemeContrastTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-02T22:49:12.648Z" hostname="runnervmnwato" time="0.133">
+  <properties/>
+  <testcase name="all six themes are checked" classname="ua.pysanka.screens.ThemeContrastTest" time="0.003"/>
+  <testcase name="chornozem.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.041"/>
+  <testcase name="hutsulshchyna.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.018"/>
+  <testcase name="kreyda.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.01"/>
+  <testcase name="nebo.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.01"/>
+  <testcase name="podillia.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.016"/>
+  <testcase name="visk.json" classname="ua.pysanka.screens.ThemeContrastTest" time="0.011"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
