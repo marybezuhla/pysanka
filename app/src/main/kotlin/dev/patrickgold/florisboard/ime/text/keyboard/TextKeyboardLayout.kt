@@ -664,8 +664,8 @@ private class TextKeyboardLayoutController(
             pointer.pysankaAnchorY = y
             return
         }
-        val stepX = (measuredWidth / 20f).coerceAtLeast(1f)
-        val stepY = (measuredHeight / 4f).coerceAtLeast(1f)
+        val stepX = (size.width / 20f).coerceAtLeast(1f)
+        val stepY = (size.height / 4f).coerceAtLeast(1f)
         val across = ((x - pointer.pysankaAnchorX) / stepX).toInt()
         val down = ((y - pointer.pysankaAnchorY) / stepY).toInt()
         if (across != 0) {
