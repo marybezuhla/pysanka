@@ -127,14 +127,8 @@ class ClipboardMediaProvider : ContentProvider() {
     ): Cursor? {
         val id = tryOrNull { ContentUris.parseId(uri) } ?: return null
         if (!init()) return null
-        if (projection != null) {
-            if (projection.contains(MediaStore.Images.Media.ORIENTATION)) {
-                clipboardFilesDao?.getCurserByIdWithColums(id, MediaStore.Images.Media.ORIENTATION)
-            } else {
-                //Return null if the projection query is invalid
-                return null
-            }
-        }
+        // Pysanka: (the orientation-only cursor was built and dropped; the whole row is returned as before)
+        if (projection != null && !projection.contains(MediaStore.Images.Media.ORIENTATION)) return null
         return clipboardFilesDao?.getCursorById(id)
     }
 
@@ -181,12 +175,11 @@ class ClipboardMediaProvider : ContentProvider() {
                     values as ContentValues
                     val mediaUri = Uri.parse(values.getAsString(Columns.MediaUri))
                     // Get the orientation of the image
-                    val exifInterface = ExifInterface(context!!.contentResolver.openInputStream(mediaUri)!!)
+                    // Pysanka: the stream is closed after reading (it was left open)
                     var rotation = 0
-                    val orientation = exifInterface.getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_NORMAL
-                    )
+                    val orientation = context!!.contentResolver.openInputStream(mediaUri)!!.use {
+                        ExifInterface(it).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                    }
                     when (orientation) {
                         ExifInterface.ORIENTATION_ROTATE_90 -> rotation = 90
                         ExifInterface.ORIENTATION_ROTATE_180 -> rotation = 180

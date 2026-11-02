@@ -919,7 +919,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             KeyCode.PYSANKA_FIX_LAYOUT -> ua.pysanka.ime.FieldText.fixLayout()
             KeyCode.PYSANKA_TEXT_FROM_PHOTO, KeyCode.PYSANKA_TEXT_FROM_CAMERA -> {
                 val info = editorInstance.activeInfo
-                ua.pysanka.ocr.PendingInsert.opened(info.packageName, info.base.fieldId)
+                ua.pysanka.ocr.PendingInsert.opened(info)
                 ua.pysanka.ocr.openTextFromImage(
                     if (data.code == KeyCode.PYSANKA_TEXT_FROM_PHOTO) ua.pysanka.ocr.TextFromImageActivity.SOURCE_PHOTO
                     else ua.pysanka.ocr.TextFromImageActivity.SOURCE_CAMERA,

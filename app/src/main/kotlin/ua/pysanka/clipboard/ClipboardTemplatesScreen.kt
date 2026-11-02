@@ -66,8 +66,12 @@ fun ClipboardTemplatesScreen() = FlorisScreen {
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Button(enabled = draft.isNotBlank(), onClick = {
-                    clipboardManager.pysankaAddPinned(draft.trim())
-                    draft = ""
+                    // Kept in the box if the history is not ready yet (the phone just started)
+                    if (clipboardManager.pysankaAddPinned(draft.trim())) {
+                        draft = ""
+                    } else {
+                        android.widget.Toast.makeText(context, R.string.pysanka__templates__not_ready, android.widget.Toast.LENGTH_LONG).show()
+                    }
                 }) { Text(stringRes(R.string.pysanka__templates__add)) }
                 for (item in history.pinned.filter { it.type == ItemType.TEXT && !it.isSensitive }) {
                     OutlinedCard(Modifier.fillMaxWidth()) {
