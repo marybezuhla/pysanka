@@ -266,7 +266,10 @@
     <string name="pysanka__emoji__history">Remember recent emoji</string>
     <string name="pysanka__emoji__history_summary">Shown first in the emoji panel</string>
     <string name="pysanka__emoji__suggest">Suggest emoji</string>
-    <string name="pysanka__emoji__suggest_summary">Type “:” and the emoji’s name</string>
+    <string name="pysanka__emoji__suggest_summary">Emoji in the suggestion bar, named in the keyboard\'s language</string>
+    <string name="pysanka__emoji__suggest_how">When to suggest emoji</string>
+    <string name="pysanka__emoji__suggest_word">For a word: “coffee” → ☕</string>
+    <string name="pysanka__emoji__suggest_colon">Only after “:” (:coffee)</string>
     <string name="pysanka__emoji__clear_recent">Clear recent emoji</string>
     <string name="pysanka__emoji__clear_recent_confirm">The recent emoji list will be empty.</string>
     <string name="pysanka__emoji__clear_pinned">Unpin all emoji</string>

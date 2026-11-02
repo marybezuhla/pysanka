@@ -334,7 +334,8 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val suggestionType = enum(
             key = "emoji__suggestion_type",
-            default = EmojiSuggestionType.LEADING_COLON,
+            // Pysanka: as Apple does, for the word being typed
+            default = EmojiSuggestionType.INLINE_TEXT,
         )
         val suggestionUpdateHistory = boolean(
             key = "emoji__suggestion_update_history",

@@ -265,7 +265,10 @@
     <string name="pysanka__emoji__history">Памʼятати недавні емодзі</string>
     <string name="pysanka__emoji__history_summary">Їх видно першими на панелі емодзі</string>
     <string name="pysanka__emoji__suggest">Пропонувати емодзі</string>
-    <string name="pysanka__emoji__suggest_summary">Наберіть «:» і назву емодзі</string>
+    <string name="pysanka__emoji__suggest_summary">Емодзі в рядку підказок, назви українською</string>
+    <string name="pysanka__emoji__suggest_how">Коли пропонувати емодзі</string>
+    <string name="pysanka__emoji__suggest_word">За словом: «кава» → ☕</string>
+    <string name="pysanka__emoji__suggest_colon">Лише після «:» (:кава)</string>
     <string name="pysanka__emoji__clear_recent">Очистити недавні емодзі</string>
     <string name="pysanka__emoji__clear_recent_confirm">Список недавніх емодзі стане порожнім.</string>
     <string name="pysanka__emoji__clear_pinned">Відкріпити всі емодзі</string>
