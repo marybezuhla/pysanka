@@ -1,15 +1,23 @@
-**Писанка 0.19.0** — приватна клавіатура для Android без доступу до інтернету. Тестова версія.
+**Писанка 0.20.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія.
 
-- 😀 **Емодзі в дописах ШІ — на ваш вибір:** Налаштування → ШІ → «Емодзі в дописах ШІ»: без, одне, 2–3 або багато. Діє для «Допису для соцмереж» і версій для кількох мереж.
-- 💬 Зрозуміліше повідомлення, коли тред, чернетки чи шаблон не вдалося покласти в історію буфера.
-- 🔒 Приватність після повного аудиту: режим інкогніто «завжди» тепер діє й на копіювання поза полями; емодзі з полів пароля не запам'ятовуються; скопійоване зображення не несе назви файла (у назві скріншота буває застосунок і час); очищене посилання ніколи не замінює новіше скопійоване (наприклад, пароль); текст із фото вставляється лише в те саме поле.
+- 🎨 **Власні теми:** Крейда, Віск і Небо вдень, Поділля, Гуцульщина й Чорнозем уночі. Кольори писанок, спокійні для довгого набору, і ще кольори системи (Material You). Обираєте за картинками клавіатури.
+- 🥚 **Налаштування в кольорах Писанки** з ледь видимою писанкою в куті. За бажанням можна кольори системи.
+- 👋 **Нове привітання:** три кроки, вибір теми, і жодного запиту дозволу на старті.
+- 😀 **Емодзі за словом, як в Apple:** «кава» → ☕ у підказках; назви емодзі тепер є українською (і «:кава» теж працює).
+- ✂️ **Заміна тексту:** «дд» → «Добрий день!». Скорочення задаються в Наборі й зберігаються зашифрованими.
+- «» **Типографські лапки й апостроф:** «ялинки» й ʼ в українській, “ ” в англійській.
+- 🖱️ **Пробіл як трекпад:** утримайте пробіл і ведіть пальцем, щоб рухати курсор.
 
-📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень — Obtainium: «Додати застосунок» → `github.com/Marybezu/pysanka`.
+📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
 
 ---
 
-**Pysanka 0.19.0** — a private keyboard for Android with no internet access. Test version.
+**Pysanka 0.20.0**: a private keyboard for Android with no internet access. Test version.
 
-- Emoji in AI posts, your choice: Settings → AI → "Emoji in AI posts": none, one, 2–3 or many. For "Post for social media" and versions for several networks.
-- A clearer message when a thread, drafts or a template cannot go into the clipboard history.
-- Privacy after a full audit: incognito set to "always" now also covers copies made outside a field; emoji from password fields are not remembered; a copied image no longer carries its file name (a screenshot's name can show the app and time); a cleaned link never replaces something copied after it (a password, say); text from a photo goes only into the same field.
+- Pysanka's own themes in pysanka colours (Chalk, Beeswax, Sky by day; Podillia, Hutsul, Black earth at night), calm for long typing, plus the system's colours; chosen by picture.
+- Settings in Pysanka's colours with a faint pysanka in the corner; or the system's colours.
+- A new welcome: three steps, a theme to choose, and no permission asked at the start.
+- Emoji for the typed word, as on the iPhone: "coffee" → ☕; emoji names now in Ukrainian too.
+- Text replacement: "gm" → "Good morning!", kept encrypted.
+- Smart quotes and apostrophe: «» and ʼ in Ukrainian, “ ” in English.
+- The space bar as a trackpad: hold it and slide to move the cursor.

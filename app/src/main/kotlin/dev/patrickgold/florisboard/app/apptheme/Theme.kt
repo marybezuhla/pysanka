@@ -32,6 +32,14 @@ import dev.patrickgold.jetpref.datastore.model.observeAsState
 import org.florisboard.lib.color.neutralDynamicColorScheme
 import org.florisboard.lib.color.systemAccentOrDefault
 
+/** Pysanka: whether the settings are in the phone's colours (Material You) rather than Pysanka's. */
+val LocalSystemColors = androidx.compose.runtime.staticCompositionLocalOf { false }
+
+/** Pysanka: the colours of its icon (the red egg, the gold star) and a warm cream for surfaces. */
+val PysankaRed = Color(0xFFB3261E)
+val PysankaGold = Color(0xFFC9962B)
+val PysankaCream = Color(0xFF9A8670)
+
 
 @Composable
 fun getColorScheme(
@@ -39,26 +47,24 @@ fun getColorScheme(
 ): ColorScheme {
     val prefs by FlorisPreferenceStore
     val accentColor by prefs.other.accentColor.observeAsState()
+    val systemColors by prefs.other.pysankaSystemColors.observeAsState()
 
     val seedColor = systemAccentOrDefault(accentColor)
-
-    return when (theme) {
-        AppTheme.AUTO, AppTheme.AUTO_AMOLED -> {
-            neutralDynamicColorScheme(
-                primary = seedColor,
-                isDark = isSystemInDarkTheme(),
-                isAmoled = theme == AppTheme.AUTO_AMOLED,
-            )
-        }
-
-        AppTheme.DARK, AppTheme.LIGHT -> {
-            neutralDynamicColorScheme(primary = seedColor, isDark = theme == AppTheme.DARK)
-        }
-
-        AppTheme.AMOLED_DARK -> {
-            neutralDynamicColorScheme(primary = seedColor, isDark = true, isAmoled = true)
-        }
+    val isDark = when (theme) {
+        AppTheme.AUTO, AppTheme.AUTO_AMOLED -> isSystemInDarkTheme()
+        AppTheme.DARK, AppTheme.AMOLED_DARK -> true
+        AppTheme.LIGHT -> false
     }
+    val isAmoled = theme == AppTheme.AUTO_AMOLED || theme == AppTheme.AMOLED_DARK
+    // Pysanka: its own colours unless the phone's are chosen: the icon's red, its gold, and
+    // warm cream surfaces (from a warm neutral), like the egg on the icon
+    if (!systemColors) {
+        return neutralDynamicColorScheme(
+            primary = PysankaRed, isDark = isDark, isAmoled = isAmoled,
+            tertiary = PysankaGold, neutral = PysankaCream, neutralVariant = PysankaCream,
+        )
+    }
+    return neutralDynamicColorScheme(primary = seedColor, isDark = isDark, isAmoled = isAmoled)
 }
 
 fun ColorScheme.amoled(): ColorScheme {
@@ -86,9 +92,13 @@ fun FlorisAppTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colors,
-        typography = Typography,
-        content = content,
-    )
+    val prefs by FlorisPreferenceStore
+    val systemColors by prefs.other.pysankaSystemColors.observeAsState()
+    androidx.compose.runtime.CompositionLocalProvider(LocalSystemColors provides systemColors) {
+        MaterialTheme(
+            colorScheme = colors,
+            typography = Typography,
+            content = content,
+        )
+    }
 }

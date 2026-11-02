@@ -12,8 +12,9 @@ import java.io.File
 import kotlin.math.pow
 
 /**
- * Pysanka: the letters on the keys of the built-in themes are easy to read: text at least 4.5:1
- * against its key (WCAG AA), large text in the long-press popup and icons at least 3:1.
+ * Pysanka: the letters on the keys of Pysanka's themes are easy to read for long: letters at least
+ * 7:1 against their key (WCAG AAA), other text 4.5:1 (AA), the chosen letter in the long-press
+ * popup and icons at least 3:1. (scripts/themes.py checks the same before writing the themes.)
  */
 class ThemeContrastTest : FunSpec({
     val dir = File("src/main/assets/ime/theme/org.florisboard.themes/stylesheets")
@@ -56,7 +57,7 @@ class ThemeContrastTest : FunSpec({
                 val bg = if (bgValue == null || bgValue == "transparent") window else over(rgba(bgValue), window)
                 withClue(rule) { ratio(over(rgba(fg), bg), bg) shouldBeGreaterThanOrEqual min }
             }
-            check("key", 4.5)
+            check("key", 7.0)
             check("key[code=32]", 4.5)
             check("key-hint", 4.5, bgRule = "key")
             check("key[code=10]", 4.5)

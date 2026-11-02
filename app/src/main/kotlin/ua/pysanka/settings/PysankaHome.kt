@@ -209,14 +209,20 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.pysankaCalibrate, stringRes(R.string.pysanka__typing__calibrate), stringRes(R.string.pysanka__typing__calibrate_summary))
     PrefToggle(prefs.correction.pysankaLearnWords, stringRes(R.string.pysanka__typing__learn_words), stringRes(R.string.pysanka__typing__learn_words_summary), enabled = suggestions)
     ActionRow(stringRes(R.string.pysanka__typing__forget_words), stringRes(R.string.pysanka__typing__forget_words_summary)) { confirmForget = true }
+    val navController = LocalNavController.current
+    LinkRow(stringRes(R.string.pysanka__shortcuts__title), stringRes(R.string.pysanka__shortcuts__summary)) {
+        navController.navigate(Routes.Settings.TextShortcuts)
+    }
     BlockDivider()
     PrefToggle(prefs.correction.autoCapitalization, stringRes(R.string.pysanka__typing__auto_caps))
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))
     PrefToggle(prefs.correction.autoSpacePunctuation, stringRes(R.string.pysanka__typing__auto_space))
+    PrefToggle(prefs.correction.pysankaSmartPunctuation, stringRes(R.string.pysanka__typing__smart_punctuation), stringRes(R.string.pysanka__typing__smart_punctuation_summary))
     BlockDivider()
     PrefChoice(prefs.gestures.deleteKeySwipeLeft, stringRes(R.string.pysanka__typing__delete_swipe), SwipeAction::class, "deleteSwipe")
     PrefChoice(prefs.gestures.spaceBarSwipeLeft, stringRes(R.string.pysanka__typing__space_swipe_left), SwipeAction::class, "general")
     PrefChoice(prefs.gestures.spaceBarSwipeRight, stringRes(R.string.pysanka__typing__space_swipe_right), SwipeAction::class, "general")
+    PrefToggle(prefs.gestures.pysankaSpaceTrackpad, stringRes(R.string.pysanka__typing__trackpad), stringRes(R.string.pysanka__typing__trackpad_summary))
     BlockDivider()
     val delay by prefs.keyboard.longPressDelay.observeAsState()
     SliderRow(stringRes(R.string.pysanka__typing__long_press), delay, 100..700, 10, { stringRes(R.string.pysanka__typing__ms, "n" to it) }) {
@@ -251,6 +257,7 @@ private fun LookSettings() {
     // "By the time of day" needs times there is no screen for
     PrefChoice(prefs.theme.mode, stringRes(R.string.pysanka__look__theme_mode), ThemeMode::class, except = setOf(ThemeMode.FOLLOW_TIME))
     ThemeChoices()
+    PrefToggle(prefs.other.pysankaSystemColors, stringRes(R.string.pysanka__look__system_colors), stringRes(R.string.pysanka__look__system_colors_summary))
     PrefToggle(prefs.keyboard.numberRow, stringRes(R.string.pysanka__look__number_row))
     PrefToggle(prefs.keyboard.hintedSymbolsEnabled, stringRes(R.string.pysanka__look__key_hints), stringRes(R.string.pysanka__look__key_hints_summary))
     val fontSize by prefs.keyboard.fontSizeMultiplierPortrait.observeAsState()
@@ -277,6 +284,16 @@ private fun EmojiSettings() {
     PrefChoice(prefs.emoji.preferredSkinTone, stringRes(R.string.prefs__media__emoji_preferred_skin_tone), EmojiSkinTone::class)
     PrefToggle(prefs.emoji.historyEnabled, stringRes(R.string.pysanka__emoji__history), stringRes(R.string.pysanka__emoji__history_summary))
     PrefToggle(prefs.emoji.suggestionEnabled, stringRes(R.string.pysanka__emoji__suggest), stringRes(R.string.pysanka__emoji__suggest_summary))
+    val suggest by prefs.emoji.suggestionEnabled.observeAsState()
+    val type by prefs.emoji.suggestionType.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__emoji__suggest_how),
+        listOf(
+            dev.patrickgold.florisboard.ime.media.emoji.EmojiSuggestionType.INLINE_TEXT to stringRes(R.string.pysanka__emoji__suggest_word),
+            dev.patrickgold.florisboard.ime.media.emoji.EmojiSuggestionType.LEADING_COLON to stringRes(R.string.pysanka__emoji__suggest_colon),
+        ),
+        type, enabled = suggest,
+    ) { scope.launch { prefs.emoji.suggestionType.set(it) } }
     if (history) {
         ActionRow(stringRes(R.string.pysanka__emoji__clear_recent)) { clearing = false }
         ActionRow(stringRes(R.string.pysanka__emoji__clear_pinned)) { clearing = true }
@@ -335,6 +352,45 @@ private fun PrivacySettings() {
     PrefToggle(prefs.clipboard.cleanLinks, stringRes(R.string.pysanka__links__clean), stringRes(R.string.pysanka__links__clean_summary))
     PrefToggle(prefs.pysankaOcr.blockScreenshots, stringRes(R.string.pysanka__privacy__block_screenshots), stringRes(R.string.pysanka__privacy__block_screenshots_summary))
     PrefChoice(prefs.suggestion.incognitoMode, stringRes(R.string.pysanka__privacy__incognito), IncognitoMode::class)
+    if (android.os.Build.VERSION.SDK_INT >= 33) CrashNotifications()
+}
+
+/**
+ * Crash notifications (Android 13+ asks for them): asked for here, only if the person wants them,
+ * not on the first start. Turning them off again is the system's own setting.
+ */
+@androidx.annotation.RequiresApi(33)
+@Composable
+private fun CrashNotifications() {
+    val context = LocalContext.current
+    fun granted() = androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) ==
+        android.content.pm.PackageManager.PERMISSION_GRANTED
+    var on by remember { mutableStateOf(granted()) }
+    fun systemSettings() {
+        val intent = android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
+        runCatching { context.startActivity(intent) }
+    }
+    // Back from the system's settings: as they are now
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    androidx.compose.runtime.DisposableEffect(lifecycle) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) on = granted()
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
+    val ask = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { given ->
+        on = given
+        // Refused twice, Android no longer asks: the person can still allow it in the system's settings
+        val activity = generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }.firstOrNull { it is android.app.Activity } as? android.app.Activity
+        if (!given && activity?.shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS) == false) systemSettings()
+    }
+    ToggleRow(stringRes(R.string.pysanka__privacy__crash_notifications), on, stringRes(R.string.pysanka__privacy__crash_notifications_summary)) { want ->
+        if (want) ask.launch(android.Manifest.permission.POST_NOTIFICATIONS) else systemSettings()
+    }
 }
 
 @Composable

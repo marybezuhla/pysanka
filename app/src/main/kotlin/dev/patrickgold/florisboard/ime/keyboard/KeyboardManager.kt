@@ -84,7 +84,7 @@ import org.florisboard.lib.kotlin.collectLatestIn
 private val DoubleSpacePeriodMatcher = """([^.!?‽\s]\s)""".toRegex()
 
 // Pysanka: marks that end a word, so it is learned (an apostrophe or hyphen may be inside one)
-private val PYSANKA_WORD_ENDS = setOf(".", ",", "!", "?", ";", ":", "…", ")", "»", "\"")
+private val PYSANKA_WORD_ENDS = setOf(".", ",", "!", "?", ";", ":", "…", ")", "»", "\"", "”")
 
 // Pysanka: fields whose words are never learned (besides password, incognito and "no learning" ones)
 private val PYSANKA_NO_LEARNING = setOf(
@@ -491,6 +491,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         // Pysanka: Backspace right after an auto-correction brings back what was typed
         val undo = pysankaUndoReady
         if (undo != null && unit == OperationUnit.CHARACTERS && editorInstance.pysankaUndoAutoCorrect(undo.typed, undo.corrected)) {
+            // A shortcut taken back stays a shortcut: nothing is learned or rejected
+            if (undo.shortcut) return
             // Taken back: this word is left as typed from now on (while the field is open), and
             // learned as the person's own word
             ua.pysanka.typing.AutoCorrect.reject(undo.typed)
@@ -640,7 +642,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         candidate?.let { commitCandidate(it) }
         // Pysanka: the next Backspace takes an auto-correction back
         if (candidate != null && candidate.text.toString() != typed && typed.isNotEmpty()) {
-            pysankaUndo = PysankaUndo(typed, candidate.text.toString(), midSentence, previous)
+            pysankaUndo = PysankaUndo(typed, candidate.text.toString(), midSentence, previous, candidate is ua.pysanka.typing.ShortcutCandidate)
         }
         if (prefs.keyboard.spaceBarSwitchesToCharacters.get()) {
             when (activeState.keyboardMode) {
@@ -791,12 +793,34 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * earlier keystroke (suggestions are made in the background and may lag behind fast typing).
      */
     private fun pysankaAutoCommitCandidate() = nlpManager.getAutoCommitCandidate()?.takeIf {
-        it.sourceProvider !is dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider ||
-            ua.pysanka.typing.AutoCorrect.suggestedFor == editorInstance.activeContent.composingText
+        val typed = editorInstance.activeContent.composingText
+        when {
+            // A shortcut's text only for exactly that shortcut
+            it is ua.pysanka.typing.ShortcutCandidate -> it.shortcut == typed
+            it.sourceProvider !is dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider -> true
+            else -> ua.pysanka.typing.AutoCorrect.suggestedFor == typed
+        }
+    }
+
+    /**
+     * Pysanka: smart punctuation, as on the iPhone: a straight quote becomes «» in Ukrainian and “”
+     * in English (opening after a space, a bracket or a dash, closing otherwise), and an apostrophe
+     * after a letter in Ukrainian becomes ʼ. Not in password, web address or e-mail fields.
+     */
+    private fun pysankaSmartChar(text: String): String {
+        if (text != "\"" && text != "'") return text
+        if (!prefs.correction.pysankaSmartPunctuation.get() || ua.pysanka.privacy.FieldPrivacy.isPassword) return text
+        // Not in a terminal or other raw editor (a quote in a command must stay straight)
+        if (editorInstance.activeInfo.isRawInputEditor) return text
+        val variation = editorInstance.activeInfo.inputAttributes.variation
+        if (variation == InputAttributes.Variation.URI || variation == InputAttributes.Variation.EMAIL_ADDRESS ||
+            variation == InputAttributes.Variation.WEB_EMAIL_ADDRESS) return text
+        val language = subtypeManager.activeSubtype.primaryLocale.language
+        return ua.pysanka.typing.SmartPunctuation.of(text, language, editorInstance.activeContent.textBeforeSelection.lastOrNull())
     }
 
     /** Pysanka: the last auto-correction, until the next key. */
-    private data class PysankaUndo(val typed: String, val corrected: String, val midSentence: Boolean, val previous: String?)
+    private data class PysankaUndo(val typed: String, val corrected: String, val midSentence: Boolean, val previous: String?, val shortcut: Boolean = false)
     private var pysankaUndo: PysankaUndo? = null
     private var pysankaUndoReady: PysankaUndo? = null
 
@@ -838,6 +862,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         previous: String? = pysankaPreviousWord(typed),
     ) {
         if (!pysankaMayLearn()) return
+        // A text-replacement shortcut is never learned as a word
+        if (ua.pysanka.typing.TextShortcuts.find(typed) != null) return
         val word = when {
             candidate == null -> typed
             // Words only (not clipboard items or emoji)
@@ -987,7 +1013,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                     }
                     else -> when (data.type) {
                         KeyType.CHARACTER, KeyType.NUMERIC ->{
-                            val text = data.asString(isForDisplay = false)
+                            val text = pysankaSmartChar(data.asString(isForDisplay = false))
                             if (!UCharacter.isUAlphabetic(UCharacter.codePointAt(text, 0))) {
                                 val typed = editorInstance.activeContent.composingText
                                 val candidate = pysankaAutoCommitCandidate()

@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import dev.patrickgold.florisboard.app.settings.theme.ColorPreferenceSerializer
-import dev.patrickgold.florisboard.app.setup.NotificationPermissionState
 import dev.patrickgold.florisboard.ime.clipboard.CLIPBOARD_HISTORY_NUM_GRID_COLUMNS_AUTO
 import dev.patrickgold.florisboard.ime.clipboard.ClipboardSyncBehavior
 import dev.patrickgold.florisboard.ime.core.DisplayLanguageNamesIn
@@ -221,6 +220,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__calibrate",
             default = true,
         )
+        // Pysanka: «» and ʼ in Ukrainian, “” in English (KeyboardManager.pysankaSmartChar)
+        val pysankaSmartPunctuation = boolean(
+            key = "pysanka__correction__smart_punctuation",
+            default = true,
+        )
         // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         val pysankaLearnWords = boolean(
             key = "pysanka__correction__learn_words",
@@ -334,7 +338,8 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val suggestionType = enum(
             key = "emoji__suggestion_type",
-            default = EmojiSuggestionType.LEADING_COLON,
+            // Pysanka: as Apple does, for the word being typed
+            default = EmojiSuggestionType.INLINE_TEXT,
         )
         val suggestionUpdateHistory = boolean(
             key = "emoji__suggestion_update_history",
@@ -387,6 +392,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         val spaceBarLongPress = enum(
             key = "gestures__space_bar_long_press",
             default = SwipeAction.SHOW_INPUT_METHOD_PICKER,
+        )
+        // Pysanka: a long press on space turns the keyboard into a trackpad for the cursor (as on the iPhone)
+        val pysankaSpaceTrackpad = boolean(
+            key = "pysanka__gestures__space_trackpad",
+            default = true,
         )
         val deleteKeySwipeLeft = enum(
             key = "gestures__delete_key_swipe_left",
@@ -533,10 +543,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "internal__version_last_changelog",
             default = VersionName.DEFAULT_RAW,
         )
-        val notificationPermissionState = enum(
-            key = "internal__notification_permission_state",
-            default = NotificationPermissionState.NOT_SET,
-        )
     }
 
     val keyboard = Keyboard()
@@ -669,6 +675,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             default = Color.Unspecified,
             serializer = ColorPreferenceSerializer,
         )
+        /** Pysanka: the settings in the phone's own colours (Material You) instead of Pysanka's. */
+        val pysankaSystemColors = boolean(
+            key = "pysanka__other__system_colors",
+            default = false,
+        )
         val settingsLanguage = string(
             key = "other__settings_language",
             default = "auto",
@@ -782,12 +793,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val dayThemeId = custom(
             key = "theme__day_theme_id",
-            default = extCoreTheme("floris_day"),
+            default = extCoreTheme("kreyda"), // Pysanka: its own themes (scripts/themes.py)
             serializer = ExtensionComponentName.Serializer,
         )
         val nightThemeId = custom(
             key = "theme__night_theme_id",
-            default = extCoreTheme("floris_night"),
+            default = extCoreTheme("podillia"),
             serializer = ExtensionComponentName.Serializer,
         )
         val accentColor = custom(
@@ -814,6 +825,9 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             "other__settings_language" -> if (entry.rawValue in PYSANKA_SETTINGS_LANGUAGES) entry.keepAsIs() else entry.reset()
             // Pysanka: "by the time of day" needs times nobody can set any more
             "theme__mode" -> if (entry.rawValue == "FOLLOW_TIME") entry.reset() else entry.keepAsIs()
+            // Pysanka: a theme that no longer comes with the keyboard (FlorisBoard's) goes back to Pysanka's
+            "theme__day_theme_id", "theme__night_theme_id" ->
+                if (entry.rawValue.substringAfter(':') in PYSANKA_THEMES) entry.keepAsIs() else entry.reset()
 
 
             // Migrate media prefs to emoji prefs
@@ -987,6 +1001,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
 
 /** Pysanka: keys of settings that have no screen any more (see [AppPrefs.migrate]). */
+/** Pysanka: the themes that come with the keyboard (scripts/themes.py and the two Material You ones). */
+private val PYSANKA_THEMES = setOf(
+    "kreyda", "visk", "nebo", "podillia", "hutsulshchyna", "chornozem", "floris_day_my", "floris_night_my",
+)
+
 private val PYSANKA_FIXED_KEYS = setOf(
             // The theme editor and the language screens were cut (November 2026)
             "theme__accent_color",
@@ -1045,7 +1064,6 @@ private val PYSANKA_FIXED_KEYS = setOf(
             "correction__remember_caps_lock_state",
             "suggestion__enable_floris_user_dictionary",
             "suggestion__enable_system_user_dictionary",
-            "emoji__suggestion_type",
             "gestures__delete_key_long_press",
             "gestures__space_bar_long_press",
             "gestures__space_bar_swipe_up",
