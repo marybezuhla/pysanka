@@ -187,6 +187,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__ai__show_count",
             default = true,
         )
+        /** How many emoji a post written by the AI may have: 0 none … 3 many (see AiPrompts.emoji). */
+        val emoji = int(
+            key = "pysanka__ai__emoji",
+            default = 2,
+        )
     }
 
     // Pysanka: dictation

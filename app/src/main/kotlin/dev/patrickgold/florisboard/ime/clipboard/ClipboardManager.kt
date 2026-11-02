@@ -102,7 +102,7 @@ class ClipboardManager(
 
     private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val cleanUpJob: Job
-    private var clipHistoryDb: ClipboardHistoryDatabase? = null
+    @Volatile private var clipHistoryDb: ClipboardHistoryDatabase? = null
     private val clipHistoryDao: ClipboardHistoryDao? get() = clipHistoryDb?.clipboardItemDao()
 
     val historyFlow: StateFlow<ClipboardHistory>
@@ -130,6 +130,10 @@ class ClipboardManager(
      */
     private fun mayKeep(isSensitive: Boolean, incognito: Boolean, passwordField: Boolean): Boolean {
         if (!prefs.clipboard.historyEnabled.get() || incognito) return false
+        // Pysanka: incognito for everything holds even when no field (or another one) is focused
+        val global = prefs.suggestion.incognitoMode.get()
+        if (global == dev.patrickgold.florisboard.ime.keyboard.IncognitoMode.FORCE_ON) return false
+        if (global == dev.patrickgold.florisboard.ime.keyboard.IncognitoMode.DYNAMIC_ON_OFF && prefs.suggestion.forceIncognitoModeFromDynamic.get()) return false
         if ((isSensitive || passwordField) && prefs.clipboard.historySkipSensitive.get()) return false
         return true
     }
@@ -295,11 +299,15 @@ class ClipboardManager(
                         val clean = ua.pysanka.clipboard.LinkCleaner.clean(text)
                         if (clean != text) {
                             val label = systemPrimaryClip.description.label
+                            var stillSame = true
                             val set = withContext(Dispatchers.Main) {
-                                runCatching { systemClipboardManager.setPrimaryClip(ClipData.newPlainText(label, clean)) }.isSuccess
+                                // Only if nothing newer was copied meanwhile (a password, say): never over it
+                                stillSame = runCatching { systemClipboardManager.primaryClip?.getItemAt(0)?.text?.toString() == text }.getOrDefault(false)
+                                stillSame && runCatching { systemClipboardManager.setPrimaryClip(ClipData.newPlainText(label, clean)) }.isSuccess
                             }
-                            // Set: the next call stores the clean text. Not set: go on with the original
-                            if (set) return@launch
+                            // Set: the next call stores the clean text. Not set (a newer clip came): that
+                            // clip's own call handles it, and the old link is not kept uncleaned
+                            if (set || !stillSame) return@launch
                         }
                     }
                 }
@@ -369,7 +377,7 @@ class ClipboardManager(
     fun pysankaAddToHistory(all: List<String>, tag: String? = null): Boolean {
         if (!mayKeep(false, fieldIncognito, fieldPassword)) return false
         // The encrypted history is not open (yet): saying "done" would lose them
-        if (clipHistoryDb == null) return false
+        if (!isHistoryOpen()) return false
         val texts = all.distinct()
         // All of them must stay: more than the history keeps would lose the last ones
         if (prefs.clipboard.historySizeLimitEnabled.get() && texts.size > prefs.clipboard.historySizeLimit.get()) return false
@@ -388,9 +396,10 @@ class ClipboardManager(
     }
 
     /** Pysanka: a template (a text typed in the settings), pinned in the history; not the clipboard itself. */
-    fun pysankaAddPinned(text: String) {
-        if (!prefs.clipboard.historyEnabled.get() || text.isBlank()) return
+    fun pysankaAddPinned(text: String): Boolean {
+        if (!prefs.clipboard.historyEnabled.get() || text.isBlank() || !isHistoryOpen()) return false
         insertOrMoveBeginning(ClipboardItem.text(text).copy(isPinned = true))
+        return true
     }
 
     /**

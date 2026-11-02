@@ -222,6 +222,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
             putString(AiService.KEY_TARGET, target.name)
             putString(AiService.KEY_TEXT, text)
             if (action == AiAction.SHORTER && overLimit(text)) putInt(AiService.KEY_LIMIT, app!!.limit)
+            putInt(AiService.KEY_EMOJI, prefs.pysankaAi.emoji.get())
         })
     }
 

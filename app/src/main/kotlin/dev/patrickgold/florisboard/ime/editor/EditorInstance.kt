@@ -145,7 +145,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         }
         val isPasswordField = ua.pysanka.privacy.FieldPrivacy.isPassword
         val isPrivate = ua.pysanka.privacy.FieldPrivacy.isPrivate
-        ua.pysanka.ocr.PendingInsert.takeFor(editorInfo.packageName, editorInfo.base.fieldId, isPasswordField, isPrivate)
+        ua.pysanka.ocr.PendingInsert.takeFor(editorInfo, isPasswordField, isPrivate)
             ?.let { ua.pysanka.ime.FieldText.insert(it) }
         ua.pysanka.ai.AiBridge.takeFor(editorInfo, isPasswordField)
             ?.let { r -> if (!ua.pysanka.ime.FieldText.applyAi(editorInfo, r)) ua.pysanka.ai.AiBridge.couldNotPlace(r.text) }
@@ -170,12 +170,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
             InputAttributes.Variation.VISIBLE_PASSWORD,
             InputAttributes.Variation.WEB_PASSWORD,
         )
-        val incognito = when (prefs.suggestion.incognitoMode.get()) {
-            IncognitoMode.FORCE_OFF -> false
-            IncognitoMode.FORCE_ON -> true
-            IncognitoMode.DYNAMIC_ON_OFF -> prefs.suggestion.forceIncognitoModeFromDynamic.get()
-        }
-        val isPrivate = incognito || editorInfo.imeOptions.flagNoPersonalizedLearning
+        val isPrivate = pysankaIncognito() || editorInfo.imeOptions.flagNoPersonalizedLearning
         clipboardManager.setFieldPrivacy(incognito = isPrivate, passwordField = isPasswordField)
         ua.pysanka.privacy.FieldPrivacy.isPrivate = isPrivate
         ua.pysanka.privacy.FieldPrivacy.isPassword = isPasswordField
@@ -194,6 +189,13 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         super.handleFinishInputView()
     }
 
+    /** Pysanka: incognito for every field (set to always, or switched on by hand), not by the field. */
+    private fun pysankaIncognito() = when (prefs.suggestion.incognitoMode.get()) {
+        IncognitoMode.FORCE_OFF -> false
+        IncognitoMode.FORCE_ON -> true
+        IncognitoMode.DYNAMIC_ON_OFF -> prefs.suggestion.forceIncognitoModeFromDynamic.get()
+    }
+
     override fun handleFinishInput() {
         // Pysanka: the clipboard search and dictation end with the field
         ua.pysanka.clipboard.ClipSearch.stop()
@@ -201,9 +203,11 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         ua.pysanka.typing.AutoCorrect.clear()
         // Pysanka: learned words are written when a field is left
         ua.pysanka.typing.UserWords.flush(appContext)
-        // Pysanka: a copy made while no field is focused is not judged by the last field
-        clipboardManager.setFieldPrivacy(incognito = false, passwordField = false)
-        ua.pysanka.privacy.FieldPrivacy.isPrivate = false
+        // Pysanka: a copy made while no field is focused is not judged by the last field, but
+        // incognito chosen for everything (always, or switched on by hand) stays on
+        val incognito = pysankaIncognito()
+        clipboardManager.setFieldPrivacy(incognito = incognito, passwordField = false)
+        ua.pysanka.privacy.FieldPrivacy.isPrivate = incognito
         ua.pysanka.privacy.FieldPrivacy.isPassword = false
         super.handleFinishInput()
     }

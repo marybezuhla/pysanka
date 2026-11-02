@@ -1,6 +1,5 @@
 package ua.pysanka.models
 
-import android.content.ClipData
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -79,8 +78,7 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
                     }.onFailure { Toast.makeText(context, R.string.pysanka__ai__no_browser, Toast.LENGTH_LONG).show() }
                 }) { Text(stringRes(R.string.pysanka__ai__download)) }
                 TextButton(onClick = {
-                    context.getSystemService(android.content.ClipboardManager::class.java)
-                        ?.setPrimaryClip(ClipData.newPlainText("link", model.download))
+                    ua.pysanka.privacy.Clip.copy(context, model.download)
                 }) { Text(stringRes(R.string.pysanka__ai__copy_link)) }
             }
             Text(stringRes(R.string.pysanka__ai__step2), style = MaterialTheme.typography.bodyMedium)
