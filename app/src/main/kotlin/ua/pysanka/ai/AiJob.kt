@@ -72,6 +72,8 @@ object AiJob {
         target: AiLanguage,
         /** For [AiAction.SHORTER]: the most characters the post may have in its app (0: none). */
         limit: Int = 0,
+        /** For a post: how many emoji (see [AiPrompts.emoji]). */
+        emoji: Int = AiPrompts.EMOJI_DEFAULT,
         onPart: (Int, Int) -> Unit,
     ): Output {
         check(action != AiAction.THREAD) { "Done without the model" }
@@ -92,7 +94,7 @@ object AiJob {
         val result = when (action.kind) {
             AiAction.Kind.WHOLE, AiAction.Kind.ADVICE -> {
                 onPart(1, 1)
-                ask(context, run, AiPrompts.system(action, target, text), text, action.temperature, text)
+                ask(context, run, AiPrompts.system(action, target, text, emoji = emoji), text, action.temperature, text)
             }
             AiAction.Kind.REWRITE -> {
                 val parts = TextChunks.split(text, PART)

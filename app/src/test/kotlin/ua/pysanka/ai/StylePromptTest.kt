@@ -21,4 +21,11 @@ class StylePromptTest : FunSpec({
         prompt shouldContain "Write in Ukrainian"
         AiPrompts.system(AiAction.FIX, AiLanguage.EN, "Текст", style) shouldNotContain "Привіт-привіт"
     }
+
+    test("a post has as many emoji as chosen; other actions do not mention them") {
+        AiPrompts.system(AiAction.POST, AiLanguage.UK, "Текст", emoji = 0) shouldContain "no emoji at all"
+        AiPrompts.system(AiAction.VERSIONS, AiLanguage.UK, "Текст", emoji = 3) shouldContain "four to six emoji"
+        AiPrompts.system(AiAction.POST, AiLanguage.UK, "Текст") shouldContain "two or three emoji"
+        AiPrompts.system(AiAction.FIX, AiLanguage.UK, "Текст", emoji = 0) shouldNotContain "emoji at all"
+    }
 })

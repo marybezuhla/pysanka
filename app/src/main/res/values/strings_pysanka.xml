@@ -325,7 +325,7 @@
     <string name="pysanka__voice__model_small">More accurate: Whisper small (about 190 MB)</string>
     <string name="pysanka__voice__model_base">Faster: Whisper base (about 60 MB), for older phones</string>
     <string name="pysanka__voice__delete_other">Delete the other model</string>
-    <string name="pysanka__ai__thread_no_history">The parts will not fit in the clipboard history (it is off or shorter): copy them with a tap.</string>
+    <string name="pysanka__ai__thread_no_history">The clipboard history cannot take the parts now (it is off, shorter, not ready yet, or this is a private field): copy them with a tap.</string>
     <string name="pysanka__typing__key_targeting">More accurate key taps</string>
     <string name="pysanka__typing__key_targeting_summary">A tap near the edge between two letters goes to the one more likely in the word (the keys look the same)</string>
     <string name="pysanka__typing__calibrate">Adapt to my taps</string>
@@ -348,5 +348,10 @@
     <string name="pysanka__ai__drafts_tag">Drafts</string>
     <string name="pysanka__ai__drafts_done">The versions are in the clipboard history, tagged “Drafts”</string>
     <string name="pysanka__clipboard_lock__failed">Could not open the fingerprint screen.</string>
-    <string name="pysanka__ai__drafts_failed">The versions will not fit in the clipboard history (it is off or shorter).</string>
+    <string name="pysanka__ai__drafts_failed">The clipboard history cannot take the versions now (it is off, shorter, not ready yet, or this is a private field).</string>
+    <string name="pysanka__ai__emoji">Emoji in AI posts</string>
+    <string name="pysanka__ai__emoji_none">none</string>
+    <string name="pysanka__ai__emoji_one">one</string>
+    <string name="pysanka__ai__emoji_some">2–3</string>
+    <string name="pysanka__ai__emoji_many">many</string>
 </resources>
