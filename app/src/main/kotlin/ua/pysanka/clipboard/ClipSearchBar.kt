@@ -54,8 +54,9 @@ private fun ClipSearchBar(query: String) {
     val keyboardManager by context.keyboardManager()
     val history by clipboardManager.historyFlow.collectAsState()
     val tags by clipboardManager.tagsFlow.collectAsState()
+    val until by ClipboardLock.until.collectAsState()
     val locked = remember { context.getSystemService(android.app.KeyguardManager::class.java) }
-        .let { it.isDeviceLocked || it.isKeyguardLocked }
+        .let { it.isDeviceLocked || it.isKeyguardLocked } || (until >= 0 && ClipboardLock.wanted(context) && !ClipboardLock.isOpen())
     // Prepared once (in the background) when the history or the tags change, not for every key
     val index by produceState(emptyList<ClipSearch.Entry>(), history, tags) {
         value = withContext(Dispatchers.Default) { ClipSearch.index(history.pinned + history.unpinned, tags) }

@@ -452,8 +452,8 @@ class ClipboardManager(
     private fun moveToTheBeginning(oldItem: ClipboardItem, newItem: ClipboardItem) {
         ioScope.launch {
             clipHistoryDao?.delete(oldItem.id)
-            // Pysanka: copying the same text again keeps its tags
-            clipHistoryDao?.insert(newItem.copy(tags = oldItem.tags))
+            // Pysanka: copying the same text again keeps its tags and adds the new ones
+            clipHistoryDao?.insert(newItem.withTagIds(oldItem.tagIds() + newItem.tagIds()))
         }
     }
 

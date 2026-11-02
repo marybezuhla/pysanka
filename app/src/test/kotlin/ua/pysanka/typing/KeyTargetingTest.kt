@@ -19,8 +19,17 @@ class KeyTargetingTest : FunSpec({
     test("near the edge the likelier letter takes it; with even odds the closer key") {
         KeyTargeting.pick(95f, 75f, listOf(o, r), likelyR) shouldBe 1
         KeyTargeting.pick(95f, 75f, listOf(o, r), even) shouldBe 0
-        r.near(80f, 75f) shouldBe true
-        r.near(70f, 75f) shouldBe false
+        r.near(88f, 75f) shouldBe true
+        r.near(80f, 75f) shouldBe false
+        // Deeper inside «о», «р» needs much better odds
+        KeyTargeting.pick(87f, 75f, listOf(o, r), KeyTargeting.Priors("п", mapOf('р' to 0.3, 'о' to 0.2))) shouldBe 0
+    }
+
+    test("with no odds, or a diagonal neighbour no likelier, the key as drawn") {
+        val below = KeyTargeting.Target(50f, 150f, 150f, 300f, 'л')
+        KeyTargeting.pick(90f, 140f, listOf(o, below), KeyTargeting.Priors("п", emptyMap())) shouldBe 0
+        KeyTargeting.pick(90f, 140f, listOf(o, below), KeyTargeting.Priors("п", mapOf('о' to 0.4, 'л' to 0.4))) shouldBe 0
+        KeyTargeting.pick(90f, 145f, listOf(o, below), KeyTargeting.Priors("п", mapOf('о' to 0.05, 'л' to 0.6))) shouldBe 1
     }
 
     test("priors count only for the word they were worked out for") {
@@ -50,10 +59,10 @@ class KeyTargetingTest : FunSpec({
             val (x, y) = c.adjust(50f + rnd.nextGaussian().toFloat() * 15f, 75f + 30f + rnd.nextGaussian().toFloat() * 15f, 100f, 150f)
             c.learn(x, y, key)
         }
-        (c.dy in 0.15f..0.25f) shouldBe true
+        (c.dy in 0.15f..0.2f) shouldBe true
         (kotlin.math.abs(c.dx) < 0.06f) shouldBe true
         repeat(400) { c.learn(50f, 150f, key) }
-        (c.dy <= 0.35f) shouldBe true
+        (c.dy <= 0.2f) shouldBe true
         c.reset()
     }
 })

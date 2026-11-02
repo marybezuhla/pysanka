@@ -32,4 +32,33 @@ internal object Replies {
             Reply(label?.trim('*', ' '), text.trim('*', ' ', '\n'))
         }.filter { it.text.isNotEmpty() }
     }
+
+    /** The networks a post is written for ([AiAction.VERSIONS]), as the prompt names them. */
+    private val NETWORKS = listOf("X", "Bluesky", "Threads", "LinkedIn")
+
+    /** A line that starts a version: «**X:** …», "Bluesky:", "### Threads", "LinkedIn (1300):". */
+    private val HEADER = Regex("""^\s*(?:#{1,4}\s*)?\**\s*([^:*\n]{1,30}?)\s*\**\s*(?::|$)\s*\**\s*(.*)$""")
+
+    private fun network(label: String): String? = NETWORKS.firstOrNull { n ->
+        // «X (Twitter)», «X / Twitter», but not a sentence that starts with the name («X is …»)
+        label.startsWith(n, ignoreCase = true) && label.substring(n.length).trim().let { it.isEmpty() || it[0] in "(/–—-" }
+    }
+
+    /**
+     * The versions of a post: each starts at a line naming its network; the lines after it (a long
+     * post has paragraphs) belong to it until the next network. Text before the first is dropped.
+     */
+    fun versions(answer: String): List<Reply> {
+        val out = mutableListOf<Pair<String, StringBuilder>>()
+        for (line in answer.lines()) {
+            val m = HEADER.find(line)
+            val name = m?.let { network(it.groupValues[1].trim()) }
+            if (m != null && name != null && (line.contains(':') || line.trimStart().startsWith("#") || line.contains("**"))) {
+                out += name to StringBuilder(m.groupValues[2])
+            } else {
+                out.lastOrNull()?.second?.append('\n')?.append(line)
+            }
+        }
+        return out.map { (n, b) -> Reply(n, b.toString().trim().trim('*').trim()) }.filter { it.text.isNotEmpty() }
+    }
 }

@@ -147,16 +147,24 @@ fun ClipboardInputLayout(
     val keyboardManager by context.keyboardManager()
     val androidKeyguardManager = remember { context.systemService(AndroidKeyguardManager::class) }
 
+    val historyEnabled by prefs.clipboard.historyEnabled.observeAsState()
     val phoneLocked = androidKeyguardManager.let { it.isDeviceLocked || it.isKeyguardLocked }
     // Pysanka: the history behind a fingerprint, if chosen (closed again when the phone locks)
     val fingerprint by prefs.clipboard.pysankaFingerprint.observeAsState()
-    val lockChanges by ua.pysanka.clipboard.ClipboardLock.changes.collectAsState()
+    val lockUntil by ua.pysanka.clipboard.ClipboardLock.until.collectAsState()
     if (phoneLocked) ua.pysanka.clipboard.ClipboardLock.close()
-    val fingerprintLocked = remember(fingerprint, lockChanges, phoneLocked) {
-        fingerprint && ua.pysanka.clipboard.ClipboardLock.supported(context) && !ua.pysanka.clipboard.ClipboardLock.isOpen()
+    // Closes by itself when its time is up, also with the panel open
+    LaunchedEffect(lockUntil) {
+        val left = lockUntil - android.os.SystemClock.elapsedRealtime()
+        if (lockUntil > 0 && left > 0) {
+            kotlinx.coroutines.delay(left)
+            ua.pysanka.clipboard.ClipboardLock.close()
+        }
+    }
+    val fingerprintLocked = remember(fingerprint, lockUntil, phoneLocked, historyEnabled) {
+        fingerprint && historyEnabled && ua.pysanka.clipboard.ClipboardLock.supported(context) && !ua.pysanka.clipboard.ClipboardLock.isOpen()
     }
     val deviceLocked = phoneLocked || fingerprintLocked
-    val historyEnabled by prefs.clipboard.historyEnabled.observeAsState()
 
     // Pysanka: the tag slider is shown by default (the filter button hides it)
     var isFilterRowShown by remember { mutableStateOf(true) }

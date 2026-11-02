@@ -290,7 +290,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
             override fun drafts(texts: List<String>) {
                 val ok = clipboardManager.pysankaAddToHistory(texts, context.getString(R.string.pysanka__ai__drafts_tag))
                 android.widget.Toast.makeText(
-                    context, if (ok) R.string.pysanka__ai__drafts_done else R.string.pysanka__ai__thread_no_history, android.widget.Toast.LENGTH_LONG,
+                    context, if (ok) R.string.pysanka__ai__drafts_done else R.string.pysanka__ai__drafts_failed, android.widget.Toast.LENGTH_LONG,
                 ).show()
                 if (ok) closePanel()
             }
@@ -610,7 +610,7 @@ private fun Done(
         return
     }
     val versions = s.action == AiAction.VERSIONS
-    val replies = remember(s) { if (s.action == AiAction.REPLIES || versions) Replies.parse(s.text).takeIf { it.size >= 2 } else null }
+    val replies = remember(s) { when { versions -> Replies.versions(s.text); s.action == AiAction.REPLIES -> Replies.parse(s.text); else -> null }?.takeIf { it.size >= 2 } }
     Column(Modifier.fillMaxSize()) {
         if (replies != null) {
             Note(

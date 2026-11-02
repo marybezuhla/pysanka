@@ -206,7 +206,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__auto_correct",
             default = true,
         )
-        // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         // Pysanka: a tap near the edge between two letters goes to the likelier one (KeyTargeting)
         val pysankaKeyTargeting = boolean(
             key = "pysanka__correction__key_targeting",
@@ -217,6 +216,7 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__correction__calibrate",
             default = true,
         )
+        // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields
         val pysankaLearnWords = boolean(
             key = "pysanka__correction__learn_words",
             default = true,

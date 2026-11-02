@@ -146,6 +146,7 @@
         <!-- Pysanka: asks for the fingerprint before the clipboard history shows (optional) -->
         <activity
             android:name="ua.pysanka.clipboard.ClipboardUnlockActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
             android:exported="false"
             android:excludeFromRecents="true"
             android:noHistory="true"
