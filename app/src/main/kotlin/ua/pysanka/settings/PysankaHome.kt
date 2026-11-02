@@ -204,10 +204,8 @@ private fun PanelActionsRow() {
     val saved by prefs.pysankaAi.panelActions.observeAsState()
     val chosen = ua.pysanka.ai.AiPanelActions.chosen(saved)
     var open by remember { mutableStateOf(false) }
-    ActionRow(
-        stringRes(R.string.pysanka__ai__panel_actions),
-        chosen.joinToString(", ") { stringRes(it.label) },
-    ) { open = true }
+    val names = chosen.map { stringRes(it.label) }
+    ActionRow(stringRes(R.string.pysanka__ai__panel_actions), names.joinToString(", ")) { open = true }
     if (open) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { open = false },
