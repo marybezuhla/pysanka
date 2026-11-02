@@ -20,34 +20,34 @@ OUT = os.path.join(ROOT, "app/src/main/assets/ime/theme/org.florisboard.themes")
 # id, label (shown when no translation is known), night?, colours
 THEMES = [
     ("kreyda", "Kreyda", False, dict(
-        background="#ece6de", background_variant="#e0d8cd", surface="#fffdf9", surface_variant="#efe8df",
-        popup="#f6f1ea", popup_focused="#dccfbf", text="#2b2420", text_variant="#5a5048", text_background="#2b2420",
-        primary="#b3261e", primary_variant="#8c1d18", on_primary="#ffffff", secondary="#8a5d00",
+        background="#e6dfd5", background_variant="#dad1c5", surface="#f8f3eb", surface_variant="#ebe3d8",
+        popup="#f1ebe2", popup_focused="#d6c9b8", text="#2b2420", text_variant="#5a5048", text_background="#2b2420",
+        primary="#a3392c", primary_variant="#85291f", on_primary="#fff8f0", secondary="#7d5a12",
         one_hand="#f3e4e1")),
     ("visk", "Visk", False, dict(
-        background="#e8dbc1", background_variant="#ddcdaf", surface="#f8efdd", surface_variant="#ebdfc7",
-        popup="#f2e7d2", popup_focused="#d8c4a0", text="#2e2116", text_variant="#64503c", text_background="#2e2116",
-        primary="#9c3d12", primary_variant="#7a2e0c", on_primary="#fff8ec", secondary="#7f5200",
+        background="#e2d5bc", background_variant="#d6c7aa", surface="#f2e8d4", surface_variant="#e5d9c0",
+        popup="#ece1cb", popup_focused="#d1bf9c", text="#2e2116", text_variant="#64503c", text_background="#2e2116",
+        primary="#8a4a2a", primary_variant="#6e3a20", on_primary="#fff8ec", secondary="#765010",
         one_hand="#efdcc0")),
     ("nebo", "Nebo", False, dict(
-        background="#dfe5ec", background_variant="#d2dae3", surface="#f9fbfd", surface_variant="#e8eef4",
-        popup="#eef2f6", popup_focused="#c6d3e0", text="#1e2a3c", text_variant="#4a596d", text_background="#1e2a3c",
-        primary="#2f5da8", primary_variant="#244a87", on_primary="#ffffff", secondary="#b3261e",
+        background="#d9e0e7", background_variant="#ccd5de", surface="#f1f4f7", surface_variant="#e1e7ee",
+        popup="#e8edf2", popup_focused="#c1cedb", text="#1e2a3c", text_variant="#4a596d", text_background="#1e2a3c",
+        primary="#3d5f94", primary_variant="#2f4c78", on_primary="#ffffff", secondary="#a3392c",
         one_hand="#e1e9f4")),
     ("podillia", "Podillia", True, dict(
         background="#15110f", background_variant="#1e1916", surface="#2a2320", surface_variant="#3a312c",
-        popup="#3a312c", popup_focused="#8c1d18", text="#f1e6d2", text_variant="#c2b5a3", text_background="#ede3d3",
-        primary="#c62f25", primary_variant="#a3241c", on_primary="#ffffff", secondary="#e0a526",
+        popup="#3a312c", popup_focused="#7a2a22", text="#f1e6d2", text_variant="#c2b5a3", text_background="#ede3d3",
+        primary="#b03d31", primary_variant="#8a2c23", on_primary="#fff6ee", secondary="#c99a3a",
         one_hand="#2a1a17")),
     ("hutsulshchyna", "Hutsulshchyna", True, dict(
         background="#101a15", background_variant="#17241d", surface="#1e2e25", surface_variant="#2a3d32",
-        popup="#2a3d32", popup_focused="#7a5410", text="#ece6d6", text_variant="#b9bba8", text_background="#e6e0d0",
-        primary="#e39b2d", primary_variant="#c47f18", on_primary="#1a1208", secondary="#f0b84a",
+        popup="#2a3d32", popup_focused="#6e4c14", text="#ece6d6", text_variant="#b9bba8", text_background="#e6e0d0",
+        primary="#c98f3a", primary_variant="#ad7a2e", on_primary="#1a1208", secondary="#d6a64e",
         one_hand="#1f2a1c")),
     ("chornozem", "Chornozem", True, dict(
         background="#000000", background_variant="#0a0908", surface="#151210", surface_variant="#241f1b",
-        popup="#241f1b", popup_focused="#6b4e12", text="#ded3c2", text_variant="#a89c8b", text_background="#d8cdbc",
-        primary="#d9a33c", primary_variant="#b8862a", on_primary="#1a1206", secondary="#d9a33c",
+        popup="#241f1b", popup_focused="#5e4512", text="#ded3c2", text_variant="#a89c8b", text_background="#d8cdbc",
+        primary="#b98e3e", primary_variant="#a37e36", on_primary="#1a1206", secondary="#b98e3e",
         one_hand="#14100c")),
 ]
 
