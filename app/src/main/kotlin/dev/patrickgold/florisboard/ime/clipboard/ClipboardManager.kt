@@ -366,8 +366,11 @@ class ClipboardManager(
      * Pysanka: several texts into the history at once (the first ends up on top), as copied in the
      * field open now (so never kept from a private one); the clipboard itself is not changed.
      */
-    fun pysankaAddToHistory(texts: List<String>, tag: String? = null): Boolean {
+    fun pysankaAddToHistory(all: List<String>, tag: String? = null): Boolean {
         if (!mayKeep(false, fieldIncognito, fieldPassword)) return false
+        // The encrypted history is not open (yet): saying "done" would lose them
+        if (clipHistoryDb == null) return false
+        val texts = all.distinct()
         // All of them must stay: more than the history keeps would lose the last ones
         if (prefs.clipboard.historySizeLimitEnabled.get() && texts.size > prefs.clipboard.historySizeLimit.get()) return false
         val clean = prefs.clipboard.cleanLinks.get()

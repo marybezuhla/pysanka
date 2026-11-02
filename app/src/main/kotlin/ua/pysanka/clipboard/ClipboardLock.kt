@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -66,6 +67,15 @@ object ClipboardLock {
         openUntil.value = 0L
     }
 
+    /** Waits until the history opened until [until] is due to close, and closes it. */
+    suspend fun closeWhenDue(until: Long) {
+        val left = until - SystemClock.elapsedRealtime()
+        if (until > 0 && left > 0) {
+            kotlinx.coroutines.delay(left)
+            close()
+        }
+    }
+
     /** Closes the lock whenever the screen goes off (registered once, in the keyboard's process). */
     fun watchScreen(context: Context) {
         val receiver = object : BroadcastReceiver() {
@@ -92,6 +102,17 @@ object ClipboardLock {
             reopen = false
             Toast.makeText(context, R.string.pysanka__clipboard_lock__failed, Toast.LENGTH_LONG).show()
         }
+    }
+
+    /**
+     * Runs [action] only once the history is open: at once if it is, else after the fingerprint
+     * asked over the settings screen in [context] (turning the lock off must not open the history).
+     */
+    fun afterUnlock(context: Context, action: () -> Unit) {
+        if (isOpen()) return action()
+        var c: Context? = context
+        while (c is android.content.ContextWrapper && c !is Activity) c = c.baseContext
+        (c as? Activity)?.let { a -> prompt(a, CancellationSignal()) { ok -> if (ok) action() } }
     }
 
     /** Asks for the fingerprint over [activity]; [done] gets whether it was given. */
@@ -145,16 +166,13 @@ fun GuardedByLock(content: @Composable () -> Unit) {
     val prefs by FlorisPreferenceStore
     val on by prefs.clipboard.pysankaFingerprint.observeAsState()
     val until by ClipboardLock.until.collectAsState()
+    LaunchedEffect(until) { ClipboardLock.closeWhenDue(until) }
     if (!on || !ClipboardLock.supported(context) || (until > 0 && ClipboardLock.isOpen())) {
         content()
         return
     }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringRes(R.string.pysanka__clipboard_lock__title), style = MaterialTheme.typography.bodyLarge)
-        Button(onClick = {
-            var c: Context? = context
-            while (c is android.content.ContextWrapper && c !is Activity) c = c.baseContext
-            (c as? Activity)?.let { a -> ClipboardLock.prompt(a, CancellationSignal()) {} }
-        }) { Text(stringRes(R.string.pysanka__clipboard_lock__open)) }
+        Button(onClick = { ClipboardLock.afterUnlock(context) {} }) { Text(stringRes(R.string.pysanka__clipboard_lock__open)) }
     }
 }

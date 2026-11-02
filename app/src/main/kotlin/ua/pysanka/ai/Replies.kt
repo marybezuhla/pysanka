@@ -37,7 +37,7 @@ internal object Replies {
     private val NETWORKS = listOf("X", "Bluesky", "Threads", "LinkedIn")
 
     /** A line that starts a version: «**X:** …», "Bluesky:", "### Threads", "LinkedIn (1300):". */
-    private val HEADER = Regex("""^\s*(?:#{1,4}\s*)?\**\s*([^:*\n]{1,30}?)\s*\**\s*(?::|$)\s*\**\s*(.*)$""")
+    private val HEADER = Regex("""^\s*(?:#{1,4}\s+)?\**\s*([^:*\n]{1,30}?)\s*\**\s*(?::|$)\s*\**\s*(.*)$""")
 
     private fun network(label: String): String? = NETWORKS.firstOrNull { n ->
         // «X (Twitter)», «X / Twitter», but not a sentence that starts with the name («X is …»)
@@ -46,16 +46,23 @@ internal object Replies {
 
     /**
      * The versions of a post: each starts at a line naming its network; the lines after it (a long
-     * post has paragraphs) belong to it until the next network. Text before the first is dropped.
+     * post has paragraphs) belong to it until the next network (each network once; a hashtag
+     * such as «#LinkedIn» is not a heading). Text before the first and after a closing «---» is
+     * dropped.
      */
     fun versions(answer: String): List<Reply> {
         val out = mutableListOf<Pair<String, StringBuilder>>()
+        var ended = false
         for (line in answer.lines()) {
             val m = HEADER.find(line)
-            val name = m?.let { network(it.groupValues[1].trim()) }
-            if (m != null && name != null && (line.contains(':') || line.trimStart().startsWith("#") || line.contains("**"))) {
+            val name = m?.let { network(it.groupValues[1].trim()) }?.takeIf { n -> out.none { it.first == n } }
+            val heading = line.contains(':') || Regex("""^\s*#{1,4}\s""").containsMatchIn(line) || line.contains("**")
+            if (m != null && name != null && heading) {
                 out += name to StringBuilder(m.groupValues[2])
-            } else {
+                ended = false
+            } else if (Regex("""^\s*(?:-{3,}|\*{3,}|_{3,})\s*$""").matches(line)) {
+                ended = true
+            } else if (!ended) {
                 out.lastOrNull()?.second?.append('\n')?.append(line)
             }
         }
