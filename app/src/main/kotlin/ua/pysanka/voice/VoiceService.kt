@@ -36,7 +36,6 @@ class VoiceService : Service() {
 
         const val KEY_TOKEN = "token"
         const val KEY_LANGUAGE = "language"
-        const val KEY_MODEL = "model"
         const val KEY_SAMPLES = "samples"
         const val KEY_TEXT = "text"
         const val KEY_REASON = "reason"
@@ -71,7 +70,7 @@ class VoiceService : Service() {
                 token = data.getLong(KEY_TOKEN)
                 language = data.getString(KEY_LANGUAGE)?.takeIf { it.matches(LANGUAGE) } ?: "auto"
                 // Loaded while the person speaks
-                VoiceEngine.load(this, PinnedModel.whisper(data.getString(KEY_MODEL)))
+                VoiceEngine.load(this, PinnedModel.WHISPER)
             }
             AUDIO -> if (data.getLong(KEY_TOKEN) == token && run == 0L) {
                 val piece = data.getShortArray(KEY_SAMPLES) ?: return

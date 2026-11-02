@@ -129,6 +129,8 @@ class FlorisApplication : Application() {
         ua.pysanka.clipboard.ClipboardLock.watchScreen(this)
         // Pysanka: FlorisBoard's own word list (unencrypted, no screen any more; always off) left from earlier
         runCatching { deleteDatabase(dev.patrickgold.florisboard.ime.dictionary.FlorisUserDictionaryDatabase.DB_FILE_NAME) }
+        // Pysanka: Whisper small is no longer offered (base is faster and steadier): its file goes
+        runCatching { java.io.File(filesDir, "voice_model").deleteRecursively() }
         // Pysanka: a camera shot left by a crash (the camera app may still be writing a fresh one)
         runCatching {
             val now = System.currentTimeMillis()

@@ -201,11 +201,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {
-        /** Which Whisper: "base" (faster; the one to start with) or "small" (more accurate, slower). */
-        val model = string(
-            key = "pysanka__voice__model",
-            default = "base",
-        )
         /** A pause of two seconds after the words ends the dictation, without «Готово». */
         val autoStop = boolean(
             key = "pysanka__voice__auto_stop",

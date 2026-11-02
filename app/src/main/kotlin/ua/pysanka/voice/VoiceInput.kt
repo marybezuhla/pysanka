@@ -61,18 +61,7 @@ object VoiceInput {
     private var onText: ((String) -> Unit)? = null
     private var language = ""
 
-    /**
-     * The Whisper to use: the one chosen in the settings ([PinnedModel.WHISPER] or the faster
-     * [PinnedModel.WHISPER_BASE]), or the other one if only that one is on the phone. Keyboard side only.
-     */
-    fun model(context: Context): PinnedModel {
-        val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
-        val chosen = PinnedModel.whisper(runCatching { prefs.pysankaVoice.model.get() }.getOrDefault("base"))
-        val other = if (chosen === PinnedModel.WHISPER) PinnedModel.WHISPER_BASE else PinnedModel.WHISPER
-        return if (ModelStore(context, chosen).modelFile() == null && ModelStore(context, other).modelFile() != null) other else chosen
-    }
-
-    fun hasModel(context: Context) = ModelStore(context, model(context)).modelFile() != null
+    fun hasModel(context: Context) = ModelStore(context, PinnedModel.WHISPER).modelFile() != null
 
     fun hasMic(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
@@ -103,10 +92,7 @@ object VoiceInput {
         token++
         val t = token
         link = Link(app) { what, data -> if (data.getLong(VoiceService.KEY_TOKEN) == t) answer(what, data) }.also {
-            it.send(VoiceService.START, t) {
-                putString(VoiceService.KEY_LANGUAGE, language)
-                putString(VoiceService.KEY_MODEL, if (model(app) === PinnedModel.WHISPER_BASE) "base" else "small")
-            }
+            it.send(VoiceService.START, t) { putString(VoiceService.KEY_LANGUAGE, language) }
         }
         state.value = State.Listening(0f, 0f)
         val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore

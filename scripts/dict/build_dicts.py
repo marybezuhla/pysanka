@@ -118,6 +118,10 @@ def main() -> None:
         data = build(lang, fw / "content" / "2018" / lang / f"{lang}_full.txt", known)
         (out / f"{lang}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(lang, len(data), list(data)[:15])
+    # Modern words the subtitles lack (slang_<lang>.txt)
+    import slang
+    for lang in ("uk", "en"):
+        print(lang, "slang added", slang.add(out, lang))
 
 
 if __name__ == "__main__":

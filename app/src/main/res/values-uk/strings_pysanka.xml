@@ -325,10 +325,6 @@
     <string name="pysanka__ai__limits">Ліміти соцмереж</string>
     <string name="pysanka__ai__show_count">Лічильник знаків</string>
     <string name="pysanka__ai__show_count_summary">Над плитками ШІ: скільки знаків у тексті; дотик показує ліміти X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
-    <string name="pysanka__voice__model">Модель</string>
-    <string name="pysanka__voice__model_small">Точніша, повільніша: Whisper small (≈190 МБ)</string>
-    <string name="pysanka__voice__model_base">Швидша (рекомендована): Whisper base (≈60 МБ)</string>
-    <string name="pysanka__voice__delete_other">Видалити іншу модель</string>
     <string name="pysanka__ai__thread_no_history">Історія буфера зараз не прийме частини (вона вимкнена, коротша, ще не готова або це приватне поле): копіюйте їх дотиком.</string>
     <string name="pysanka__typing__key_targeting">Точніше влучання в клавіші</string>
     <string name="pysanka__typing__key_targeting_summary">Дотик біля краю між двома літерами йде до тієї, що ймовірніша в слові (клавіші виглядають так само)</string>
