@@ -743,9 +743,9 @@
     <string name="enum__emoji_history_update_strategy__manual_sort_append__description" comment="Enum value description">Не змінює автоматично порядок при використанні емодзі. Нові емодзі додаються в кінець.</string>
     <string name="enum__emoji_skin_tone__default" comment="Enum value label">{emoji} Без тону (жовтий)</string>
     <string name="enum__emoji_skin_tone__light_skin_tone" comment="Enum value label">{emoji} Світлий</string>
-    <string name="enum__emoji_skin_tone__medium_light_skin_tone" comment="Enum value label">{emoji} Середньо-світлий</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone" comment="Enum value label">{emoji} Помірно світлий</string>
     <string name="enum__emoji_skin_tone__medium_skin_tone" comment="Enum value label">{emoji} Середній</string>
-    <string name="enum__emoji_skin_tone__medium_dark_skin_tone" comment="Enum value label">{emoji} Середньо-темний</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone" comment="Enum value label">{emoji} Помірно темний</string>
     <string name="enum__emoji_skin_tone__dark_skin_tone" comment="Enum value label">{emoji} Темний</string>
     <string name="enum__emoji_hair_style__default" comment="Enum value label">Стандартне волосся {emoji}</string>
     <string name="enum__emoji_hair_style__red_hair" comment="Enum value label">Червоне волосся {emoji}</string>

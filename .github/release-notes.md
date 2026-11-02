@@ -1,6 +1,6 @@
 **Писанка 0.21.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія.
 
-- 🎙️ **Диктування без «Готово»:** замовкніть на 2 секунди, і текст зʼявиться сам (вимикається в налаштуваннях диктування). Кільце навколо мікрофона показує, скільки часу лишилось.
+- 🎙️ **Диктування закінчується саме:** замовкніть на 2 секунди, і текст зʼявиться сам (вимикається в налаштуваннях диктування). Кільце навколо мікрофона показує, скільки часу лишилось.
 - ✍️ **Менше зайвих ком і вигадок у диктуванні:** тиша до слів не йде в модель, а Whisper ставить коми за граматикою.
 - 🎙️ **Нова панель диктування:** великий мікрофон у кольорах теми, хвилі за голосом, поруч розділові знаки, ⌫, пробіл, новий рядок і ваші емодзі. Панель лишається для наступного речення, а «Прибрати» стирає щойно вставлене одним дотиком.
 - ✋ **Говорити, утримуючи мікрофон** (Налаштування → Диктування): розпізнається рівно те, що сказано, поки тримаєте.
@@ -16,7 +16,7 @@
 
 **Pysanka 0.21.0**: a private keyboard for Android with no internet access. Test version.
 
-- Dictation without “Done”: stay quiet for 2 seconds and the text appears (can be turned off). A ring around the microphone shows the time left.
+- Dictation finishes by itself: stay quiet for 2 seconds and the text appears (can be turned off). A ring around the microphone shows the time left.
 - Fewer extra commas and made-up words in dictation.
 - A new dictation panel: a big microphone in the theme's colours with waves that follow your voice, punctuation, ⌫, space, new line and your emoji beside it. It stays open for the next sentence, and Remove takes back what just went in.
 - Hold the microphone while speaking (Settings → Dictation): exactly what you say while holding is recognised.

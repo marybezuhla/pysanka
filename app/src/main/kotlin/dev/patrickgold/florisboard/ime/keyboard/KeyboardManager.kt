@@ -342,7 +342,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             val before = editorInstance.activeContent.textBeforeSelection
             val piece = if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text
             // Remembered (in memory, while the panel is open) so «Прибрати» can take it back
-            if (editorInstance.commitText(piece)) voice.inserted.value = piece
+            val at = editorInstance.activeContent.selection.start
+            if (editorInstance.commitText(piece)) {
+                voice.inserted.value = if (at >= 0) ua.pysanka.voice.VoiceInput.Inserted(piece, at + piece.length) else null
+            }
         }
     }
 
