@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -134,7 +135,8 @@ internal fun ThemeRow(night: Boolean, seed: Color, chosen: String, modifier: Mod
 @Composable
 private fun Sample(look: Look, selected: Boolean) {
     val frame = if (selected) BorderStroke(3.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-    Surface(shape = RoundedCornerShape(12.dp), border = frame, color = look.background, modifier = Modifier.fillMaxWidth()) {
+    // A picture only: a screen reader reads the theme's name below it, not the letters
+    Surface(shape = RoundedCornerShape(12.dp), border = frame, color = look.background, modifier = Modifier.fillMaxWidth().clearAndSetSemantics { }) {
         Column(Modifier.padding(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             for (row in listOf("йцук", "фіва")) {
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {

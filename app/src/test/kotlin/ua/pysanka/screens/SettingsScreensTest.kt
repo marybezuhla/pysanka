@@ -75,8 +75,19 @@ class SettingsScreensTest {
                         Modifier.fillMaxSize().padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        // The welcome screen's greeting above the closed blocks
-                        if (!openTyping) dev.patrickgold.florisboard.app.setup.PysankaWelcome()
+                        // The welcome screen as it opens the first time; the settings' blocks otherwise
+                        if (!openTyping) {
+                            dev.patrickgold.florisboard.app.setup.PysankaWelcome()
+                            dev.patrickgold.florisboard.app.setup.SetupStep(
+                                1, "Увімкнути Писанку", done = false, active = true,
+                                text = app.getString(dev.patrickgold.florisboard.R.string.pysanka__setup__enable), button = "Відкрити системні налаштування",
+                            ) {}
+                            dev.patrickgold.florisboard.app.setup.SetupStep(2, "Вибрати Писанку", done = false, active = false, text = "", button = "") {}
+                            Text(app.getString(dev.patrickgold.florisboard.R.string.pysanka__setup__look), color = MaterialTheme.colorScheme.onSurface)
+                            ua.pysanka.settings.ThemeRow(false, androidx.compose.ui.graphics.Color(0xFF6750A4), "kreyda") {}
+                            ua.pysanka.settings.ThemeRow(true, androidx.compose.ui.graphics.Color(0xFF6750A4), "podillia") {}
+                            return@Column
+                        }
                         Block("Мови", "Українська, Англійська (Сполучені Штати)", icon = Icons.Default.Language) {}
                         Block("Набір", "Свайп: увімкнено · підказки: увімкнено · виправлення: увімкнено", icon = Icons.Outlined.Keyboard, startOpen = openTyping) {
                             ToggleRow("Набір проведенням (свайп)", true, "Проводьте пальцем по літерах") {}
@@ -93,9 +104,6 @@ class SettingsScreensTest {
                         Block("ШІ на телефоні", "Модель встановлено", icon = ua.pysanka.ui.AiMark) {
                             LinkRow("Модель і налаштування ШІ", "Завантажити чи видалити модель, «Мій стиль»") {}
                         }
-                        // The themes as the settings and the welcome screen show them
-                        ua.pysanka.settings.ThemeRow(false, androidx.compose.ui.graphics.Color(0xFF6750A4), "kreyda") {}
-                        ua.pysanka.settings.ThemeRow(true, androidx.compose.ui.graphics.Color(0xFF6750A4), "podillia") {}
                     }
                     }
                 }
@@ -114,8 +122,8 @@ class SettingsScreensTest {
         Unit
     }
 
-    @Test fun closed() = shot("settings-01-closed", dark = false, openTyping = false)
-    @Test fun closedDark() = shot("settings-01-closed-dark", dark = true, openTyping = false)
+    @Test fun closed() = shot("welcome-01", dark = false, openTyping = false)
+    @Test fun closedDark() = shot("welcome-01-dark", dark = true, openTyping = false)
     @Test fun typingOpen() = shot("settings-02-typing-open", dark = false, openTyping = true)
     @Test fun typingOpenDark() = shot("settings-02-typing-open-dark", dark = true, openTyping = true)
 }
