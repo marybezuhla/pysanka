@@ -235,6 +235,8 @@ dependencies {
     implementation(projects.lib.compose)
     implementation(projects.lib.kotlin)
     implementation(projects.lib.native)
+    // Pysanka: whisper.cpp for dictation
+    implementation(projects.lib.whisper)
     implementation(projects.lib.snygg)
 
     testImplementation(libs.kotest.assertions.core)
