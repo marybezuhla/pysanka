@@ -38,6 +38,9 @@ jobs:
       - name: Check strings (unescaped apostrophes)
         run: bash .github/check-strings.sh
 
+      - name: Check the built-in Whisper model (exact pinned file)
+        run: cd app/src/main/assets/voice && sha256sum -c SHA256SUMS
+
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
@@ -57,8 +60,6 @@ jobs:
           sudo apt-get install -y -qq ninja-build
 
       - name: Test and build (unsigned)
-        env:
-          VERSION_CODE: ${{ github.run_number }}
         shell: bash
         run: |
           set -o pipefail
@@ -93,11 +94,13 @@ jobs:
         if: always()
         with:
           name: build-log
+          retention-days: 7
           path: log/
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: pysanka-unsigned
+          retention-days: 7
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
   # Saves the build log to the ci-logs branch. Runs no project code.
@@ -140,10 +143,11 @@ jobs:
       - name: Check that signing secrets exist
         id: secrets
         env:
+          KEYSTORE: ${{ secrets.PYSANKA_KEYSTORE }}
           PASS: ${{ secrets.PYSANKA_SIGNING_PASS }}
           STORE: ${{ secrets.PYSANKA_STORE_PASS }}
         run: |
-          if [ -n "$PASS" ] && [ -n "$STORE" ]; then
+          if [ -n "$KEYSTORE" ] && [ -n "$PASS" ] && [ -n "$STORE" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "::error::Signing secrets are not set in the release environment; nothing is published."
@@ -155,7 +159,6 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: |
-            signing
             .github
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
@@ -174,23 +177,27 @@ jobs:
       - name: Sign
         if: steps.secrets.outputs.ready == 'true'
         env:
+          KEYSTORE: ${{ secrets.PYSANKA_KEYSTORE }}
           PASS: ${{ secrets.PYSANKA_SIGNING_PASS }}
           STORE: ${{ secrets.PYSANKA_STORE_PASS }}
         shell: bash
         run: |
           set -e
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          # The key lives only in the release environment's secrets, never in the repository: the
+          # encrypted key file (base64) and its password, decrypted here only for signing
+          printf %s "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/pysanka.jks.enc"
           printf %s "$PASS" > "$RUNNER_TEMP/p"
-          openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in signing/pysanka.jks.enc -out "$RUNNER_TEMP/pysanka.jks" -pass file:"$RUNNER_TEMP/p"
-          rm "$RUNNER_TEMP/p"
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in "$RUNNER_TEMP/pysanka.jks.enc" -out "$RUNNER_TEMP/pysanka.jks" -pass file:"$RUNNER_TEMP/p"
+          rm -f "$RUNNER_TEMP/p" "$RUNNER_TEMP/pysanka.jks.enc"
           mkdir -p out
           "$BT/zipalign" -P 16 -f 4 unsigned/app-release-unsigned.apk "$RUNNER_TEMP/aligned.apk"
           OUT="out/pysanka-$(tr -d '[:space:]' < version.txt).apk"
           "$BT/apksigner" sign --ks "$RUNNER_TEMP/pysanka.jks" --ks-key-alias pysanka \
             --ks-pass env:STORE --key-pass env:STORE --out "$OUT" "$RUNNER_TEMP/aligned.apk"
           rm -f "$RUNNER_TEMP/pysanka.jks"
-          # The certificate must be exactly Pysanka's own (signing/certificate-sha256.txt)
-          CERT="$(tr -d '[:space:]' < signing/certificate-sha256.txt)"
+          # The certificate must be exactly Pysanka's own (.github/signing-certificate-sha256.txt)
+          CERT="$(tr -d '[:space:]' < .github/signing-certificate-sha256.txt)"
           "$BT/apksigner" verify --print-certs "$OUT" | tee certs.txt
           if ! tr -d ' ' < certs.txt | grep -qi "SHA-256digest:$CERT"; then
             echo "::error::Unexpected signing certificate"; exit 1
@@ -198,12 +205,13 @@ jobs:
 
       - name: Remove the decrypted key
         if: always()
-        run: rm -f "$RUNNER_TEMP/pysanka.jks" "$RUNNER_TEMP/p"
+        run: rm -f "$RUNNER_TEMP/pysanka.jks" "$RUNNER_TEMP/pysanka.jks.enc" "$RUNNER_TEMP/p"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: steps.secrets.outputs.ready == 'true'
         with:
           name: pysanka-signed
+          retention-days: 7
           path: out/*.apk
 
   # Publishes the signed APK. Never sees the signing key; uses only GitHub's own gh tool.

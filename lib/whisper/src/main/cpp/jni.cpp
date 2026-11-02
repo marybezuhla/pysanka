@@ -1,5 +1,5 @@
-// Pysanka: the JNI side of dictation (see WhisperNative.kt). Loads a model from a file in Pysanka's
-// own storage and turns 16 kHz mono audio into text. No logging of the text or the audio: whisper's
+// Pysanka: the JNI side of dictation (see WhisperNative.kt). Loads the model that comes with the app
+// (mapped from the APK) and turns 16 kHz mono audio into text. No logging of the text or the audio: whisper's
 // (and ggml's) log output is switched off.
 #include <jni.h>
 #include <atomic>
@@ -30,33 +30,40 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *, void *) {
     return JNI_VERSION_1_6;
 }
 
+// The model from a direct buffer (the file mapped from the APK); whisper copies what it needs
 JNIEXPORT jlong JNICALL
-Java_ua_pysanka_whisper_WhisperNative_init(JNIEnv * env, jobject, jstring path) {
-    const char * p = env->GetStringUTFChars(path, nullptr);
-    if (p == nullptr) return 0;
+Java_ua_pysanka_whisper_WhisperNative_init(JNIEnv * env, jobject, jobject buffer) {
+    void * data = env->GetDirectBufferAddress(buffer);
+    const jlong size = env->GetDirectBufferCapacity(buffer);
+    if (data == nullptr || size <= 0) return 0;
     whisper_context * ctx = nullptr;
     try {
         whisper_context_params params = whisper_context_default_params();
         params.use_gpu = false;
         params.flash_attn = true;
-        ctx = whisper_init_from_file_with_params(p, params);
+        ctx = whisper_init_from_buffer_with_params(data, static_cast<size_t>(size), params);
     } catch (...) {
         ctx = nullptr;
     }
-    env->ReleaseStringUTFChars(path, p);
     return reinterpret_cast<jlong>(ctx);
 }
 
 // The text as UTF-8 bytes (decoded in Kotlin: NewStringUTF would garble emoji and broken bytes)
 JNIEXPORT jbyteArray JNICALL
 Java_ua_pysanka_whisper_WhisperNative_transcribe(
-        JNIEnv * env, jobject, jlong handle, jfloatArray audio, jstring language, jint threads, jlong gen) {
+        JNIEnv * env, jobject, jlong handle, jfloatArray audio, jstring language, jstring prompt, jint threads, jlong gen) {
     auto * ctx = reinterpret_cast<whisper_context *>(handle);
     if (ctx == nullptr) return nullptr;
     const char * lang = env->GetStringUTFChars(language, nullptr);
     if (lang == nullptr) return nullptr;
+    const char * hint = env->GetStringUTFChars(prompt, nullptr);
+    if (hint == nullptr) {
+        env->ReleaseStringUTFChars(language, lang);
+        return nullptr;
+    }
     jfloat * samples = env->GetFloatArrayElements(audio, nullptr);
     if (samples == nullptr) {
+        env->ReleaseStringUTFChars(prompt, hint);
         env->ReleaseStringUTFChars(language, lang);
         return nullptr;
     }
@@ -80,6 +87,9 @@ Java_ua_pysanka_whisper_WhisperNative_transcribe(
         params.print_timestamps = false;
         params.suppress_blank = true;
         params.suppress_nst = true;
+        // Pysanka: a sample of well-punctuated text in the language, so commas follow the grammar
+        // (an empty one: none)
+        params.initial_prompt = hint[0] != '\0' ? hint : nullptr;
         params.abort_callback = abort_requested;
         params.abort_callback_user_data = &run;
         rc = whisper_full(ctx, params, samples, n);
@@ -96,6 +106,7 @@ Java_ua_pysanka_whisper_WhisperNative_transcribe(
         rc = -1;
     }
     env->ReleaseFloatArrayElements(audio, samples, JNI_ABORT);
+    env->ReleaseStringUTFChars(prompt, hint);
     env->ReleaseStringUTFChars(language, lang);
     if (rc != 0) return nullptr;
 

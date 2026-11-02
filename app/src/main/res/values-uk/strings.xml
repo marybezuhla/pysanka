@@ -13,7 +13,7 @@
     <string name="media__tab__emojis" comment="Tab description for emojis in the media UI">Емодзі</string>
     <string name="media__tab__emoticons" comment="Tab description for emoticons in the media UI">Смайлики</string>
     <string name="media__tab__kaomoji" comment="Tab description for kaomoji in the media UI">Каомоджі</string>
-    <string name="prefs__media__emoji_preferred_skin_tone">Бажаний відтінок шкіри емодзі</string>
+    <string name="prefs__media__emoji_preferred_skin_tone">Тон шкіри емодзі</string>
     <string name="prefs__media__emoji_preferred_hair_style">Бажана зачіска емодзі</string>
     <string name="prefs__media__emoji_history__title" comment="Preference group title">Історія емодзі</string>
     <string name="prefs__media__emoji_history_enabled" comment="Preference title">Увімкнути історію емодзі</string>
@@ -741,12 +741,12 @@
     <string name="enum__emoji_history_update_strategy__manual_sort_prepend__description" comment="Enum value description">Не змінює автоматично порядок при використанні емодзі. Нові емодзі додаються на початок.</string>
     <string name="enum__emoji_history_update_strategy__manual_sort_append" comment="Enum value label">Ручне сортування (додавання)</string>
     <string name="enum__emoji_history_update_strategy__manual_sort_append__description" comment="Enum value description">Не змінює автоматично порядок при використанні емодзі. Нові емодзі додаються в кінець.</string>
-    <string name="enum__emoji_skin_tone__default" comment="Enum value label">Типовий колір шкіри {emoji}</string>
-    <string name="enum__emoji_skin_tone__light_skin_tone" comment="Enum value label">{emoji} Світлий тон шкіри</string>
-    <string name="enum__emoji_skin_tone__medium_light_skin_tone" comment="Enum value label">Світлуватий колір шкіри {emoji}</string>
-    <string name="enum__emoji_skin_tone__medium_skin_tone" comment="Enum value label">{emoji} Середній тон шкіри</string>
-    <string name="enum__emoji_skin_tone__medium_dark_skin_tone" comment="Enum value label">{emoji} Середній темний тон шкіри</string>
-    <string name="enum__emoji_skin_tone__dark_skin_tone" comment="Enum value label">{emoji} Темний тон шкіри</string>
+    <string name="enum__emoji_skin_tone__default" comment="Enum value label">{emoji} Без тону (жовтий)</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone" comment="Enum value label">{emoji} Світлий</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone" comment="Enum value label">{emoji} Помірно світлий</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone" comment="Enum value label">{emoji} Середній</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone" comment="Enum value label">{emoji} Помірно темний</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone" comment="Enum value label">{emoji} Темний</string>
     <string name="enum__emoji_hair_style__default" comment="Enum value label">Стандартне волосся {emoji}</string>
     <string name="enum__emoji_hair_style__red_hair" comment="Enum value label">Червоне волосся {emoji}</string>
     <string name="enum__emoji_hair_style__curly_hair" comment="Enum value label">{emoji} Кучеряве волосся</string>

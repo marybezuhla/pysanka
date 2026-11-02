@@ -21,29 +21,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import dev.patrickgold.florisboard.R
 import dev.patrickgold.florisboard.lib.compose.FlorisScreen
 import org.florisboard.lib.compose.stringRes
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.material3.RadioButton
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.key
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.Role
 import dev.patrickgold.jetpref.datastore.model.observeAsState
 import kotlinx.coroutines.launch
-import ua.pysanka.models.ModelImport
-import ua.pysanka.models.ModelStore
-import ua.pysanka.models.PinnedModel
-import ua.pysanka.models.ModelSection
 import ua.pysanka.whisper.WhisperNative
 
 /**
- * Pysanka: dictation in the settings: the model (downloaded by the person, only the exact published
- * file) and the microphone, asked for here, never from the keyboard.
+ * Pysanka: dictation in the settings: how it works, the pause that ends it and the microphone,
+ * asked for here, never from the keyboard (the model comes with the app).
  */
 @Composable
 fun VoiceSettingsScreen() = FlorisScreen {
@@ -72,37 +66,27 @@ fun VoiceSettingsScreen() = FlorisScreen {
             if (!WhisperNative.supported) {
                 Text(stringRes(R.string.pysanka__voice__unsupported), color = MaterialTheme.colorScheme.error)
             }
-            // Which Whisper: the more accurate or the faster
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
             val scope = androidx.compose.runtime.rememberCoroutineScope()
-            val chosen by prefs.pysankaVoice.model.observeAsState()
-            Text(stringRes(R.string.pysanka__voice__model), style = MaterialTheme.typography.titleMedium)
-            for ((name, label) in listOf("small" to R.string.pysanka__voice__model_small, "base" to R.string.pysanka__voice__model_base)) {
-                Row(
-                    Modifier.fillMaxWidth().selectable(selected = chosen == name, role = Role.RadioButton) {
-                        scope.launch { prefs.pysankaVoice.model.set(name) }
-                    },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(selected = chosen == name, onClick = null)
-                    Text(stringRes(label), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 8.dp))
+            Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
+            // A pause ends the dictation by itself (or only «Готово» does)
+            val autoStop by prefs.pysankaVoice.autoStop.observeAsState()
+            val holding by prefs.pysankaVoice.holdToTalk.observeAsState()
+            Row(Modifier.fillMaxWidth().alpha(if (holding) 0.5f else 1f).toggleable(autoStop, enabled = !holding, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.autoStop.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringRes(R.string.pysanka__voice__auto_stop), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringRes(R.string.pysanka__voice__auto_stop_summary), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
+                androidx.compose.material3.Switch(checked = autoStop, onCheckedChange = null, enabled = !holding)
             }
-            val import = if (chosen == "base") ModelImport.VOICE_BASE else ModelImport.VOICE
-            key(import) {
-                ModelSection(import) {
-                    Text(stringRes(R.string.pysanka__voice__how_to_use), style = MaterialTheme.typography.bodyMedium)
+            // Hold to speak: what is recognised is exactly what was said while held
+            val hold by prefs.pysankaVoice.holdToTalk.observeAsState()
+            Row(Modifier.fillMaxWidth().toggleable(hold, role = Role.Switch) { v -> scope.launch { prefs.pysankaVoice.holdToTalk.set(v) } }, verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringRes(R.string.pysanka__voice__hold), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringRes(R.string.pysanka__voice__hold_summary), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                // The other one, if it is still on the phone, can go
-                val other = remember { ModelStore(context, if (import === ModelImport.VOICE) PinnedModel.WHISPER_BASE else PinnedModel.WHISPER) }
-                var otherThere by remember { mutableStateOf(other.modelFile() != null) }
-                // Not while either is being copied in (its temporary file is in its folder)
-                val copying by import.status.collectAsState()
-                if (otherThere && copying.progress == null && !ModelImport.VOICE.running && !ModelImport.VOICE_BASE.running) {
-                    OutlinedButton(onClick = { other.delete(); otherThere = false }) {
-                        Text(stringRes(R.string.pysanka__voice__delete_other))
-                    }
-                }
+                androidx.compose.material3.Switch(checked = hold, onCheckedChange = null)
             }
             HorizontalDivider()
             if (mic) {

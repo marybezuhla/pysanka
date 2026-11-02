@@ -3,6 +3,9 @@ package ua.pysanka.settings
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -128,6 +131,7 @@ fun PysankaHome() {
                 navController.navigate(Routes.Settings.PysankaAi)
             }
             PrefToggle(prefs.pysankaAi.showCount, stringRes(R.string.pysanka__ai__show_count), stringRes(R.string.pysanka__ai__show_count_summary))
+            PanelActionsRow()
             // How many emoji a post written by the AI may have
             val emoji by prefs.pysankaAi.emoji.observeAsState()
             val scope = rememberCoroutineScope()
@@ -145,7 +149,6 @@ fun PysankaHome() {
 
         val voiceState = stringRes(
             when {
-                !ua.pysanka.voice.VoiceInput.hasModel(context) -> R.string.pysanka__settings__voice_missing
                 !ua.pysanka.voice.VoiceInput.hasMic(context) -> R.string.pysanka__settings__voice_no_mic
                 else -> R.string.pysanka__settings__voice_ready
             },
@@ -190,6 +193,45 @@ private fun <T : Any> PrefChoice(
     val scope = rememberCoroutineScope()
     val entries = if (variant == null) enumDisplayEntriesOf(values) else enumDisplayEntriesOf(values, variant)
     ChoiceRow(title, entries.filter { it.key !in except }.map { it.key to it.label }, value, enabled) { scope.launch { pref.set(it) } }
+}
+
+/** Which AI actions the panel shows before "More": a list of all of them with ticks. */
+@Composable
+private fun PanelActionsRow() {
+    val prefs by FlorisPreferenceStore
+    val scope = rememberCoroutineScope()
+    val saved by prefs.pysankaAi.panelActions.observeAsState()
+    val chosen = ua.pysanka.ai.AiPanelActions.chosen(saved)
+    var open by remember { mutableStateOf(false) }
+    val names = chosen.map { stringRes(it.label) }
+    ActionRow(stringRes(R.string.pysanka__ai__panel_actions), names.joinToString(", ")) { open = true }
+    if (open) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { open = false },
+            title = { Text(stringRes(R.string.pysanka__ai__panel_actions)) },
+            text = {
+                Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
+                    Text(stringRes(R.string.pysanka__ai__panel_actions_hint), style = MaterialTheme.typography.bodyMedium)
+                    for (a in ua.pysanka.ai.AiPanelActions.CHOOSABLE) {
+                        val on = a in chosen
+                        Row(
+                            Modifier.fillMaxWidth().toggleable(on, role = androidx.compose.ui.semantics.Role.Checkbox) { v ->
+                                val next = if (v) chosen + a else chosen - a
+                                // At least one stays on the panel
+                                if (next.isNotEmpty()) scope.launch { prefs.pysankaAi.panelActions.set(ua.pysanka.ai.AiPanelActions.save(next)) }
+                            }.padding(vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            androidx.compose.material3.Checkbox(checked = on, onCheckedChange = null)
+                            Spacer(Modifier.width(10.dp))
+                            Text(stringRes(a.label))
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { open = false }) { Text(stringRes(R.string.pysanka__ai__panel_actions_done)) } },
+        )
+    }
 }
 
 @Composable

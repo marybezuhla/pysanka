@@ -20,8 +20,6 @@ import kotlinx.coroutines.launch
 class ModelImport private constructor(val model: PinnedModel) {
     companion object {
         val AI = ModelImport(PinnedModel.GEMMA)
-        val VOICE = ModelImport(PinnedModel.WHISPER)
-        val VOICE_BASE = ModelImport(PinnedModel.WHISPER_BASE)
 
         private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }

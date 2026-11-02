@@ -186,6 +186,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__ai__show_count",
             default = true,
         )
+        /** The actions on the AI panel before "More" (ua.pysanka.ai.AiPanelActions); empty: the usual ones. */
+        val panelActions = string(
+            key = "pysanka__ai__panel_actions",
+            default = "",
+        )
         /** How many emoji a post written by the AI may have: 0 none … 3 many (see AiPrompts.emoji). */
         val emoji = int(
             key = "pysanka__ai__emoji",
@@ -196,10 +201,15 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {
-        /** Which Whisper: "small" (more accurate) or "base" (faster). */
-        val model = string(
-            key = "pysanka__voice__model",
-            default = "small",
+        /** A pause of two seconds after the words ends the dictation, without «Готово». */
+        val autoStop = boolean(
+            key = "pysanka__voice__auto_stop",
+            default = true,
+        )
+        /** The microphone is held while speaking (released: recognised) instead of listening at once. */
+        val holdToTalk = boolean(
+            key = "pysanka__voice__hold_to_talk",
+            default = false,
         )
     }
 
@@ -818,16 +828,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 
     override fun migrate(entry: PreferenceMigrationEntry): PreferenceMigrationEntry {
         return when (entry.key) {
-            // Pysanka: settings whose screens were removed always stay at their defaults, so a value
-            // set in an earlier build can never get stuck where nobody can change it
-            in PYSANKA_FIXED_KEYS -> entry.reset()
-            // Pysanka: the settings speak Ukrainian or English (or follow the phone)
-            "other__settings_language" -> if (entry.rawValue in PYSANKA_SETTINGS_LANGUAGES) entry.keepAsIs() else entry.reset()
-            // Pysanka: "by the time of day" needs times nobody can set any more
-            "theme__mode" -> if (entry.rawValue == "FOLLOW_TIME") entry.reset() else entry.keepAsIs()
-            // Pysanka: a theme that no longer comes with the keyboard (FlorisBoard's) goes back to Pysanka's
-            "theme__day_theme_id", "theme__night_theme_id" ->
-                if (entry.rawValue.substringAfter(':') in PYSANKA_THEMES) entry.keepAsIs() else entry.reset()
 
 
             // Migrate media prefs to emoji prefs
@@ -1000,101 +1000,3 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 /** Pysanka: the settings languages offered ("auto": as the phone). */
 val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
 
-/** Pysanka: keys of settings that have no screen any more (see [AppPrefs.migrate]). */
-/** Pysanka: the themes that come with the keyboard (scripts/themes.py and the two Material You ones). */
-private val PYSANKA_THEMES = setOf(
-    "kreyda", "visk", "nebo", "podillia", "hutsulshchyna", "chornozem", "floris_day_my", "floris_night_my",
-)
-
-private val PYSANKA_FIXED_KEYS = setOf(
-            // The theme editor and the language screens were cut (November 2026)
-            "theme__accent_color",
-            "theme__sunrise_time",
-            "theme__sunset_time",
-            "theme__editor_color_representation",
-            "theme__editor_display_kbd_after_dialogs",
-            "theme__editor_level",
-            "localization__display_language_names_in",
-            "localization__display_keyboard_labels_in_subtype_language",
-            "clipboard__use_internal_clipboard",
-            "clipboard__sync_to_floris",
-            "clipboard__sync_to_system",
-            "clipboard__history_num_grid_columns_portrait",
-            "clipboard__history_num_grid_columns_landscape",
-            "devtools__enabled",
-            "devtools__show_primary_clip",
-            "devtools__show_input_state_overlay",
-            "devtools__show_spelling_overlay",
-            "devtools__show_inline_autofill_overlay",
-            "devtools__show_touch_boundaries",
-            "devtools__show_drag_and_drop_helpers",
-            "devtools__show_window_resize_handle_boundaries",
-            "emoji__history_pinned_update_strategy",
-            "emoji__history_pinned_max_size",
-            "emoji__history_recent_update_strategy",
-            "emoji__history_recent_max_size",
-            "emoji__suggestion_update_history",
-            "emoji__suggestion_candidate_show_name",
-            "emoji__suggestion_query_min_length",
-            "emoji__suggestion_candidate_max_count",
-            "gestures__swipe_distance_threshold",
-            "gestures__swipe_velocity_threshold",
-            "glide__preview_refresh_delay",
-            "input_feedback__audio_feat_key_press",
-            "input_feedback__audio_feat_key_long_press",
-            "input_feedback__audio_feat_key_repeated_action",
-            "input_feedback__audio_feat_gesture_swipe",
-            "input_feedback__audio_feat_gesture_moving_swipe",
-            "input_feedback__haptic_feat_key_press",
-            "input_feedback__haptic_feat_key_long_press",
-            "input_feedback__haptic_feat_key_repeated_action",
-            "input_feedback__haptic_feat_gesture_swipe",
-            "input_feedback__haptic_feat_gesture_moving_swipe",
-            "keyboard__multi_tap_timeout_use_system",
-            "keyboard__multi_tap_timeout",
-            "keyboard__multi_tap_highlight_enabled",
-            "keyboard__flick_key_hint_enabled",
-            "keyboard__flick_key_hint_placement",
-            "other__settings_theme",
-            "other__accent_color",
-            "other__show_app_icon",
-            "smartbar__flip_toggles",
-            "smartbar__shared_actions_auto_expand_collapse",
-            // The FlorisBoard sub-screens were folded into the settings list; what was left out keeps its default
-            "correction__remember_caps_lock_state",
-            "suggestion__enable_floris_user_dictionary",
-            "suggestion__enable_system_user_dictionary",
-            "gestures__delete_key_long_press",
-            "gestures__space_bar_long_press",
-            "gestures__space_bar_swipe_up",
-            "gestures__swipe_down",
-            "gestures__swipe_left",
-            "gestures__swipe_right",
-            "gestures__swipe_up",
-            "glide__immediate_backspace_deletes_word",
-            "glide__show_preview",
-            "glide__trail_fade_duration",
-            "keyboard__capitalization_behavior",
-            "keyboard__font_size_multiplier_landscape",
-            "keyboard__hinted_number_row_enabled",
-            "keyboard__hinted_number_row_mode",
-            "keyboard__hinted_symbols_mode",
-            "keyboard__incognito_indicator",
-            "keyboard__key_spacing_horizontal",
-            "keyboard__key_spacing_vertical",
-            "keyboard__landscape_input_ui_mode",
-            "keyboard__merge_hint_popups_enabled",
-            "keyboard__space_bar_display_mode",
-            "keyboard__utility_key_action",
-            "keyboard__utility_key_enabled",
-            "smartbar__extended_actions_placement",
-            "smartbar__layout",
-            "spelling__language_mode",
-            "spelling__use_contacts",
-            "spelling__use_udm_entries",
-            "suggestion__api30_inline_suggestions_enabled",
-            "suggestion__block_possibly_offensive",
-            "suggestion__display_mode",
-            "clipboard__history_hide_on_paste",
-            "clipboard__history_hide_on_next_text_field",
-)

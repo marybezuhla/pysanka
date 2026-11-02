@@ -159,7 +159,9 @@ internal object AiPrompts {
             "letters mixed up (for example Latin look-alikes in a Cyrillic word, or a digit inside a Cyrillic word such as 6 for б or 3 for з; real numbers stay as they are), " +
             "words joined together or split apart, words broken across lines with a hyphen, lines broken in the " +
             "middle of a sentence. Fix only such errors. Join the lines of one paragraph; keep breaks between " +
-            "paragraphs and list items. Do not rephrase and do not change anything that is already right."
+            "paragraphs and list items. Do not rephrase and do not change anything that is already right. " +
+            "Names, brands and words written in Latin letters stay exactly as they are: never translate or " +
+            "transliterate them, never replace a name with another one."
         AiAction.RUSSISMS -> "The text is in Ukrainian. Replace Russianisms, calques from Russian and surzhyk with " +
             "natural Ukrainian words and phrases (for example «приймати участь» → «брати участь», «на протязі» → " +
             "«протягом», «вірно» → «правильно» where it means correct). Change nothing else."

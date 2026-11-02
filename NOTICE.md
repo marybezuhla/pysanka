@@ -24,6 +24,10 @@ those copies keep that licence.
   licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Changed: limited to the
   most frequent words, rescaled to 1–255, Ukrainian words filtered as below and a few respelled
   (2019 spelling). The lists are under CC BY-SA 4.0; how they are made: `scripts/dict/`.
+- Words added to those lists by theme (slang, military, medicine…): Pysanka's own lists
+  (`scripts/dict/*_uk.txt`, `*_en.txt`, GPL-3.0) and, for medicines and first names, words
+  from dict_uk (https://github.com/brown-uk/dict_uk) with their forms from its uk_UA hunspell
+  dictionary, GPL 3.0+ / LGPL 2.1+ / MPL 1.1, here under GPL-3.0; made by `scripts/dict/themes.py`.
   The Ukrainian filter uses the uk_UA hunspell dictionary (dict_uk project, as in LibreOffice,
   MPL 1.1) only while the lists are made; it is not part of Pysanka.
 
@@ -44,7 +48,9 @@ those copies keep that licence.
 - LiteRT-LM (Google, Apache 2.0) runs the AI editor's model. The Gemma model is not included; the
   owner downloads it under its own terms, and only the exact published file is accepted.
 - `lib/whisper/src/main/cpp/whisper.cpp` — whisper.cpp v1.9.5 and ggml (The ggml authors, MIT, its
-  `LICENSE` alongside), only the files the phone build needs, unchanged. It runs dictation; the Whisper
-  model (OpenAI, MIT) is not included: the owner downloads it, and only the exact published file is accepted.
+  `LICENSE` alongside), only the files the phone build needs, unchanged. It runs dictation.
+- `app/src/main/assets/voice/ggml-base-q5_1.bin` — the Whisper base model (OpenAI, MIT,
+  https://github.com/openai/whisper) in whisper.cpp's 5-bit format, unchanged; source and SHA-256 in
+  `SOURCE.md` and `SHA256SUMS` alongside.
 - ONNX Runtime (Microsoft, MIT), Bouncy Castle (MIT-style),
   SQLCipher for Android (BSD-style) are used as dependencies under their own licences.

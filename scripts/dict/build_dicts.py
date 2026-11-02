@@ -21,7 +21,14 @@ from pathlib import Path
 MAX_WORDS = {"uk": 60000, "en": 50000}
 UKRAINIAN_ONLY = set("іїєґ'")
 # Valid as rare Ukrainian forms, but in subtitles they are the Russian words
-STOP = {"uk": {"мне", "его", "ее", "конечно", "надо"}, "en": set()}
+STOP = {
+    "uk": {
+        "мне", "его", "ее", "конечно", "надо", "с", "он", "но", "ему", "ладно", "потому", "после", "потом",
+        "парень", "парня", "найти", "знать", "поговорить", "вернуться", "смогу", "почти", "нашли",
+        "простите", "будем", "стать", "тем", "ден", "пор", "ко", "во", "ме", "м", "ять", "оно", "одно",
+    },
+    "en": set(),
+}
 # Spelling of 2019 (the subtitles keep the older one): the beginning of a word and its replacement
 RESPELL = {"uk": {"проект": "проєкт"}, "en": {}}
 LETTERS = {
@@ -118,6 +125,7 @@ def main() -> None:
         data = build(lang, fw / "content" / "2018" / lang / f"{lang}_full.txt", known)
         (out / f"{lang}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(lang, len(data), list(data)[:15])
+    # Then the words by theme, added to the same lists: themes.py
 
 
 if __name__ == "__main__":

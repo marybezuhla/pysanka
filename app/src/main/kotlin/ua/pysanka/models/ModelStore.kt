@@ -44,37 +44,6 @@ class PinnedModel(
             sizeGb = 2.6,
             spaceGb = 2.8,
         )
-
-        /** Whisper small (OpenAI, MIT), whisper.cpp's 5-bit file, for dictation: the more accurate. */
-        val WHISPER = PinnedModel(
-            dir = "voice_model",
-            name = "model.bin",
-            downloadName = "ggml-small-q5_1.bin",
-            download = "https://huggingface.co/ggerganov/whisper.cpp/resolve/" +
-                "f281eb45af861ab5e5297d23694b7d46e090c02c/ggml-small-q5_1.bin?download=true",
-            bytes = null,
-            maxBytes = 200_000_000L,
-            sha256 = "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb",
-            sizeGb = 0.19,
-            spaceGb = 0.4,
-        )
-
-        /** The Whisper called [name] ("base"; anything else: small). */
-        fun whisper(name: String?): PinnedModel = if (name == "base") WHISPER_BASE else WHISPER
-
-        /** Whisper base, whisper.cpp's 5-bit file: the faster (for older phones), less accurate. */
-        val WHISPER_BASE = PinnedModel(
-            dir = "voice_model_base",
-            name = "model.bin",
-            downloadName = "ggml-base-q5_1.bin",
-            download = "https://huggingface.co/ggerganov/whisper.cpp/resolve/" +
-                "f281eb45af861ab5e5297d23694b7d46e090c02c/ggml-base-q5_1.bin?download=true",
-            bytes = null,
-            maxBytes = 65_000_000L,
-            sha256 = "422f1ae452ade6f30a004d7e5c6a43195e4433bc370bf23fac9cc591f01a8898",
-            sizeGb = 0.06,
-            spaceGb = 0.3,
-        )
     }
 }
 
