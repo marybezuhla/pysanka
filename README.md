@@ -37,13 +37,13 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 ## Privacy
 
 - No internet permission; the build fails if one appears. Nothing goes to a cloud backup or to another phone.
-- Encrypted clipboard history (SQLCipher + AES-256, hardware-backed key); "Don't keep passwords" is your choice; password-protected clipboard copy and import from FlorisBoard. Coloured and automatic tags. Copied links are cleaned of tracking. Photos and screenshots into the history with one tap, with recognised text. Planned: search, snippets.
-- Word suggestions and careful typo correction in Ukrainian and English; the keyboard learns your words and what usually comes next, kept encrypted and never from password or incognito fields.
-- Optional on-device AI (Gemma 4), as a panel right in the keyboard (✦: actions as tiles, the answer in place of the keys): grammar, style, summaries of long texts (numbers and names checked), translation, Russianisms, list, table, notes, letters, reply options, hiding personal data, «In my style» (from your own encrypted samples); "Share → Pysanka AI" from any app. Planned: social-media tools; on-device dictation (Whisper).
+- Encrypted clipboard history (SQLCipher + AES-256, hardware-backed key); "Don't keep passwords" is your choice; password-protected clipboard copy and import from FlorisBoard. Coloured and automatic tags. Copied links are cleaned of tracking. Photos and screenshots into the history with one tap, with recognised text. Search, templates, and optionally a fingerprint to open the history.
+- Word suggestions and careful typo correction in Ukrainian and English; the keyboard learns your words and what usually comes next, kept encrypted and never from password or incognito fields. More accurate taps on the edge between keys, adapting to how you tap; high-contrast themes.
+- Optional on-device AI (Gemma 4), as a panel right in the keyboard (✦: actions as tiles, the answer in place of the keys): grammar, style, summaries of long texts (numbers and names checked), translation, Russianisms, list, table, notes, letters, reply options, hiding personal data, «In my style» (from your own encrypted samples); "Share → Pysanka AI" from any app. For social media: a character counter, threads, "Calmer", versions for several networks to the clipboard, as many emoji as you choose.
 - On-device text recognition from photos and the camera.
 - Optional on-device dictation (Whisper): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
 
-Today this is a keyboard built on FlorisBoard with simpler settings, stronger privacy and an encrypted clipboard with tags. Features will arrive step by step.
+Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only, and only once you add the models yourself; without them the keyboard works fully.
 
 ## Transparency
 

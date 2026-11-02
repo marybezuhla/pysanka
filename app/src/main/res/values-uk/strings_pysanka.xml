@@ -35,8 +35,8 @@
     <string name="pysanka__tag__manage">Керувати тегами</string>
     <string name="pysanka__tag__create_first">Створити теги в налаштуваннях</string>
     <string name="pysanka__tag__screen_title">Теги буфера</string>
-    <string name="pysanka__tag__screen_summary">Ваші кольорові теги для історії; повзунок над історією показує записи за ними</string>
-    <string name="pysanka__tag__screen_hint">Теги з\'являються в повзунку над історією буфера. Щоб додати чи прибрати тег, довго натисніть запис в історії й оберіть «Теги». Посилання, номери телефонів, коди, адреси пошти й зображення позначаються автоматично.</string>
+    <string name="pysanka__tag__screen_summary">Ваші кольорові теги для історії; стрічка над історією показує записи за ними</string>
+    <string name="pysanka__tag__screen_hint">Теги зʼявляються в стрічці над історією буфера. Щоб додати чи прибрати тег, довго натисніть запис в історії й оберіть «Теги». Посилання, номери телефонів, коди, адреси пошти й зображення позначаються автоматично.</string>
     <string name="pysanka__tag__none_yet">Тегів ще немає.</string>
     <string name="pysanka__tag__add">Додати тег</string>
     <string name="pysanka__tag__name">Назва</string>
@@ -206,7 +206,7 @@
     <string name="pysanka__style__save">Зберегти</string>
     <string name="pysanka__style__remove">Видалити зразок</string>
     <string name="pysanka__style__save_failed">Не вдалося зберегти зразки</string>
-    <string name="pysanka__ai__source_count">Текст, знаків: {n}</string>
+    <string name="pysanka__ai__source_count">Знаків у тексті: {n}</string>
     <string name="pysanka__ai__stop">Зупинити</string>
     <string name="pysanka__ai__cancel">Скасувати</string>
     <string name="pysanka__ai__working_part">Працюю… частина {k} з {n}</string>
@@ -355,4 +355,5 @@
     <string name="pysanka__ai__emoji_one">одне</string>
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">багато</string>
+    <string name="pysanka__templates__not_ready">Історія буфера ще не готова. Спробуйте за мить.</string>
 </resources>

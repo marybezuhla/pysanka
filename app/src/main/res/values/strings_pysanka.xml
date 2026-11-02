@@ -354,4 +354,5 @@
     <string name="pysanka__ai__emoji_one">one</string>
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">many</string>
+    <string name="pysanka__templates__not_ready">The clipboard history is not ready yet. Try again in a moment.</string>
 </resources>

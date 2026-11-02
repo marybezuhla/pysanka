@@ -28,7 +28,6 @@ import android.provider.MediaStore.Images.Media
 import android.provider.OpenableColumns
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.database.getStringOrNull
 import androidx.core.net.toUri
 import androidx.room.AutoMigration
 import androidx.room.ColumnInfo
@@ -114,7 +113,6 @@ data class ClipboardItem @OptIn(ExperimentalSerializationApi::class) constructor
          * So that every item doesn't have to allocate its own array.
          */
         private val TEXT_PLAIN = listOf("text/plain")
-        private val MEDIA_PROJECTION = arrayOf(OpenableColumns.DISPLAY_NAME)
 
         // Pysanka: its own label, not FlorisBoard's (both can be installed)
         const val FLORIS_CLIP_LABEL = "pysanka/clipboard_item"
@@ -161,18 +159,13 @@ data class ClipboardItem @OptIn(ExperimentalSerializationApi::class) constructor
                 if (dataItem.uri.authority == ClipboardMediaProvider.AUTHORITY || !cloneUri) {
                     dataItem.uri
                 } else {
-                    var displayName = when (type) {
+                    // Pysanka: a plain name, not the source's (a screenshot's name tells the app and time)
+                    val ext = data.description.filterMimeTypes("*/*")?.firstOrNull()
+                        ?.let { android.webkit.MimeTypeMap.getSingleton().getExtensionFromMimeType(it) }
+                    val displayName = when (type) {
                         ItemType.IMAGE -> "Image"
                         ItemType.VIDEO -> "Video"
-                    }
-                    tryOrNull {
-                        context.contentResolver.query(dataItem.uri, MEDIA_PROJECTION)?.use { cursor ->
-                            val displayNameColumn = cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
-                            if (cursor.moveToNext()) {
-                                cursor.getStringOrNull(displayNameColumn)?.let { displayName = it }
-                            }
-                        }
-                    }
+                    } + (ext?.let { ".$it" } ?: "")
                     val values = ContentValues(3).apply {
                         put(OpenableColumns.DISPLAY_NAME, displayName)
                         put(ClipboardMediaProvider.Columns.MediaUri, dataItem.uri.toString())
@@ -430,9 +423,6 @@ interface ClipboardFilesDao {
 
     @Query("SELECT * FROM $CLIPBOARD_FILES_TABLE WHERE ${BaseColumns._ID} == (:uid)")
     fun getCursorById(uid: Long) : Cursor
-
-    @Query("SELECT (:projection) FROM $CLIPBOARD_FILES_TABLE WHERE ${BaseColumns._ID} == (:uid)")
-    fun getCurserByIdWithColums(uid: Long, projection: String) : Cursor
 
     @Query("DELETE FROM $CLIPBOARD_FILES_TABLE WHERE ${BaseColumns._ID} == (:id)")
     fun delete(id: Long)
