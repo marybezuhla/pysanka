@@ -30,10 +30,11 @@ plugins {
 val projectMinSdk: String by project
 val projectTargetSdk: String by project
 val projectCompileSdk: String by project
-// Pysanka: the version people see (major.minor.patch) is set by hand in version.txt before each release;
-// versionCode comes from the CI run number, so every build installs over the previous one.
+// Pysanka: the version (major.minor.patch) is set by hand in version.txt before each release, and
+// versionCode comes from it (1.2.4 → 10204), so the same source always builds the same version.
 val projectVersionName = rootProject.file("version.txt").readText().trim()
-val ciVersionCode = (System.getenv("VERSION_CODE") ?: "1").toInt()
+val projectVersionCode = projectVersionName.substringBefore("-").split(".").map { it.toInt() }
+    .let { (major, minor, patch) -> major * 10_000 + minor * 100 + patch }
 val projectVersionNameSuffix = projectVersionName.substringAfter("-", "").let { suffix ->
     if (suffix.isNotEmpty()) {
         "-$suffix"
@@ -57,6 +58,12 @@ kotlin {
 }
 
 android {
+    // Pysanka: no encrypted list of dependencies in the APK (only Google can read it)
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     namespace = "dev.patrickgold.florisboard"
     compileSdk = projectCompileSdk.toInt()
     buildToolsVersion = tools.versions.buildTools.get()
@@ -77,7 +84,7 @@ android {
         applicationId = "ua.pysanka"
         minSdk = projectMinSdk.toInt()
         targetSdk = projectTargetSdk.toInt()
-        versionCode = ciVersionCode
+        versionCode = projectVersionCode
         versionName = projectVersionName.substringBefore("-")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

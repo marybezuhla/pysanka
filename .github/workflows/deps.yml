@@ -46,6 +46,7 @@ jobs:
         if: always()
         with:
           name: verification-metadata
+          retention-days: 7
           path: meta/
 
   publish:
