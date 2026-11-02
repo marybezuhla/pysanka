@@ -1,5 +1,6 @@
 package ua.pysanka.ai
 
+import ua.pysanka.models.ModelStore
 import android.content.Context
 import android.content.Intent
 import android.net.Uri

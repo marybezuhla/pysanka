@@ -226,6 +226,7 @@ private fun ImeInnerWindow() {
                 ImeUiMode.CLIPBOARD -> ProvideActualLayoutDirection { ClipboardInputLayout() }
                 // Pysanka
                 ImeUiMode.PYSANKA_AI -> ProvideActualLayoutDirection { ua.pysanka.ai.AiPanel() }
+                ImeUiMode.PYSANKA_VOICE -> ProvideActualLayoutDirection { ua.pysanka.voice.VoicePanel() }
             }
             ImeSystemUiFloating()
         }
