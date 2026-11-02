@@ -144,9 +144,10 @@ jobs:
         id: secrets
         env:
           KEYSTORE: ${{ secrets.PYSANKA_KEYSTORE }}
+          PASS: ${{ secrets.PYSANKA_SIGNING_PASS }}
           STORE: ${{ secrets.PYSANKA_STORE_PASS }}
         run: |
-          if [ -n "$KEYSTORE" ] && [ -n "$STORE" ]; then
+          if [ -n "$KEYSTORE" ] && [ -n "$PASS" ] && [ -n "$STORE" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "::error::Signing secrets are not set in the release environment; nothing is published."
@@ -177,13 +178,18 @@ jobs:
         if: steps.secrets.outputs.ready == 'true'
         env:
           KEYSTORE: ${{ secrets.PYSANKA_KEYSTORE }}
+          PASS: ${{ secrets.PYSANKA_SIGNING_PASS }}
           STORE: ${{ secrets.PYSANKA_STORE_PASS }}
         shell: bash
         run: |
           set -e
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
-          # The key lives only in the release environment's secrets (base64), never in the repository
-          printf %s "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/pysanka.jks"
+          # The key lives only in the release environment's secrets, never in the repository: the
+          # encrypted key file (base64) and its password, decrypted here only for signing
+          printf %s "$KEYSTORE" | base64 -d > "$RUNNER_TEMP/pysanka.jks.enc"
+          printf %s "$PASS" > "$RUNNER_TEMP/p"
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in "$RUNNER_TEMP/pysanka.jks.enc" -out "$RUNNER_TEMP/pysanka.jks" -pass file:"$RUNNER_TEMP/p"
+          rm -f "$RUNNER_TEMP/p" "$RUNNER_TEMP/pysanka.jks.enc"
           mkdir -p out
           "$BT/zipalign" -P 16 -f 4 unsigned/app-release-unsigned.apk "$RUNNER_TEMP/aligned.apk"
           OUT="out/pysanka-$(tr -d '[:space:]' < version.txt).apk"
@@ -199,7 +205,7 @@ jobs:
 
       - name: Remove the decrypted key
         if: always()
-        run: rm -f "$RUNNER_TEMP/pysanka.jks"
+        run: rm -f "$RUNNER_TEMP/pysanka.jks" "$RUNNER_TEMP/pysanka.jks.enc" "$RUNNER_TEMP/p"
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: steps.secrets.outputs.ready == 'true'
