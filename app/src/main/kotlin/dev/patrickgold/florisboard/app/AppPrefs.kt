@@ -129,6 +129,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__clipboard__history_skip_sensitive",
             default = true,
         )
+        // Pysanka: the history opens only after the fingerprint (or screen lock); see ClipboardLock
+        val pysankaFingerprint = boolean(
+            key = "pysanka__clipboard__fingerprint",
+            default = false,
+        )
         // Pysanka: tracking (utm_…, fbclid, si…) is removed from copied links, in the clipboard itself
         val cleanLinks = boolean(
             key = "pysanka__clipboard__clean_links",

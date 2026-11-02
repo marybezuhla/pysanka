@@ -379,6 +379,12 @@ class ClipboardManager(
         return true
     }
 
+    /** Pysanka: a template (a text typed in the settings), pinned in the history; not the clipboard itself. */
+    fun pysankaAddPinned(text: String) {
+        if (!prefs.clipboard.historyEnabled.get() || text.isBlank()) return
+        insertOrMoveBeginning(ClipboardItem.text(text).copy(isPinned = true))
+    }
+
     /**
      * Adds a new item to the clipboard history (if enabled).
      */

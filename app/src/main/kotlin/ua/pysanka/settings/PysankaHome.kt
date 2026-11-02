@@ -355,8 +355,14 @@ private fun ClipboardSettings() {
         prefs.clipboard.clearPrimaryClipAffectsHistoryIfUnpinned, stringRes(R.string.pysanka__clipboard__clear_affects),
         stringRes(R.string.pysanka__clipboard__clear_affects_summary), enabled = history,
     )
+    if (ua.pysanka.clipboard.ClipboardLock.supported(LocalContext.current)) {
+        PrefToggle(prefs.clipboard.pysankaFingerprint, stringRes(R.string.pysanka__clipboard_lock__setting), stringRes(R.string.pysanka__clipboard_lock__setting_summary))
+    }
     PrefToggle(prefs.clipboard.suggestionEnabled, stringRes(R.string.pysanka__clipboard__suggest), stringRes(R.string.pysanka__clipboard__suggest_summary))
     BlockDivider()
+    LinkRow(stringRes(R.string.pysanka__templates__title), stringRes(R.string.pysanka__templates__summary)) {
+        navController.navigate(Routes.Settings.ClipboardTemplates)
+    }
     LinkRow(stringRes(R.string.pysanka__tag__screen_title), stringRes(R.string.pysanka__tag__screen_summary)) {
         navController.navigate(Routes.Settings.ClipboardTags)
     }

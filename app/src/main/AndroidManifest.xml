@@ -140,6 +140,14 @@
             android:name="ua.pysanka.ai.AiService"
             android:exported="false"
             android:process=":ai" />
+        <!-- Pysanka: asks for the fingerprint before the clipboard history shows (optional) -->
+        <activity
+            android:name="ua.pysanka.clipboard.ClipboardUnlockActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Pysanka: dictation (Whisper) in its own process, so the model never weighs on the keyboard -->
         <service
             android:name="ua.pysanka.voice.VoiceService"
