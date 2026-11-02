@@ -366,17 +366,30 @@ private fun CrashNotifications() {
     fun granted() = androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) ==
         android.content.pm.PackageManager.PERMISSION_GRANTED
     var on by remember { mutableStateOf(granted()) }
+    fun systemSettings() {
+        val intent = android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
+        runCatching { context.startActivity(intent) }
+    }
+    // Back from the system's settings: as they are now
+    val lifecycle = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle
+    androidx.compose.runtime.DisposableEffect(lifecycle) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) on = granted()
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
     val ask = androidx.activity.compose.rememberLauncherForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
-    ) { on = it }
+    ) { given ->
+        on = given
+        // Refused twice, Android no longer asks: the person can still allow it in the system's settings
+        val activity = generateSequence(context) { (it as? android.content.ContextWrapper)?.baseContext }.firstOrNull { it is android.app.Activity } as? android.app.Activity
+        if (!given && activity?.shouldShowRequestPermissionRationale(android.Manifest.permission.POST_NOTIFICATIONS) == false) systemSettings()
+    }
     ToggleRow(stringRes(R.string.pysanka__privacy__crash_notifications), on, stringRes(R.string.pysanka__privacy__crash_notifications_summary)) { want ->
-        if (want) {
-            ask.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            val intent = android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                .putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
-            runCatching { context.startActivity(intent) }
-        }
+        if (want) ask.launch(android.Manifest.permission.POST_NOTIFICATIONS) else systemSettings()
     }
 }
 

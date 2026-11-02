@@ -265,7 +265,7 @@
     <string name="pysanka__emoji__history">Памʼятати недавні емодзі</string>
     <string name="pysanka__emoji__history_summary">Їх видно першими на панелі емодзі</string>
     <string name="pysanka__emoji__suggest">Пропонувати емодзі</string>
-    <string name="pysanka__emoji__suggest_summary">Емодзі в рядку підказок, назви українською</string>
+    <string name="pysanka__emoji__suggest_summary">Емодзі в рядку підказок, назви мовою клавіатури</string>
     <string name="pysanka__emoji__suggest_how">Коли пропонувати емодзі</string>
     <string name="pysanka__emoji__suggest_word">За словом: «кава» → ☕</string>
     <string name="pysanka__emoji__suggest_colon">Лише після «:» (:кава)</string>
@@ -366,7 +366,7 @@
     <string name="pysanka__theme__hutsulshchyna">Гуцульщина</string>
     <string name="pysanka__theme__chornozem">Чорнозем</string>
     <string name="pysanka__theme__system">Кольори системи</string>
-    <string name="pysanka__theme__system_dark">Кольори системи, темна</string>
+    <string name="pysanka__theme__system_dark">Темна, кольори системи</string>
     <string name="pysanka__look__system_colors">Налаштування в кольорах системи</string>
     <string name="pysanka__look__system_colors_summary">Material You замість червоного й кремового Писанки</string>
     <string name="pysanka__welcome__title">Вітаємо в Писанці!</string>
@@ -381,7 +381,7 @@
     <string name="pysanka__shortcuts__text">Текст</string>
     <string name="pysanka__shortcuts__add">Зберегти</string>
     <string name="pysanka__shortcuts__delete">Видалити «{shortcut}»</string>
-    <string name="pysanka__typing__smart_punctuation">Розумні лапки й апостроф</string>
+    <string name="pysanka__typing__smart_punctuation">Типографські лапки й апостроф</string>
     <string name="pysanka__typing__smart_punctuation_summary">«ялинки» й ʼ в українській, “ ” в англійській</string>
     <string name="pysanka__typing__trackpad">Пробіл як трекпад</string>
     <string name="pysanka__typing__trackpad_summary">Утримайте пробіл і ведіть пальцем, курсор рухатиметься за ним</string>

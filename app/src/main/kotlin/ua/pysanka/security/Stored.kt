@@ -69,6 +69,12 @@ fun writeWhole(target: File, block: (OutputStream) -> Unit) {
         throw e
     }
     file.finishWrite(out)
-    // AtomicFile only logs a failed rename; a key file that silently never appeared would be lost
-    check(target.isFile) { "Could not save ${target.name}" }
+    // AtomicFile only logs a failed rename (it leaves the new file behind): a key that never
+    // reached its place would be lost at the next start
+    check(target.isFile && !File(target.path + ".new").exists()) { "Could not save ${target.name}" }
+    // The rename itself on the disk too (AtomicFile syncs the file, not its folder)
+    runCatching {
+        val fd = android.system.Os.open(target.parentFile!!.path, android.system.OsConstants.O_RDONLY, 0)
+        try { android.system.Os.fsync(fd) } finally { android.system.Os.close(fd) }
+    }
 }

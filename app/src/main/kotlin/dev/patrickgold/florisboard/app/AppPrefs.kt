@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import dev.patrickgold.florisboard.app.settings.theme.ColorPreferenceSerializer
-import dev.patrickgold.florisboard.app.setup.NotificationPermissionState
 import dev.patrickgold.florisboard.ime.clipboard.CLIPBOARD_HISTORY_NUM_GRID_COLUMNS_AUTO
 import dev.patrickgold.florisboard.ime.clipboard.ClipboardSyncBehavior
 import dev.patrickgold.florisboard.ime.core.DisplayLanguageNamesIn
@@ -544,10 +543,6 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "internal__version_last_changelog",
             default = VersionName.DEFAULT_RAW,
         )
-        val notificationPermissionState = enum(
-            key = "internal__notification_permission_state",
-            default = NotificationPermissionState.NOT_SET,
-        )
     }
 
     val keyboard = Keyboard()
@@ -830,6 +825,9 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             "other__settings_language" -> if (entry.rawValue in PYSANKA_SETTINGS_LANGUAGES) entry.keepAsIs() else entry.reset()
             // Pysanka: "by the time of day" needs times nobody can set any more
             "theme__mode" -> if (entry.rawValue == "FOLLOW_TIME") entry.reset() else entry.keepAsIs()
+            // Pysanka: a theme that no longer comes with the keyboard (FlorisBoard's) goes back to Pysanka's
+            "theme__day_theme_id", "theme__night_theme_id" ->
+                if (entry.rawValue.substringAfter(':') in PYSANKA_THEMES) entry.keepAsIs() else entry.reset()
 
 
             // Migrate media prefs to emoji prefs
@@ -1003,6 +1001,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
 
 /** Pysanka: keys of settings that have no screen any more (see [AppPrefs.migrate]). */
+/** Pysanka: the themes that come with the keyboard (scripts/themes.py and the two Material You ones). */
+private val PYSANKA_THEMES = setOf(
+    "kreyda", "visk", "nebo", "podillia", "hutsulshchyna", "chornozem", "floris_day_my", "floris_night_my",
+)
+
 private val PYSANKA_FIXED_KEYS = setOf(
             // The theme editor and the language screens were cut (November 2026)
             "theme__accent_color",

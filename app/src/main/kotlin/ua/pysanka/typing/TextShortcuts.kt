@@ -38,7 +38,7 @@ object TextShortcuts {
         field = MutableStateFlow(null)
 
     @Volatile private var byKey: Map<String, String> = emptyMap()
-    private var lastTry = 0L
+    @Volatile private var lastTry = 0L
 
     /** A shortcut as typed: letters and digits only, with no spaces. */
     fun isValidShortcut(s: String) = s.length in 1..MAX_SHORTCUT && s.all { it.isLetterOrDigit() }
@@ -47,13 +47,21 @@ object TextShortcuts {
     fun find(typed: String): String? = if (typed.isEmpty()) null else byKey[typed.lowercase()]
 
     /** Reads them (once the vault is open; a locked phone is tried again after a while). Off the main thread. */
-    @Synchronized
     fun load(context: Context) {
         if (all.value != null) return
-        val now = android.os.SystemClock.elapsedRealtime()
-        if (!ClipboardVault.isOpen() && lastTry != 0L && now - lastTry < 30_000L) return
-        lastTry = now
-        if (!SecureClipboard.ensureOpen(context) || !ClipboardVault.isOpen()) return
+        if (!ClipboardVault.isOpen()) {
+            val now = android.os.SystemClock.elapsedRealtime()
+            if (lastTry != 0L && now - lastTry < 30_000L) return
+            lastTry = now
+            // Outside this object's lock: opening the vault may wipe, and the wipe takes it
+            if (!SecureClipboard.ensureOpen(context) || !ClipboardVault.isOpen()) return
+        }
+        read(context)
+    }
+
+    @Synchronized
+    private fun read(context: Context) {
+        if (all.value != null) return
         val list = runCatching {
             val file = file(context)
             if (!file.isFile) return@runCatching emptyList()
@@ -82,8 +90,7 @@ object TextShortcuts {
         }
     }
 
-    /** Removes them from memory and the phone (also when the vault's key is lost). */
-    @Synchronized
+    /** Removes them from memory and the phone (also when the vault's key is lost; without the lock, see [load]). */
     fun wipe(context: Context) {
         file(context).delete()
         all.value = null
