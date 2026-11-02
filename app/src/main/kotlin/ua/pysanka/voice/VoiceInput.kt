@@ -59,7 +59,15 @@ object VoiceInput {
     private var token = 0L
     private var onText: ((String) -> Unit)? = null
 
-    fun hasModel(context: Context) = ModelStore(context, PinnedModel.WHISPER).modelFile() != null
+    /** The Whisper chosen in the settings ([PinnedModel.WHISPER] or the faster [PinnedModel.WHISPER_BASE]). */
+    fun model(): PinnedModel {
+        val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
+        return model(runCatching { prefs.pysankaVoice.model.get() }.getOrDefault("small"))
+    }
+
+    fun model(name: String?): PinnedModel = if (name == "base") PinnedModel.WHISPER_BASE else PinnedModel.WHISPER
+
+    fun hasModel(context: Context) = ModelStore(context, model()).modelFile() != null
 
     fun hasMic(context: Context) =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
@@ -89,7 +97,10 @@ object VoiceInput {
         token++
         val t = token
         link = Link(app) { what, data -> if (data.getLong(VoiceService.KEY_TOKEN) == t) answer(what, data) }.also {
-            it.send(VoiceService.START, t) { putString(VoiceService.KEY_LANGUAGE, language) }
+            it.send(VoiceService.START, t) {
+                putString(VoiceService.KEY_LANGUAGE, language)
+                putString(VoiceService.KEY_MODEL, if (model() === PinnedModel.WHISPER_BASE) "base" else "small")
+            }
         }
         state.value = State.Listening(0, 0f)
         record(t)
