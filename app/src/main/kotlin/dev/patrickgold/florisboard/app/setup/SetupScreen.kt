@@ -51,6 +51,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -133,7 +134,8 @@ fun SetupScreen() = FlorisScreen {
 /** One step: its number (a tick once done), and while it is the one to do, what to do and its button. */
 @Composable
 internal fun SetupStep(number: Int, title: String, done: Boolean, active: Boolean, text: String, button: String, onClick: () -> Unit) {
-    OutlinedCard(Modifier.fillMaxWidth()) {
+    val doneText = stringRes(R.string.pysanka__setup__done)
+    OutlinedCard(Modifier.fillMaxWidth().semantics { if (done) stateDescription = doneText }) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
             val scheme = MaterialTheme.colorScheme
             Box(

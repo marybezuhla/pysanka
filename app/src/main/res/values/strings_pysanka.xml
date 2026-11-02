@@ -389,4 +389,5 @@
     <string name="pysanka__shortcuts__not_ready">The shortcuts are not open yet. Unlock the phone and come back here.</string>
     <string name="pysanka__shortcuts__not_saved">The shortcuts could not be saved. Please try again.</string>
     <string name="pysanka__shortcuts__full">There are already {n} shortcuts, no more fit. Delete some first.</string>
+    <string name="pysanka__setup__done">done</string>
 </resources>

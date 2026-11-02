@@ -106,11 +106,13 @@ object TextShortcuts {
     /** Removes them from memory and the phone (also when the vault's key is lost; without the lock, see [load]). */
     fun wipe(context: Context) {
         file(context).delete()
+        readFailures = 0
         all.value = null
         byKey = emptyMap()
     }
 
     private fun set(list: List<Shortcut>) {
+        readFailures = 0
         all.value = list
         byKey = list.associate { it.shortcut.lowercase() to it.text }
     }
