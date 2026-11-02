@@ -122,6 +122,7 @@ internal fun ThemeRow(night: Boolean, seed: Color, chosen: String, modifier: Mod
                     names[id.componentId] ?: id.componentId,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(top = 6.dp),
                 )
             }

@@ -178,10 +178,11 @@ internal fun PysankaWelcome() {
         Text(
             stringRes(R.string.pysanka__welcome__title),
             style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.semantics { heading() },
         )
         Spacer(Modifier.height(6.dp))
-        Text(stringRes(R.string.pysanka__welcome__lead), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+        Text(stringRes(R.string.pysanka__welcome__lead), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, textAlign = TextAlign.Center)
         Spacer(Modifier.height(10.dp))
         Text(
             stringRes(R.string.pysanka__welcome__promise),
