@@ -101,8 +101,11 @@ fun ThemePicker(night: Boolean, modifier: Modifier = Modifier) {
 internal fun ThemeRow(night: Boolean, seed: Color, chosen: String, modifier: Modifier = Modifier, onChoose: (ExtensionComponentName) -> Unit) {
     val context = LocalContext.current
     val names = themeNames()
-    val looks = remember(seed, night) {
-        THEMES.filter { it.third == night }.mapNotNull { (id, ext, _) -> look(context, ext, id, seed)?.let { ExtensionComponentName(ext, id) to it } }
+    // Read off the main thread (four small stylesheets)
+    val looks by androidx.compose.runtime.produceState(emptyList<Pair<ExtensionComponentName, Look>>(), seed, night) {
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+            THEMES.filter { it.third == night }.mapNotNull { (id, ext, _) -> look(context, ext, id, seed)?.let { ExtensionComponentName(ext, id) to it } }
+        }
     }
     Row(
         modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),

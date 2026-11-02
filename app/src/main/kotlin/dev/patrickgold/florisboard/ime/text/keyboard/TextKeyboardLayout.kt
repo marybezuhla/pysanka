@@ -653,7 +653,8 @@ private class TextKeyboardLayoutController(
 
     /**
      * Pysanka: the finger on the space bar after a long press moves the cursor, as a trackpad: half a
-     * letter key's width across is one character, a row's height up or down is one line.
+     * letter key's width across is one character, a row's height up or down is one line (in a field
+     * of several lines only).
      */
     private fun pysankaTrackpadMove(event: MotionEvent, pointer: TouchPointer) {
         val x = event.getX(pointer.index)
@@ -672,7 +673,8 @@ private class TextKeyboardLayoutController(
             pointer.pysankaAnchorX += across * stepX
             inputFeedbackController?.gestureMovingSwipe(TextKeyData.SPACE)
         }
-        if (down != 0) {
+        // Up and down only in a field of several lines (elsewhere they move to another field)
+        if (down != 0 && editorInstance.activeInfo.inputAttributes.flagTextMultiLine) {
             keyboardManager.handleArrow(if (down < 0) KeyCode.ARROW_UP else KeyCode.ARROW_DOWN, abs(down))
             pointer.pysankaAnchorY += down * stepY
             inputFeedbackController?.gestureMovingSwipe(TextKeyData.SPACE)
