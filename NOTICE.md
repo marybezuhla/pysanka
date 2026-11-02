@@ -1,17 +1,18 @@
 # Licences and third-party material
 
-## Pysanka: GPL-3.0
+## Pysanka: GPL-3.0-or-later
 
-Pysanka as a whole is distributed under the **GNU General Public License, version 3** (`LICENSE`).
+Pysanka as a whole is distributed under the **GNU General Public License, version 3 or (at your
+option) any later version** (SPDX: `GPL-3.0-or-later`; the text of version 3 is in `LICENSE`).
 Anyone who shares a changed Pysanka must share its source code under the same licence.
 
 | What | Licence |
 |---|---|
-| Pysanka's own code: everything in `ua.pysanka` (`app/src/main/kotlin/ua/pysanka`, its tests and resources such as `strings_pysanka.xml`), the build and CI scripts written for Pysanka, the documents | GPL-3.0 |
-| Pysanka's changes inside FlorisBoard files (marked with `Pysanka:` comments) | GPL-3.0 |
+| Pysanka's own code: everything in `ua.pysanka` (`app/src/main/kotlin/ua/pysanka`, its tests and resources such as `strings_pysanka.xml`), the build and CI scripts written for Pysanka, the documents | GPL-3.0-or-later |
+| Pysanka's changes inside FlorisBoard files (marked with `Pysanka:` comments) | GPL-3.0-or-later |
 | Code that comes from FlorisBoard (files under `dev.patrickgold.florisboard`, `lib/` and others with a FlorisBoard copyright header) | Apache 2.0 (`LICENSE-APACHE`), as before; their headers stay |
 
-Apache 2.0 code may be part of a GPL-3.0 work; the parts from FlorisBoard keep their own licence and
+Apache 2.0 code may be part of a GPL-3.0-or-later work; the parts from FlorisBoard keep their own licence and
 notices, and can still be taken from here under Apache 2.0 (or from FlorisBoard itself). Releases up
 to 0.5.1 (and this repository before November 2026) published Pysanka's own code under Apache 2.0;
 those copies keep that licence.
@@ -25,7 +26,7 @@ those copies keep that licence.
   most frequent words, rescaled to 1–255, Ukrainian words filtered as below and a few respelled
   (2019 spelling). The lists are under CC BY-SA 4.0; how they are made: `scripts/dict/`.
 - Words added to those lists by theme (slang, military, medicine…): Pysanka's own lists
-  (`scripts/dict/*_uk.txt`, `*_en.txt`, GPL-3.0) and, for medicines and first names, words
+  (`scripts/dict/*_uk.txt`, `*_en.txt`, GPL-3.0-or-later) and, for medicines and first names, words
   from dict_uk (https://github.com/brown-uk/dict_uk) with their forms from its uk_UA hunspell
   dictionary, GPL 3.0+ / LGPL 2.1+ / MPL 1.1, here under GPL-3.0; made by `scripts/dict/themes.py`.
   The Ukrainian filter uses the uk_UA hunspell dictionary (dict_uk project, as in LibreOffice,

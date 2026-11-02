@@ -31,8 +31,8 @@
     <string name="pysanka__clipboard_copy__over_limit">Over the history size limit, not added: {n}. To import everything, raise or turn off the limit in clipboard settings and import again.</string>
     <string name="pysanka__clipboard_copy__history_off">Clipboard history is turned off. Turn it on in clipboard settings first.</string>
     <string name="pysanka__about__based_on__title">Based on FlorisBoard</string>
-    <string name="pysanka__about__based_on__summary">Pysanka is built on FlorisBoard by The FlorisBoard Contributors (Apache 2.0); an independent project, Pysanka itself is under GPL-3.0</string>
-    <string name="pysanka__about__license__summary">GPL-3.0: free software with no warranty of any kind. Source code: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__based_on__summary">Pysanka is built on FlorisBoard by The FlorisBoard Contributors (Apache 2.0); an independent project, Pysanka itself is under GPL-3.0 or later</string>
+    <string name="pysanka__about__license__summary">GPL-3.0 or later: free software with no warranty of any kind. Source code: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Data sources</string>
     <string name="pysanka__about__data__summary">Word lists from FrequencyWords (CC BY-SA 4.0) and dict_uk, emoji names from Unicode CLDR, text recognition by PaddleOCR (Apache 2.0), dictation by Whisper (OpenAI, MIT) and whisper.cpp (MIT). The Gemma AI model (Google) is downloaded separately, under the Gemma terms.</string>
     <string name="pysanka__error__copy">Could not copy</string>

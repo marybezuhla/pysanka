@@ -40,7 +40,7 @@
 - **Підпис:** відбиток сертифіката SHA-256 `ea082ca6d8620c201948d08a9572c0b74a75101eb71b2752ceddcb4807d038ce`.
 - **Як створено:** код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням авторки.
 
-Kotlin · Jetpack Compose · C++ (whisper.cpp). Ліцензія GPL-3.0; код із FlorisBoard лишається під Apache 2.0. Що під якою ліцензією: [NOTICE.md](NOTICE.md).
+Kotlin · Jetpack Compose · C++ (whisper.cpp). Ліцензія GPL-3.0 або новіша (GPL-3.0-or-later); код із FlorisBoard лишається під Apache 2.0. Що під якою ліцензією: [NOTICE.md](NOTICE.md).
 
 ---
 
@@ -84,4 +84,4 @@ Only the clipboard moves to another phone (as a password-protected copy). Learne
 - **Signing:** certificate SHA-256 `ea082ca6d8620c201948d08a9572c0b74a75101eb71b2752ceddcb4807d038ce`.
 - **How it was made:** the code was written with AI (Claude, Anthropic) under the author's direction and testing.
 
-Licence: GPL-3.0; code from FlorisBoard stays under Apache 2.0. What is under which licence, and third-party material: [NOTICE.md](NOTICE.md).
+Licence: GPL-3.0 or later (GPL-3.0-or-later); code from FlorisBoard stays under Apache 2.0. What is under which licence, and third-party material: [NOTICE.md](NOTICE.md).

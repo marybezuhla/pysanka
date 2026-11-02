@@ -30,8 +30,8 @@
     <string name="pysanka__clipboard_copy__over_limit">Не вмістилося в обмеження історії, не додано: {n}. Щоб імпортувати все, збільште або вимкніть обмеження в налаштуваннях буфера й імпортуйте знову.</string>
     <string name="pysanka__clipboard_copy__history_off">Історію буфера вимкнено. Спершу ввімкніть її в налаштуваннях буфера.</string>
     <string name="pysanka__about__based_on__title">На основі FlorisBoard</string>
-    <string name="pysanka__about__based_on__summary">Писанку побудовано на FlorisBoard від The FlorisBoard Contributors (Apache 2.0); це незалежний проєкт, сама Писанка під GPL-3.0</string>
-    <string name="pysanka__about__license__summary">GPL-3.0: вільне програмне забезпечення без жодних гарантій. Вихідний код: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__based_on__summary">Писанку побудовано на FlorisBoard від The FlorisBoard Contributors (Apache 2.0); це незалежний проєкт, сама Писанка під GPL-3.0 або новішою</string>
+    <string name="pysanka__about__license__summary">GPL-3.0 або новіша: вільне програмне забезпечення без жодних гарантій. Вихідний код: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Джерела даних</string>
     <string name="pysanka__about__data__summary">Словники з FrequencyWords (CC BY-SA 4.0) і dict_uk, назви емодзі з Unicode CLDR, розпізнавання тексту PaddleOCR (Apache 2.0), диктування Whisper (OpenAI, MIT) і whisper.cpp (MIT). Модель ШІ Gemma (Google) ви завантажуєте окремо, за умовами Gemma.</string>
     <string name="pysanka__error__copy">Не вдалося скопіювати</string>
