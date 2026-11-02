@@ -194,6 +194,8 @@ fun AiPanel(modifier: Modifier = Modifier) {
     // The app being written in, if it limits a post (X, Threads…): shown with the count, and a post
     // longer than that can be shortened to fit or split into a thread
     val app = remember { SocialApps.of(panel.info.packageName) }
+    val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
+    val showCount = remember { prefs.pysankaAi.showCount.get() }
     fun overLimit(t: String) = app != null && SocialApps.length(t) > app.limit
 
     fun runAction(action: AiAction) {
@@ -262,9 +264,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
         available = { (it != AiAction.MY_STYLE || hasStyle) && (it != AiAction.THREAD || overLimit(source)) },
         lead = if (overLimit(source)) listOf(AiAction.THREAD, AiAction.SHORTER) else emptyList(),
         app = app,
-        count = app?.let { a ->
-            stringRes(R.string.pysanka__ai__app_count, "app" to a.name, "n" to SocialApps.length(source), "limit" to a.limit)
-        },
+        length = if (showCount) SocialApps.length(source) else null,
         modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
         headerHeight = FlorisImeSizing.smartbarHeight,
         actions = object : PanelActions {
@@ -334,9 +334,10 @@ internal fun AiPanelView(
     available: (AiAction) -> Boolean = { true },
     /** Shown first (for a post too long for its app: the thread and "shorter"). */
     lead: List<AiAction> = emptyList(),
-    /** The app being written in, if it limits a post, and the post's length there ("X: 312 / 280"). */
+    /** The app being written in, if it limits a post. */
     app: SocialApps.App? = null,
-    count: String? = null,
+    /** The post's length, when the counter is on (see [Counter]). */
+    length: Int? = null,
     modifier: Modifier,
     headerHeight: Dp,
     actions: PanelActions,
@@ -371,7 +372,8 @@ internal fun AiPanelView(
                     Chip(stringRes(R.string.pysanka__ai__open_settings), primary = true) { actions.settings() }
                 }
                 PanelStage.Menu -> Column(Modifier.fillMaxSize()) {
-                    Note(stringRes(note) + count?.let { " · $it" }.orEmpty())
+                    Note(stringRes(note))
+                    if (length != null) Counter(length, app)
                     val shown = if (more) {
                         (lead + MAIN + AiAction.entries).distinct().filter(available)
                     } else {
@@ -614,7 +616,7 @@ private fun Done(
                 append(stringRes(R.string.pysanka__ai__done_in, "s" to s.seconds.toString(), "where" to s.backend))
                 if (app != null && s.action == AiAction.SHORTER) {
                     append(" · ").append(
-                        stringRes(R.string.pysanka__ai__app_count, "app" to app.name, "n" to SocialApps.length(s.text), "limit" to app.limit),
+                        stringRes(R.string.pysanka__ai__length, "n" to SocialApps.length(s.text)) + " · ${app.name}: ${app.limit}",
                     )
                 }
                 if (s.unconfirmed) {
@@ -638,6 +640,29 @@ private fun Done(
             } else {
                 Chip(stringRes(R.string.pysanka__ocr__copy), primary = true, onClick = onCopy)
             }
+        }
+    }
+}
+
+/**
+ * The post's length, and how it fits its app ("312 знаків · X: 280"); a tap shows what every network
+ * allows, so the same post can be checked for another one, and hides it again.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Counter(length: Int, app: SocialApps.App?) {
+    var open by remember { mutableStateOf(false) }
+    fun mark(limit: Int) = if (length <= limit) "✓" else "✗"
+    Column(
+        Modifier.fillMaxWidth().clickable(onClickLabel = stringRes(R.string.pysanka__ai__limits)) { open = !open }
+            .padding(horizontal = 12.dp, vertical = 2.dp),
+    ) {
+        SnyggText(
+            text = stringRes(R.string.pysanka__ai__length, "n" to length) +
+                (app?.let { " · ${it.name}: ${it.limit} ${mark(it.limit)}" } ?: "") + if (open) "  ▴" else "  ▾",
+        )
+        if (open) FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            for (n in SocialApps.NETWORKS) SnyggText(text = "${n.name} ${n.limit} ${mark(n.limit)}")
         }
     }
 }

@@ -315,7 +315,10 @@
     <string name="pysanka__ai__action_hashtags">Hashtags</string>
     <string name="pysanka__ai__action_calmer">Calmer</string>
     <string name="pysanka__ai__action_thread">Split into a thread</string>
-    <string name="pysanka__ai__app_count">{app}: {n} / {limit} characters</string>
     <string name="pysanka__ai__thread_note">Parts: {n}. Tap a part to copy it.</string>
     <string name="pysanka__ai__thread_place">First into the field, the rest to the clipboard</string>
+    <string name="pysanka__ai__length">{n} characters</string>
+    <string name="pysanka__ai__limits">Social media limits</string>
+    <string name="pysanka__ai__show_count">Character counter</string>
+    <string name="pysanka__ai__show_count_summary">Above the AI tiles: how many characters; a tap shows the limits of X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
 </resources>

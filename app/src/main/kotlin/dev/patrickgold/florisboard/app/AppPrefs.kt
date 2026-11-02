@@ -174,6 +174,16 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: the AI panel
+    val pysankaAi = PysankaAi()
+    inner class PysankaAi {
+        /** The post's length (and what each network allows) above the AI panel's tiles. */
+        val showCount = boolean(
+            key = "pysanka__ai__show_count",
+            default = true,
+        )
+    }
+
     val correction = Correction()
     inner class Correction {
         // Pysanka: a clear typing error is corrected when a space follows (careful; see WordSuggester)
