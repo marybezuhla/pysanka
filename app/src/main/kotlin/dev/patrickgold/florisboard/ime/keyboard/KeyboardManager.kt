@@ -311,8 +311,11 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         editorInstance.commitGesture(fixCase(word))
     }
 
-    /** Pysanka: dictation (see [ua.pysanka.voice.VoiceInput]): the panel opens and listens at once. */
-    private fun pysankaDictate() {
+    /**
+     * Pysanka: dictation (see [ua.pysanka.voice.VoiceInput]): the panel opens and listens at once;
+     * its microphone starts the next one.
+     */
+    fun pysankaDictate() {
         val voice = ua.pysanka.voice.VoiceInput
         when (voice.ready(appContext)) {
             ua.pysanka.voice.VoiceInput.Ready.YES -> {

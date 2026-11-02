@@ -2,6 +2,7 @@
 
 - 🎙️ **Диктування без «Готово»:** замовкніть на 2 секунди, і текст зʼявиться сам (вимикається в налаштуваннях диктування). Кільце навколо мікрофона показує, скільки часу лишилось.
 - ✍️ **Менше зайвих ком і вигадок у диктуванні:** тиша до слів не йде в модель, а Whisper ставить коми за граматикою.
+- 🎙️ **Зручна панель диктування:** лишається відкритою для наступного речення; поруч розділові знаки, ⌫, пробіл, новий рядок і ваші емодзі.
 - 🎙️ **Диктування одразу, без завантаження:** модель Whisper base тепер усередині застосунку (тому файл .apk більший, ≈60 МБ). Попередню тестову версію краще видалити й встановити заново.
 - ✦ **Дії на панелі ШІ на ваш вибір:** Налаштування → ШІ → «Дії на панелі ШІ», решта в «Ще».
 - 🔙 **ШІ-редактор не губить відповідь** на «назад»: можна вставити, скопіювати або відкинути. «Виправити розпізнане» не змінює імена й слова латиницею.
@@ -16,6 +17,7 @@
 
 - Dictation without “Done”: stay quiet for 2 seconds and the text appears (can be turned off). A ring around the microphone shows the time left.
 - Fewer extra commas and made-up words in dictation.
+- A handier dictation panel: it stays open for the next sentence, with punctuation, ⌫, space, new line and your emoji beside the microphone.
 - Dictation works right away: the Whisper base model now comes inside the app (so the .apk is ≈60 MB bigger). Best to uninstall the previous test version and install this one.
 - AI panel actions of your choice; the rest under “More”.
 - The AI editor keeps its answer on “back”: insert, copy or discard. “Fix recognised text” leaves names and Latin words alone.
