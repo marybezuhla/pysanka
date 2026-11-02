@@ -167,7 +167,7 @@
     <string name="pysanka__ai__lang_fr">Французька</string>
     <string name="pysanka__ai__lang_es">Іспанська</string>
     <string name="pysanka__ai__about">Gemma 4 (Google) працює повністю на телефоні: нічого нікуди не надсилається, а без моделі клавіатура працює як завжди. Писанка не має доступу до інтернету, тож модель ви завантажуєте самі; приймається лише точний опублікований файл.</string>
-    <string name="pysanka__ai__step1">1. Завантажте {file} (≈2,6 ГБ) у браузері.</string>
+    <string name="pysanka__ai__step1">1. Завантажте {file} (≈{size} ГБ) у браузері.</string>
     <string name="pysanka__ai__download">Завантажити</string>
     <string name="pysanka__ai__copy_link">Копіювати посилання</string>
     <string name="pysanka__ai__no_browser">Немає браузера, щоб відкрити посилання: скопіюйте його.</string>
@@ -176,7 +176,7 @@
     <string name="pysanka__ai__pick">Вибрати файл</string>
     <string name="pysanka__ai__checking">Копіюю й перевіряю… Не закривайте цей екран.</string>
     <string name="pysanka__ai__wrong_file">Це не той файл. Завантажте {file} кнопкою вище.</string>
-    <string name="pysanka__ai__no_space">Замало вільного місця: потрібно приблизно 2,8 ГБ.</string>
+    <string name="pysanka__ai__no_space">Замало вільного місця: потрібно приблизно {size} ГБ.</string>
     <string name="pysanka__ai__import_failed">Не вдалося скопіювати файл. Спробуйте ще раз.</string>
     <string name="pysanka__ai__original_kept">Не вдалося видалити завантажений файл: видаліть його у «Файлах».</string>
     <string name="pysanka__ai__ready">Модель встановлено ({size} МБ).</string>

@@ -354,7 +354,7 @@ private fun ResultView(bitmap: Bitmap, lines: List<OcrLine>, close: () -> Unit) 
             TextButton(onClick = { selected = emptySet() }) { Text(stringRes(R.string.pysanka__ocr__none)) }
             // Pysanka: the AI fixes recognition errors, if the model is installed
             // Not for a password, incognito or no-learning field: nothing from it goes to the AI
-            val aiReady = remember { ua.pysanka.ai.ModelStore(context).modelFile() != null && !PendingInsert.fromPrivateField }
+            val aiReady = remember { ua.pysanka.models.ModelStore(context).modelFile() != null && !PendingInsert.fromPrivateField }
             if (aiReady) {
                 TextButton(enabled = selected.isNotEmpty(), onClick = {
                     ua.pysanka.ai.AiBridge.openFromPhoto(context, selectedText())
