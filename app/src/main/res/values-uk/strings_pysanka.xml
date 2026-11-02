@@ -385,4 +385,6 @@
     <string name="pysanka__typing__smart_punctuation_summary">«ялинки» й ʼ в українській, “ ” в англійській</string>
     <string name="pysanka__typing__trackpad">Пробіл як трекпад</string>
     <string name="pysanka__typing__trackpad_summary">Утримайте пробіл і ведіть пальцем, курсор рухатиметься за ним</string>
+    <string name="pysanka__setup__enable">Android просить окремо ввімкнути кожну нову клавіатуру: відкрийте його налаштування й увімкніть «Писанка». Він попередить, що клавіатура може бачити все, що ви набираєте. Так він каже про будь-яку клавіатуру, а Писанка не має доступу до інтернету, тож нічого нікуди не надішле.</string>
+    <string name="pysanka__setup__look">Вигляд клавіатури. Можна обрати зараз або будь-коли в налаштуваннях.</string>
 </resources>

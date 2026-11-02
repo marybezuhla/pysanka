@@ -384,4 +384,6 @@
     <string name="pysanka__typing__smart_punctuation_summary">«» and ʼ in Ukrainian, “ ” in English</string>
     <string name="pysanka__typing__trackpad">Space bar as a trackpad</string>
     <string name="pysanka__typing__trackpad_summary">Hold the space bar and slide: the cursor follows your finger</string>
+    <string name="pysanka__setup__enable">Android asks for every new keyboard to be turned on separately: open its settings and turn on “Pysanka”. It will warn that a keyboard can see everything you type. It says so about any keyboard; Pysanka has no internet access, so it sends nothing anywhere.</string>
+    <string name="pysanka__setup__look">How the keyboard looks. Choose now or any time in the settings.</string>
 </resources>
