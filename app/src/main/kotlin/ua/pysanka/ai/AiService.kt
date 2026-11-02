@@ -80,7 +80,7 @@ class AiService : Service() {
     private fun start(reply: Messenger, data: Bundle) {
         stop()
         val token = data.getLong(KEY_TOKEN)
-        val action = AiAction.entries.firstOrNull { it.name == data.getString(KEY_ACTION) } ?: return
+        val action = AiAction.entries.firstOrNull { it.name == data.getString(KEY_ACTION) }?.takeIf { it != AiAction.THREAD } ?: return
         val target = AiLanguage.entries.firstOrNull { it.name == data.getString(KEY_TARGET) } ?: AiLanguage.EN
         val text = data.getString(KEY_TEXT).orEmpty()
         // The keyboard checks this too; a text over the limit is never started here

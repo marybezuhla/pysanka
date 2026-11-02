@@ -114,6 +114,7 @@ class AiPanelScreensTest {
                                     intoEmptyField = false,
                                     canExpand = true,
                                     canRun = { true },
+                                    available = { it != AiAction.THREAD },
                                     modifier = Modifier.fillMaxWidth().height(300.dp),
                                     headerHeight = 40.dp,
                                     actions = none,

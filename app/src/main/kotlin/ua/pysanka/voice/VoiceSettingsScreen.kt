@@ -29,6 +29,7 @@ import org.florisboard.lib.compose.stringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.RadioButton
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.Role
@@ -95,7 +96,9 @@ fun VoiceSettingsScreen() = FlorisScreen {
                 // The other one, if it is still on the phone, can go
                 val other = remember { ModelStore(context, if (import === ModelImport.VOICE) PinnedModel.WHISPER_BASE else PinnedModel.WHISPER) }
                 var otherThere by remember { mutableStateOf(other.modelFile() != null) }
-                if (otherThere) {
+                // Not while either is being copied in (its temporary file is in its folder)
+                val copying by import.status.collectAsState()
+                if (otherThere && copying.progress == null && !ModelImport.VOICE.running && !ModelImport.VOICE_BASE.running) {
                     OutlinedButton(onClick = { other.delete(); otherThere = false }) {
                         Text(stringRes(R.string.pysanka__voice__delete_other))
                     }

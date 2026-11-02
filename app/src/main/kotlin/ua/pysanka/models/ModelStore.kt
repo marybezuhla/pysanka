@@ -59,6 +59,9 @@ class PinnedModel(
             spaceGb = 0.4,
         )
 
+        /** The Whisper called [name] ("base"; anything else: small). */
+        fun whisper(name: String?): PinnedModel = if (name == "base") WHISPER_BASE else WHISPER
+
         /** Whisper base, whisper.cpp's 5-bit file: the faster (for older phones), less accurate. */
         val WHISPER_BASE = PinnedModel(
             dir = "voice_model_base",
