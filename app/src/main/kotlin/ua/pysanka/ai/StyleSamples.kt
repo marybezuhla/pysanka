@@ -1,18 +1,14 @@
 package ua.pysanka.ai
 
 import android.content.Context
-import android.os.Build
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
+import ua.pysanka.security.HardwareKey
+import ua.pysanka.security.writeWhole
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.security.KeyStore
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
@@ -21,7 +17,7 @@ import javax.crypto.spec.GCMParameterSpec
  * the way they do ([AiAction.MY_STYLE]). Never collected from typing.
  *
  * Kept in one file sealed with AES-256-GCM by its own key in the phone's hardware keystore
- * (StrongBox when there is one; usable only while the phone is unlocked). Its own key, not the
+ * ([HardwareKey]). Its own key, not the
  * clipboard's, because the AI runs in a separate process that must read the samples without
  * opening the clipboard. A file that cannot be read (a damaged one, or a key the keystore lost)
  * gives no samples; adding new ones replaces it.
@@ -38,7 +34,6 @@ object StyleSamples {
     private const val FORMAT = 1
     private const val GCM_TAG_BITS = 128
     private const val TRANSFORMATION = "AES/GCM/NoPadding"
-    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
     private val AAD = "pysanka/style/v1".toByteArray()
 
     private fun file(context: Context) = File(context.applicationContext.noBackupFilesDir, FILE)
@@ -54,8 +49,7 @@ object StyleSamples {
         require(input.readUnsignedByte() == FORMAT)
         val iv = ByteArray(input.readUnsignedByte()).also { input.readFully(it) }
         val data = input.readBytes()
-        val key = (KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }.getKey(KEY_ALIAS, null) as? SecretKey)
-            ?: return emptyList()
+        val key = (HardwareKey.keyStore().getKey(KEY_ALIAS, null) as? SecretKey) ?: return emptyList()
         val plain = Cipher.getInstance(TRANSFORMATION).apply {
             init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, iv))
             updateAAD(AAD)
@@ -87,12 +81,11 @@ object StyleSamples {
             }
         }.toByteArray()
         val cipher = Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.ENCRYPT_MODE, key())
+            init(Cipher.ENCRYPT_MODE, HardwareKey.getOrCreate(KEY_ALIAS))
             updateAAD(AAD)
         }
         val sealed = try { cipher.doFinal(plain) } finally { plain.fill(0) }
-        val tmp = File(target.parentFile, "$FILE.tmp")
-        FileOutputStream(tmp).use { stream ->
+        writeWhole(target) { stream ->
             DataOutputStream(stream).apply {
                 writeByte(FORMAT)
                 writeByte(cipher.iv.size)
@@ -100,11 +93,6 @@ object StyleSamples {
                 write(sealed)
                 flush()
             }
-            stream.fd.sync()
-        }
-        if (!tmp.renameTo(target)) {
-            tmp.delete()
-            error("Could not save the style samples")
         }
     }
 
@@ -119,30 +107,5 @@ object StyleSamples {
         if (text.length <= MAX_CHARS) return text
         val end = if (Character.isHighSurrogate(text[MAX_CHARS - 1])) MAX_CHARS - 1 else MAX_CHARS
         return text.substring(0, end)
-    }
-
-    private fun key(): SecretKey {
-        val ks = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-        (ks.getKey(KEY_ALIAS, null) as? SecretKey)?.let { return it }
-        fun spec(strongBox: Boolean) = KeyGenParameterSpec.Builder(
-            KEY_ALIAS, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
-        ).apply {
-            setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-            setKeySize(256)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                setUnlockedDeviceRequired(true)
-                if (strongBox) setIsStrongBoxBacked(true)
-            }
-        }.build()
-        val gen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
-        return try {
-            gen.init(spec(strongBox = true))
-            gen.generateKey()
-        } catch (e: java.security.ProviderException) {
-            // No StrongBox on this phone
-            gen.init(spec(strongBox = false))
-            gen.generateKey()
-        }
     }
 }

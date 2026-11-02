@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 import ua.pysanka.clipboard.SecureClipboard
 import ua.pysanka.security.ClipboardVault
 import ua.pysanka.security.SealedFile
+import ua.pysanka.security.writeWhole
 import java.io.File
-import java.io.FileOutputStream
 
 /**
  * Pysanka: the learned words ([PersonalWords]), one encrypted file per language in the app's
@@ -164,17 +164,10 @@ object UserWords {
         dirty.clear()
         for ((language, bytes) in toWrite) {
             runCatching {
-                val target = file(context, language)
-                target.parentFile?.mkdirs()
-                val tmp = File(target.parentFile, "$language.tmp")
-                FileOutputStream(tmp).use { file ->
-                    // The writer closes the file too; a second close does nothing
-                    SealedFile.writer(ClipboardVault.wordsKey(), label(language), file).use { it.write(bytes) }
-                }
-                // On the disk before it replaces the old file (a power cut leaves one of the two whole)
-                FileOutputStream(tmp, true).use { it.fd.sync() }
                 // Whole or not at all: a write cut short never replaces the old file
-                if (!tmp.renameTo(target)) tmp.delete()
+                writeWhole(file(context, language)) { out ->
+                    SealedFile.writer(ClipboardVault.wordsKey(), label(language), out).use { it.write(bytes) }
+                }
             }
             bytes.fill(0)
         }
