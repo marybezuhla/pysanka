@@ -83,6 +83,11 @@ object Routes {
         @Deeplink("settings/pysanka/voice")
         object PysankaVoice
 
+        // Pysanka: templates (pinned texts typed in the settings)
+        @Serializable
+        @Deeplink("settings/clipboard/templates")
+        object ClipboardTemplates
+
         // Pysanka: the owner's clipboard tags
         @Serializable
         @Deeplink("settings/clipboard/tags")
@@ -131,6 +136,7 @@ object Routes {
 
             composableWithDeepLink(Settings.ClipboardCopy::class) { ua.pysanka.clipboard.ClipboardBackupScreen() }
             composableWithDeepLink(Settings.ClipboardTags::class) { ua.pysanka.clipboard.ClipboardTagsScreen() }
+            composableWithDeepLink(Settings.ClipboardTemplates::class) { ua.pysanka.clipboard.ClipboardTemplatesScreen() }
             composableWithDeepLink(Settings.PysankaAi::class) { ua.pysanka.ai.AiSettingsScreen() }
             composableWithDeepLink(Settings.PysankaVoice::class) { ua.pysanka.voice.VoiceSettingsScreen() }
 

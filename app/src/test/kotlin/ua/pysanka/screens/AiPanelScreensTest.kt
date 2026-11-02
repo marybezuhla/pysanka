@@ -68,6 +68,7 @@ class AiPanelScreensTest {
         override fun place(text: String, insert: Boolean) {}
         override fun copy(text: String) {}
         override fun thread(parts: List<String>) {}
+        override fun drafts(texts: List<String>) {}
         override fun change(text: String) {}
         override fun settings() {}
     }

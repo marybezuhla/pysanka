@@ -366,17 +366,31 @@ class ClipboardManager(
      * Pysanka: several texts into the history at once (the first ends up on top), as copied in the
      * field open now (so never kept from a private one); the clipboard itself is not changed.
      */
-    fun pysankaAddToHistory(texts: List<String>): Boolean {
+    fun pysankaAddToHistory(all: List<String>, tag: String? = null): Boolean {
         if (!mayKeep(false, fieldIncognito, fieldPassword)) return false
+        // The encrypted history is not open (yet): saying "done" would lose them
+        if (clipHistoryDb == null) return false
+        val texts = all.distinct()
         // All of them must stay: more than the history keeps would lose the last ones
         if (prefs.clipboard.historySizeLimitEnabled.get() && texts.size > prefs.clipboard.historySizeLimit.get()) return false
         val clean = prefs.clipboard.cleanLinks.get()
         val now = System.currentTimeMillis()
-        texts.asReversed().forEachIndexed { i, t ->
-            val text = if (clean) ua.pysanka.clipboard.LinkCleaner.clean(t) else t
-            insertOrMoveBeginning(ClipboardItem.text(text).copy(creationTimestampMs = now + i))
+        ioScope.launch {
+            // A tag by its name, made if missing (for the drafts of a post)
+            val tagId = tag?.let { name -> runCatching { ensureTags(listOf(name to 0))[name.trim().lowercase()] }.getOrNull() }
+            texts.asReversed().forEachIndexed { i, t ->
+                val text = if (clean) ua.pysanka.clipboard.LinkCleaner.clean(t) else t
+                val item = ClipboardItem.text(text).copy(creationTimestampMs = now + i)
+                insertOrMoveBeginning(if (tagId != null) item.withTagIds(listOf(tagId)) else item)
+            }
         }
         return true
+    }
+
+    /** Pysanka: a template (a text typed in the settings), pinned in the history; not the clipboard itself. */
+    fun pysankaAddPinned(text: String) {
+        if (!prefs.clipboard.historyEnabled.get() || text.isBlank()) return
+        insertOrMoveBeginning(ClipboardItem.text(text).copy(isPinned = true))
     }
 
     /**
@@ -441,8 +455,8 @@ class ClipboardManager(
     private fun moveToTheBeginning(oldItem: ClipboardItem, newItem: ClipboardItem) {
         ioScope.launch {
             clipHistoryDao?.delete(oldItem.id)
-            // Pysanka: copying the same text again keeps its tags
-            clipHistoryDao?.insert(newItem.copy(tags = oldItem.tags))
+            // Pysanka: copying the same text again keeps its tags and adds the new ones
+            clipHistoryDao?.insert(newItem.withTagIds(oldItem.tagIds() + newItem.tagIds()))
         }
     }
 

@@ -326,4 +326,27 @@
     <string name="pysanka__voice__model_base">Faster: Whisper base (about 60 MB), for older phones</string>
     <string name="pysanka__voice__delete_other">Delete the other model</string>
     <string name="pysanka__ai__thread_no_history">The parts will not fit in the clipboard history (it is off or shorter): copy them with a tap.</string>
+    <string name="pysanka__typing__key_targeting">More accurate key taps</string>
+    <string name="pysanka__typing__key_targeting_summary">A tap near the edge between two letters goes to the one more likely in the word (the keys look the same)</string>
+    <string name="pysanka__typing__calibrate">Adapt to my taps</string>
+    <string name="pysanka__typing__calibrate_summary">If you always tap a little low or to one side, the keyboard notices and corrects it (in memory only, not in password or incognito fields)</string>
+    <string name="pysanka__clipboard_lock__prompt">Pysanka clipboard</string>
+    <string name="pysanka__clipboard_lock__title">The clipboard history opens with your fingerprint</string>
+    <string name="pysanka__clipboard_lock__open">Open</string>
+    <string name="pysanka__clipboard_lock__setting">Open the history with a fingerprint</string>
+    <string name="pysanka__clipboard_lock__setting_summary">A fingerprint or screen lock before the clipboard history; open for 5 minutes or until the screen turns off</string>
+    <string name="pysanka__templates__title">Templates</string>
+    <string name="pysanka__templates__summary">Texts pasted with one tap: an address, a signature, a reply</string>
+    <string name="pysanka__templates__about">Type a text you paste often. It is pinned in the clipboard history (encrypted), always on top, pasted with a tap. All pinned texts are listed below.</string>
+    <string name="pysanka__templates__history_off">Templates live in the clipboard history, which is off. Turn the history on in the Clipboard block.</string>
+    <string name="pysanka__templates__new">New template</string>
+    <string name="pysanka__templates__add">Add</string>
+    <string name="pysanka__templates__delete">Delete</string>
+    <string name="pysanka__ai__action_versions">For several networks</string>
+    <string name="pysanka__ai__versions_note">Versions for X, Bluesky, Threads, LinkedIn. A tap puts one in place of the text.</string>
+    <string name="pysanka__ai__versions_drafts">All to the clipboard · Drafts</string>
+    <string name="pysanka__ai__drafts_tag">Drafts</string>
+    <string name="pysanka__ai__drafts_done">The versions are in the clipboard history, tagged “Drafts”</string>
+    <string name="pysanka__clipboard_lock__failed">Could not open the fingerprint screen.</string>
+    <string name="pysanka__ai__drafts_failed">The versions will not fit in the clipboard history (it is off or shorter).</string>
 </resources>

@@ -192,6 +192,8 @@ private fun TypingSettings() {
     PrefToggle(prefs.glide.showTrail, stringRes(R.string.pysanka__typing__glide_trail), enabled = glide)
     PrefToggle(prefs.suggestion.enabled, stringRes(R.string.pysanka__typing__suggestions), stringRes(R.string.pysanka__typing__suggestions_summary))
     PrefToggle(prefs.correction.pysankaAutoCorrect, stringRes(R.string.pysanka__typing__auto_correct), stringRes(R.string.pysanka__typing__auto_correct_summary), enabled = suggestions)
+    PrefToggle(prefs.correction.pysankaKeyTargeting, stringRes(R.string.pysanka__typing__key_targeting), stringRes(R.string.pysanka__typing__key_targeting_summary), enabled = suggestions)
+    PrefToggle(prefs.correction.pysankaCalibrate, stringRes(R.string.pysanka__typing__calibrate), stringRes(R.string.pysanka__typing__calibrate_summary))
     PrefToggle(prefs.correction.pysankaLearnWords, stringRes(R.string.pysanka__typing__learn_words), stringRes(R.string.pysanka__typing__learn_words_summary), enabled = suggestions)
     ActionRow(stringRes(R.string.pysanka__typing__forget_words), stringRes(R.string.pysanka__typing__forget_words_summary)) { confirmForget = true }
     BlockDivider()
@@ -353,8 +355,23 @@ private fun ClipboardSettings() {
         prefs.clipboard.clearPrimaryClipAffectsHistoryIfUnpinned, stringRes(R.string.pysanka__clipboard__clear_affects),
         stringRes(R.string.pysanka__clipboard__clear_affects_summary), enabled = history,
     )
+    if (ua.pysanka.clipboard.ClipboardLock.supported(LocalContext.current)) {
+        // Turning the lock off asks for the fingerprint too, or it would be no lock at all
+        val context = LocalContext.current
+        val locked by prefs.clipboard.pysankaFingerprint.observeAsState()
+        ToggleRow(stringRes(R.string.pysanka__clipboard_lock__setting), locked, stringRes(R.string.pysanka__clipboard_lock__setting_summary)) { on ->
+            if (on) {
+                scope.launch { prefs.clipboard.pysankaFingerprint.set(true) }
+            } else {
+                ua.pysanka.clipboard.ClipboardLock.afterUnlock(context) { scope.launch { prefs.clipboard.pysankaFingerprint.set(false) } }
+            }
+        }
+    }
     PrefToggle(prefs.clipboard.suggestionEnabled, stringRes(R.string.pysanka__clipboard__suggest), stringRes(R.string.pysanka__clipboard__suggest_summary))
     BlockDivider()
+    LinkRow(stringRes(R.string.pysanka__templates__title), stringRes(R.string.pysanka__templates__summary)) {
+        navController.navigate(Routes.Settings.ClipboardTemplates)
+    }
     LinkRow(stringRes(R.string.pysanka__tag__screen_title), stringRes(R.string.pysanka__tag__screen_summary)) {
         navController.navigate(Routes.Settings.ClipboardTags)
     }

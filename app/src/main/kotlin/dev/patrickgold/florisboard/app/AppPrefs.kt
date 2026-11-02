@@ -129,6 +129,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__clipboard__history_skip_sensitive",
             default = true,
         )
+        // Pysanka: the history opens only after the fingerprint (or screen lock); see ClipboardLock
+        val pysankaFingerprint = boolean(
+            key = "pysanka__clipboard__fingerprint",
+            default = false,
+        )
         // Pysanka: tracking (utm_…, fbclid, si…) is removed from copied links, in the clipboard itself
         val cleanLinks = boolean(
             key = "pysanka__clipboard__clean_links",
@@ -199,6 +204,16 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         // Pysanka: a clear typing error is corrected when a space follows (careful; see WordSuggester)
         val pysankaAutoCorrect = boolean(
             key = "pysanka__correction__auto_correct",
+            default = true,
+        )
+        // Pysanka: a tap near the edge between two letters goes to the likelier one (KeyTargeting)
+        val pysankaKeyTargeting = boolean(
+            key = "pysanka__correction__key_targeting",
+            default = true,
+        )
+        // Pysanka: the person's usual tap offset taken off each tap (KeyTargeting.Calibration, memory only)
+        val pysankaCalibrate = boolean(
+            key = "pysanka__correction__calibrate",
             default = true,
         )
         // Pysanka: the person's own words are learned (encrypted, see UserWords), never from private fields

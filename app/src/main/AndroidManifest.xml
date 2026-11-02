@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Pysanka: dictation only; asked for when the person turns it on in the settings -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!-- Pysanka: the optional fingerprint before the clipboard history (an install-time permission
+         for the system's own fingerprint screen; nothing about the fingerprint reaches Pysanka) -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
 
     <!-- Android 11+ only: Define that FlorisBoard requests to see all apps that
           ship with an IME or Spell Check service. This is used to guide the user
@@ -140,6 +143,14 @@
             android:name="ua.pysanka.ai.AiService"
             android:exported="false"
             android:process=":ai" />
+        <!-- Pysanka: asks for the fingerprint before the clipboard history shows (optional) -->
+        <activity
+            android:name="ua.pysanka.clipboard.ClipboardUnlockActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Pysanka: dictation (Whisper) in its own process, so the model never weighs on the keyboard -->
         <service
             android:name="ua.pysanka.voice.VoiceService"

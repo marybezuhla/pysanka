@@ -327,4 +327,27 @@
     <string name="pysanka__voice__model_base">Швидша — Whisper base (≈60 МБ), для старіших телефонів</string>
     <string name="pysanka__voice__delete_other">Видалити іншу модель</string>
     <string name="pysanka__ai__thread_no_history">Частини не вмістяться в історію буфера (вона вимкнена або коротша): копіюйте їх дотиком.</string>
+    <string name="pysanka__typing__key_targeting">Точніше влучання в клавіші</string>
+    <string name="pysanka__typing__key_targeting_summary">Дотик біля краю між двома літерами йде до тієї, що ймовірніша в слові (клавіші виглядають так само)</string>
+    <string name="pysanka__typing__calibrate">Підлаштовуватися під мої дотики</string>
+    <string name="pysanka__typing__calibrate_summary">Якщо ви завжди влучаєте трохи нижче чи вбік, клавіатура це помічає й виправляє (лише в памʼяті, не в полях пароля й інкогніто)</string>
+    <string name="pysanka__clipboard_lock__prompt">Буфер Писанки</string>
+    <string name="pysanka__clipboard_lock__title">Історія буфера відкривається відбитком</string>
+    <string name="pysanka__clipboard_lock__open">Відкрити</string>
+    <string name="pysanka__clipboard_lock__setting">Відкривати історію відбитком</string>
+    <string name="pysanka__clipboard_lock__setting_summary">Відбиток чи блокування екрана перед історією буфера; відкрита — 5 хвилин або доки не згасне екран</string>
+    <string name="pysanka__templates__title">Шаблони</string>
+    <string name="pysanka__templates__summary">Тексти, що вставляються одним дотиком: адреса, підпис, відповідь</string>
+    <string name="pysanka__templates__about">Наберіть текст, який часто вставляєте. Він закріпиться в історії буфера (зашифровано) — завжди зверху, вставляється дотиком. Нижче — усі закріплені тексти.</string>
+    <string name="pysanka__templates__history_off">Шаблони живуть в історії буфера, а її вимкнено. Увімкніть історію в блоці «Буфер».</string>
+    <string name="pysanka__templates__new">Новий шаблон</string>
+    <string name="pysanka__templates__add">Додати</string>
+    <string name="pysanka__templates__delete">Видалити</string>
+    <string name="pysanka__ai__action_versions">Для кількох мереж</string>
+    <string name="pysanka__ai__versions_note">Версії для X, Bluesky, Threads, LinkedIn. Дотик — вставити замість тексту.</string>
+    <string name="pysanka__ai__versions_drafts">Усі в буфер · Чернетки</string>
+    <string name="pysanka__ai__drafts_tag">Чернетки</string>
+    <string name="pysanka__ai__drafts_done">Версії в історії буфера з тегом «Чернетки»</string>
+    <string name="pysanka__clipboard_lock__failed">Не вдалося відкрити екран відбитка.</string>
+    <string name="pysanka__ai__drafts_failed">Версії не вмістяться в історію буфера (вона вимкнена або коротша).</string>
 </resources>
