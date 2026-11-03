@@ -7,7 +7,7 @@
 - ✦ **ШІ на шматок тексту:** без виділення можна обрати речення, абзац або все поле (типово абзац).
 - ⌨️ **Фізична клавіатура** друкує мовою Писанки, а Ctrl+Пробіл чи Alt+Shift перемикає мову.
 - #️⃣ **Хештеги після «#»:** ваші, слова з допису й зі словника. Окремий перемикач у налаштуваннях емодзі.
-- 📱 **Розділена клавіатура** на планшетах і розкладних телефонах, повернутих боком: дві половини під великі пальці.
+- 📱 **Розділена клавіатура** на планшетах і розкладних телефонах: дві половини під великі пальці (на звичайному телефоні за бажанням, «Завжди»).
 - Дрібні правки текстів (вітання, «Зробіть паузу на 2 секунди»).
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
@@ -23,5 +23,5 @@
 - AI on part of the text: with nothing selected, choose the sentence, the paragraph or the whole field (the paragraph at first).
 - A physical keyboard types in Pysanka's language; Ctrl+Space or Alt+Shift switches it.
 - Hashtags after «#»: yours, words from the post and from the dictionary; a separate toggle in the emoji settings.
-- A split keyboard on tablets and foldables held sideways.
+- A split keyboard on tablets and foldables (on a phone if you choose «Always»).
 - Small text fixes.

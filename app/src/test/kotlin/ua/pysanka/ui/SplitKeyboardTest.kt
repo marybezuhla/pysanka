@@ -31,10 +31,13 @@ class SplitKeyboardTest {
     }
 
     @Test fun whenToSplit() {
-        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.AUTO, 1000f, 400f, landscape = true), 0f)
-        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.AUTO, 2000f, 900f, landscape = false), 0f)
-        assertTrue(SplitKeyboard.gap(SplitKeyboard.AUTO, 2000f, 900f, landscape = true) > 0f)
-        assertTrue(SplitKeyboard.gap(SplitKeyboard.ON, 1000f, 400f, landscape = false) > 0f)
-        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.OFF, 2000f, 900f, landscape = true), 0f)
+        // A phone held sideways (900 dp wide, its shorter side 400): whole, unless chosen
+        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.AUTO, 2000f, 900f, smallestDp = 400), 0f)
+        assertTrue(SplitKeyboard.gap(SplitKeyboard.ON, 2000f, 900f, smallestDp = 400) > 0f)
+        // A tablet or an unfolded phone, wide enough
+        assertTrue(SplitKeyboard.gap(SplitKeyboard.AUTO, 2000f, 900f, smallestDp = 700) > 0f)
+        // A tablet held upright, narrow keyboard: whole
+        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.AUTO, 1200f, 600f, smallestDp = 600), 0f)
+        assertEquals(0f, SplitKeyboard.gap(SplitKeyboard.OFF, 2000f, 900f, smallestDp = 700), 0f)
     }
 }

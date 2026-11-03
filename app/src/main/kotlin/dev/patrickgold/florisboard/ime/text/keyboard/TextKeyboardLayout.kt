@@ -229,8 +229,7 @@ fun TextKeyboardLayout(
             keyboard.mode == KeyboardMode.SYMBOLS2
         ) {
             ua.pysanka.ui.SplitKeyboard.gap(
-                splitMode, keyboardWidth, keyboardWidth.toDp().value,
-                configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE,
+                splitMode, keyboardWidth, keyboardWidth.toDp().value, configuration.smallestScreenWidthDp,
             )
         } else 0f
         val desiredKey = remember(

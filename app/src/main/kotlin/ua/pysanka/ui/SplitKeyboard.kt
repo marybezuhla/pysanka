@@ -10,14 +10,21 @@ object SplitKeyboard {
     const val ON = "on"
     const val OFF = "off"
 
-    /** From this wide (dp) the keyboard of a screen held sideways splits by itself. */
+    /** From this wide (dp) the keyboard splits by itself. */
     private const val AUTO_MIN_DP = 640f
 
-    /** How wide the gap is ([widthPx]: the keyboard's width), or 0 for a whole keyboard. */
-    fun gap(mode: String, widthPx: Float, widthDp: Float, landscape: Boolean): Float = when (mode) {
+    /** A tablet or an unfolded phone: its screen's shorter side is at least this (dp). */
+    private const val TABLET_DP = 600
+
+    /**
+     * How wide the gap is ([widthPx]: the keyboard's width), or 0 for a whole keyboard. By itself
+     * ("auto") only on a tablet or an unfolded phone ([smallestDp]: the screen's shorter side), wide
+     * enough; a phone held sideways keeps a whole keyboard unless the person chose "always".
+     */
+    fun gap(mode: String, widthPx: Float, widthDp: Float, smallestDp: Int): Float = when (mode) {
         OFF -> 0f
         ON -> widthPx * gapShare(widthDp)
-        else -> if (landscape && widthDp >= AUTO_MIN_DP) widthPx * gapShare(widthDp) else 0f
+        else -> if (smallestDp >= TABLET_DP && widthDp >= AUTO_MIN_DP) widthPx * gapShare(widthDp) else 0f
     }
 
     /** The wider the screen, the wider the gap: each half about as wide as a phone's keyboard (~360 dp). */

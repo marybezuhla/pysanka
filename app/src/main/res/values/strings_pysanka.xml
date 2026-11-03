@@ -445,7 +445,7 @@
     <string name="pysanka__hashtags__suggest">Suggest hashtags</string>
     <string name="pysanka__hashtags__suggest_summary">After «#»: your hashtags, words from the post and from the dictionary. Your hashtags are remembered encrypted, like learned words.</string>
     <string name="pysanka__look__split">Split keyboard</string>
-    <string name="pysanka__look__split_auto">On a wide screen held sideways (tablet, foldable)</string>
+    <string name="pysanka__look__split_auto">By itself on a tablet or foldable</string>
     <string name="pysanka__look__split_on">Always</string>
     <string name="pysanka__look__split_off">Never</string>
 </resources>

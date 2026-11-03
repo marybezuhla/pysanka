@@ -446,7 +446,7 @@
     <string name="pysanka__hashtags__suggest">Пропонувати хештеги</string>
     <string name="pysanka__hashtags__suggest_summary">Після «#»: ваші хештеги, слова з допису й зі словника. Ваші хештеги запамʼятовуються зашифровано, як вивчені слова.</string>
     <string name="pysanka__look__split">Розділена клавіатура</string>
-    <string name="pysanka__look__split_auto">На широкому екрані, поверненому боком (планшет, розкладний телефон)</string>
+    <string name="pysanka__look__split_auto">Сама на планшеті й розкладному телефоні</string>
     <string name="pysanka__look__split_on">Завжди</string>
     <string name="pysanka__look__split_off">Ніколи</string>
 </resources>
