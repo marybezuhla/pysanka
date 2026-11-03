@@ -72,6 +72,20 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         }
     }
 
+    /**
+     * Pysanka: the likely next letters; at a word's start also the first letters of the words the
+     * person usually writes after the previous one (half and half with the word list's).
+     */
+    private fun pysankaNextLetters(dict: WordSuggester, word: String, content: EditorContent, own: PersonalWords?): Map<Char, Double> {
+        val base = dict.nextLetters(word)
+        if (word.isNotEmpty() || own == null) return base
+        val previous = ua.pysanka.typing.PreviousWord.of(content.textBeforeSelection) ?: return base
+        val firsts = dict.predict(previous, 5, own).mapNotNull { PersonalWords.key(it).firstOrNull() }
+        if (firsts.isEmpty()) return base
+        val habit = firsts.groupingBy { it }.eachCount().mapValues { it.value.toDouble() / firsts.size }
+        return (base.keys + habit.keys).associateWith { 0.5 * (base[it] ?: 0.0) + 0.5 * (habit[it] ?: 0.0) }
+    }
+
     private val editorInstance by context.editorInstance()
     private val keyboardManager by context.keyboardManager()
 
@@ -142,7 +156,7 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
                 // nor while a text-replacement shortcut is being typed (it is no word of the list)
                 !ua.pysanka.typing.TextShortcuts.startsWith(word)
             ) {
-                ua.pysanka.typing.KeyTargeting.Priors(PersonalWords.key(word), dict.nextLetters(word))
+                ua.pysanka.typing.KeyTargeting.Priors(PersonalWords.key(word), pysankaNextLetters(dict, word, content, own))
             } else {
                 null
             },

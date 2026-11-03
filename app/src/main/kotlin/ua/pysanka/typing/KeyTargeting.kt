@@ -90,25 +90,57 @@ object KeyTargeting {
         /** The most it corrects, as a share of a key. */
         private const val MAX = 0.2f
 
+        /**
+         * Besides the offset for the whole keyboard, one for each part of it ([ZONES]: rows and the
+         * left, middle and right thirds), learned a little faster but capped lower: thumbs miss
+         * differently at the far edges and in the bottom row than in the middle.
+         */
+        const val ZONES = 12
+        private const val ZONE_RATE = 0.05f
+        private const val ZONE_MAX = 0.12f
+
         @Volatile var dx = 0f
             private set
         @Volatile var dy = 0f
             private set
+        private val zx = FloatArray(ZONES)
+        private val zy = FloatArray(ZONES)
 
-        /** A tap moved by what was learned ([w], [h]: a letter key's size). */
-        fun adjust(x: Float, y: Float, w: Float, h: Float): Pair<Float, Float> = (x - dx * w) to (y - dy * h)
+        /**
+         * The part of the keyboard a tap at ([x], [y]) is in: 4 bands from the top, 3 across of a
+         * keyboard [width] × [height]; -1 if unknown.
+         */
+        fun zone(x: Float, y: Float, width: Float, height: Float): Int {
+            if (width <= 0f || height <= 0f) return -1
+            val col = (x / width * 3).toInt().coerceIn(0, 2)
+            val row = (y / height * 4).toInt().coerceIn(0, 3)
+            return row * 3 + col
+        }
+
+        /** A tap moved by what was learned ([w], [h]: a letter key's size; [zone]: see [zone]). */
+        fun adjust(x: Float, y: Float, w: Float, h: Float, zone: Int = -1): Pair<Float, Float> {
+            val ox = dx + (if (zone in 0 until ZONES) zx[zone] else 0f)
+            val oy = dy + (if (zone in 0 until ZONES) zy[zone] else 0f)
+            return (x - ox * w) to (y - oy * h)
+        }
 
         /** A tap (already moved by [adjust]) that ended on [t]: what is still off is learned a little. */
-        fun learn(x: Float, y: Float, t: Target) {
+        fun learn(x: Float, y: Float, t: Target, zone: Int = -1) {
             val rx = (x - (t.left + t.right) / 2) / t.width
             val ry = (y - (t.top + t.bottom) / 2) / t.height
             dx = (dx + RATE * rx).coerceIn(-MAX, MAX)
             dy = (dy + RATE * ry).coerceIn(-MAX, MAX)
+            if (zone in 0 until ZONES) {
+                zx[zone] = (zx[zone] + ZONE_RATE * rx).coerceIn(-ZONE_MAX, ZONE_MAX)
+                zy[zone] = (zy[zone] + ZONE_RATE * ry).coerceIn(-ZONE_MAX, ZONE_MAX)
+            }
         }
 
         fun reset() {
             dx = 0f
             dy = 0f
+            zx.fill(0f)
+            zy.fill(0f)
         }
     }
 }

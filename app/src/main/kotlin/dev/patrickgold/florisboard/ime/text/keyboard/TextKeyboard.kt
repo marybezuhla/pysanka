@@ -55,8 +55,9 @@ class TextKeyboard(
         val drawn = getKeyForPos(rawX, rawY) ?: return null
         val drawnLetter = pysankaLetter(drawn) ?: return drawn
         // The person's usual offset taken off, but only ever from one letter to another
+        val zone = calibration.zone(rawX, rawY, pysankaWidth, pysankaHeight)
         val (pointerX, pointerY) = if (calibrate) {
-            drawn.touchBounds.let { calibration.adjust(rawX, rawY, it.right - it.left, it.bottom - it.top) }
+            drawn.touchBounds.let { calibration.adjust(rawX, rawY, it.right - it.left, it.bottom - it.top, zone) }
         } else {
             rawX to rawY
         }
@@ -77,7 +78,7 @@ class TextKeyboard(
         }
         // Learned from taps that went to the key they were on (a tap given to a neighbour says little),
         // and only where the offset was taken off (a raw tap still has it in)
-        if (calibrate && adjusted && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter))
+        if (calibrate && adjusted && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter), zone)
         return if (i == 0) hit else near[i - 1].first
     }
 
