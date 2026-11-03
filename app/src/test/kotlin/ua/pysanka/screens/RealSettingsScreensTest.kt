@@ -38,9 +38,11 @@ import java.io.File
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], qualifiers = "uk-w400dp-h1800dp-xhdpi")
-open class RealSettingsScreensTest {
-    protected open val prefix = "real"
+// Android 8.0, the oldest Pysanka runs on (an API too new for it fails here). Pysanka's app does not
+// start under Robolectric's Android 14 (it hangs before the test), so the pictures are taken on 8.0.
+@Config(sdk = [26], qualifiers = "uk-w360dp-h1800dp-mdpi")
+class RealSettingsScreensTest {
+    private val prefix = "android8"
 
     // A picture that hangs prints where every thread is, then fails (instead of the whole run waiting)
     @get:org.junit.Rule val timeout: org.junit.rules.TestRule = org.junit.rules.TestRule { base, _ ->
@@ -77,7 +79,7 @@ open class RealSettingsScreensTest {
         }
     }
 
-    protected fun shot(name: String, open: Int?, dark: Boolean) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+    private fun shot(name: String, open: Int?, dark: Boolean) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         scenario.onActivity { activity ->
             activity.setContent {
                 org.florisboard.lib.compose.ProvideLocalizedResources(activity, appName = R.string.app_name) {
@@ -116,11 +118,3 @@ open class RealSettingsScreensTest {
     @Test fun voice() = shot("08-voice", R.string.pysanka__voice__title, dark = false)
 }
 
-/**
- * Pysanka: the same screens on Android 8.0, the oldest Pysanka runs on: they must draw there too
- * (an API newer than the phone would fail here).
- */
-@Config(sdk = [26], qualifiers = "uk-w360dp-h1800dp-mdpi")
-class RealSettingsScreensAndroid8Test : RealSettingsScreensTest() {
-    override val prefix = "android8"
-}
