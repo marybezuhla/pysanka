@@ -444,7 +444,7 @@
     <string name="setup__enable_ime__title">Увімкнути Писанку</string>
     <string name="setup__enable_ime__description">Android вимагає окремо ввімкнути кожну нову клавіатуру. Відкрийте системні налаштування <i>Мова та введення</i> й увімкніть там «Писанка».</string>
     <string name="setup__enable_ime__open_settings_btn">Відкрити системні налаштування</string>
-    <string name="setup__select_ime__title">Вибрати Писанку</string>
+    <string name="setup__select_ime__title">Обрати Писанку</string>
     <string name="setup__select_ime__description">Писанку ввімкнено. Щоб нею користуватися, виберіть її у вікні вибору клавіатури.</string>
     <string name="setup__select_ime__switch_keyboard_btn">Перемкнути клавіатуру</string>
     <string name="setup__grant_notification_permission__title">Сповіщення про збої</string>

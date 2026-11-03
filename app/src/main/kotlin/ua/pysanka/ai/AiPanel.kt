@@ -150,7 +150,14 @@ fun AiPanel(modifier: Modifier = Modifier) {
             },
         )
     }
-    var source by remember { mutableStateOf(panel.taken.text) }
+    // With nothing selected: the paragraph around the cursor at first (or the whole field if that is
+    // all there is); the person can choose the sentence or the whole field instead
+    val parts = remember { listOf(TextParts.Part.SENTENCE, TextParts.Part.PARAGRAPH, TextParts.Part.ALL).filter { it in panel.taken.parts } }
+    var part by remember {
+        mutableStateOf(if (TextParts.Part.PARAGRAPH in parts) TextParts.Part.PARAGRAPH else TextParts.Part.ALL)
+    }
+    val taken = panel.taken.narrowed(part)
+    var source by remember { mutableStateOf(taken.text) }
     var target by remember { mutableStateOf(draft?.language ?: AiLanguage.EN) }
     var more by remember { mutableStateOf(false) }
     var loaded by remember { mutableStateOf(false) }
@@ -190,7 +197,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
 
     /** Possible replies go to the message on the clipboard, unless a text is selected or already worked on. */
     fun fromClip(action: AiAction) =
-        action == AiAction.REPLIES && clip != null && panel.taken.mode != AiBridge.Mode.SELECTION && source == panel.taken.text
+        action == AiAction.REPLIES && clip != null && panel.taken.mode != AiBridge.Mode.SELECTION && source == taken.text
 
     fun input(action: AiAction) = if (fromClip(action)) clip!! else source
 
@@ -233,7 +240,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
 
     /** Into the field: in place of the text it came from, or (possible replies, an empty field) at the cursor. */
     fun placeText(text: String, insert: Boolean) {
-        val t = panel.taken
+        val t = taken
         val result = AiBridge.Result(if (insert) AiBridge.Mode.INSERT else t.mode, t.text, text, t.start, t.end)
         // Replaced text is not lost: it goes into the clipboard history first (as any copy made in
         // this field would; never from a private one, and not if the history is off)
@@ -253,7 +260,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
     }
 
     fun openFull(action: AiAction) {
-        val t = panel.taken
+        val t = taken
         // Replies are never put in place of the text
         val taken = if (action == AiAction.REPLIES) t.copy(mode = AiBridge.Mode.INSERT) else t
         // An answer already written goes along, so the work is not lost
@@ -267,15 +274,19 @@ fun AiPanel(modifier: Modifier = Modifier) {
     AiPanelView(
         stage = stage,
         note = when {
-            source != panel.taken.text -> R.string.pysanka__ai__panel_previous
+            source != taken.text -> R.string.pysanka__ai__panel_previous
             source.isBlank() -> R.string.pysanka__ai__panel_empty
-            panel.taken.mode == AiBridge.Mode.SELECTION -> R.string.pysanka__ai__panel_selection
+            parts.size > 1 -> R.string.pysanka__ai__panel_part
+            taken.mode == AiBridge.Mode.SELECTION -> R.string.pysanka__ai__panel_selection
             else -> R.string.pysanka__ai__panel_all
         },
+        // Which part of the field, when there is a choice (and nothing worked on yet)
+        parts = if (source == taken.text) parts else emptyList(),
+        part = part,
         loaded = loaded,
         more = more,
         target = target,
-        intoEmptyField = panel.taken.mode == AiBridge.Mode.INSERT,
+        intoEmptyField = taken.mode == AiBridge.Mode.INSERT,
         canExpand = panel.canExpand,
         canRun = { input(it).isNotBlank() },
         available = { (it != AiAction.MY_STYLE || hasStyle) && (it != AiAction.THREAD || overLimit(source)) },
@@ -286,6 +297,10 @@ fun AiPanel(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth().height(FlorisImeSizing.imeUiHeight()),
         headerHeight = FlorisImeSizing.smartbarHeight,
         actions = object : PanelActions {
+            override fun part(p: TextParts.Part) {
+                part = p
+                source = panel.taken.narrowed(p).text
+            }
             override fun close() = closePanel()
             override fun back() = goBack()
             override fun tile(action: AiAction) {
@@ -332,6 +347,8 @@ fun AiPanel(modifier: Modifier = Modifier) {
 
 /** What the panel's buttons do (see [AiPanel]; the screenshots draw it with none). */
 internal interface PanelActions {
+    /** Which part of the field the AI works on (see [TextParts]). */
+    fun part(p: TextParts.Part) {}
     fun close()
     fun back()
     fun tile(action: AiAction)
@@ -371,6 +388,9 @@ internal fun AiPanelView(
     app: SocialApps.App? = null,
     /** The post's length, when the counter is on (see [Counter]). */
     length: Int? = null,
+    /** Parts of the field to choose from (none: no choice), and the chosen one. */
+    parts: List<TextParts.Part> = emptyList(),
+    part: TextParts.Part = TextParts.Part.ALL,
     modifier: Modifier,
     headerHeight: Dp,
     actions: PanelActions,
@@ -406,6 +426,25 @@ internal fun AiPanelView(
                 }
                 PanelStage.Menu -> Column(Modifier.fillMaxSize()) {
                     Note(stringRes(note))
+                    if (parts.size > 1) {
+                        Row(
+                            Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            for (p in parts) {
+                                Chip(
+                                    stringRes(
+                                        when (p) {
+                                            TextParts.Part.SENTENCE -> R.string.pysanka__ai__part_sentence
+                                            TextParts.Part.PARAGRAPH -> R.string.pysanka__ai__part_paragraph
+                                            TextParts.Part.ALL -> R.string.pysanka__ai__part_all
+                                        },
+                                    ),
+                                    primary = p == part,
+                                ) { actions.part(p) }
+                            }
+                        }
+                    }
                     if (length != null && length > 0) Counter(length, app)
                     val shown = if (more) {
                         (lead + main + AiAction.entries).distinct().filter(available)

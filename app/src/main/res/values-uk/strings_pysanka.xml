@@ -367,7 +367,7 @@
     <string name="pysanka__look__system_colors_summary">Material You замість червоного й кремового Писанки</string>
     <string name="pysanka__welcome__title">Вітаємо в Писанці!</string>
     <string name="pysanka__welcome__lead">Клавіатура, що пише разом із вами й нікому не переказує.</string>
-    <string name="pysanka__welcome__promise">Без інтернету. Ваші слова й буфер зашифровані. ШІ, якщо захочете, працює просто на телефоні.</string>
+    <string name="pysanka__welcome__promise">Без інтернету. Ваші слова й буфер зашифровані. ШІ можна додати за бажанням.</string>
     <string name="pysanka__privacy__crash_notifications">Сповіщати про збої</string>
     <string name="pysanka__privacy__crash_notifications_summary">Якщо Писанка зламається, сповіщення покаже звіт (без тексту, який ви набирали). Android попросить дозволу.</string>
     <string name="pysanka__shortcuts__title">Заміна тексту</string>
@@ -389,7 +389,7 @@
     <string name="pysanka__setup__done">виконано</string>
     <string name="pysanka__voice__speak">Говоріть… {time}</string>
     <string name="pysanka__voice__auto_stop">Закінчувати після паузи</string>
-    <string name="pysanka__voice__auto_stop_summary">Замовкніть на 2 секунди, і текст зʼявиться сам. Дотик до мікрофона закінчує раніше.</string>
+    <string name="pysanka__voice__auto_stop_summary">Зробіть паузу на 2 секунди, і текст зʼявиться сам. Дотик до мікрофона закінчує раніше.</string>
     <string name="pysanka__voice__tap_to_speak">Торкніться мікрофона й говоріть</string>
     <string name="pysanka__voice__speak_again">Диктувати</string>
     <string name="pysanka__voice__keys">До клавіш</string>
@@ -436,4 +436,8 @@
     <string name="pysanka__tag__move_down_named">Перемістити «{name}» нижче</string>
     <string name="pysanka__tag__actions_named">Дії з тегом «{name}»</string>
     <string name="pysanka__setup__finish_after">Стане доступно після двох кроків угорі</string>
+    <string name="pysanka__ai__panel_part">Нічого не виділено: оберіть, з чим працювати</string>
+    <string name="pysanka__ai__part_sentence">Речення</string>
+    <string name="pysanka__ai__part_paragraph">Абзац</string>
+    <string name="pysanka__ai__part_all">Усе поле</string>
 </resources>

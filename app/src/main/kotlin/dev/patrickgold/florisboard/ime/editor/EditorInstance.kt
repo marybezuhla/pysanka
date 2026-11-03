@@ -334,11 +334,15 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
      *
      * @return True on success, false if an error occurred or the input connection is invalid.
      */
-    fun commitCompletion(candidate: SuggestionCandidate): Boolean {
+    fun commitCompletion(candidate: SuggestionCandidate, wholeWord: Boolean = false): Boolean {
         val text = candidate.text.toString()
         if (text.isEmpty() || activeInfo.isRawInputEditor) return false
         val content = activeContent
         return if (content.composing.isValid) {
+            // Pysanka: a suggestion tapped with the cursor inside a word: the word's rest after the
+            // cursor goes too, so it replaces the whole word (a space typed there splits it instead)
+            val tail = if (wholeWord) ua.pysanka.typing.WordTail.length(content.textAfterSelection) else 0
+            if (tail > 0) dev.patrickgold.florisboard.FlorisImeService.currentInputConnection()?.deleteSurroundingText(0, tail)
             phantomSpace.setActive(showComposingRegion = false, candidate = candidate)
             super.finalizeComposingText(text)
         } else {

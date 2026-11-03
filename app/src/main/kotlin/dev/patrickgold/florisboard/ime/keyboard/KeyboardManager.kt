@@ -295,13 +295,14 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
-    fun commitCandidate(candidate: SuggestionCandidate) {
+    /** [wholeWord] (Pysanka): a tapped suggestion replaces the whole word around the cursor. */
+    fun commitCandidate(candidate: SuggestionCandidate, wholeWord: Boolean = false) {
         scope.launch {
             candidate.sourceProvider?.notifySuggestionAccepted(subtypeManager.activeSubtype, candidate)
         }
         when (candidate) {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
-            else -> editorInstance.commitCompletion(candidate)
+            else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
     }
 
@@ -902,7 +903,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     fun pysankaTapCandidate(candidate: SuggestionCandidate) {
         val typed = editorInstance.activeContent.composingText
         pysankaLearn(typed, candidate, insisted = candidate.text.toString() == typed)
-        commitCandidate(candidate)
+        commitCandidate(candidate, wholeWord = true)
     }
 
     override fun onInputKeyUp(data: KeyData) = activeState.batchEdit {
