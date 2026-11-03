@@ -81,6 +81,7 @@ class AiEditorActivity : ComponentActivity() {
         private const val EXTRA_TARGET = "target"
         private const val EXTRA_BACK_TO_PANEL = "back_to_panel"
         private const val EXTRA_EMOJI = "emoji"
+        private const val EXTRA_SYSTEM_COLORS = "system_colors"
 
         /** An answer as it is handed over (to the keyboard on leaving, from the panel on Expand). */
         internal fun bundleOf(output: AiJob.Output, action: AiAction? = null, language: AiLanguage? = null) = Bundle().apply {
@@ -122,10 +123,13 @@ class AiEditorActivity : ComponentActivity() {
             backToPanel: Boolean = false,
         ): Intent {
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
-            val secure = runCatching { prefs.pysankaOcr.blockScreenshots.get() }.getOrDefault(false)
+            // Settings not loaded yet: the safer choice
+            val loaded = runCatching { dev.patrickgold.florisboard.FlorisApplication.getHack().preferenceStoreLoaded.value }.getOrDefault(false)
+            val secure = !loaded || runCatching { prefs.pysankaOcr.blockScreenshots.get() }.getOrDefault(true)
             val language = runCatching { prefs.other.settingsLanguage.get() }.getOrDefault("auto")
             // Read here, in the keyboard's process (the editor's own process does not touch the settings)
             val emoji = runCatching { prefs.pysankaAi.emoji.get() }.getOrDefault(AiPrompts.EMOJI_DEFAULT)
+            val systemColors = runCatching { prefs.other.pysankaSystemColors.get() }.getOrDefault(false)
             return Intent(context, AiEditorActivity::class.java)
                 .putExtra(EXTRA_TEXT, text)
                 .putExtra(EXTRA_PRESET, preset?.name)
@@ -135,6 +139,7 @@ class AiEditorActivity : ComponentActivity() {
                 .putExtra(EXTRA_FOR_RESULT, forResult)
                 .putExtra(EXTRA_LANGUAGE, language)
                 .putExtra(EXTRA_EMOJI, emoji)
+                .putExtra(EXTRA_SYSTEM_COLORS, systemColors)
                 .putExtra(EXTRA_TARGET, target?.name)
                 .putExtra(EXTRA_BACK_TO_PANEL, backToPanel && receiver != null)
                 .apply { if (done != null) putExtra(EXTRA_DONE, bundleOf(done)) }
@@ -164,7 +169,7 @@ class AiEditorActivity : ComponentActivity() {
         backToPanel = intent.getBooleanExtra(EXTRA_BACK_TO_PANEL, false) && receiver != null && !forResult
         setContent {
             ProvideLocalizedResources(ua.pysanka.settings.AppLanguage.context(this, intent.getStringExtra(EXTRA_LANGUAGE)), appName = R.string.app_name) {
-                FlorisAppTheme(theme = AppTheme.AUTO) {
+                FlorisAppTheme(theme = AppTheme.AUTO, systemColorsOverride = intent.getBooleanExtra(EXTRA_SYSTEM_COLORS, false)) {
                     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                         AiEditorScreen(
                             original = text,

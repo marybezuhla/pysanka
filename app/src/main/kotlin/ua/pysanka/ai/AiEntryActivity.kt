@@ -8,6 +8,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withStarted
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Pysanka: the AI editor from other apps, without the keyboard:
@@ -23,6 +28,11 @@ import androidx.activity.result.contract.ActivityResultContracts
  * text here, so only plain text is taken, and no more than [AiJob.HARD_MAX] characters.
  */
 class AiEntryActivity : ComponentActivity() {
+    private companion object {
+        const val SETTINGS_WAIT_MS = 2000L
+        const val KEY_LAUNCHED = "launched"
+    }
+
     private val editor = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
         val text = r.data?.getStringExtra(AiEditorActivity.EXTRA_TEXT)
         if (intent.action == Intent.ACTION_PROCESS_TEXT && r.resultCode == RESULT_OK && text != null) {
@@ -34,7 +44,28 @@ class AiEntryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Already waiting for the editor (this screen was only recreated)
-        if (savedInstanceState != null) return
+        if (savedInstanceState?.getBoolean(KEY_LAUNCHED) == true) return
+        // A cold start loads the settings in the background: wait for them (briefly), so the
+        // editor gets the person's "block screenshots" and language, not the defaults
+        lifecycleScope.launch {
+            withTimeoutOrNull(SETTINGS_WAIT_MS) {
+                dev.patrickgold.florisboard.FlorisApplication.getHack().preferenceStoreLoaded.first { it }
+            }
+            // Only while on screen (a start from the background could be blocked)
+            lifecycle.withStarted { open() }
+        }
+    }
+
+    /** The editor was started: a recreated screen only waits for its answer. */
+    private var launched = false
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_LAUNCHED, launched)
+    }
+
+    private fun open() {
+        launched = true
         val text: String
         val preset: AiAction
         var canReplace = false

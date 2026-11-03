@@ -167,6 +167,9 @@ class PersonalWordsTest : FunSpec({
         PreviousWord.of("Кінець. ") shouldBe null
         PreviousWord.of("привіт,") shouldBe null
         PreviousWord.of("ab12 ") shouldBe null
+        // A line break ends the sentence, also right before the cursor
+        PreviousWord.of("привіт \n") shouldBe null
+        PreviousWord.of("привіт\n", spaceComing = true) shouldBe null
         PreviousWord.of("рядок\n") shouldBe null
         PreviousWord.of("") shouldBe null
         PreviousWord.of("x".repeat(100) + " ") shouldBe null

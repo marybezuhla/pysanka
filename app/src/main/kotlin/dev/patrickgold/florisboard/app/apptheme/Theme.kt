@@ -74,6 +74,8 @@ fun ColorScheme.amoled(): ColorScheme {
 @Composable
 fun FlorisAppTheme(
     theme: AppTheme,
+    // Pysanka: given by a screen in another process, where the settings are not loaded
+    systemColorsOverride: Boolean? = null,
     content: @Composable () -> Unit,
 ) {
     val colors = getColorScheme(theme = theme)
@@ -93,7 +95,8 @@ fun FlorisAppTheme(
     }
 
     val prefs by FlorisPreferenceStore
-    val systemColors by prefs.other.pysankaSystemColors.observeAsState()
+    val systemColorsPref by prefs.other.pysankaSystemColors.observeAsState()
+    val systemColors = systemColorsOverride ?: systemColorsPref
     androidx.compose.runtime.CompositionLocalProvider(LocalSystemColors provides systemColors) {
         MaterialTheme(
             colorScheme = colors,

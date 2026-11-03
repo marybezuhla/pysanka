@@ -75,6 +75,9 @@ fun blockTint(): Tint {
  * One theme of the settings. Closed, it shows its [title] and [summary]; a tap opens it.
  * [padded] false for blocks of rows that draw their own dividers.
  */
+/** Pysanka: the one open block of a screen (by its title), for blocks that open one at a time. */
+val LocalOpenBlock = androidx.compose.runtime.compositionLocalOf<androidx.compose.runtime.MutableState<String?>?> { null }
+
 @Composable
 fun Block(
     title: String,
@@ -84,7 +87,13 @@ fun Block(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val tint = blockTint()
-    var open by rememberSaveable(title) { mutableStateOf(startOpen) }
+    // Among blocks that share one open block (the settings' home), opening one closes the others
+    val shared = LocalOpenBlock.current
+    var ownOpen by rememberSaveable(title) { mutableStateOf(startOpen) }
+    val open = if (shared != null) shared.value == title else ownOpen
+    fun toggle() {
+        if (shared != null) shared.value = if (open) null else title else ownOpen = !ownOpen
+    }
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, tint.container),
@@ -100,7 +109,7 @@ fun Block(
                     heading()
                     stateDescription = stateText
                 }
-                .clickable(role = Role.Button) { open = !open }
+                .clickable(role = Role.Button) { toggle() }
                 .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -152,11 +161,11 @@ fun LinkRow(title: String, hint: String? = null, onClick: () -> Unit) {
 
 /** A row that does something at once (with its own confirmation where needed). */
 @Composable
-fun ActionRow(title: String, hint: String? = null, onClick: () -> Unit) {
+fun ActionRow(title: String, hint: String? = null, enabled: Boolean = true, onClick: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(enabled = enabled, onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-    ) { RowText(title, hint, true, Modifier.weight(1f)) }
+    ) { RowText(title, hint, enabled, Modifier.weight(1f)) }
 }
 
 /** One of a few choices: the name and the chosen one; a tap shows them all. */

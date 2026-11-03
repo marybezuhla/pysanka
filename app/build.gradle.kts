@@ -200,7 +200,6 @@ dependencies {
     // androidTestImplementation(composeBom)
 
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.autofill)
     implementation(libs.androidx.collection.ktx)
     implementation(libs.androidx.compose.material.icons)
@@ -214,7 +213,6 @@ dependencies {
     implementation(libs.androidx.emoji2.views)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.profileinstaller)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     // Pysanka: the clipboard databases are encrypted with SQLCipher

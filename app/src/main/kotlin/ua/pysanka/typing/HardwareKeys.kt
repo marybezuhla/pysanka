@@ -29,7 +29,9 @@ object HardwareKeys {
      * [shift], [caps]: Shift held, Caps Lock on; [ctrl], [alt], [meta]: those held.
      */
     /**
-     * [systemChar]: what the system's own layout would type for this key (0 if nothing);
+     * [systemChar]: what the system's own layout types on the A key (0 if unknown): it tells
+     * whether that layout is Latin, for every key alike, so over a Cyrillic one English digits and
+     * signs are US ones too (Shift+2 is @, not ");
      * [altLeft]: the left Alt is held (the right one is AltGr on many keyboards).
      */
     fun action(

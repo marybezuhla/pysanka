@@ -114,15 +114,17 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     }
 
     override fun addGesturePoint(position: GlideTypingGesture.Detector.Position) {
-        if (!gesture.isEmpty) {
-            val dx = gesture.getLastX() - position.x
-            val dy = gesture.getLastY() - position.y
+        synchronized(gesture) {
+            if (!gesture.isEmpty) {
+                val dx = gesture.getLastX() - position.x
+                val dy = gesture.getLastY() - position.y
 
-            if (dx * dx + dy * dy > distanceThresholdSquared) {
+                if (dx * dx + dy * dy > distanceThresholdSquared) {
+                    gesture.addPoint(position.x, position.y)
+                }
+            } else {
                 gesture.addPoint(position.x, position.y)
             }
-        } else {
-            gesture.addPoint(position.x, position.y)
         }
     }
 
@@ -191,8 +193,11 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         }
         // Pysanka: the decoder for this language and these key places, built in the background
         // (FlorisBoard's way answers until it is ready); distances in key spacing (touch width)
+        // (the key places are part of the cache key, so a changed layout never finds a stale one)
         val cacheKey = currentSubtype to geometry
-        val decoded = if (invalidateCache) null else decoderCache.get(cacheKey)
+        val decoded = decoderCache.get(cacheKey)
+        // Any build still running for an earlier layout must not replace what is chosen here
+        val ticket = ++building
         if (decoded != null) {
             decoder = decoded.first
             keyWidth = decoded.second
@@ -207,7 +212,6 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
                     points[Character.toLowerCase(k.baseCode()).toChar()] = ua.pysanka.typing.swipe.SwipeDecoder.Point(c.x / width, c.y / width)
                 }
                 val wordList = this.words
-                val ticket = ++building
                 builder.execute {
                     val built = ua.pysanka.typing.swipe.SwipeDecoder(points, wordList)
                     decoderCache.put(cacheKey, built to width)
@@ -229,11 +233,25 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     }
 
     private val lruSuggestionCache = LruCache<Pair<Gesture, Int>, List<String>>(SUGGESTION_CACHE_SIZE)
-    override fun getSuggestions(maxSuggestionCount: Int, gestureCompleted: Boolean): List<String> {
-        return when (val cached = lruSuggestionCache.get(Pair(this.gesture, maxSuggestionCount))) {
+    override fun getSuggestions(maxSuggestionCount: Int, gestureCompleted: Boolean): List<String> =
+        getSuggestions(copyGesture(), maxSuggestionCount)
+
+    /** Pysanka: a copy of the swipe so far (taken on the thread that adds the points). */
+    fun copyGesture(): Gesture = synchronized(gesture) { gesture.clone() }
+
+    /** Pysanka: the finished swipe, and the classifier emptied for the next one, in one step. */
+    fun takeGesture(): Gesture = synchronized(gesture) { gesture.clone().also { gesture.clear() } }
+
+    /**
+     * Pysanka: the words for [gesture], a copy. The finger keeps moving while a word is worked out
+     * (in the background), so the work and the cache must both use that copy: a result kept under
+     * the later, longer swipe gave the final word from half of the path.
+     */
+    fun getSuggestions(gesture: Gesture, maxSuggestionCount: Int): List<String> {
+        return when (val cached = lruSuggestionCache.get(Pair(gesture, maxSuggestionCount))) {
             null -> {
-                val suggestions = unCachedGetSuggestions(maxSuggestionCount)
-                lruSuggestionCache.put(Pair(this.gesture.clone(), maxSuggestionCount), suggestions)
+                val suggestions = unCachedGetSuggestions(gesture, maxSuggestionCount)
+                lruSuggestionCache.put(Pair(gesture, maxSuggestionCount), suggestions)
 
                 suggestions
             }
@@ -243,7 +261,7 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         }
     }
 
-    private fun unCachedGetSuggestions(maxSuggestionCount: Int): List<String> {
+    private fun unCachedGetSuggestions(gesture: Gesture, maxSuggestionCount: Int): List<String> {
         // Pysanka: Pysanka's decoder (shape, location, letters in order, detours, length, word
         // frequency and the person's habits); FlorisBoard's way below only if it is not ready
         decoder?.let { d ->
@@ -314,7 +332,7 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     }
 
     override fun clear() {
-        gesture.clear()
+        synchronized(gesture) { gesture.clear() }
     }
 
     private fun calcLocationDistance(gesture1: Gesture, gesture2: Gesture): Float {
@@ -726,10 +744,13 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
             return true
         }
 
+        // Pysanka: only the points in use, as [equals] compares
         override fun hashCode(): Int {
-            var result = xs.contentHashCode()
-            result = 31 * result + ys.contentHashCode()
-            result = 31 * result + size
+            var result = size
+            for (i in 0 until size) {
+                result = 31 * result + xs[i].hashCode()
+                result = 31 * result + ys[i].hashCode()
+            }
             return result
         }
     }

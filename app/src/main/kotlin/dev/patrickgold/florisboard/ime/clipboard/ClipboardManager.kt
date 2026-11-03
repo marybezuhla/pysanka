@@ -342,7 +342,9 @@ class ClipboardManager(
                     val foreign = systemPrimaryClip.getItemAt(0).uri?.let {
                         dev.patrickgold.florisboard.ime.clipboard.provider.ClipboardMediaProvider.isForeignContent(appContext, it)
                     } ?: true
-                    val keep = !isVideo && !ours && foreign && mayKeep(ClipboardItem.isSensitive(systemPrimaryClip), incognito, passwordField)
+                    // Pysanka: Pysanka's own copy from a private field (text from a photo) is kept out like incognito
+                    val privateCopy = systemPrimaryClip.description.extras?.getBoolean(ua.pysanka.privacy.Clip.PRIVATE_EXTRA, false) == true
+                    val keep = !isVideo && !ours && foreign && mayKeep(ClipboardItem.isSensitive(systemPrimaryClip), incognito || privateCopy, passwordField)
                     val item = ClipboardItem.fromClipData(appContext, systemPrimaryClip, cloneUri = keep).let {
                         // Kept although copied in a password field ("Don't keep passwords" off): mark it
                         // sensitive, so it is masked and the timed clean-up of sensitive items applies.

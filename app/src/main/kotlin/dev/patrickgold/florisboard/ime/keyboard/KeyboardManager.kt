@@ -305,7 +305,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
             // Pysanka: «#tag » in place of what was typed after «#»
             is ua.pysanka.typing.HashtagCandidate -> {
-                if (editorInstance.pysankaCommitHashtag(candidate.tag)) ua.pysanka.typing.Hashtags.learn(appContext, candidate.tag)
+                // Chosen one by one: the person's own at once; a few at once: learned like typed words (by use)
+                if (editorInstance.pysankaCommitHashtag(candidate.tags)) candidate.tags.forEach { pysankaLearnHashtag(it, insisted = candidate.tags.size == 1) }
             }
             else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
@@ -644,8 +645,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * but skips handling changing to characters keyboard and double space periods.
      */
     fun handleHardwareKeyboardSpace() {
-        val candidate = pysankaAutoCommitCandidate(bySpace = true)
-        candidate?.let { commitCandidate(it) }
+        // Pysanka: learning as with the on-screen Space (the Backspace undo is the on-screen keys' own)
+        val candidate = pysankaCommitBySpace(undo = false)
         // Skip handling changing to characters keyboard and double space periods
         // TODO: this is whether we commit space after selecting candidate. Should be determined by SuggestionProvider
         if (!subtypeManager.activeSubtype.primaryLocale.supportsAutoSpace &&
@@ -655,24 +656,39 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     /**
-     * Handles a [KeyCode.SPACE] event. Also handles the auto-correction of two space taps if
-     * enabled by the user.
+     * Pysanka: what Space does to the word before it (on screen and on a physical keyboard): a
+     * finished hashtag or word is learned, an auto-correction is applied (and can be taken back by
+     * the next Backspace). Returns the candidate committed, if any.
      */
-    private fun handleSpace(data: KeyData) {
-        // Pysanka: a hashtag finished with a space is remembered (see Hashtags.learn)
+    private fun pysankaCommitBySpace(undo: Boolean = true): SuggestionCandidate? {
+        // A hashtag finished with a space is remembered (see Hashtags.learn)
         ua.pysanka.typing.Hashtags.typed(editorInstance.activeContent.textBeforeSelection)
-            ?.takeIf { it.isNotEmpty() }?.let { ua.pysanka.typing.Hashtags.learn(appContext, it) }
+            ?.takeIf { it.isNotEmpty() }?.let { pysankaLearnHashtag(it) }
         val typed = editorInstance.activeContent.composingText
-        // Pysanka: a correction worked out for an earlier keystroke is not applied
+        // A correction worked out for an earlier keystroke is not applied
         val candidate = pysankaAutoCommitCandidate(bySpace = true)
         val midSentence = pysankaMidSentence(typed)
         val previous = pysankaPreviousWord(typed)
         pysankaLearn(typed, candidate, previous = previous)
         candidate?.let { commitCandidate(it) }
-        // Pysanka: the next Backspace takes an auto-correction back
-        if (candidate != null && candidate.text.toString() != typed && typed.isNotEmpty()) {
+        // The next Backspace takes an auto-correction back
+        if (undo && candidate != null && candidate.text.toString() != typed && typed.isNotEmpty()) {
             pysankaUndo = PysankaUndo(typed, candidate.text.toString(), midSentence, previous, candidate is ua.pysanka.typing.ShortcutCandidate)
         }
+        return candidate
+    }
+
+    /** Pysanka: a finished hashtag is learned under the same rules as words (see [pysankaMayLearn]). */
+    private fun pysankaLearnHashtag(tag: String, insisted: Boolean = true) {
+        if (pysankaMayLearn()) ua.pysanka.typing.Hashtags.learn(appContext, tag, insisted)
+    }
+
+    /**
+     * Handles a [KeyCode.SPACE] event. Also handles the auto-correction of two space taps if
+     * enabled by the user.
+     */
+    private fun handleSpace(data: KeyData) {
+        val candidate = pysankaCommitBySpace()
         if (prefs.keyboard.spaceBarSwitchesToCharacters.get()) {
             when (activeState.keyboardMode) {
                 KeyboardMode.NUMERIC_ADVANCED,
@@ -909,8 +925,18 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
     /** Pysanka: a suggestion tapped. Choosing the word as typed teaches it at once. */
     fun pysankaTapCandidate(candidate: SuggestionCandidate) {
-        val typed = editorInstance.activeContent.composingText
-        pysankaLearn(typed, candidate, insisted = candidate.text.toString() == typed)
+        val content = editorInstance.activeContent
+        val typed = content.composingText
+        val asTyped = candidate.text.toString() == typed
+        // The word's part before the cursor, as typed, while its rest follows: only that part is
+        // finished (the rest stays) and such a piece of a word is not learned
+        if (asTyped && ua.pysanka.typing.WordTail.length(content.textAfterSelection) > 0) {
+            commitCandidate(candidate, wholeWord = false)
+            // No space comes before the rest of the word
+            editorInstance.phantomSpace.setInactive()
+            return
+        }
+        pysankaLearn(typed, candidate, insisted = asTyped)
         commitCandidate(candidate, wholeWord = true)
     }
 
@@ -1112,7 +1138,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             val action = ua.pysanka.typing.HardwareKeys.action(
                 keyCode, language, event.isShiftPressed, event.isCapsLockOn,
                 event.isCtrlPressed, event.isAltPressed, event.isMetaPressed,
-                systemChar = event.getUnicodeChar(event.metaState and KeyEvent.META_SHIFT_MASK.inv() and KeyEvent.META_CAPS_LOCK_ON.inv()),
+                // The system layout as a whole (by its A key), so digits and signs follow the letters
+                systemChar = event.keyCharacterMap?.get(KeyEvent.KEYCODE_A, 0) ?: 0,
                 altLeft = event.metaState and KeyEvent.META_ALT_LEFT_ON != 0,
             )
             // Anything pressed after Alt+Shift calls the switch off (Shift+Alt+arrow and the like)

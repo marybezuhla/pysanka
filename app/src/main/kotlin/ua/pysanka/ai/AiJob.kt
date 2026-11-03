@@ -122,7 +122,6 @@ object AiJob {
         }.let {
             when (action) {
                 AiAction.REDACT -> Redact.apply(it)
-                AiAction.HASHTAGS -> Hashtags.append(text, it)
                 else -> it
             }
         }

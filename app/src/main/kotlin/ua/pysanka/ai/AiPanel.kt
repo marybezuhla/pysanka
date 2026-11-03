@@ -51,7 +51,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.icons.filled.Spa
-import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.Campaign
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.Flag
@@ -546,7 +545,6 @@ private fun icon(action: AiAction): ImageVector = when (action) {
     AiAction.NOTES -> Icons.Default.EditNote
     AiAction.LETTER -> Icons.Default.Email
     AiAction.POST -> Icons.Default.Campaign
-    AiAction.HASHTAGS -> Icons.Default.Tag
     AiAction.VERSIONS -> Icons.Default.Layers
     AiAction.REPLIES -> Icons.Default.QuestionAnswer
     AiAction.TONE -> Icons.Default.TheaterComedy

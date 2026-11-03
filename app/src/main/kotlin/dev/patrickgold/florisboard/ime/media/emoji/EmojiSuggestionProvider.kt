@@ -152,18 +152,40 @@ private fun String.containsWeighted(other: String, ignoreCase: Boolean = false):
 }
 
 /**
- * Pysanka: the emoji a typed word names, the closest first: a keyword (or the name) that is the
- * word, then, from 4 letters, one with a word that begins with it ("кав" offers nothing, "кава" ☕).
+ * Pysanka: the emoji a typed word names, the closest first: one named by the word, then one with
+ * the word among its keywords, then, from 4 letters, one with a word that begins with it ("кав"
+ * offers nothing, "кава" ☕). Among equals, the one with fewer keywords (the more specific: for
+ * «дім» the house before the empty nest). Little words (мені, для, the…) offer none: they are only
+ * parts of longer keywords («мені погано» is 🤮).
  */
 internal fun pysankaEmojiFor(emojis: List<Emoji>, query: String, max: Int): List<Emoji> {
     val q = query.lowercase()
+    if (q in PYSANKA_EMOJI_STOP_WORDS) return emptyList()
     fun score(e: Emoji): Int {
-        val words = e.keywords.map { it.lowercase() } + e.name.lowercase()
+        val name = e.name.lowercase()
+        val keywords = e.keywords.map { it.lowercase() }
         return when {
-            words.any { it == q } -> 2
-            q.length >= 4 && words.any { w -> w.split(' ').any { it.startsWith(q) } } -> 1
+            name == q -> 4
+            keywords.any { it == q } -> 3
+            name.split(' ').any { it == q } -> 2
+            q.length >= 4 && (keywords + name).any { w -> w.split(' ').any { it.startsWith(q) } } -> 1
             else -> 0
         }
     }
-    return emojis.map { it to score(it) }.filter { it.second > 0 }.sortedByDescending { it.second }.take(max).map { it.first }
+    return emojis.map { it to score(it) }.filter { it.second > 0 }
+        .sortedWith(compareByDescending<Pair<Emoji, Int>> { it.second }.thenBy { it.first.keywords.size })
+        .take(max).map { it.first }
 }
+
+/** Pysanka: pronouns, prepositions and other little words: never an emoji by themselves. */
+private val PYSANKA_EMOJI_STOP_WORDS = setOf(
+    "мені", "мене", "мій", "моя", "моє", "мої", "тобі", "тебе", "твій", "твоя", "твоє", "твої", "він", "вона",
+    "воно", "вони", "його", "її", "їх", "їм", "йому", "нам", "нас", "вам", "вас", "наш", "наша", "наше",
+    "наші", "ваш", "ваша", "ваше", "ваші", "свій", "своя", "своє", "свої", "себе", "собі", "цей", "ця", "це",
+    "ці", "той", "та", "те", "ті", "який", "яка", "яке", "які", "для", "від", "під", "над", "без", "через",
+    "після", "перед", "біля", "про", "при", "між", "коли", "тоді", "тут", "там", "дуже", "також", "теж",
+    "або", "але", "що", "щоб", "як", "так", "ні", "не", "ще", "вже", "лише", "тільки", "все", "усе", "всі",
+    "усі", "весь", "буде", "було", "була", "були", "може", "можна", "треба", "немає", "нема",
+    "the", "and", "for", "from", "with", "without", "you", "your", "my", "mine", "this", "that", "very",
+    "more", "less", "have", "has", "are", "was", "were", "not", "but", "about",
+)

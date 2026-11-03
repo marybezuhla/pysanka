@@ -49,14 +49,24 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
     private var lastTime = System.currentTimeMillis()
     // Pysanka: one preview at a time (a new one is not started while the last is still working)
     private val previewing = java.util.concurrent.atomic.AtomicBoolean(false)
+    // Pysanka: each finished or cancelled swipe starts a new generation; a preview from an older one
+    // that ends late is dropped, so it never replaces the final word's alternatives
+    private val generation = java.util.concurrent.atomic.AtomicLong(0)
+
+    // Pysanka: final words are worked out one after another, so they are typed in the order swiped
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private val finals = Dispatchers.Default.limitedParallelism(1)
 
     override fun onGlideComplete(data: GlideTypingGesture.Detector.PointerData) {
-        updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true) {
-            glideTypingClassifier.clear()
-        }
+        generation.incrementAndGet()
+        // Pysanka: the whole path is taken (and the classifier made ready for the next swipe) at once,
+        // here, so a next swipe started while this one is worked out neither joins nor loses points
+        val path = glideTypingClassifier.takeGesture()
+        updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true, path) {}
     }
 
     override fun onGlideCancelled() {
+        generation.incrementAndGet()
         glideTypingClassifier.clear()
     }
 
@@ -69,7 +79,7 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
         if (prefs.glide.showPreview.get() && time - lastTime > prefs.glide.previewRefreshDelay.get() &&
             previewing.compareAndSet(false, true)
         ) {
-            updateSuggestionsAsync(1, false) { previewing.set(false) }
+            updateSuggestionsAsync(1, false, glideTypingClassifier.copyGesture()) { previewing.set(false) }
             lastTime = time
         }
     }
@@ -91,16 +101,27 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
      * @param callback Called when this function completes. Takes a boolean, which indicates if suggestions
      * were successfully set.
      */
-    private fun updateSuggestionsAsync(maxSuggestionsToShow: Int, commit: Boolean, callback: (Boolean) -> Unit) {
+    private fun updateSuggestionsAsync(
+        maxSuggestionsToShow: Int,
+        commit: Boolean,
+        // Pysanka: the swipe as it was when asked (a copy)
+        path: StatisticalGlideTypingClassifier.Gesture,
+        callback: (Boolean) -> Unit,
+    ) {
         if (!glideTypingClassifier.ready) {
             callback.invoke(false)
             return
         }
 
-        scope.launch(Dispatchers.Default) {
-            val suggestions = glideTypingClassifier.getSuggestions(MAX_SUGGESTION_COUNT, true)
+        val started = generation.get()
+        scope.launch(if (commit) finals else Dispatchers.Default) {
+            val suggestions = glideTypingClassifier.getSuggestions(path, MAX_SUGGESTION_COUNT)
 
             withContext(Dispatchers.Main) {
+                if (!commit && started != generation.get()) {
+                    callback.invoke(false)
+                    return@withContext
+                }
                 val suggestionList = buildList {
                     suggestions.subList(
                         1.coerceAtMost(min(commit.compareTo(false), suggestions.size)),

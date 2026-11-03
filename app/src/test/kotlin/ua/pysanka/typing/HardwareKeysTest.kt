@@ -32,6 +32,10 @@ class HardwareKeysTest {
         assertEquals(Action.Pass, press(KeyEvent.KEYCODE_A, lang = "en", system = 'q'))
         // The system is set to Ukrainian: English is typed as on a US keyboard
         assertEquals(Action.Type("a"), press(KeyEvent.KEYCODE_A, lang = "en", system = 'ф'))
+        // …digits and signs too (the system layout is judged as a whole), so an email can be typed
+        assertEquals(Action.Type("@"), press(KeyEvent.KEYCODE_2, lang = "en", shift = true, system = 'ф'))
+        assertEquals(Action.Type("/"), press(KeyEvent.KEYCODE_SLASH, lang = "en", system = 'ф'))
+        assertEquals(Action.Pass, press(KeyEvent.KEYCODE_2, lang = "en", shift = true, system = 'a'))
     }
 
     @Test fun shiftAndCapsLock() {
