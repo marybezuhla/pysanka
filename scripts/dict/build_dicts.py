@@ -5,12 +5,15 @@ Pysanka: builds the word lists for suggestions and swipe (app/src/main/assets/im
 Sources (both checked out by hand, see README in this folder):
 - FrequencyWords (Hermit Dave), OpenSubtitles 2018 word counts, CC BY-SA 4.0:
   content/2018/<lang>/<lang>_full.txt
-- Ukrainian only: the Ukrainian hunspell dictionary of the dict_uk project (uk_UA.dic/.aff;
+- Ukrainian: the Ukrainian hunspell dictionary of the dict_uk project (uk_UA.dic/.aff;
   GPL 3.0+ / LGPL 2.1+ / MPL 1.1): a Ukrainian word is kept only if the dictionary knows it, so
   Russian words and misspellings common in subtitles are left out.
+- Russian: the Russian hunspell dictionary of LibreOffice (ru_RU.dic/.aff, by A. Lebedev;
+  LGPL / BSD-style, see its README): likewise, only words it knows (no misspellings). Written
+  without «ё» where the subtitles do so («еще»), as people type.
 
 Output: {"word": frequency 1..255} for the most frequent words, frequency on a log scale.
-Usage: build_dicts.py <FrequencyWords dir> <uk_UA dir> <out dir>
+Usage: build_dicts.py <FrequencyWords dir> <uk_UA dir> <out dir> [<ru_RU dir>]
 """
 import json
 import math
@@ -18,7 +21,7 @@ import re
 import sys
 from pathlib import Path
 
-MAX_WORDS = {"uk": 60000, "en": 50000}
+MAX_WORDS = {"uk": 60000, "en": 50000, "ru": 60000}
 UKRAINIAN_ONLY = set("іїєґ'")
 # Valid as rare Ukrainian forms, but in subtitles they are the Russian words
 STOP = {
@@ -28,16 +31,18 @@ STOP = {
         "простите", "будем", "стать", "тем", "ден", "пор", "ко", "во", "ме", "м", "ять", "оно", "одно",
     },
     "en": set(),
+    "ru": set(),
 }
 # Spelling of 2019 (the subtitles keep the older one): the beginning of a word and its replacement
-RESPELL = {"uk": {"проект": "проєкт"}, "en": {}}
+RESPELL = {"uk": {"проект": "проєкт"}, "en": {}, "ru": {}}
 LETTERS = {
     "uk": re.compile(r"^[абвгґдеєжзиіїйклмнопрстуфхцчшщьюя']+(-[абвгґдеєжзиіїйклмнопрстуфхцчшщьюя']+)*$"),
     "en": re.compile(r"^[a-z]+('[a-z]+)?$"),
+    "ru": re.compile(r"^[абвгдеёжзийклмнопрстуфхцчшщъыьэюя]+(-[абвгдеёжзийклмнопрстуфхцчшщъыьэюя]+)*$"),
 }
 
 
-def hunspell_forms(dic: Path, aff: Path) -> set[str]:
+def hunspell_forms(dic: Path, aff: Path, lang: str = "uk") -> set[str]:
     """All word forms of a hunspell dictionary that uses only suffix rules (like uk_UA)."""
     rules: dict[str, list[tuple[str, str, re.Pattern]]] = {}
     for line in aff.read_text(encoding="utf-8").splitlines():
@@ -56,8 +61,9 @@ def hunspell_forms(dic: Path, aff: Path) -> set[str]:
         # Names: lowercased, their forms would let in common Russian words («Мень» → «меня»), so a
         # name is kept only if it is plainly Ukrainian (і, ї, є, ґ or an apostrophe: «Київ»,
         # «Україна»); it keeps its capital letter. Abbreviations are left out.
+        # Russian: a name keeps its capital (Москва); an abbreviation is left out.
         if stem != stem.lower():
-            if stem.isupper() or not any(c in UKRAINIAN_ONLY for c in stem.lower()):
+            if stem.isupper() or (lang == "uk" and not any(c in UKRAINIAN_ONLY for c in stem.lower())):
                 continue
         forms.add(stem)
         for f in flags:
@@ -121,7 +127,14 @@ def main() -> None:
     fw, uk_dir, out = (Path(a) for a in sys.argv[1:4])
     known_uk = hunspell_forms(uk_dir / "uk_UA.dic", uk_dir / "uk_UA.aff")
     out.mkdir(parents=True, exist_ok=True)
-    for lang, known in (("uk", known_uk), ("en", None)):
+    langs = [("uk", known_uk), ("en", None)]
+    if len(sys.argv) > 4:
+        ru_dir = Path(sys.argv[4])
+        known_ru = hunspell_forms(ru_dir / "ru_RU.dic", ru_dir / "ru_RU.aff", "ru")
+        # Typed without «ё» as often as with it: both are known
+        known_ru |= {w.replace("ё", "е").replace("Ё", "Е") for w in known_ru}
+        langs.append(("ru", known_ru))
+    for lang, known in langs:
         data = build(lang, fw / "content" / "2018" / lang / f"{lang}_full.txt", known)
         (out / f"{lang}.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(lang, len(data), list(data)[:15])

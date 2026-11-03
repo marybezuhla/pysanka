@@ -19,7 +19,7 @@ those copies keep that licence.
 
 ## Third-party material
 
-- `app/src/main/assets/ime/dict/uk.json`, `en.json` — word lists for suggestions and swipe, made from
+- `app/src/main/assets/ime/dict/uk.json`, `en.json`, `ru.json` — word lists for suggestions and swipe, made from
   FrequencyWords by Hermit Dave (https://github.com/hermitdave/FrequencyWords; word counts from
   OpenSubtitles 2018, http://opus.nlpl.eu/OpenSubtitles.php, http://www.opensubtitles.org/),
   licensed CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Changed: limited to the
@@ -30,9 +30,13 @@ those copies keep that licence.
   from dict_uk (https://github.com/brown-uk/dict_uk) with their forms from its uk_UA hunspell
   dictionary, GPL 3.0+ / LGPL 2.1+ / MPL 1.1, here under GPL-3.0; made by `scripts/dict/themes.py`.
   The Ukrainian filter uses the uk_UA hunspell dictionary (dict_uk project, as in LibreOffice,
-  MPL 1.1) only while the lists are made; it is not part of Pysanka.
+  MPL 1.1) only while the lists are made; it is not part of Pysanka. The Russian list is filtered
+  the same way with LibreOffice's ru_RU hunspell dictionary (Copyright (c) 1997-2008, Alexander I.
+  Lebedev; BSD-style licence, https://github.com/LibreOffice/dictionaries/tree/master/ru_RU), which
+  also gives the forms of the words added by theme (`scripts/dict/*_ru.txt`, GPL-3.0-or-later); the
+  dictionary itself is not part of Pysanka.
 
-- `app/src/main/assets/ime/media/emoji/uk.txt` — Ukrainian emoji names and keywords from the Unicode
+- `app/src/main/assets/ime/media/emoji/uk.txt`, `ru.txt` — Ukrainian and Russian emoji names and keywords from the Unicode
   Common Locale Data Repository (CLDR) v48, © Unicode, Inc., Unicode License v3
   (https://www.unicode.org/license.txt); made by `scripts/emoji_uk.py`. The other emoji files come
   from FlorisBoard, made from the same CLDR data.

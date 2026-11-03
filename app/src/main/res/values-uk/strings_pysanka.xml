@@ -95,7 +95,7 @@
     <string name="pysanka__look__day_theme">Тема вдень</string>
     <string name="pysanka__look__night_theme">Тема вночі</string>
     <string name="pysanka__typing__glide">Набір проведенням (свайп)</string>
-    <string name="pysanka__typing__glide_summary">Проводьте пальцем по літерах (українська й англійська)</string>
+    <string name="pysanka__typing__glide_summary">Проводьте пальцем по літерах (українська, англійська й російська)</string>
     <string name="pysanka__typing__glide_trail">Показувати слід пальця</string>
     <string name="pysanka__typing__suggestions">Підказки слів</string>
     <string name="pysanka__typing__suggestions_summary">Над клавіатурою</string>

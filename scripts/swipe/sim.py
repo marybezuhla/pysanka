@@ -3,6 +3,7 @@ import numpy as np
 
 UK_ROWS = ["йцукенгшщзхї", "фівапролджє", "ячсмитьбю"]
 EN_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+RU_ROWS = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбю"]
 H = 1.35  # key height / width
 def layout(rows, offsets):
     keys = {}
@@ -12,6 +13,8 @@ def layout(rows, offsets):
     return keys
 UK = layout(UK_ROWS, [0, 0.5, 1.5])
 EN = layout(EN_ROWS, [0, 0.5, 1.5])
+RU = layout(RU_ROWS, [0, 0.5, 1.5])
+KEYS = {"uk": UK, "en": EN, "ru": RU}
 
 def load(lang):
     d = json.load(open(pathlib.Path(__file__).resolve().parents[2] / f"app/src/main/assets/ime/dict/{lang}.json", encoding="utf-8"))
@@ -20,7 +23,7 @@ def load(lang):
 def key_seq(word, keys):
     seq = []
     for ch in word.lower():
-        c = ch if ch in keys else unicodedata.normalize("NFD", ch)[0]
+        c = ch if ch in keys else {"ґ": "г", "ъ": "ь"}.get(ch, unicodedata.normalize("NFD", ch)[0])
         if c in keys:
             seq.append(c)
     return seq

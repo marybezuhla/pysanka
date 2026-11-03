@@ -63,7 +63,7 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
             if (ch == '\'' || ch == '’' || ch == 'ʼ' || ch == '-') continue
             val lc = ch.lowercaseChar()
             val k = keyIndex[lc] ?: keyIndex[Normalizer.normalize(lc.toString(), Normalizer.Form.NFD)[0]]
-                // A letter only in a key's popup (ґ on г): swiped through that key
+                // A letter only in a key's popup (ґ on г, ъ on ь): swiped through that key
                 ?: POPUP_BASE[lc]?.let { keyIndex[it] } ?: return null
             if (out.size == 0 || out.last() != k) out.add(k)
         }
@@ -271,7 +271,8 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         /** How many words the cheap first look passes on to the full measures. */
         private const val SHORTLIST = 400
 
-        private val POPUP_BASE = mapOf('ґ' to 'г')
+        // ґ on г (Ukrainian); ё on е and ъ on ь (Russian)
+        private val POPUP_BASE = mapOf('ґ' to 'г', 'ё' to 'е', 'ъ' to 'ь')
 
         // Tuned on simulated swipes (scripts/swipe/tune.py)
         private const val W_SHAPE = 44.354

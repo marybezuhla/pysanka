@@ -6,9 +6,11 @@ and no emoji could be offered for a Ukrainian word. This writes ime/media/emoji/
 format as en.txt (same emoji, same order and groups), with CLDR's Ukrainian name and keywords;
 an emoji CLDR has no Ukrainian words for keeps the English ones.
 
+Russian likewise (ru.txt), for people who type Russian with Pysanka.
+
 Usage (from the repository root, with a checkout of github.com/unicode-org/cldr at the release
 that en.txt names, e.g. release-48):
-    python3 scripts/emoji_uk.py /path/to/cldr
+    python3 scripts/emoji_uk.py /path/to/cldr [uk|ru]
 """
 import os
 import sys
@@ -18,11 +20,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMOJI = os.path.join(ROOT, "app/src/main/assets/ime/media/emoji")
 
 
-def read(cldr):
+def read(cldr, lang="uk"):
     names, words = {}, {}
     # Derived first, so the hand-made annotations win where both have an emoji
     for sub in ("annotationsDerived", "annotations"):
-        tree = ET.parse(os.path.join(cldr, "common", sub, "uk.xml"))
+        tree = ET.parse(os.path.join(cldr, "common", sub, f"{lang}.xml"))
         for a in tree.iter("annotation"):
             cp, text = a.get("cp"), (a.text or "").strip()
             if not cp or not text or a.get("draft") == "unconfirmed":
@@ -40,9 +42,10 @@ def clean(s):
 
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) not in (2, 3):
         sys.exit(__doc__)
-    names, words = read(sys.argv[1])
+    lang = sys.argv[2] if len(sys.argv) == 3 else "uk"
+    names, words = read(sys.argv[1], lang)
     out, kept = [], 0
     with open(os.path.join(EMOJI, "en.txt"), encoding="utf-8") as f:
         for line in f.read().splitlines():
@@ -60,9 +63,9 @@ def main():
             else:
                 out.append(line)
                 kept += 1
-    with open(os.path.join(EMOJI, "uk.txt"), "w", encoding="utf-8") as f:
+    with open(os.path.join(EMOJI, f"{lang}.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(out) + "\n")
-    print(f"uk.txt: {len(out)} lines, {kept} emoji kept in English")
+    print(f"{lang}.txt: {len(out)} lines, {kept} emoji kept in English")
 
 
 if __name__ == "__main__":

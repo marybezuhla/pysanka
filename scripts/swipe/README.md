@@ -26,3 +26,6 @@ Results (right word first / among the first three, 150 words from the 8000 most 
 | Ukrainian, ordinary | 75 % / 84 % | 90 % / 97 % |
 | Ukrainian, hasty | 59 % / 70 % | 78 % / 85 % |
 | English, ordinary | 54 % / 72 % | 69 % / 84 % |
+
+Russian (added for 1.0, same weights, `NOISE=0.27 CUT=0.55 python3 bench2.py ru 150 …`): the right word
+first 91 %, among the first three 98 % (Ukrainian on the same swipes: 95 % and 99 %).
