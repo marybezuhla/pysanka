@@ -1,27 +1,21 @@
-**Писанка 0.21.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія.
+**Писанка 0.22.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія перед 1.0. Попередню версію краще видалити й встановити цю заново (історія буфера почнеться з нуля).
 
-- 🎙️ **Диктування закінчується саме:** замовкніть на 2 секунди, і текст зʼявиться сам (вимикається в налаштуваннях диктування). Кільце навколо мікрофона показує, скільки часу лишилось.
-- ✍️ **Менше зайвих ком і вигадок у диктуванні:** тиша до слів не йде в модель, а Whisper ставить коми за граматикою.
-- 🎙️ **Нова панель диктування:** великий мікрофон у кольорах теми, хвилі за голосом, поруч розділові знаки, ⌫, пробіл, новий рядок і ваші емодзі. Панель лишається для наступного речення, а «Прибрати» стирає щойно вставлене одним дотиком.
-- ✋ **Говорити, утримуючи мікрофон** (Налаштування → Диктування): розпізнається рівно те, що сказано, поки тримаєте.
-- 🎙️ **Диктування одразу, без завантаження:** модель Whisper base тепер усередині застосунку (тому файл .apk більший, ≈60 МБ). Попередню тестову версію краще видалити й встановити заново.
-- ✦ **Дії на панелі ШІ на ваш вибір:** Налаштування → ШІ → «Дії на панелі ШІ», решта в «Ще».
-- 🔙 **ШІ-редактор не губить відповідь** на «назад»: можна вставити, скопіювати або відкинути. «Виправити розпізнане» не змінює імена й слова латиницею.
-- 📚 **Більший словник:** сучасні слова й сленг, військове й воєнний побут, державне й цифрове, бренди й сервіси, медицина й ліки, міста й регіони, імена. Підказки й свайп знають ці слова й не «виправляють». З основного словника прибрано російські слова з субтитрів («с», «он», «потом»…).
-- 🎨 Рівні підписи тонів шкіри емодзі.
+- 🔒 **Безпечніший буфер:** зображення в історію беруться лише з інших застосунків (ніколи з файлів самої Писанки), задовгі тексти не ламають історію, звіт про збій не містить вашого тексту.
+- ↩️ **Менше незворотного:** перед заміною тексту відповіддю ШІ попередній текст кладеться в історію буфера; видалення моделі, шаблонів, замін тексту й зразків стилю питає підтвердження.
+- ♿ **Для TalkBack:** підписані кнопки буфера й тегів, повзунки читаються з назвою, стан диктування й копії буфера оголошується.
+- 📱 **Чесніше на слабких телефонах:** попередження, якщо для ШІ замало памʼяті; диктування позначене недоступним, якщо процесор його не тягне.
+- ℹ️ **«Про застосунок»:** ліцензія GPL-3.0 або новіша, джерела даних, політика приватності ([PRIVACY.md](https://github.com/Marybezu/pysanka/blob/main/PRIVACY.md)). Інтерфейс лише українською й англійською.
+- 🧹 Застосунок стрункіший: прибрано зайві переклади й старий код.
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
 
 ---
 
-**Pysanka 0.21.0**: a private keyboard for Android with no internet access. Test version.
+**Pysanka 0.22.0**: a private keyboard for Android with no internet access. A test version before 1.0. Best to uninstall the previous version and install this one (the clipboard history starts empty).
 
-- Dictation finishes by itself: stay quiet for 2 seconds and the text appears (can be turned off). A ring around the microphone shows the time left.
-- Fewer extra commas and made-up words in dictation.
-- A new dictation panel: a big microphone in the theme's colours with waves that follow your voice, punctuation, ⌫, space, new line and your emoji beside it. It stays open for the next sentence, and Remove takes back what just went in.
-- Hold the microphone while speaking (Settings → Dictation): exactly what you say while holding is recognised.
-- Dictation works right away: the Whisper base model now comes inside the app (so the .apk is ≈60 MB bigger). Best to uninstall the previous test version and install this one.
-- AI panel actions of your choice; the rest under “More”.
-- The AI editor keeps its answer on “back”: insert, copy or discard. “Fix recognised text” leaves names and Latin words alone.
-- A bigger dictionary: slang, military and wartime life, government and digital services, brands, medicine, cities and regions, first names. Russian words from the subtitles were removed from the main Ukrainian list.
-- Even labels for emoji skin tones.
+- Safer clipboard: pictures are taken only from other apps (never Pysanka's own files), very long texts cannot break the history, crash reports contain none of your text.
+- Less that cannot be undone: before the AI replaces a text, the previous one goes to the clipboard history; deleting the model, templates, shortcuts or style samples asks first.
+- For TalkBack: clipboard and tag buttons are labelled, sliders are read with their names, dictation and clipboard copy states are announced.
+- Honest on modest phones: a warning when there is too little memory for the AI; dictation marked unavailable where the processor cannot run it.
+- About: GPL-3.0 or later, data sources, privacy policy (PRIVACY.md). The interface is Ukrainian and English only.
+- A leaner app: unused translations and old code removed.
