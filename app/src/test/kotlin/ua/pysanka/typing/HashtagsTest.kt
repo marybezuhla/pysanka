@@ -15,6 +15,8 @@ class HashtagsTest {
         assertEquals("", Hashtags.typed("Ранкова кава #"))
         assertEquals("кав", Hashtags.typed("Ранкова кава #кав"))
         assertNull(Hashtags.typed("Ранкова кава"))
+        // After Enter it is a new line, not the hashtag any more
+        assertNull(Hashtags.typed("Ранкова кава #кава\n"))
         // Not inside a word or a link
         assertNull(Hashtags.typed("site.com/#top"))
     }

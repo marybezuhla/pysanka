@@ -49,14 +49,19 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
     private var lastTime = System.currentTimeMillis()
     // Pysanka: one preview at a time (a new one is not started while the last is still working)
     private val previewing = java.util.concurrent.atomic.AtomicBoolean(false)
+    // Pysanka: each finished or cancelled swipe starts a new generation; a preview from an older one
+    // that ends late is dropped, so it never replaces the final word's alternatives
+    private val generation = java.util.concurrent.atomic.AtomicLong(0)
 
     override fun onGlideComplete(data: GlideTypingGesture.Detector.PointerData) {
+        generation.incrementAndGet()
         updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true) {
             glideTypingClassifier.clear()
         }
     }
 
     override fun onGlideCancelled() {
+        generation.incrementAndGet()
         glideTypingClassifier.clear()
     }
 
@@ -97,10 +102,15 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
             return
         }
 
+        val started = generation.get()
         scope.launch(Dispatchers.Default) {
             val suggestions = glideTypingClassifier.getSuggestions(MAX_SUGGESTION_COUNT, true)
 
             withContext(Dispatchers.Main) {
+                if (!commit && started != generation.get()) {
+                    callback.invoke(false)
+                    return@withContext
+                }
                 val suggestionList = buildList {
                     suggestions.subList(
                         1.coerceAtMost(min(commit.compareTo(false), suggestions.size)),

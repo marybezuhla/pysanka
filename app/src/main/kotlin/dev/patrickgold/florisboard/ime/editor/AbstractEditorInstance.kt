@@ -412,7 +412,9 @@ abstract class AbstractEditorInstance(context: Context) {
         return true
     }
 
-    open fun finalizeComposingText(text: String): Boolean {
+    // Pysanka: [removedAfter] chars right after the cursor were just deleted by the caller (the rest
+    // of a word replaced whole), so the keyboard's copy of the text must not keep them
+    open fun finalizeComposingText(text: String, removedAfter: Int = 0): Boolean {
         val ic = currentInputConnection() ?: return false
         val content = activeContent
         val composing = content.composing
@@ -427,6 +429,7 @@ abstract class AbstractEditorInstance(context: Context) {
                     append(content.textBeforeSelection.removeSuffix(content.composingText))
                     append(text)
                 },
+                textAfterSelection = content.textAfterSelection.drop(removedAfter),
                 selectedText = "",
             )
             expectedContentQueue.push(newContent)
