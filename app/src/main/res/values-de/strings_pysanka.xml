@@ -476,4 +476,20 @@
     <string name="pysanka__translate__selection_menu">Im Menü für markierten Text</string>
     <string name="pysanka__translate__selection_menu_hint">„Übersetzen (Pysanka)“ in jeder App</string>
     <string name="pysanka__translate__target">Übersetzen in</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Listen</string>
+    <string name="pysanka__lists__quick_action__tooltip">Listen, Aufgaben und Datum</string>
+    <string name="pysanka__lists__title">Listen und Datum</string>
+    <string name="pysanka__lists__bullet">Liste</string>
+    <string name="pysanka__lists__number">Nummeriert</string>
+    <string name="pysanka__lists__todo">Aufgabe</string>
+    <string name="pysanka__lists__date">Datum</string>
+    <string name="pysanka__lists__time">Uhrzeit</string>
+    <string name="pysanka__lists__date_time">Datum und Uhrzeit</string>
+    <string name="pysanka__lists__continue">Listen mit Enter fortsetzen</string>
+    <string name="pysanka__lists__continue_summary">Enter nach einem Punkt beginnt den nächsten, bei einem leeren Punkt endet die Liste</string>
+    <string name="pysanka__lists__style">Aufgaben und Listen</string>
+    <string name="pysanka__lists__style_auto">Wie die App sie zeigt (Markdown in Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Symbole ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

@@ -477,4 +477,20 @@
     <string name="pysanka__translate__selection_menu">En el menú del texto seleccionado</string>
     <string name="pysanka__translate__selection_menu_hint">«Traducir (Pysanka)» en cualquier app</string>
     <string name="pysanka__translate__target">Traducir a</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Listas</string>
+    <string name="pysanka__lists__quick_action__tooltip">Listas, tareas y fecha</string>
+    <string name="pysanka__lists__title">Listas y fecha</string>
+    <string name="pysanka__lists__bullet">Lista</string>
+    <string name="pysanka__lists__number">Numerada</string>
+    <string name="pysanka__lists__todo">Tarea</string>
+    <string name="pysanka__lists__date">Fecha</string>
+    <string name="pysanka__lists__time">Hora</string>
+    <string name="pysanka__lists__date_time">Fecha y hora</string>
+    <string name="pysanka__lists__continue">Continuar listas con Intro</string>
+    <string name="pysanka__lists__continue_summary">Intro tras un elemento empieza el siguiente; en un elemento vacío termina la lista</string>
+    <string name="pysanka__lists__style">Tareas y listas</string>
+    <string name="pysanka__lists__style_auto">Como las muestra la app (Markdown en Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Símbolos ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

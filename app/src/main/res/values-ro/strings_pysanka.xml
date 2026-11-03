@@ -477,4 +477,20 @@
     <string name="pysanka__translate__selection_menu">În meniul textului selectat</string>
     <string name="pysanka__translate__selection_menu_hint">„Traducere (Pysanka)” în orice aplicație</string>
     <string name="pysanka__translate__target">Traduceți în</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Liste</string>
+    <string name="pysanka__lists__quick_action__tooltip">Liste, sarcini și data</string>
+    <string name="pysanka__lists__title">Liste și data</string>
+    <string name="pysanka__lists__bullet">Listă</string>
+    <string name="pysanka__lists__number">Numerotată</string>
+    <string name="pysanka__lists__todo">Sarcină</string>
+    <string name="pysanka__lists__date">Data</string>
+    <string name="pysanka__lists__time">Ora</string>
+    <string name="pysanka__lists__date_time">Data și ora</string>
+    <string name="pysanka__lists__continue">Continuați listele cu Enter</string>
+    <string name="pysanka__lists__continue_summary">Enter după un element începe următorul; pe un element gol încheie lista</string>
+    <string name="pysanka__lists__style">Sarcini și liste</string>
+    <string name="pysanka__lists__style_auto">Cum le arată aplicația (Markdown în Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Simboluri ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

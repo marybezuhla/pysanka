@@ -478,4 +478,20 @@
     <string name="pysanka__translate__selection_menu">W menu zaznaczonego tekstu</string>
     <string name="pysanka__translate__selection_menu_hint">„Przetłumacz (Pysanka)” w każdej aplikacji</string>
     <string name="pysanka__translate__target">Tłumacz na</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Listy</string>
+    <string name="pysanka__lists__quick_action__tooltip">Listy, zadania i data</string>
+    <string name="pysanka__lists__title">Listy i data</string>
+    <string name="pysanka__lists__bullet">Lista</string>
+    <string name="pysanka__lists__number">Numerowana</string>
+    <string name="pysanka__lists__todo">Zadanie</string>
+    <string name="pysanka__lists__date">Data</string>
+    <string name="pysanka__lists__time">Godzina</string>
+    <string name="pysanka__lists__date_time">Data i godzina</string>
+    <string name="pysanka__lists__continue">Kontynuuj listy klawiszem Enter</string>
+    <string name="pysanka__lists__continue_summary">Enter po punkcie zaczyna następny, na pustym punkcie kończy listę</string>
+    <string name="pysanka__lists__style">Zadania i listy</string>
+    <string name="pysanka__lists__style_auto">Jak pokazuje aplikacja (Markdown w Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Symbole ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

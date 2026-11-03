@@ -476,4 +476,20 @@
     <string name="pysanka__translate__selection_menu">A kijelölt szöveg menüjében</string>
     <string name="pysanka__translate__selection_menu_hint">„Fordítás (Pysanka)” bármely alkalmazásban</string>
     <string name="pysanka__translate__target">Célnyelv</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Listák</string>
+    <string name="pysanka__lists__quick_action__tooltip">Listák, teendők és dátum</string>
+    <string name="pysanka__lists__title">Listák és dátum</string>
+    <string name="pysanka__lists__bullet">Lista</string>
+    <string name="pysanka__lists__number">Számozott</string>
+    <string name="pysanka__lists__todo">Teendő</string>
+    <string name="pysanka__lists__date">Dátum</string>
+    <string name="pysanka__lists__time">Idő</string>
+    <string name="pysanka__lists__date_time">Dátum és idő</string>
+    <string name="pysanka__lists__continue">Listák folytatása Enterrel</string>
+    <string name="pysanka__lists__continue_summary">Az Enter egy tétel után újat kezd, üres tételen lezárja a listát</string>
+    <string name="pysanka__lists__style">Teendők és listák</string>
+    <string name="pysanka__lists__style_auto">Ahogy az alkalmazás mutatja (Markdown a Joplinban, Obsidianban, Markorban)</string>
+    <string name="pysanka__lists__style_symbols">Szimbólumok ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

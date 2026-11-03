@@ -198,6 +198,21 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: lists, to-dos and the date (ua.pysanka.ime.Lists)
+    val pysankaLists = PysankaLists()
+    inner class PysankaLists {
+        /** Enter after a list item starts the next one; on an empty item it ends the list. */
+        val continueOnEnter = boolean(
+            key = "pysanka__lists__continue",
+            default = true,
+        )
+        /** How items are written: AUTO (Markdown in Markdown note apps), SYMBOLS or MARKDOWN. */
+        val style = string(
+            key = "pysanka__lists__style",
+            default = "AUTO",
+        )
+    }
+
     // Pysanka: the offline translation dictionaries
     val pysankaTranslate = PysankaTranslate()
     inner class PysankaTranslate {

@@ -478,4 +478,20 @@
     <string name="pysanka__translate__selection_menu">У меню виділеного тексту</string>
     <string name="pysanka__translate__selection_menu_hint">«Перекласти (Писанка)» в будь-якому застосунку</string>
     <string name="pysanka__translate__target">Мова перекладу</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Списки</string>
+    <string name="pysanka__lists__quick_action__tooltip">Списки, справи й дата</string>
+    <string name="pysanka__lists__title">Списки й дата</string>
+    <string name="pysanka__lists__bullet">Список</string>
+    <string name="pysanka__lists__number">Нумерований</string>
+    <string name="pysanka__lists__todo">Справа</string>
+    <string name="pysanka__lists__date">Дата</string>
+    <string name="pysanka__lists__time">Час</string>
+    <string name="pysanka__lists__date_time">Дата й час</string>
+    <string name="pysanka__lists__continue">Продовжувати списки з Enter</string>
+    <string name="pysanka__lists__continue_summary">Enter після пункту починає наступний, на порожньому пункті завершує список</string>
+    <string name="pysanka__lists__style">Справи й списки</string>
+    <string name="pysanka__lists__style_auto">Як показує застосунок (Markdown у Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Символи ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

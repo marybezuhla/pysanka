@@ -478,4 +478,20 @@
     <string name="pysanka__translate__selection_menu">V ponuke označeného textu</string>
     <string name="pysanka__translate__selection_menu_hint">„Preložiť (Pysanka)“ v ktorejkoľvek aplikácii</string>
     <string name="pysanka__translate__target">Preklad do</string>
+    <!-- Lists, to-dos and the date -->
+    <string name="pysanka__lists__quick_action">Zoznamy</string>
+    <string name="pysanka__lists__quick_action__tooltip">Zoznamy, úlohy a dátum</string>
+    <string name="pysanka__lists__title">Zoznamy a dátum</string>
+    <string name="pysanka__lists__bullet">Zoznam</string>
+    <string name="pysanka__lists__number">Číslovaný</string>
+    <string name="pysanka__lists__todo">Úloha</string>
+    <string name="pysanka__lists__date">Dátum</string>
+    <string name="pysanka__lists__time">Čas</string>
+    <string name="pysanka__lists__date_time">Dátum a čas</string>
+    <string name="pysanka__lists__continue">Pokračovať v zoznamoch klávesom Enter</string>
+    <string name="pysanka__lists__continue_summary">Enter za položkou začne ďalšiu, na prázdnej položke zoznam ukončí</string>
+    <string name="pysanka__lists__style">Úlohy a zoznamy</string>
+    <string name="pysanka__lists__style_auto">Ako ich zobrazuje aplikácia (Markdown v Joplin, Obsidian, Markor)</string>
+    <string name="pysanka__lists__style_symbols">Symboly ☐ ☑ •</string>
+    <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
 </resources>

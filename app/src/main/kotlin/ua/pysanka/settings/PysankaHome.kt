@@ -315,6 +315,17 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))
     PrefToggle(prefs.correction.autoSpacePunctuation, stringRes(R.string.pysanka__typing__auto_space))
     PrefToggle(prefs.correction.pysankaSmartPunctuation, stringRes(R.string.pysanka__typing__smart_punctuation), stringRes(R.string.pysanka__typing__smart_punctuation_summary))
+    PrefToggle(prefs.pysankaLists.continueOnEnter, stringRes(R.string.pysanka__lists__continue), stringRes(R.string.pysanka__lists__continue_summary))
+    val listStyle by prefs.pysankaLists.style.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__lists__style),
+        listOf(
+            "AUTO" to stringRes(R.string.pysanka__lists__style_auto),
+            "SYMBOLS" to stringRes(R.string.pysanka__lists__style_symbols),
+            "MARKDOWN" to stringRes(R.string.pysanka__lists__style_markdown),
+        ),
+        listStyle,
+    ) { v -> scope.launch { prefs.pysankaLists.style.set(v) } }
     BlockDivider()
     PrefChoice(prefs.gestures.deleteKeySwipeLeft, stringRes(R.string.pysanka__typing__delete_swipe), SwipeAction::class, "deleteSwipe")
     PrefChoice(prefs.gestures.spaceBarSwipeLeft, stringRes(R.string.pysanka__typing__space_swipe_left), SwipeAction::class, "general")
