@@ -28,7 +28,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           V="$(tr -d '[:space:]' < version.txt)"
-          echo "$V" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "::error::version.txt must be major.minor.patch, got '$V'"; exit 1; }
+          # minor and patch below 100, so versionCode (major·10000 + minor·100 + patch) never collides
+          echo "$V" | grep -Eq '^[0-9]+\.[0-9]{1,2}\.[0-9]{1,2}$' || { echo "::error::version.txt must be major.minor.patch (minor, patch < 100), got '$V'"; exit 1; }
           # A push to main becomes a release: stop here, before any approval, if this version is already out.
           if [ "${{ github.event_name }}" = push ] && [ "${{ github.ref }}" = refs/heads/main ] \
              && gh api "repos/${{ github.repository }}/releases/tags/v$V" >/dev/null 2>&1; then
@@ -38,8 +39,10 @@ jobs:
       - name: Check strings (unescaped apostrophes)
         run: bash .github/check-strings.sh
 
-      - name: Check the built-in Whisper model (exact pinned file)
-        run: cd app/src/main/assets/voice && sha256sum -c SHA256SUMS
+      - name: Check the built-in models (exact pinned files)
+        run: |
+          (cd app/src/main/assets/voice && sha256sum -c SHA256SUMS)
+          (cd app/src/main/assets/ocr && sha256sum -c SHA256SUMS)
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
@@ -51,13 +54,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
 
-      # The keyboard's native part is written in Rust; the version is pinned to the one upstream uses.
-      - name: Set up Rust and Ninja
-        run: |
-          RUST="$(grep -E '^rustToolchain' gradle/tools.versions.toml | cut -d'"' -f2)"
-          rustup toolchain install "$RUST" --profile minimal --target aarch64-linux-android
-          rustup default "$RUST"
-          sudo apt-get install -y -qq ninja-build
+      # whisper.cpp is built with CMake and Ninja
+      - name: Set up Ninja
+        run: sudo apt-get install -y -qq ninja-build
 
       - name: Test and build (unsigned)
         shell: bash
@@ -90,6 +89,19 @@ jobs:
           grep -h -o -E '<failure message="[^"]{0,300}' app/build/test-results/*/*.xml 2>/dev/null | head -5 \
             | while IFS= read -r l; do echo "::warning title=test::${l#<failure message=\"}"; done || true
 
+      # The same log, packed into this job's own output (read with the GitHub API), so no branch
+      # is needed for it: lines "PYSANKA-LOG <base64 of a tar.gz>"
+      - name: Print the log for review
+        if: always()
+        shell: bash
+        run: |
+          # Without the dependency list (large; the deps workflow has it); over 6 MB, without the screens
+          tar -C log --exclude=./verification-metadata.xml -czf "$RUNNER_TEMP/log.tgz" . || true
+          if [ "$(stat -c %s "$RUNNER_TEMP/log.tgz" 2>/dev/null || echo 0)" -gt 6000000 ]; then
+            tar -C log --exclude=./verification-metadata.xml --exclude=./screens -czf "$RUNNER_TEMP/log.tgz" . || true
+          fi
+          base64 -w 4000 "$RUNNER_TEMP/log.tgz" | sed 's/^/PYSANKA-LOG /' || true
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -102,28 +114,6 @@ jobs:
           name: pysanka-unsigned
           retention-days: 7
           path: app/build/outputs/apk/release/app-release-unsigned.apk
-
-  # Saves the build log to the ci-logs branch. Runs no project code.
-  logs:
-    needs: build
-    # Also for pull requests from this repository (never from forks, which get no write access)
-    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        with:
-          name: build-log
-          path: log
-      - name: Push the log
-        shell: bash
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd log
-          git init -q && git checkout -q -b ci-logs && git add . && git -c user.name=ci -c user.email=ci@localhost commit -qm "build log ${{ github.run_number }}"
-          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" ci-logs
 
   # Signs. Only for main, only in the "release" environment (needs the owner's approval), and with
   # no Gradle or other third-party build code: just the Android SDK's own zipalign and apksigner.

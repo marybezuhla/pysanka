@@ -74,10 +74,31 @@ fun TextShortcutsScreen() = FlorisScreen {
             val current = list
             // At the most there are (a new one only in place of one with the same word)
             val full = current != null && current.size >= TextShortcuts.MAX && current.none { it.shortcut.equals(shortcut, ignoreCase = true) }
-            Button(enabled = current != null && !full && TextShortcuts.isValidShortcut(shortcut) && text.isNotBlank(), onClick = {
+            // One with the same word is replaced only after asking
+            var overwrite by remember { mutableStateOf(false) }
+            var deleting by remember { mutableStateOf<TextShortcuts.Shortcut?>(null) }
+            fun add() {
                 val rest = current.orEmpty().filter { !it.shortcut.equals(shortcut, ignoreCase = true) }
                 keep(rest + TextShortcuts.Shortcut(shortcut, text.trim())) { shortcut = ""; text = "" }
+            }
+            Button(enabled = current != null && !full && TextShortcuts.isValidShortcut(shortcut) && text.isNotBlank(), onClick = {
+                if (current.orEmpty().any { it.shortcut.equals(shortcut, ignoreCase = true) }) overwrite = true else add()
             }) { Text(stringRes(R.string.pysanka__shortcuts__add)) }
+            if (overwrite) {
+                ua.pysanka.settings.ConfirmDialog(
+                    stringRes(R.string.pysanka__shortcuts__overwrite, "shortcut" to shortcut),
+                    confirm = stringRes(R.string.pysanka__confirm__replace),
+                    onConfirm = { add() },
+                    onDismiss = { overwrite = false },
+                )
+            }
+            deleting?.let { d ->
+                ua.pysanka.settings.ConfirmDialog(
+                    stringRes(R.string.pysanka__shortcuts__delete_ask, "shortcut" to d.shortcut),
+                    onConfirm = { keep(current.orEmpty() - d) {} },
+                    onDismiss = { deleting = null },
+                )
+            }
             if (current == null) Text(stringRes(R.string.pysanka__shortcuts__not_ready), color = MaterialTheme.colorScheme.error)
             if (full) Text(stringRes(R.string.pysanka__shortcuts__full, "n" to TextShortcuts.MAX), color = MaterialTheme.colorScheme.error)
             for (item in current.orEmpty()) {
@@ -87,7 +108,7 @@ fun TextShortcutsScreen() = FlorisScreen {
                             Text(item.shortcut, style = MaterialTheme.typography.titleSmall)
                             Text(item.text, style = MaterialTheme.typography.bodySmall, maxLines = 3)
                         }
-                        IconButton(onClick = { keep(current.orEmpty() - item) }) {
+                        IconButton(onClick = { deleting = item }) {
                             Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__shortcuts__delete, "shortcut" to item.shortcut))
                         }
                     }

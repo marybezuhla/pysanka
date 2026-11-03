@@ -89,7 +89,7 @@ fun AboutScreen() = FlorisScreen {
                 } catch (e: Throwable) {
                     Toast.makeText(
                         context,
-                        context.stringRes(R.string.about__version_copied__error, "error_message" to e.message),
+                        context.stringRes(R.string.pysanka__error__copy), // Pysanka: no raw error text for people
                         Toast.LENGTH_SHORT,
                     ).show()
                 }
@@ -116,7 +116,8 @@ fun AboutScreen() = FlorisScreen {
         Preference(
             icon = Icons.Outlined.Description,
             title = stringRes(R.string.about__project_license__title),
-            summary = stringRes(R.string.about__project_license__summary, "license_name" to "Apache 2.0"),
+            // Pysanka: GPL-3.0, no warranty, where the source is
+            summary = stringRes(R.string.pysanka__about__license__summary),
             onClick = { navController.navigate(Routes.Settings.ProjectLicense) },
         )
         // Pysanka: credit to the keyboard it is built on
@@ -131,6 +132,13 @@ fun AboutScreen() = FlorisScreen {
             title = stringRes(id = R.string.about__third_party_licenses__title),
             summary = stringRes(id = R.string.about__third_party_licenses__summary),
             onClick = { navController.navigate(Routes.Settings.ThirdPartyLicenses) },
+        )
+        // Pysanka: where the word lists, emoji names and models come from (NOTICE.md)
+        Preference(
+            icon = Icons.Outlined.Description,
+            title = stringRes(R.string.pysanka__about__data__title),
+            summary = stringRes(R.string.pysanka__about__data__summary),
+            onClick = { context.launchUrl("https://github.com/Marybezu/pysanka/blob/main/NOTICE.md") },
         )
     }
 }

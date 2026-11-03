@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d573e2ae2cbe7026957bc8d8fda291f3",
+    "identityHash": "dc886df9792fe6b6ad532cc7aa7c4a84",
     "entities": [
       {
         "tableName": "clipboard_files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `_display_name` TEXT NOT NULL, `_size` INTEGER NOT NULL, `mimeTypes` TEXT NOT NULL, PRIMARY KEY(`_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER NOT NULL, `_display_name` TEXT NOT NULL, `_size` INTEGER NOT NULL, `orientation` INTEGER NOT NULL, `mimeTypes` TEXT NOT NULL, PRIMARY KEY(`_id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -27,6 +27,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "orientation",
+            "columnName": "orientation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "mimeTypes",
             "columnName": "mimeTypes",
             "affinity": "TEXT",
@@ -34,10 +40,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "_id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [
           {
@@ -49,14 +55,12 @@
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_clipboard_files__id` ON `${TABLE_NAME}` (`_id`)"
           }
-        ],
-        "foreignKeys": []
+        ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd573e2ae2cbe7026957bc8d8fda291f3')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dc886df9792fe6b6ad532cc7aa7c4a84')"
     ]
   }
 }

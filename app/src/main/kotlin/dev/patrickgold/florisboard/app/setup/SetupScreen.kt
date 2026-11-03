@@ -126,6 +126,15 @@ fun SetupScreen() = FlorisScreen {
                     navController.navigate(Routes.Settings.Home) { popUpTo(Routes.Setup.Screen) { inclusive = true } }
                 },
             ) { Text(stringRes(R.string.setup__finish_up__finish_btn)) }
+            // Pysanka: why it cannot be tapped yet
+            if (!(enabled && selected)) {
+                Text(
+                    stringRes(R.string.pysanka__setup__finish_after),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                )
+            }
             footer(context)
         }
     }
@@ -135,7 +144,7 @@ fun SetupScreen() = FlorisScreen {
 @Composable
 internal fun SetupStep(number: Int, title: String, done: Boolean, active: Boolean, text: String, button: String, onClick: () -> Unit) {
     val doneText = stringRes(R.string.pysanka__setup__done)
-    OutlinedCard(Modifier.fillMaxWidth().semantics { if (done) stateDescription = doneText }) {
+    OutlinedCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.Top) {
             val scheme = MaterialTheme.colorScheme
             Box(
@@ -155,7 +164,8 @@ internal fun SetupStep(number: Int, title: String, done: Boolean, active: Boolea
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = if (active) FontWeight.Bold else FontWeight.Normal,
                     color = if (done || active) scheme.onSurface else scheme.onSurfaceVariant,
-                    modifier = Modifier.semantics { heading() },
+                    // The step's state is read with its title
+                    modifier = Modifier.semantics { heading(); if (done) stateDescription = doneText },
                 )
                 if (active) {
                     Text(text, style = MaterialTheme.typography.bodyMedium, color = scheme.onSurface, modifier = Modifier.padding(top = 4.dp))

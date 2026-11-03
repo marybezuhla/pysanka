@@ -52,6 +52,18 @@ class ClipboardMediaProvider : ContentProvider() {
 
     companion object {
         const val AUTHORITY = "${BuildConfig.APPLICATION_ID}.provider.clipboard"
+
+        /**
+         * Pysanka: whether a copied picture's address may be read: a content address of another
+         * app only. A file path, or any of Pysanka's own providers, could make Pysanka read its own
+         * private files into the history for another app to paste.
+         */
+        fun isForeignContent(context: android.content.Context, uri: Uri): Boolean {
+            if (uri.scheme != android.content.ContentResolver.SCHEME_CONTENT) return false
+            val authority = uri.authority ?: return false
+            // Every authority, also user-prefixed ones ("10@ua.pysanka…")
+            return authority.split(";").none { it.substringAfter('@').startsWith(context.packageName) }
+        }
         val IMAGE_CLIPS_URI: Uri = "content://$AUTHORITY/clips/images".toUri()
         val VIDEO_CLIPS_URI: Uri = "content://$AUTHORITY/clips/videos".toUri()
 
@@ -174,6 +186,8 @@ class ClipboardMediaProvider : ContentProvider() {
                     check(init()) { "Clipboard is locked" }
                     values as ContentValues
                     val mediaUri = Uri.parse(values.getAsString(Columns.MediaUri))
+                    // Pysanka: only another app's content address (see isForeignContent)
+                    check(isForeignContent(context!!, mediaUri)) { "Not a foreign content address" }
                     // Get the orientation of the image
                     // Pysanka: the stream is closed after reading (it was left open)
                     var rotation = 0

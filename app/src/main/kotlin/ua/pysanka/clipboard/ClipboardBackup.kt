@@ -84,6 +84,8 @@ object ClipboardBackup {
         data object NotACopy : Status
         data object HistoryOff : Status
         data object Failed : Status
+        /** More text than one copy can hold (MAX_JSON_BYTES); the same limit for export and import. */
+        data object TooLarge : Status
     }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -112,6 +114,7 @@ object ClipboardBackup {
     }
 
     private class WrongPasswordOrDamaged : Exception()
+    private class TooLarge : Exception()
 
     // ---------------------------------------------------------------- detect
 
@@ -153,7 +156,7 @@ object ClipboardBackup {
             } catch (t: Throwable) {
                 // A half-written file is useless and could later look like a wrong password
                 runCatching { android.provider.DocumentsContract.deleteDocument(app.contentResolver, uri) }
-                Status.Failed
+                if (t is TooLarge) Status.TooLarge else Status.Failed
             } finally {
                 password.fill(' ')
             }
@@ -169,7 +172,7 @@ object ClipboardBackup {
                 ItemType.IMAGE -> options.images && item.uri != null
                 ItemType.VIDEO -> false
             }
-        }
+        }.take(MAX_ITEMS) // as many as an import reads
         // The owner's tags travel with the copy, by name (ids differ from phone to phone)
         val tagList = clipboardManager.allTags()
         val tagNames = tagList.associate { it.id to it.name }
@@ -214,7 +217,10 @@ object ClipboardBackup {
                     }
                     zip.putNextEntry(ZipEntry(ITEMS))
                     val tagDefs = JSONArray(tagList.map { JSONObject().put("name", it.name).put("color", it.color) })
-                    zip.write(JSONObject().put("format", 1).put("tags", tagDefs).put("items", list).toString().toByteArray())
+                    val bytes = JSONObject().put("format", 1).put("tags", tagDefs).put("items", list).toString().toByteArray()
+                    // Never a copy that its own import would refuse
+                    if (bytes.size > MAX_JSON_BYTES) throw TooLarge()
+                    zip.write(bytes)
                     zip.closeEntry()
                 }
             }
@@ -244,6 +250,8 @@ object ClipboardBackup {
                 Status.Imported(r.added, r.skipped, r.overLimit)
             } catch (e: WrongPasswordOrDamaged) {
                 Status.WrongPassword
+            } catch (e: TooLarge) {
+                Status.TooLarge
             } catch (e: ClipboardManager.HistoryDisabled) {
                 Status.HistoryOff
             } catch (t: Throwable) {
@@ -281,14 +289,15 @@ object ClipboardBackup {
         val files = HashSet<String>()
         val tagDefs = json.optJSONArray("tags")?.let { a ->
             (0 until minOf(a.length(), 200)).mapNotNull { a.optJSONObject(it) }
-                .map { it.optString("name").take(40) to it.optInt("color") }.filter { it.first.isNotBlank() }
+                .map { it.optString("name").trim().take(40) to it.optInt("color") }.filter { it.first.isNotBlank() }
         } ?: emptyList()
         for (i in 0 until minOf(list.length(), MAX_ITEMS)) {
             val o = list.optJSONObject(i) ?: continue
             val time = o.optLong("time", System.currentTimeMillis())
             val pinned = o.optBoolean("pinned")
             val sensitive = o.optBoolean("sensitive")
-            val names = o.optJSONArray("tags")?.let { a -> (0 until minOf(a.length(), 50)).map { a.optString(it) } } ?: emptyList()
+            // Cut as tags are stored (40 characters), so the names still match them
+            val names = o.optJSONArray("tags")?.let { a -> (0 until minOf(a.length(), 50)).map { a.optString(it).trim().take(40) } } ?: emptyList()
             when (o.optString("type")) {
                 "text" -> if (o.has("text") && !o.isNull("text")) {
                     candidates.add(Candidate(textItem(o.optString("text"), time, pinned, sensitive), null, "", names))
@@ -441,7 +450,8 @@ object ClipboardBackup {
         val outcome = try {
             // Tags named in the copy are matched to the owner's tags by name, or created
             val tagIds = if (candidates.any { it.tagNames.isNotEmpty() }) {
-                val wantedNames = candidates.flatMap { it.tagNames }.toSet()
+                // At most 200 tags from one copy, however many it names
+                val wantedNames = candidates.flatMap { it.tagNames }.filter { it.isNotBlank() }.toSet().take(200 - tagDefs.size.coerceAtMost(200))
                 val defs = tagDefs + wantedNames.filter { n -> tagDefs.none { it.first.equals(n, ignoreCase = true) } }.map { it to 0 }
                 clipboardManager.ensureTags(defs)
             } else {
@@ -513,7 +523,7 @@ object ClipboardBackup {
             val n = input.read(buf)
             if (n < 0) break
             total += n
-            if (total > max) throw IOException("Too large")
+            if (total > max) throw TooLarge()
             out.write(buf, 0, n)
         }
         return out.toString(Charsets.UTF_8.name())

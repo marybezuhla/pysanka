@@ -1,5 +1,6 @@
 package ua.pysanka.settings
 
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -99,9 +100,13 @@ fun PysankaHome() {
         ) { LookSettings() }
 
         val history by prefs.emoji.historyEnabled.observeAsState()
+        val tone by prefs.emoji.preferredSkinTone.observeAsState()
+        // The tone chosen, as it is named in the list (with its emoji)
+        val toneName = enumDisplayEntriesOf(dev.patrickgold.florisboard.ime.media.emoji.EmojiSkinTone::class)
+            .firstOrNull { it.key == tone }?.label.orEmpty()
         Block(
             stringRes(R.string.pysanka__settings__emoji),
-            stringRes(R.string.pysanka__settings__emoji_state, "history" to state(history)),
+            stringRes(R.string.pysanka__settings__emoji_state, "tone" to toneName, "history" to state(history)),
             icon = Icons.Outlined.EmojiEmotions,
         ) { EmojiSettings() }
 
@@ -149,6 +154,8 @@ fun PysankaHome() {
 
         val voiceState = stringRes(
             when {
+                // A processor that cannot run it: said here too, not only when dictating
+                !ua.pysanka.whisper.WhisperNative.supported -> R.string.pysanka__voice__unsupported
                 !ua.pysanka.voice.VoiceInput.hasMic(context) -> R.string.pysanka__settings__voice_no_mic
                 else -> R.string.pysanka__settings__voice_ready
             },
@@ -198,6 +205,7 @@ private fun <T : Any> PrefChoice(
 /** Which AI actions the panel shows before "More": a list of all of them with ticks. */
 @Composable
 private fun PanelActionsRow() {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val prefs by FlorisPreferenceStore
     val scope = rememberCoroutineScope()
     val saved by prefs.pysankaAi.panelActions.observeAsState()
@@ -215,10 +223,14 @@ private fun PanelActionsRow() {
                     for (a in ua.pysanka.ai.AiPanelActions.CHOOSABLE) {
                         val on = a in chosen
                         Row(
-                            Modifier.fillMaxWidth().toggleable(on, role = androidx.compose.ui.semantics.Role.Checkbox) { v ->
+                            Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(on, role = androidx.compose.ui.semantics.Role.Checkbox) { v ->
                                 val next = if (v) chosen + a else chosen - a
-                                // At least one stays on the panel
-                                if (next.isNotEmpty()) scope.launch { prefs.pysankaAi.panelActions.set(ua.pysanka.ai.AiPanelActions.save(next)) }
+                                // At least one stays on the panel (and it says so)
+                                if (next.isNotEmpty()) {
+                                    scope.launch { prefs.pysankaAi.panelActions.set(ua.pysanka.ai.AiPanelActions.save(next)) }
+                                } else {
+                                    android.widget.Toast.makeText(context, R.string.pysanka__ai__panel_actions_one, android.widget.Toast.LENGTH_LONG).show()
+                                }
                             }.padding(vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {

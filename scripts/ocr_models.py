@@ -1,6 +1,6 @@
 """Fetches the official PaddlePaddle PP-OCRv5 mobile models (text detection + East Slavic
 recognition), converts them to ONNX, checks them on a rendered Ukrainian test image and writes
-SHA256SUMS. Runs in GitHub Actions (ocr-models.yml); the result is reviewed before it is committed.
+SHA256SUMS. Run it by hand (the models are in the repository; CI checks SHA256SUMS on every build).
 """
 import hashlib, json, os, pathlib, subprocess, sys, yaml
 

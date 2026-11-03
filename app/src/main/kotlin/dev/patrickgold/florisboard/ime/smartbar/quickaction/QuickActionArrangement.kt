@@ -107,7 +107,8 @@ data class QuickActionArrangement(
         }
 
         override fun deserialize(value: String): QuickActionArrangement {
-            return QuickActionJsonConfig.decodeFromString(value)
+            // Pysanka: a saved bar that cannot be read gives the usual one, never a crash
+            return runCatching { QuickActionJsonConfig.decodeFromString<QuickActionArrangement>(value) }.getOrDefault(Default)
         }
     }
 }

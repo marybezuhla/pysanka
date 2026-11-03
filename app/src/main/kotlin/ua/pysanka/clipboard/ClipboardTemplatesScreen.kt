@@ -73,12 +73,20 @@ fun ClipboardTemplatesScreen() = FlorisScreen {
                         android.widget.Toast.makeText(context, R.string.pysanka__templates__not_ready, android.widget.Toast.LENGTH_LONG).show()
                     }
                 }) { Text(stringRes(R.string.pysanka__templates__add)) }
+                var deleting by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf<dev.patrickgold.florisboard.ime.clipboard.provider.ClipboardItem?>(null) }
+                deleting?.let { d ->
+                    ua.pysanka.settings.ConfirmDialog(
+                        stringRes(R.string.pysanka__templates__delete_ask, "text" to d.text.orEmpty().take(60)),
+                        onConfirm = { clipboardManager.clearExactHistory(listOf(d)) },
+                        onDismiss = { deleting = null },
+                    )
+                }
                 for (item in history.pinned.filter { it.type == ItemType.TEXT && !it.isSensitive }) {
                     OutlinedCard(Modifier.fillMaxWidth()) {
                         Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
                             Text(item.text.orEmpty(), style = MaterialTheme.typography.bodySmall, maxLines = 3, modifier = Modifier.weight(1f).padding(vertical = 8.dp))
-                            IconButton(onClick = { clipboardManager.clearExactHistory(listOf(item)) }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__templates__delete))
+                            IconButton(onClick = { deleting = item }) {
+                                Icon(Icons.Default.Delete, contentDescription = stringRes(R.string.pysanka__templates__delete_named, "text" to item.text.orEmpty().take(30)))
                             }
                         }
                     }

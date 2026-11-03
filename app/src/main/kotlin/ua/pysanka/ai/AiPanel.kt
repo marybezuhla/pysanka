@@ -235,7 +235,20 @@ fun AiPanel(modifier: Modifier = Modifier) {
     fun placeText(text: String, insert: Boolean) {
         val t = panel.taken
         val result = AiBridge.Result(if (insert) AiBridge.Mode.INSERT else t.mode, t.text, text, t.start, t.end)
-        if (!ua.pysanka.ime.FieldText.applyAi(panel.info, result)) AiBridge.couldNotPlace(text)
+        // Replaced text is not lost: it goes into the clipboard history first (as any copy made in
+        // this field would; never from a private one, and not if the history is off)
+        // (only once it is certain the original is being replaced, not inserted after)
+        var kept = false
+        val placed = ua.pysanka.ime.FieldText.applyAi(panel.info, result) {
+            if (t.text.isNotBlank() && t.text != text) {
+                kept = runCatching { clipboardManager.pysankaAddToHistory(listOf(t.text)) }.getOrDefault(false)
+            }
+        }
+        if (!placed) {
+            AiBridge.couldNotPlace(text)
+        } else if (kept) {
+            android.widget.Toast.makeText(context, R.string.pysanka__ai__replaced_kept, android.widget.Toast.LENGTH_LONG).show()
+        }
         closePanel()
     }
 

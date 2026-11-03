@@ -61,7 +61,7 @@ class SubtypeManager(context: Context) {
     init {
         prefs.localization.subtypes.asFlow().collectLatestIn(scope) { listRaw ->
             flogDebug { listRaw }
-            // Pysanka: a list saved in another format (Pysanka before 0.9) counts as none
+            // Pysanka: a list that cannot be read counts as none
             val list = if (listRaw.isNotBlank()) {
                 runCatching { SubtypeJsonConfig.decodeFromString<List<Subtype>>(listRaw) }.getOrDefault(emptyList())
             } else {

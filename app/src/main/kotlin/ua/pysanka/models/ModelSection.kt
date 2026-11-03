@@ -62,11 +62,33 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
         is ModelStore.State.Ready -> {
             Text(stringRes(R.string.pysanka__ai__ready, "size" to s.sizeMb.toString()), style = MaterialTheme.typography.titleMedium)
             ready()
-            OutlinedButton(onClick = { store.delete(); state = store.state() }) {
+            var asking by remember { mutableStateOf(false) }
+            OutlinedButton(onClick = { asking = true }) {
                 Text(stringRes(R.string.pysanka__ai__delete))
+            }
+            if (asking) {
+                ua.pysanka.settings.ConfirmDialog(
+                    stringRes(R.string.pysanka__ai__delete_ask, "size" to gb(model.sizeGb)),
+                    onConfirm = { store.delete(); state = store.state() },
+                    onDismiss = { asking = false },
+                )
             }
         }
         ModelStore.State.Missing -> {
+            // A phone with less memory than the model needs: said before a 2.6 GB download
+            val ramGb = remember {
+                val info = android.app.ActivityManager.MemoryInfo()
+                (context.getSystemService(android.content.Context.ACTIVITY_SERVICE) as android.app.ActivityManager).getMemoryInfo(info)
+                info.totalMem / 1_000_000_000.0
+            }
+            // Android reports less than the marketed size (a 6 GB phone says about 5.3–5.6)
+            if (ramGb < 5.0) {
+                Text(
+                    stringRes(R.string.pysanka__ai__low_memory, "ram" to gb(ramGb)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
             Text(
                 stringRes(R.string.pysanka__ai__step1, "file" to model.downloadName, "size" to gb(model.sizeGb)),
                 style = MaterialTheme.typography.bodyMedium,

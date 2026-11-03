@@ -324,7 +324,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 activeState.imeUiMode = ImeUiMode.PYSANKA_VOICE
             }
             ua.pysanka.voice.VoiceInput.Ready.NOT_HERE -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
-            ua.pysanka.voice.VoiceInput.Ready.UNSUPPORTED -> appContext.showShortToastSync(R.string.pysanka__voice__unsupported)
+            ua.pysanka.voice.VoiceInput.Ready.UNSUPPORTED -> appContext.showLongToastSync(R.string.pysanka__voice__unsupported)
             else -> {
                 appContext.showShortToastSync(R.string.pysanka__voice__set_up)
                 ua.pysanka.voice.openVoiceSettings(appContext)
@@ -342,9 +342,12 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             val before = editorInstance.activeContent.textBeforeSelection
             val piece = if (before.isNotEmpty() && !before.last().isWhitespace()) " $text" else text
             // Remembered (in memory, while the panel is open) so «Прибрати» can take it back
-            val at = editorInstance.activeContent.selection.start
+            val sel = editorInstance.activeContent.selection
             if (editorInstance.commitText(piece)) {
-                voice.inserted.value = if (at >= 0) ua.pysanka.voice.VoiceInput.Inserted(piece, at + piece.length) else null
+                // «Прибрати» only when nothing was replaced (it could not bring a replaced text back)
+                voice.inserted.value = if (sel.start >= 0 && !sel.isSelectionMode) {
+                    ua.pysanka.voice.VoiceInput.Inserted(piece, sel.start + piece.length)
+                } else null
             }
         }
     }
@@ -1216,6 +1219,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 KeyCode.CLIPBOARD_SELECT_ALL -> {
                     editorInfo.isRichInputEditor
                 }
+                // Pysanka: dictation is greyed out on a processor that cannot run it
+                KeyCode.VOICE_INPUT -> ua.pysanka.whisper.WhisperNative.supported
                 KeyCode.TOGGLE_INCOGNITO_MODE -> when (prefs.suggestion.incognitoMode.get()) {
                     IncognitoMode.FORCE_OFF, IncognitoMode.FORCE_ON -> false
                     IncognitoMode.DYNAMIC_ON_OFF -> !editorInfo.imeOptions.flagNoPersonalizedLearning

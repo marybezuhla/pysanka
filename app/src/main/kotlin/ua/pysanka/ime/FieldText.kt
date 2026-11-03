@@ -95,7 +95,8 @@ object FieldText {
      * text). Otherwise nothing is overwritten: the text goes in after the current selection, or,
      * if the app does not say where that is, it is only copied (returns false then).
      */
-    fun applyAi(info: FlorisEditorInfo, result: ua.pysanka.ai.AiBridge.Result): Boolean {
+    /** [onReplace]: called only when the original is really about to be replaced (not inserted after it). */
+    fun applyAi(info: FlorisEditorInfo, result: ua.pysanka.ai.AiBridge.Result, onReplace: () -> Unit = {}): Boolean {
         val ic = ic() ?: return false
         // Where the selection is now: from the app, or else as the field reported it when it opened
         val now = ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0)
@@ -135,7 +136,10 @@ object FieldText {
                 }
                 ua.pysanka.ai.AiBridge.Mode.INSERT -> false
             }
-            if (replace) return ic.commitText(result.text, 1)
+            if (replace) {
+                onReplace()
+                return ic.commitText(result.text, 1)
+            }
             // Never overwrite something else: go to the end of the selection first; if where it is
             // cannot be told, do not touch the field at all
             if (curStart < 0 || curEnd < 0) {

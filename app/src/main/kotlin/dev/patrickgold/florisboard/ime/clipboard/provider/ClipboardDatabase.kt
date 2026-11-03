@@ -29,7 +29,6 @@ import android.provider.OpenableColumns
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
-import androidx.room.AutoMigration
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Database
@@ -38,13 +37,11 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.PrimaryKey
 import androidx.room.Query
-import androidx.room.RenameColumn
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.Update
-import androidx.room.migration.AutoMigrationSpec
 import dev.patrickgold.florisboard.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.EncodeDefault
@@ -312,8 +309,9 @@ interface ClipboardHistoryDao {
     @Query("UPDATE $CLIPBOARD_HISTORY_TABLE SET pysanka_tags = :tags WHERE ${BaseColumns._ID} = :id")
     fun setTags(id: Long, tags: String)
 
+    /** Pysanka: the number of rows deleted (0: pinned, kept). */
     @Query("DELETE FROM $CLIPBOARD_HISTORY_TABLE WHERE ${BaseColumns._ID} = :id AND not isPinned ")
-    fun deleteIfUnpinned(id: Long)
+    fun deleteIfUnpinned(id: Long): Int
 
     @Delete
     fun delete(items: List<ClipboardItem>)
@@ -367,30 +365,13 @@ interface ClipboardTagDao {
 
 @Database(
     entities = [ClipboardItem::class, ClipboardTag::class],
-    version = 5,
-    autoMigrations = [
-        AutoMigration(from = 2, to = 4),
-        AutoMigration(from = 3, to = 4, spec = ClipboardHistoryDatabase.MIGRATE_3_TO_4::class),
-        // Pysanka: tags (a new table and a column with an empty default; nothing existing changes)
-        AutoMigration(from = 4, to = 5),
-    ],
+    // Pysanka: starts at 1 for 1.0 (no older history to carry over); later versions need a migration
+    version = 1,
 )
 @TypeConverters(Converters::class)
 abstract class ClipboardHistoryDatabase : RoomDatabase() {
     abstract fun clipboardItemDao(): ClipboardHistoryDao
     abstract fun clipboardTagDao(): ClipboardTagDao
-
-    @RenameColumn(
-        tableName = CLIPBOARD_HISTORY_TABLE,
-        fromColumnName = "isSensitive",
-        toColumnName = "is_sensitive",
-    )
-    @RenameColumn(
-        tableName = CLIPBOARD_HISTORY_TABLE,
-        fromColumnName = "isRemoteDevice",
-        toColumnName = "is_remote_device",
-    )
-    class MIGRATE_3_TO_4 : AutoMigrationSpec
 
     companion object {
         fun new(context: Context): ClipboardHistoryDatabase {
@@ -400,7 +381,8 @@ abstract class ClipboardHistoryDatabase : RoomDatabase() {
                 )
                 // Pysanka: encrypted with SQLCipher; the caller has opened the clipboard vault
                 .openHelperFactory(ua.pysanka.clipboard.SecureClipboard.openHelperFactory())
-                .fallbackToDestructiveMigration()
+                // Pysanka: an older app over a newer database starts empty; an upgrade needs its migration
+                .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
                 .build()
         }
     }
@@ -434,7 +416,7 @@ interface ClipboardFilesDao {
     fun getAll(): List<ClipboardFileInfo>
 }
 
-@Database(entities = [ClipboardFileInfo::class], version = 2)
+@Database(entities = [ClipboardFileInfo::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class ClipboardFilesDatabase : RoomDatabase() {
     abstract fun clipboardFilesDao() : ClipboardFilesDao
@@ -447,7 +429,8 @@ abstract class ClipboardFilesDatabase : RoomDatabase() {
                 )
                 // Pysanka: encrypted with SQLCipher; the caller has opened the clipboard vault
                 .openHelperFactory(ua.pysanka.clipboard.SecureClipboard.openHelperFactory())
-                .fallbackToDestructiveMigration()
+                // Pysanka: an older app over a newer database starts empty; an upgrade needs its migration
+                .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
                 .build()
         }
     }

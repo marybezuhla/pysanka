@@ -35,7 +35,7 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import dev.patrickgold.florisboard.R
 import org.florisboard.lib.android.readText
-import org.florisboard.lib.android.showShortToast
+import org.florisboard.lib.android.showLongToast
 import org.florisboard.lib.kotlin.guardedByLock
 import ua.pysanka.typing.AutoCorrect
 import ua.pysanka.typing.KeyNeighbours
@@ -166,9 +166,13 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         val previous = PreviousWord.of(content.textBeforeSelection.dropLast(word.length))
         val found = dict.suggest(word, maxCandidateCount, AutoCorrect.rejected, own, previous)
         AutoCorrect.suggestedFor = word
+        // Pysanka: Ukrainian words with an apostrophe get the same ʼ the key types (smart punctuation),
+        // not the list's straight one, unless one was typed (then that one is kept)
+        val ukApostrophe = subtype.primaryLocale.language == "uk" && prefs.correction.pysankaSmartPunctuation.get() &&
+            word.none { it == '\'' || it == '’' || it == 'ʼ' }
         val list = found.map {
             WordSuggestionCandidate(
-                text = it.word,
+                text = if (ukApostrophe) it.word.replace('\'', 'ʼ') else it.word,
                 confidence = if (it.autoCorrect) 0.9 else 0.5,
                 isEligibleForAutoCommit = autoCorrect && it.autoCorrect,
                 // Only a learned word can be forgotten with a long press
@@ -204,13 +208,13 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         val language = subtype.primaryLocale.language
         if (candidate is NextWordCandidate) {
             return UserWords.forgetPair(appContext, language, candidate.previous, word).also { forgotten ->
-                if (forgotten) appContext.showShortToast(R.string.pysanka__typing__next_word_forgotten, "word" to word)
+                if (forgotten) appContext.showLongToast(R.string.pysanka__typing__next_word_forgotten, "word" to word)
             }
         }
         // Called on the main thread: only words already in memory (as they were just offered)
         if (!dict.isOwn(word, UserWords.peek(language))) return false
         return UserWords.forget(appContext, language, word).also { forgotten ->
-            if (forgotten) appContext.showShortToast(R.string.pysanka__typing__word_forgotten, "word" to word)
+            if (forgotten) appContext.showLongToast(R.string.pysanka__typing__word_forgotten, "word" to word)
         }
     }
 

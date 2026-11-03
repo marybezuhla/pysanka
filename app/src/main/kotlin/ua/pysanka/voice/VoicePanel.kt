@@ -57,6 +57,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -244,7 +245,12 @@ fun VoicePanelView(
                         },
                     )
                 }
-                SnyggText(FlorisImeUi.ClipboardHeaderText.elementName, modifier = Modifier.weight(1f), text = line)
+                SnyggText(
+                    FlorisImeUi.ClipboardHeaderText.elementName,
+                    // Read out when it changes («Розпізнаю…», «Нічого не чути…»)
+                    modifier = Modifier.weight(1f).semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+                    text = line,
+                )
                 when {
                     s is VoiceInput.State.Listening || s == VoiceInput.State.Recognising ->
                         Chip(Icons.Default.Close, stringRes(R.string.pysanka__voice__cancel)) { actions.cancel() }
@@ -275,10 +281,10 @@ fun VoicePanelView(
                 Key(Modifier.weight(3f), icon = Icons.Default.SpaceBar, label = stringRes(R.string.pysanka__voice__space), code = KeyCode.SPACE) { actions.space() }
                 Key(Modifier.weight(1.4f), icon = Icons.AutoMirrored.Filled.KeyboardReturn, label = stringRes(R.string.pysanka__voice__new_line)) { actions.newLine() }
             }
-            LazyRow(Modifier.fillMaxWidth().height(40.dp), contentPadding = PaddingValues(horizontal = 4.dp)) {
+            LazyRow(Modifier.fillMaxWidth().height(48.dp), contentPadding = PaddingValues(horizontal = 4.dp)) {
                 items(emoji) { e ->
                     Box(
-                        Modifier.fillMaxHeight().width(44.dp).clip(CircleShape).clickable(onClickLabel = e, role = Role.Button) {
+                        Modifier.fillMaxHeight().width(48.dp).clip(CircleShape).clickable(onClickLabel = e, role = Role.Button) {
                             FlorisImeService.inputFeedbackController()?.keyPress()
                             actions.emoji(e)
                         },
