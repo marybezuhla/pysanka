@@ -43,6 +43,9 @@ open class RealSettingsScreensTest {
     protected open val prefix = "real"
 
     @Before fun setUp() {
+        // Pysanka's crash handler ends the process (as on a phone): here an error in the background
+        // is printed instead, so the test shows it
+        Thread.setDefaultUncaughtExceptionHandler { thread, e -> System.err.println("Uncaught in ${thread.name}: ${e.stackTraceToString()}") }
         val app = ApplicationProvider.getApplicationContext<FlorisApplication>()
         shadowOf(app.packageManager).addActivityIfNotPresent(ComponentName(app, ComponentActivity::class.java))
         // The settings are read in the background when the app starts
