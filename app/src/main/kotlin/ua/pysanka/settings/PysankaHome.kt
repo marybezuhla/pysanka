@@ -64,7 +64,10 @@ import kotlin.reflect.KClass
  * their defaults.
  */
 @Composable
-fun PysankaHome() {
+fun PysankaHome(
+    /** The block open at first (its title); for the screenshot tests. */
+    initialOpen: String? = null,
+) {
     val prefs by FlorisPreferenceStore
     val navController = LocalNavController.current
     val context = LocalContext.current
@@ -73,7 +76,7 @@ fun PysankaHome() {
     fun state(v: Boolean) = if (v) on else off
 
     // One block open at a time: opening another closes it
-    val openBlock = rememberSaveable { mutableStateOf<String?>(null) }
+    val openBlock = rememberSaveable { mutableStateOf(initialOpen) }
     androidx.compose.runtime.CompositionLocalProvider(LocalOpenBlock provides openBlock) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
