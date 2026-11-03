@@ -85,7 +85,7 @@ class TextKeyboard(
     /** Pysanka: the keys moved apart into two halves with a [gap] between them (see [ua.pysanka.ui.SplitKeyboard]). */
     fun pysankaSplit(width: Float, gap: Float) {
         if (gap <= 0f) return
-        val all = keys().toList()
+        val all = keys().asSequence().toList()
         val bounds = all.map { ua.pysanka.ui.SplitKeyboard.Bounds(it.touchBounds.left, it.touchBounds.right, it.visibleBounds.left, it.visibleBounds.right) }
         ua.pysanka.ui.SplitKeyboard.apply(width, gap, bounds)
         for ((k, b) in all.zip(bounds)) {
