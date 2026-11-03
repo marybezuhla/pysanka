@@ -71,6 +71,9 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
 
     private fun norm(word: String) = PersonalWords.key(word)
 
+    /** Pysanka: a word with «ё» written as people often type it («ещё» → «еще»), to show one of the two. */
+    private fun yo(key: String) = key.replace('ё', 'е')
+
     /** How common a word is for this person (0: not a word). */
     private fun score(key: String, own: PersonalWords?): Int {
         val base = freq[key]
@@ -104,6 +107,8 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
         rejected: Set<String> = emptySet(),
         own: PersonalWords? = null,
         previous: String? = null,
+        // Pysanka: swear words and slurs only when typed in full (see [Offensive])
+        blockOffensive: Boolean = true,
     ): List<Suggestion> {
         if (typed.isEmpty() || max <= 0) return emptyList()
         val lower = norm(typed)
@@ -127,7 +132,9 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
             scored.merge(cand, c * (if (extra == 0) 1.2 else 1.0 / (1 + extra * 0.05)), ::maxOf)
         }
         if (known) scored[lower] = maxOf(scored[lower] ?: 0.0, f(lower) * 1.5)
-        val ranked = scored.entries.sortedByDescending { it.value }.take(max)
+        if (blockOffensive) scored.keys.removeAll { it != lower && Offensive.isOffensive(it) }
+        // One spelling of a word written with «ё» or «е» («ещё», «еще»): the likelier one
+        val ranked = scored.entries.sortedByDescending { it.value }.distinctBy { yo(it.key) }.take(max)
         val best = ranked.firstOrNull()
         val second = ranked.getOrNull(1)?.value ?: 0.0
         // Decided before the word before is weighed: a correction must stand on its own
@@ -143,7 +150,7 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
             scored.mapValues { (key, v) ->
                 val n = own.pairCount(prev, key)
                 if (n >= PersonalWords.PAIR_KNOWN) v * (1 + PAIR_GAIN * minOf(n, PAIR_USES)) else v
-            }.entries.sortedByDescending { it.value }.take(max).map { it.key }
+            }.entries.sortedByDescending { it.value }.distinctBy { yo(it.key) }.take(max).map { it.key }
         } else {
             ranked.map { it.key }
         }

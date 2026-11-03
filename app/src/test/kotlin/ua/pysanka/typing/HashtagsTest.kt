@@ -63,7 +63,7 @@ class HashtagsTest {
 
     @Test fun aLanguageWithoutAWordList() {
         // Every word is unknown there: one used once counts, forms are left as written
-        val tags = Hashtags.keywords("Утром кофе и прогулка по набережной", { 0 }, max = 4, hasList = false)
-        assertTrue("кофе" in tags && "прогулка" in tags)
+        val tags = Hashtags.keywords("Rano kawa i spacer nad rzeką", { 0 }, max = 4, hasList = false)
+        assertTrue("kawa" in tags && "spacer" in tags)
     }
 }

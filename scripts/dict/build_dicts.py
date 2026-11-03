@@ -9,7 +9,7 @@ Sources (both checked out by hand, see README in this folder):
   GPL 3.0+ / LGPL 2.1+ / MPL 1.1): a Ukrainian word is kept only if the dictionary knows it, so
   Russian words and misspellings common in subtitles are left out.
 - Russian: the Russian hunspell dictionary of LibreOffice (ru_RU.dic/.aff, by A. Lebedev;
-  LGPL / BSD-style, see its README): likewise, only words it knows (no misspellings). Written
+  BSD-style licence, see its README): likewise, only words it knows (no misspellings). Written
   without «ё» where the subtitles do so («еще»), as people type.
 
 Output: {"word": frequency 1..255} for the most frequent words, frequency on a log scale.
@@ -65,11 +65,18 @@ def hunspell_forms(dic: Path, aff: Path, lang: str = "uk") -> set[str]:
         if stem != stem.lower():
             if stem.isupper() or (lang == "uk" and not any(c in UKRAINIAN_ONLY for c in stem.lower())):
                 continue
+            # Russian: no abbreviations in mixed case («мА», «эВ») and no short names that are
+            # mostly parts of others or sounds («Лос», «Дж», «Эмм»)
+            if lang == "ru" and (any(c.isupper() for c in stem[1:]) or len(stem) <= 3):
+                continue
         forms.add(stem)
         for f in flags:
             for strip, add, cond in rules.get(f, []):
                 if cond.search(stem) and stem.endswith(strip):
                     forms.add(stem[: len(stem) - len(strip)] + add)
+    if lang == "ru":
+        # Short forms of names are mostly sounds or parts of others («Эмм» of «Эмма»)
+        forms = {f for f in forms if f == f.lower() or len(f) > 3}
     return forms
 
 

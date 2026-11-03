@@ -125,8 +125,9 @@ def main() -> None:
                         base[f] = freq
                         known.add(f.lower())
                         added += 1
-                    elif lang == "ru" and f not in base and f.lower() in base and f != f.lower():
-                        # A name the subtitles have in small letters («киев»): its capital, as common as the theme
+                    elif lang == "ru" and f not in base and f != f.lower() and base.get(f.lower(), freq) < freq:
+                        # A name the subtitles have in small letters, and rarely as a word («киев»): its
+                        # capital, as common as the theme. A common word stays as it is («ровно», «новая»)
                         base[f] = max(base.pop(f.lower()), freq)
                         added += 1
                     elif lang == "ru" and base.get(f, freq) < freq:

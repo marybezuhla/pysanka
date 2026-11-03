@@ -65,7 +65,7 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         return suggesters.withLock { map ->
             // A language without a list is remembered as such (not looked for on every key)
             if (lang in map) return@withLock map[lang]
-            // A language without a list (Russian, Polish…) gets an empty one: the person's own words
+            // A language without a list (Polish, German…) gets an empty one: the person's own words
             // and text shortcuts still come, corrections never (see ua.pysanka.typing.WordLists)
             runCatching {
                 val words = if (ua.pysanka.typing.WordLists.has(appContext, lang)) {
@@ -208,7 +208,10 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         }
         val autoCorrect = hasList && prefs.correction.pysankaAutoCorrect.get() && shortcut == null
         val previous = PreviousWord.of(content.textBeforeSelection.dropLast(word.length))
-        val found = dict.suggest(word, maxCandidateCount, AutoCorrect.rejected, own, previous)
+        val found = dict.suggest(
+            word, maxCandidateCount, AutoCorrect.rejected, own, previous,
+            blockOffensive = prefs.suggestion.blockPossiblyOffensive.get(),
+        )
         AutoCorrect.suggestedFor = word
         // Pysanka: Ukrainian words with an apostrophe get the same ʼ the key types (smart punctuation),
         // not the list's straight one, unless one was typed (then that one is kept)

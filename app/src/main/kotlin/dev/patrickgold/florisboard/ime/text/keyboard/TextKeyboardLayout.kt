@@ -81,6 +81,7 @@ import dev.patrickgold.florisboard.ime.text.key.KeyVariation
 import dev.patrickgold.florisboard.ime.theme.FlorisImeUi
 import dev.patrickgold.florisboard.ime.window.LocalWindowController
 import dev.patrickgold.florisboard.keyboardManager
+// Pysanka: the active language, for swipe only where it has a word list
 import dev.patrickgold.florisboard.subtypeManager
 import dev.patrickgold.florisboard.lib.FlorisRect
 import dev.patrickgold.florisboard.lib.Pointer
@@ -415,6 +416,7 @@ private class TextKeyboardLayoutController(
     private val prefs by FlorisPreferenceStore
     private val editorInstance by context.editorInstance()
     private val keyboardManager by context.keyboardManager()
+    // Pysanka: for isGlideEnabled (swipe only in a language with a word list)
     private val subtypeManagerForGlide by context.subtypeManager()
     private val appContextForGlide = context.applicationContext
 
