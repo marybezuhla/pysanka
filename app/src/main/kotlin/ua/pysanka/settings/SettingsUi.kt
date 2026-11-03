@@ -152,11 +152,11 @@ fun LinkRow(title: String, hint: String? = null, onClick: () -> Unit) {
 
 /** A row that does something at once (with its own confirmation where needed). */
 @Composable
-fun ActionRow(title: String, hint: String? = null, onClick: () -> Unit) {
+fun ActionRow(title: String, hint: String? = null, enabled: Boolean = true, onClick: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(enabled = enabled, onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-    ) { RowText(title, hint, true, Modifier.weight(1f)) }
+    ) { RowText(title, hint, enabled, Modifier.weight(1f)) }
 }
 
 /** One of a few choices: the name and the chosen one; a tap shows them all. */
