@@ -1,6 +1,7 @@
 package ua.pysanka.settings
 
 import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.BorderStroke
@@ -192,7 +193,8 @@ fun <T> ChoiceRow(title: String, options: List<Pair<T, String>>, selected: T, en
             onDismissRequest = { asking = false },
             title = { Text(title) },
             text = {
-                Column {
+                // Scrolls when the choices are more than the screen holds (the settings' languages)
+                Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
                     for ((value, label) in options) {
                         Row(
                             Modifier.fillMaxWidth().heightIn(min = 48.dp)

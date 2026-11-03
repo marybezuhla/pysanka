@@ -44,7 +44,8 @@ those copies keep that licence.
   there); the dictionaries are used only while the lists are made and are not part of Pysanka
   (`scripts/dict/build_more.py`).
 - `app/src/main/assets/ime/dict/be.json` — the Belarusian word list: word counts from Belacorpus
-  (L. F. Mazzitelli, 2021, https://github.com/Belarusian-Corpus; only the counts are used, no text),
+  (L. F. Mazzitelli, 2021, https://github.com/Belarusian-Corpus, texts at
+  https://github.com/lidia-m/belacorpus_corpus; only the counts of words are used, no text is included),
   words kept if LibreOffice's be_BY dictionary (official orthography) or spell-be-tarask
   (https://github.com/375gnu/spell-be-tarask, classical orthography, M. Udodau, H. Valoshka,
   CC BY-SA 3.0) accepts them; the list is under CC BY-SA 4.0 (`scripts/dict/build_be.py`).

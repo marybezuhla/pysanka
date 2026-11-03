@@ -90,13 +90,14 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         val frequency = { w: String -> dict?.frequency(w) ?: 0 }
         val complete = { p: String -> dict?.suggest(p, 3)?.map { it.word }?.filter { PersonalWords.key(it).startsWith(PersonalWords.key(p)) }.orEmpty() }
         val hasList = ua.pysanka.typing.WordLists.has(appContext, subtype.primaryLocale.language)
-        val single = ua.pysanka.typing.Hashtags.suggest(prefix, text, own, frequency, complete, hasList = hasList)
+        val language = subtype.primaryLocale.language
+        val single = ua.pysanka.typing.Hashtags.suggest(prefix, text, own, frequency, complete, hasList = hasList, language = language)
             .map { ua.pysanka.typing.HashtagCandidate(it) }
         // Right after «#»: the text's key words, all at once, first
         if (prefix.isNotEmpty()) return single
         val bundle = ua.pysanka.typing.Hashtags.keywords(
             text, frequency, complete, ua.pysanka.typing.Hashtags.BUNDLE,
-            hasList = hasList,
+            hasList = hasList, language = language,
         )
         return if (bundle.size >= 2) listOf(ua.pysanka.typing.HashtagCandidate(bundle)) + single else single
     }

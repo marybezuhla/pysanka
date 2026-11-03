@@ -43,7 +43,9 @@ object Offensive {
             return hit(CYRILLIC.stems, CYRILLIC.words) || hit(ENGLISH.stems, ENGLISH.words) ||
                 LanguageExtras.offensive.values.any { hit(it.stems, it.words) }
         }
-        val own = builtIn(language)?.let { hit(it.stems, it.words) } == true
+        val own = builtIn(language)?.let { hit(it.stems, it.words) } == true ||
+            // English swear words and slurs turn up in every Latin-script language's subtitles too
+            (language !in setOf("uk", "ru", "be") && hit(ENGLISH.stems, ENGLISH.words))
         return own || LanguageExtras.offensive[language]?.let { hit(it.stems, it.words) } == true
     }
 }

@@ -46,6 +46,7 @@ object Hashtags {
     fun suggest(
         prefix: String, text: String, own: PersonalWords?, frequency: (String) -> Int, complete: (String) -> List<String>, max: Int = 5,
         hasList: Boolean = true,
+        language: String? = null,
     ): List<String> {
         val p = PersonalWords.key(prefix)
         val out = LinkedHashMap<String, String>()
@@ -59,7 +60,7 @@ object Hashtags {
             keys.take(max).forEach { add(o.display(it) ?: it) }
         }
         // 2. The text's key words
-        keywords(text, frequency, complete, max = 12, hasList = hasList).filter { PersonalWords.key(it).startsWith(p) }.forEach { add(it) }
+        keywords(text, frequency, complete, max = 12, hasList = hasList, language = language).filter { PersonalWords.key(it).startsWith(p) }.forEach { add(it) }
         // 3. The word list
         if (p.length >= 2) complete(prefix).forEach { add(it) }
         return out.values.toList()
@@ -155,6 +156,8 @@ object Hashtags {
         // Pysanka: false for a language without a word list: every word is unknown there, so one
         // used once counts too, and no word is turned into another form
         hasList: Boolean = true,
+        // Pysanka: whose little words are left out (see LanguageExtras.stop)
+        language: String? = null,
     ): List<String> {
         val tagged = Regex("""#([\p{L}\p{N}_]+)""").findAll(text).map { PersonalWords.key(it.groupValues[1]) }.toSet()
         class Group(val forms: MutableList<String> = mutableListOf(), var count: Int = 0, var first: Int = 0, var name: Boolean = false)
@@ -162,7 +165,7 @@ object Hashtags {
         for ((i, m) in WORD.findAll(text).withIndex()) {
             val w = m.value
             val key = PersonalWords.key(w)
-            if (key.length < 4 || key in STOP || key in LanguageExtras.stop || key.any { it.isDigit() } || key in tagged) continue
+            if (key.length < 4 || key in STOP || key in LanguageExtras.stop(language) || key.any { it.isDigit() } || key in tagged) continue
             val g = groups.getOrPut(stem(key)) { Group(first = i) }
             g.forms += w
             g.count++

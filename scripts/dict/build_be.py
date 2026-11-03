@@ -23,6 +23,10 @@ from build_more import Hunspell  # noqa: E402
 LETTERS = "абвгґдеёжзійклмнопрстуўфхцчшыьэюя"
 WORD = re.compile(rf"[{LETTERS}]+(?:['’ʼ-][{LETTERS}]+)*", re.IGNORECASE)
 KEEP = 60000
+SHORT = {
+    "а", "і", "у", "ў", "з", "я", "о", "ж", "на", "не", "да", "за", "па", "ён", "як", "ці", "то", "ну", "аб", "ад",
+    "бо", "ды", "мы", "вы", "ты", "ім", "іх", "яе", "ля", "аж", "бы", "ой", "ох", "ах", "эх", "эй", "ну", "но", "ад",
+}
 
 
 def main() -> None:
@@ -51,12 +55,13 @@ def main() -> None:
     for w, n in sorted(counts.items(), key=lambda kv: -kv[1]):
         if len(kept) >= KEEP:
             break
-        # One letter: only the words that are one letter (not «п.» or «ст.» of abbreviations)
-        if len(w) == 1 and w not in "аіуўзяо":
+        # One or two letters: only the words that are so short (not «п.», «ст.» of abbreviations,
+        # letter names «эм», «цэ», initials); a capital only from three letters on
+        if len(w) <= 2 and w not in SHORT:
             continue
         if any(h.ok(w) for h in hun):
             kept[w] = kept.get(w, 0) + n
-        elif len(w) > 1 and any(h.ok(w[0].upper() + w[1:]) for h in hun):
+        elif len(w) > 3 and any(h.ok(w[0].upper() + w[1:]) for h in hun):
             W = w[0].upper() + w[1:]
             kept[W] = kept.get(W, 0) + n
     ordered = sorted(kept.items(), key=lambda kv: -kv[1])

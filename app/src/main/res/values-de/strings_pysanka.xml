@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">Pysanka baut auf FlorisBoard von The FlorisBoard Contributors auf (Apache 2.0); Pysanka selbst ist ein unabhängiges Projekt unter GPL-3.0 oder später</string>
     <string name="pysanka__about__license__summary">GPL-3.0 oder später: freie Software ohne jegliche Gewährleistung. Quellcode: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Datenquellen</string>
-    <string name="pysanka__about__data__summary">Wortlisten aus FrequencyWords (CC BY-SA 4.0) und dict_uk, Emoji-Namen aus Unicode CLDR, Texterkennung mit PaddleOCR (Apache 2.0), Diktieren mit Whisper (OpenAI, MIT) und whisper.cpp (MIT). Das KI-Modell Gemma (Google) wird separat heruntergeladen, unter den Gemma-Nutzungsbedingungen.</string>
+    <string name="pysanka__about__data__summary">Wortlisten aus FrequencyWords (CC BY-SA 4.0) und dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), Emoji-Namen aus Unicode CLDR, Texterkennung mit PaddleOCR (Apache 2.0), Diktieren mit Whisper (OpenAI, MIT) und whisper.cpp (MIT). Das KI-Modell Gemma (Google) wird separat heruntergeladen, unter den Gemma-Nutzungsbedingungen.</string>
     <string name="pysanka__error__copy">Kopieren nicht möglich</string>
     <string name="pysanka__error__license">Der Lizenztext lässt sich nicht anzeigen. Er liegt im Repository: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Öffnen nicht möglich: Keine App auf dem Handy kann das</string>

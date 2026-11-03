@@ -72,7 +72,7 @@ class EmojiSuggestionProvider(private val context: Context) : SuggestionProvider
         // Pysanka: for a word as it is typed (as Apple does), only an emoji the word really names:
         // a keyword that is the word, or (from 4 letters) begins with it; "при" offers nothing
         if (prefs.emoji.suggestionType.get() == EmojiSuggestionType.INLINE_TEXT) {
-            return withContext(Dispatchers.Default) { inline(emojis, query, maxCandidateCount, showName) }
+            return withContext(Dispatchers.Default) { inline(emojis, query, maxCandidateCount, showName, subtype.primaryLocale.language) }
         }
         val candidates = withContext(Dispatchers.Default) {
             emojis.parallelStream()
@@ -98,8 +98,8 @@ class EmojiSuggestionProvider(private val context: Context) : SuggestionProvider
         return candidates
     }
 
-    private fun inline(emojis: List<Emoji>, query: String, max: Int, showName: Boolean): List<SuggestionCandidate> =
-        pysankaEmojiFor(emojis, query, max).map { EmojiSuggestionCandidate(emoji = it, showName = showName, sourceProvider = this) }
+    private fun inline(emojis: List<Emoji>, query: String, max: Int, showName: Boolean, language: String?): List<SuggestionCandidate> =
+        pysankaEmojiFor(emojis, query, max, language).map { EmojiSuggestionCandidate(emoji = it, showName = showName, sourceProvider = this) }
 
     override suspend fun notifySuggestionAccepted(subtype: Subtype, candidate: SuggestionCandidate) {
         val updateHistory = prefs.emoji.suggestionUpdateHistory.get()
@@ -158,9 +158,9 @@ private fun String.containsWeighted(other: String, ignoreCase: Boolean = false):
  * «дім» the house before the empty nest). Little words (мені, для, the…) offer none: they are only
  * parts of longer keywords («мені погано» is 🤮).
  */
-internal fun pysankaEmojiFor(emojis: List<Emoji>, query: String, max: Int): List<Emoji> {
+internal fun pysankaEmojiFor(emojis: List<Emoji>, query: String, max: Int, language: String? = null): List<Emoji> {
     val q = query.lowercase()
-    if (q in PYSANKA_EMOJI_STOP_WORDS || q in ua.pysanka.typing.LanguageExtras.stop) return emptyList()
+    if (q in PYSANKA_EMOJI_STOP_WORDS || q in ua.pysanka.typing.LanguageExtras.stop(language)) return emptyList()
     fun score(e: Emoji): Int {
         val name = e.name.lowercase()
         val keywords = e.keywords.map { it.lowercase() }

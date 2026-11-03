@@ -87,7 +87,9 @@ class WordSuggester(
 
     /** Pysanka: a word as typed without the marks of Latin letters (see [bareKeys]). */
     private fun bare(word: String): String {
-        if (word.all { it < '\u00C0' }) return word
+        // Only Latin letters have marks to leave out: plain ASCII and every other alphabet (Cyrillic)
+        // are as typed (and a Ukrainian list builds no index at all, quickly)
+        if (word.all { it < '\u00C0' || it > '\u024F' }) return word
         val sb = StringBuilder()
         for (ch in word) {
             when (ch) {

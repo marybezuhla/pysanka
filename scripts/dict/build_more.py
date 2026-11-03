@@ -55,13 +55,44 @@ LANGS = {
 # The words of one letter each language has (other single letters in subtitles are initials or
 # parts of abbreviations, and would be offered while typing)
 ONE = {"pl": "aiouwz", "hu": "aés", "ro": "aeio", "sk": "aikosuvz", "es": "aeouy", "pt": "aàeéoó", "fr": "aày", "de": ""}
+# English words the subtitles of other languages have (titles, interjections), taken as names
+ENGLISH = {"the", "hi", "he", "she", "mr", "mrs", "ms", "uh", "oh", "ok", "hey", "yes", "no", "you", "and"}
 # Romanian subtitles often have the old cedilla letters: the correct comma-below ones instead
 FIX = {"ro": {"ş": "ș", "ţ": "ț"}}
+
+
+def stems(dic: Path) -> set[str]:
+    """The words a hunspell dictionary lists as such (before its affixes), as written there."""
+    raw = dic.read_bytes()
+    enc = "utf-8"
+    for line in (dic.with_suffix(".aff")).read_bytes().decode("latin-1").splitlines():
+        if line.startswith("SET "):
+            enc = line.split()[1].strip()
+    out = set()
+    for line in raw.decode(enc, errors="ignore").splitlines()[1:]:
+        w = line.split("/")[0].split("\t")[0].strip()
+        if w:
+            out.add(w)
+    return out
 
 
 def build(lang: str, fw: Path, lo: Path) -> dict[str, int]:
     subs, dicts, letters, keep = LANGS[lang]
     hun = [Hunspell(lo / f"{d}.aff", lo / f"{d}.dic") for d in dicts]
+    # German: a noun the dictionary lists with its capital («Zeit», «Schule», «Spiel») is taken with
+    # it, also when the small word is a verb form or a preposition too; but not one ending in -en,
+    # most often typed as the verb («leben», «essen»: a typed word is kept as typed anyway)
+    nouns: set[str] = set()
+    if lang == "de":
+        listed = set().union(*(stems(lo / f"{d}.dic") for d in dicts))
+        nouns = {w for w in listed if w[:1].isupper() and (w.lower() not in listed or not w.endswith("en"))}
+        # …and never a little word or one typed small nearly always («nicht», «schnell», «zwei»:
+        # Pysanka's lists stop_de.txt and lower_de.txt)
+        here = Path(__file__).resolve().parent
+        small = set()
+        for f in ("stop_de.txt", "lower_de.txt"):
+            small |= {l.strip().lower() for l in (here / f).read_text(encoding="utf-8").splitlines() if l.strip() and not l.startswith("#")}
+        nouns = {w for w in nouns if w.lower() not in small}
     word_re = re.compile(rf"^[{letters}]+(['’-][{letters}]+)*$")
     raw: dict[str, int] = {}
     for s in subs:
@@ -78,13 +109,17 @@ def build(lang: str, fw: Path, lo: Path) -> dict[str, int]:
             break
         if len(word) == 1 and word not in ONE[lang]:
             continue
+        cap = word[0].upper() + word[1:]
+        if cap in nouns:
+            out[cap] = out.get(cap, 0) + n
+            continue
         # As written in small letters if the dictionary takes it so; else with a capital (a German
         # noun, a name); else not a word
         if any(h.ok(word) for h in hun):
             out[word] = out.get(word, 0) + n
-        elif len(word) > 1 and any(h.ok(word[0].upper() + word[1:]) for h in hun):
-            w = word[0].upper() + word[1:]
-            out[w] = out.get(w, 0) + n
+        elif len(word) > 2 and word not in ENGLISH and any(h.ok(cap) for h in hun):
+            # (not a short one: initials and abbreviations; not an English word taken as a name)
+            out[cap] = out.get(cap, 0) + n
     counts = sorted(out.items(), key=lambda kv: -kv[1])
     top, low = math.log(counts[0][1]), math.log(max(counts[-1][1], 1))
     return {w: max(1, round(1 + 254 * (math.log(n) - low) / max(top - low, 1e-9))) for w, n in counts}

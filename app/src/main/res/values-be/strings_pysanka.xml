@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">Пісанка створана на аснове FlorisBoard ад The FlorisBoard Contributors (Apache 2.0); гэта незалежны праект, а сама Пісанка распаўсюджваецца паводле GPL-3.0 або навейшай версіі</string>
     <string name="pysanka__about__license__summary">GPL-3.0 або навейшая: свабоднае праграмнае забеспячэнне без аніякіх гарантый. Зыходны код: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Крыніцы даных</string>
-    <string name="pysanka__about__data__summary">Спісы слоў з FrequencyWords (CC BY-SA 4.0) і dict_uk, назвы эмодзі з Unicode CLDR, распазнаванне тэксту — PaddleOCR (Apache 2.0), дыктоўка — Whisper (OpenAI, MIT) і whisper.cpp (MIT). Мадэль ШІ Gemma (Google) вы спампоўваеце асобна, на ўмовах Gemma.</string>
+    <string name="pysanka__about__data__summary">Спісы слоў з FrequencyWords (CC BY-SA 4.0) і dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), назвы эмодзі з Unicode CLDR, распазнаванне тэксту — PaddleOCR (Apache 2.0), дыктоўка — Whisper (OpenAI, MIT) і whisper.cpp (MIT). Мадэль ШІ Gemma (Google) вы спампоўваеце асобна, на ўмовах Gemma.</string>
     <string name="pysanka__error__copy">Не ўдалося скапіяваць</string>
     <string name="pysanka__error__license">Не ўдалося паказаць тэкст ліцэнзіі. Ён ёсць у рэпазіторыі: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Не ўдалося адкрыць: на тэлефоне няма праграмы, якая гэта ўмее</string>
