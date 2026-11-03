@@ -1,0 +1,94 @@
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/dev/patrickgold/florisboard/lib/crashutility/CrashUtility.kt:170:17 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'Thread.UncaughtExceptionHandler?'.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/dev/patrickgold/florisboard/lib/ext/ExtensionMaintainer.kt:27:1 Custom serializer 'ExtensionMaintainerSerializer' is private, while the type 'ExtensionMaintainer' is not. This can cause 'serializer not found' errors on use sites. Consider aligning the visibilities.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/ua/pysanka/ai/AiPanel.kt:751:44 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Int'.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/ua/pysanka/ai/AiPrompts.kt:15:21 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+--
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/dev/patrickgold/florisboard/lib/crashutility/CrashUtility.kt:170:17 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'Thread.UncaughtExceptionHandler?'.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/dev/patrickgold/florisboard/lib/ext/ExtensionMaintainer.kt:27:1 Custom serializer 'ExtensionMaintainerSerializer' is private, while the type 'ExtensionMaintainer' is not. This can cause 'serializer not found' errors on use sites. Consider aligning the visibilities.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/ua/pysanka/ai/AiPanel.kt:751:44 Unnecessary non-null assertion (!!) on a non-null receiver of type 'Int'.
+w: file:///home/runner/work/pysanka/pysanka/app/src/main/kotlin/ua/pysanka/ai/AiPrompts.kt:15:21 This annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+----
+SettingsScreensTest > typingOpenDark PASSED
+
+VoicePanelScreensTest > failed PASSED
+
+VoicePanelScreensTest > listening PASSED
+
+VoicePanelScreensTest > listeningDark PASSED
+
+VoicePanelScreensTest > hold PASSED
+
+VoicePanelScreensTest > ready PASSED
+
+VoicePanelScreensTest > recognising PASSED
+
+VoicePanelScreensTest > inserted PASSED
+
+VoicePanelScreensTest > insertedDark PASSED
+
+WriteWholeTest > aFailedWriteKeepsTheOldFile PASSED
+
+WriteWholeTest > writesAndReplaces PASSED
+
+WriteWholeTest > aSealedWriterThatClosesTheStream PASSED
+
+HardwareKeysTest > ukrainianLettersAndApostrophe PASSED
+
+HardwareKeysTest > shortcutsAndOtherKeysPass PASSED
+
+HardwareKeysTest > shiftAndCapsLock PASSED
+
+HardwareKeysTest > languageSwitches PASSED
+
+HardwareKeysTest > englishKeepsALatinSystemLayout PASSED
+
+HardwareKeysTest > typesInTheKeyboardsLanguage PASSED
+
+HashtagsTest > ownTagsFirstThenThePostThenTheList PASSED
+
+HashtagsTest > wordsOfThePostRarerFirst PASSED
+
+HashtagsTest > theTagBeingTyped PASSED
+
+WordTailTest > apostropheAndHyphenInside PASSED
+
+WordTailTest > restOfTheWord PASSED
+
+WordTailTest > nothingAfterAWordEnd PASSED
+
+WordTailTest > closingQuoteAndDecomposedLetters PASSED
+
+SwipeDecoderTest > neverAWordWithoutFrequency PASSED
+
+SwipeDecoderTest > ukrainianWordsFromTheOwnersVideo PASSED
+
+SwipeDecoderTest > englishWords PASSED
+
+SwipeDecoderTest > lettersOutsideTheLayoutAreSkipped PASSED
+
+SplitKeyboardTest > whenToSplit PASSED
+
+SplitKeyboardTest > aLetterAcrossTheMiddleGoesToOneSide PASSED
+
+SplitKeyboardTest > aGapBetweenTheHalves PASSED
+
+> Task :app:mergeReleaseComposeMapping
+> Task :app:convertShrunkResourcesToBinaryRelease
+> Task :app:lintVitalReportRelease
+> Task :app:lintVitalRelease
+> Task :app:optimizeReleaseResources
+> Task :app:compileReleaseArtProfile
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1793675821523.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/pysanka/pysanka/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 8m 23s
+362 actionable tasks: 362 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.2.0/userguide/configuration_cache_enabling.html
