@@ -75,6 +75,9 @@ fun blockTint(): Tint {
  * One theme of the settings. Closed, it shows its [title] and [summary]; a tap opens it.
  * [padded] false for blocks of rows that draw their own dividers.
  */
+/** Pysanka: the one open block of a screen (by its title), for blocks that open one at a time. */
+val LocalOpenBlock = androidx.compose.runtime.compositionLocalOf<androidx.compose.runtime.MutableState<String?>?> { null }
+
 @Composable
 fun Block(
     title: String,
@@ -84,7 +87,13 @@ fun Block(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val tint = blockTint()
-    var open by rememberSaveable(title) { mutableStateOf(startOpen) }
+    // Among blocks that share one open block (the settings' home), opening one closes the others
+    val shared = LocalOpenBlock.current
+    var ownOpen by rememberSaveable(title) { mutableStateOf(startOpen) }
+    val open = if (shared != null) shared.value == title else ownOpen
+    fun toggle() {
+        if (shared != null) shared.value = if (open) null else title else ownOpen = !ownOpen
+    }
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, tint.container),
@@ -100,7 +109,7 @@ fun Block(
                     heading()
                     stateDescription = stateText
                 }
-                .clickable(role = Role.Button) { open = !open }
+                .clickable(role = Role.Button) { toggle() }
                 .heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

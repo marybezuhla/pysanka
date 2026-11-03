@@ -624,6 +624,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "keyboard__key_spacing_horizontal",
             default = 100,
         )
+        // Pysanka: the keyboard's height as a share of the usual one (a size set by dragging wins over it)
+        val pysankaHeight = int(
+            key = "pysanka__keyboard__height",
+            default = 100,
+        )
         val popupEnabled = boolean(
             key = "keyboard__popup_enabled",
             default = true,

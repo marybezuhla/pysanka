@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -71,6 +72,9 @@ fun PysankaHome() {
     val off = stringRes(R.string.pysanka__settings__off)
     fun state(v: Boolean) = if (v) on else off
 
+    // One block open at a time: opening another closes it
+    val openBlock = rememberSaveable { mutableStateOf<String?>(null) }
+    androidx.compose.runtime.CompositionLocalProvider(LocalOpenBlock provides openBlock) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
             stringRes(R.string.pysanka__settings__tagline),
@@ -174,6 +178,7 @@ fun PysankaHome() {
         ) {
             LinkRow(stringRes(R.string.about__title)) { navController.navigate(Routes.Settings.About) }
         }
+    }
     }
 }
 
@@ -334,6 +339,26 @@ private fun LookSettings() {
     val fontSize by prefs.keyboard.fontSizeMultiplierPortrait.observeAsState()
     SliderRow(stringRes(R.string.pysanka__look__font_size), fontSize, 50..150, 5, { "$it %" }) {
         scope.launch { prefs.keyboard.fontSizeMultiplierPortrait.set(it) }
+    }
+    // The keyboard's height; a size set by dragging the keyboard's frame is let go, so this one shows
+    val height by prefs.keyboard.pysankaHeight.observeAsState()
+    SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }) {
+        scope.launch {
+            prefs.keyboard.pysankaHeight.set(it)
+            prefs.keyboard.windowConfig.set(prefs.keyboard.windowConfig.get().mapValues { (_, c) -> c.copy(fixedProps = emptyMap()) })
+        }
+    }
+    // Gaps between the keys: as usual, or wider (each key stands apart, as many keyboards draw them)
+    val gapH by prefs.keyboard.keySpacingHorizontal.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__look__key_gaps),
+        listOf(false to stringRes(R.string.pysanka__look__key_gaps_usual), true to stringRes(R.string.pysanka__look__key_gaps_wide)),
+        gapH > 100,
+    ) { wide ->
+        scope.launch {
+            prefs.keyboard.keySpacingHorizontal.set(if (wide) WIDE_GAP_H else 100)
+            prefs.keyboard.keySpacingVertical.set(if (wide) WIDE_GAP_V else 100)
+        }
     }
     BlockDivider()
     PrefToggle(prefs.inputFeedback.hapticEnabled, stringRes(R.string.pysanka__sound__haptic))
@@ -559,3 +584,7 @@ private fun seconds(n: Int) = if (n % 60 == 0) {
 } else {
     stringRes(R.string.pysanka__time__after_seconds, "n" to n)
 }
+
+/** Pysanka: the wider gaps between keys, in percent of the usual. */
+private const val WIDE_GAP_H = 200
+private const val WIDE_GAP_V = 170

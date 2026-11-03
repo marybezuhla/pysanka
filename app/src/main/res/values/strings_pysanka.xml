@@ -450,4 +450,8 @@
     <string name="pysanka__look__split_auto">Automatic on a tablet or foldable</string>
     <string name="pysanka__look__split_on">Always</string>
     <string name="pysanka__look__split_off">Never</string>
+    <string name="pysanka__look__height">Keyboard height</string>
+    <string name="pysanka__look__key_gaps">Gaps between keys</string>
+    <string name="pysanka__look__key_gaps_usual">Usual</string>
+    <string name="pysanka__look__key_gaps_wide">Wide</string>
 </resources>

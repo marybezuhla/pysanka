@@ -451,4 +451,8 @@
     <string name="pysanka__look__split_auto">Автоматично на планшеті й складаному телефоні</string>
     <string name="pysanka__look__split_on">Завжди</string>
     <string name="pysanka__look__split_off">Ніколи</string>
+    <string name="pysanka__look__height">Висота клавіатури</string>
+    <string name="pysanka__look__key_gaps">Відступи між клавішами</string>
+    <string name="pysanka__look__key_gaps_usual">Звичайні</string>
+    <string name="pysanka__look__key_gaps_wide">Просторі</string>
 </resources>

@@ -139,8 +139,9 @@ class ImeWindowController(
             activeWindowConfig,
             userPreferredOptions,
             editor.version,
-        ) { rootInsets, windowConfig, userConfig, _ ->
-            doComputeWindowSpec(rootInsets, windowConfig, userConfig)
+            prefs.keyboard.pysankaHeight.asFlow(),
+        ) { rootInsets, windowConfig, userConfig, _, heightPercent ->
+            doComputeWindowSpec(rootInsets, windowConfig, userConfig, heightPercent)
         }.collectIn(scope) { windowSpec ->
             activeWindowSpec.value = windowSpec
         }
@@ -261,12 +262,18 @@ class ImeWindowController(
         rootInsets: ImeInsets.Root,
         windowConfig: ImeWindowConfig,
         userPreferredOptions: ImeWindowSpec.UserPreferredOptions,
+        // Pysanka: the height chosen in the settings, in percent of the usual
+        heightPercent: Int = 100,
     ): ImeWindowSpec {
         return when (windowConfig.mode) {
             ImeWindowMode.FIXED -> {
                 val constraints = ImeWindowConstraints.of(rootInsets, windowConfig.fixedMode)
-                val props = (windowConfig.fixedProps[windowConfig.fixedMode] ?: constraints.defaultProps)
-                    .constrained(constraints)
+                val props = (
+                    windowConfig.fixedProps[windowConfig.fixedMode]
+                        ?: constraints.defaultProps.let { d ->
+                            if (heightPercent == 100) d else d.copy(keyboardHeight = d.keyboardHeight * (heightPercent / 100f))
+                        }
+                    ).constrained(constraints)
                 ImeWindowSpec.Fixed(
                     fixedMode = windowConfig.fixedMode,
                     props = props,
