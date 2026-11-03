@@ -39,7 +39,8 @@ jobs:
 
   publish:
     needs: extract
-    if: always()
+    # Only when every edition was taken: else the data of a missing one would silently disappear
+    if: needs.extract.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write

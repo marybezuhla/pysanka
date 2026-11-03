@@ -461,7 +461,6 @@
     <string name="pysanka__translate__quick_action">Translate</string>
     <string name="pysanka__translate__quick_action__tooltip">Translate the word</string>
     <string name="pysanka__translate__no_word">Put the cursor on a word or select it.</string>
-    <string name="pysanka__translate__swap">Swap languages</string>
     <string name="pysanka__translate__looking">Looking it up…</string>
     <string name="pysanka__translate__unknown">“{word}” is not in the dictionaries.</string>
     <string name="pysanka__translate__none">No translation of “{word}” ({language}).</string>

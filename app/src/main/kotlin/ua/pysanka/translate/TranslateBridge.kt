@@ -17,7 +17,12 @@ object TranslateBridge {
 
     private fun ic(): InputConnection? = FlorisImeService.currentInputConnection()
 
-    private fun isWordChar(c: Char) = c.isLetter() || c == '\'' || c == '’' || c == 'ʼ' || c == '-'
+    // Stress marks and other combining marks are part of the word («за́мок»)
+    private fun isWordChar(c: Char) = c.isLetter() || c == '\'' || c == '’' || c == 'ʼ' || c == '-' ||
+        Character.getType(c) == Character.NON_SPACING_MARK.toInt()
+
+    /** Quotes and hyphens at the ends belong to the text around the word, not to it ('hello', well-). */
+    private fun isEdge(c: Char) = c == '\'' || c == '’' || c == 'ʼ' || c == '-'
 
     /** Reads the word for the panel; false (with a message) where the panel cannot open. */
     fun open(): Boolean {
@@ -40,18 +45,22 @@ object TranslateBridge {
         }
         val before = ic.getTextBeforeCursor(64, 0)?.toString().orEmpty()
         val after = ic.getTextAfterCursor(64, 0)?.toString().orEmpty()
-        var b = before.takeLastWhile(::isWordChar)
-        var a = after.takeWhile(::isWordChar)
+        var b = before.takeLastWhile(::isWordChar).dropWhile(::isEdge)
+        val a = after.takeWhile(::isWordChar).dropLastWhile(::isEdge)
         var trailing = ""
         if (b.isEmpty() && a.isEmpty()) {
             // Just after a word and its space: that word
             trailing = before.takeLastWhile { it == ' ' }
-            b = before.dropLast(trailing.length).takeLastWhile(::isWordChar)
-            a = ""
             if (trailing.length > 1) return null
+            b = before.dropLast(trailing.length).takeLastWhile(::isWordChar).dropWhile(::isEdge)
         }
-        val text = (b + a).trim('-', '\'', '’', 'ʼ')
-        if (text.isEmpty()) return null
+        if (a.isEmpty()) {
+            // A closing quote or hyphen between the word and the cursor stays where it is ('hello'|)
+            val tail = b.takeLastWhile(::isEdge)
+            b = b.dropLast(tail.length)
+            trailing = tail + trailing
+        }
+        if (b.isEmpty() && a.isEmpty()) return null
         return Word(b + a, false, b.length + trailing.length, a.length, trailing)
     }
 

@@ -460,7 +460,6 @@
     <string name="pysanka__translate__quick_action">Fordítás</string>
     <string name="pysanka__translate__quick_action__tooltip">Szó fordítása</string>
     <string name="pysanka__translate__no_word">Tegye a kurzort egy szóra, vagy jelölje ki.</string>
-    <string name="pysanka__translate__swap">Nyelvek felcserélése</string>
     <string name="pysanka__translate__looking">Keresés…</string>
     <string name="pysanka__translate__unknown">„{word}” nincs a szótárakban.</string>
     <string name="pysanka__translate__none">Nincs fordítás: „{word}” ({language}).</string>
@@ -472,9 +471,9 @@
     <string name="pysanka__translate__copied">Másolva</string>
     <string name="pysanka__translate__not_here">Jelszómezőben a fordítás nem működik.</string>
     <string name="pysanka__translate__target_auto">Automatikus</string>
-    <string name="pysanka__translate__state">Fordítás erre: {language}</string>
-    <string name="pysanka__translate__about">Szavak és állandó kifejezések a 12 nyelv között. A szótárak az alkalmazásban vannak, így minden internet nélkül működik. A billentyűzet feletti „Fordítás” gomb a kurzornál lévő szót fordítja le.</string>
+    <string name="pysanka__translate__state">Célnyelv: {language}</string>
+    <string name="pysanka__translate__about">Szavak és állandósult kifejezések a 12 nyelv között. A szótárak az alkalmazásban vannak, így minden internet nélkül működik. A billentyűzet feletti „Fordítás” gomb a kurzornál lévő szót fordítja le.</string>
     <string name="pysanka__translate__selection_menu">A kijelölt szöveg menüjében</string>
     <string name="pysanka__translate__selection_menu_hint">„Fordítás (Pysanka)” bármely alkalmazásban</string>
-    <string name="pysanka__translate__target">Fordítás erre</string>
+    <string name="pysanka__translate__target">Célnyelv</string>
 </resources>

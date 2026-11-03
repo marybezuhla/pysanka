@@ -462,7 +462,6 @@
     <string name="pysanka__translate__quick_action">Переклад</string>
     <string name="pysanka__translate__quick_action__tooltip">Перекласти слово</string>
     <string name="pysanka__translate__no_word">Поставте курсор на слово або виділіть його.</string>
-    <string name="pysanka__translate__swap">Поміняти мови</string>
     <string name="pysanka__translate__looking">Шукаю…</string>
     <string name="pysanka__translate__unknown">«{word}» немає в словниках.</string>
     <string name="pysanka__translate__none">Немає перекладу «{word}» ({language}).</string>

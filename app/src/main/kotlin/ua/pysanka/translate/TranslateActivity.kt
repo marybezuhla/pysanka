@@ -27,7 +27,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -53,6 +53,7 @@ import dev.patrickgold.florisboard.app.apptheme.FlorisAppTheme
 import org.florisboard.lib.compose.stringRes
 import ua.pysanka.privacy.followScreenshotBlock
 import java.util.Locale
+import kotlinx.coroutines.flow.first
 
 /**
  * Pysanka: «Перекласти (Писанка)» in the text selection menu of any app: the selected word,
@@ -106,6 +107,11 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
     val tooLong = text.length > Translations.MAX_CHARS
 
     LaunchedEffect(Unit) {
+        // From the selection menu the app may be starting cold: the settings (the language to
+        // translate into, the keyboard's languages) are read only once they are loaded
+        kotlinx.coroutines.withTimeoutOrNull(2000L) {
+            dev.patrickgold.florisboard.FlorisApplication.getHack().preferenceStoreLoaded.first { it }
+        }
         if (!tooLong) {
             val s = TranslateChoice.start(context, text)
             from = s.from
@@ -118,8 +124,11 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
         val f = from
         if (f != null && (lookup?.from != f || lookup?.to != to)) {
             loading = true
-            lookup = TranslateChoice.lookup(context, text, f, to)
-            loading = false
+            try {
+                lookup = TranslateChoice.lookup(context, text, f, to)
+            } finally {
+                loading = false
+            }
         }
     }
 
@@ -145,9 +154,8 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
                 if (f != null) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         FilterChip(picking == Pick.FROM, { picking = if (picking == Pick.FROM) null else Pick.FROM }, { Text(Translations.languageName(f, ui)) })
-                        IconButton(onClick = { from = to; to = f }) {
-                            Icon(Icons.Default.SwapHoriz, contentDescription = stringRes(R.string.pysanka__translate__swap))
-                        }
+                        // Not a swap: the word stays what it is, in its own language
+                        Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.padding(horizontal = 4.dp))
                         FilterChip(picking == Pick.TO, { picking = if (picking == Pick.TO) null else Pick.TO }, { Text(Translations.languageName(to, ui)) })
                     }
                 }
@@ -156,7 +164,14 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
                     p != null -> FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         for (lang in Translations.LANGUAGES) {
                             FilterChip(lang == (if (p == Pick.FROM) f else to), {
-                                if (p == Pick.FROM) from = lang else to = lang
+                                // The same language on both sides: they change places
+                                if (p == Pick.FROM) {
+                                    if (lang == to) to = f ?: to
+                                    from = lang
+                                } else {
+                                    if (lang == f) from = to
+                                    to = lang
+                                }
                                 picking = null
                             }, { Text(Translations.languageName(lang, ui)) })
                         }

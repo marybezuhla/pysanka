@@ -460,7 +460,6 @@
     <string name="pysanka__translate__quick_action">Übersetzen</string>
     <string name="pysanka__translate__quick_action__tooltip">Wort übersetzen</string>
     <string name="pysanka__translate__no_word">Setzen Sie den Cursor auf ein Wort oder markieren Sie es.</string>
-    <string name="pysanka__translate__swap">Sprachen tauschen</string>
     <string name="pysanka__translate__looking">Suche…</string>
     <string name="pysanka__translate__unknown">„{word}“ ist nicht in den Wörterbüchern.</string>
     <string name="pysanka__translate__none">Keine Übersetzung von „{word}“ ({language}).</string>

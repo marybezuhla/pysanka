@@ -59,8 +59,11 @@ those copies keep that licence.
   editions; text by the Wiktionary contributors, CC BY-SA 4.0 and GFDL) through the wiktextract
   extracts of kaikki.org (Tatu Ylonen, https://github.com/tatuylonen/wiktextract). Changed: only the
   words and translations are kept (no explanations), limited to the words of the keyboard's lists,
-  joined by meaning, with the forms of words from the LibreOffice hunspell dictionaries (used only while
-  the files are made). The files are under CC BY-SA 4.0; how they are made: `scripts/translate/`.
+  joined by meaning. The files are under CC BY-SA 4.0; how they are made: `scripts/translate/`. The
+  `*.forms.txt` files also link inflected forms of the keyboard's words to their dictionary forms as the
+  LibreOffice hunspell dictionaries of each language find them (the dictionaries listed above, each under
+  its own free licence: MPL 1.1, LGPL, GPL or BSD-style; only these word pairs are kept, no part of the
+  dictionaries' files).
 - `app/src/main/assets/ime/media/emoji/uk.txt`, `ru.txt`, `pl.txt`, `hu.txt`, `ro.txt`, `sk.txt`, `be.txt` — emoji names and keywords in those languages from the Unicode
   Common Locale Data Repository (CLDR) v48, © Unicode, Inc., Unicode License v3
   (https://www.unicode.org/license.txt); made by `scripts/emoji_uk.py`. The other emoji files come

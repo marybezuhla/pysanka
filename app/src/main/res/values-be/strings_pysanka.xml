@@ -462,11 +462,10 @@
     <string name="pysanka__translate__quick_action">Пераклад</string>
     <string name="pysanka__translate__quick_action__tooltip">Перакласці слова</string>
     <string name="pysanka__translate__no_word">Пастаўце курсор на слова або вылучыце яго.</string>
-    <string name="pysanka__translate__swap">Памяняць мовы</string>
     <string name="pysanka__translate__looking">Шукаю…</string>
     <string name="pysanka__translate__unknown">«{word}» няма ў слоўніках.</string>
     <string name="pysanka__translate__none">Няма перакладу «{word}» ({language}).</string>
-    <string name="pysanka__translate__via_english">Простага перакладу няма, гэта пераклад праз англійскую.</string>
+    <string name="pysanka__translate__via_english">Прамога перакладу няма, гэта пераклад праз англійскую.</string>
     <string name="pysanka__translate__source">Слоўнікі з Вікіслоўніка (CC BY-SA), без інтэрнэту</string>
     <string name="pysanka__translate__too_long">Вылучыце адно слова або кароткі выраз.</string>
     <string name="pysanka__translate__tap_to_replace">Дакраніцеся да перакладу, каб замяніць вылучанае.</string>

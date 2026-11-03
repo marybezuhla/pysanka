@@ -24,6 +24,9 @@ object Translations {
     /** How many translations are shown at most. */
     const val MAX_RESULTS = 16
 
+    /** How many of a word's first meanings give their commonest word even if no other meaning agrees. */
+    private const val LEAD_MEANINGS = 8
+
     /** Longer text is not a word or an expression: not looked up. */
     const val MAX_CHARS = 60
 
@@ -154,7 +157,8 @@ object Translations {
         val k = key(text)
         val lemmas = if (k.isEmpty() || k.length > MAX_CHARS) emptyList() else lemmas(src, from, k)
         if (lemmas.isEmpty() || from == to) return Lookup(from, to, lemmas, emptyList())
-        val words = file(src, "$from.words.txt")!!
+        // Read again if memory was short since lemmas(); nothing found if it cannot be
+        val words = file(src, "$from.words.txt") ?: return Lookup(from, to, lemmas, emptyList())
         val ids = lemmas.flatMap { words.find(it)?.split(',').orEmpty() }.filter { it.isNotEmpty() }.distinct()
         val direct = collect(src, ids, from, to, hintLanguage, lemmas.toSet())
         if (direct.isNotEmpty() || from == "en" || to == "en") return Lookup(from, to, lemmas, direct)
@@ -167,7 +171,7 @@ object Translations {
         return Lookup(from, to, lemmas, results.take(MAX_RESULTS / 2))
     }
 
-    private class Found(val word: String, val first: Int, var support: Int, val hint: String?)
+    private class Found(val word: String, val first: Int, var support: Int, val hint: String?, var lead: Boolean)
 
     private fun collect(
         src: Source,
@@ -184,21 +188,25 @@ object Translations {
         // Ids are in the order of the meanings: the most basic first
         for ((n, id) in ids.sorted().withIndex()) {
             val ws = target.find(id)?.split('|') ?: continue
-            for (w in ws) {
+            for ((i, w) in ws.withIndex()) {
                 val wk = key(w)
                 if (wk.isEmpty() || (from == to && wk in exclude)) continue
+                // The commonest word of one of the first (most widely shared) meanings
+                val lead = i == 0 && n < LEAD_MEANINGS
                 val f = found[wk]
                 if (f != null) {
                     f.support++
+                    f.lead = f.lead || lead
                 } else {
-                    found[wk] = Found(w, n, 1, hint(id, hints, exclude + wk))
+                    found[wk] = Found(w, n, 1, hint(id, hints, exclude + wk), lead)
                 }
             }
         }
-        // A word many meanings agree on: those of a single stray meaning (the «@» called «собачка») are left out
+        // When meanings agree on some words, a word of only one meaning is shown only if it is that
+        // meaning's commonest (the «@» called «собачка» brings no «вухо»; «клавіша» for "key" stays)
         val best = found.values.maxOfOrNull { it.support } ?: 0
-        val enough = if (best >= 4) best / 4 + 1 else 1
-        return found.values.filter { it.support >= enough }
+        val enough = if (best >= 3) 2 else 1
+        return found.values.filter { it.support >= enough || it.lead }
             .sortedWith(compareByDescending<Found> { it.support }.thenBy { it.first })
             .take(MAX_RESULTS).map { Result(it.word, it.hint) }
     }

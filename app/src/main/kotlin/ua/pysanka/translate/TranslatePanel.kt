@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,8 +79,11 @@ fun TranslatePanel(modifier: Modifier = Modifier) {
         val f = from
         if (word != null && f != null && (lookup?.from != f || lookup?.to != to)) {
             loading = true
-            lookup = TranslateChoice.lookup(context, word.text, f, to)
-            loading = false
+            try {
+                lookup = TranslateChoice.lookup(context, word.text, f, to)
+            } finally {
+                loading = false
+            }
         }
     }
 
@@ -123,16 +126,8 @@ fun TranslatePanel(modifier: Modifier = Modifier) {
                         Chip(Translations.languageName(f, ui), picking == Picking.FROM) {
                             picking = if (picking == Picking.FROM) null else Picking.FROM
                         }
-                        SnyggIconButton(
-                            FlorisImeUi.ClipboardHeaderButton.elementName,
-                            onClick = {
-                                val old = f
-                                from = to
-                                to = old
-                            },
-                        ) {
-                            SnyggIcon(imageVector = Icons.Default.SwapHoriz, contentDescription = stringRes(R.string.pysanka__translate__swap))
-                        }
+                        // Not a swap: the word stays what it is, in its own language
+                        SnyggIcon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, modifier = Modifier.padding(horizontal = 4.dp))
                         Chip(Translations.languageName(to, ui), picking == Picking.TO) {
                             picking = if (picking == Picking.TO) null else Picking.TO
                         }
@@ -142,7 +137,14 @@ fun TranslatePanel(modifier: Modifier = Modifier) {
                     val p = picking
                     when {
                         p != null -> LanguageGrid(ui, if (p == Picking.FROM) f else to) { lang ->
-                            if (p == Picking.FROM) from = lang else to = lang
+                            // The same language on both sides: they change places
+                            if (p == Picking.FROM) {
+                                if (lang == to) to = f ?: to
+                                from = lang
+                            } else {
+                                if (lang == f) from = to
+                                to = lang
+                            }
                             picking = null
                         }
                         loading -> Note(stringRes(R.string.pysanka__translate__looking))
