@@ -42,6 +42,25 @@ import java.io.File
 open class RealSettingsScreensTest {
     protected open val prefix = "real"
 
+    // A picture that hangs prints where every thread is, then fails (instead of the whole run waiting)
+    @get:org.junit.Rule val timeout: org.junit.rules.TestRule = org.junit.rules.TestRule { base, _ ->
+        object : org.junit.runners.model.Statement() {
+            override fun evaluate() {
+                val watchdog = Thread {
+                    try {
+                        Thread.sleep(120_000)
+                        System.err.println("Hung for 2 min:")
+                        Thread.getAllStackTraces().forEach { (th, st) ->
+                            System.err.println("--- ${th.name}"); st.take(25).forEach { System.err.println("    at $it") }
+                        }
+                        Runtime.getRuntime().halt(3)
+                    } catch (_: InterruptedException) {}
+                }.apply { isDaemon = true; start() }
+                try { base.evaluate() } finally { watchdog.interrupt() }
+            }
+        }
+    }
+
     @Before fun setUp() {
         // Pysanka's crash handler ends the process (as on a phone): here an error in the background
         // is printed instead, so the test shows it
