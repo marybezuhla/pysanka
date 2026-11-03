@@ -285,6 +285,7 @@ private fun TypingSettings() {
     PrefToggle(prefs.keyboard.popupEnabled, stringRes(R.string.pysanka__typing__popup), stringRes(R.string.pysanka__typing__popup_summary))
     PrefToggle(prefs.keyboard.spaceBarSwitchesToCharacters, stringRes(R.string.pysanka__typing__space_letters), stringRes(R.string.pysanka__typing__space_letters_summary))
     PrefToggle(prefs.physicalKeyboard.showOnScreenKeyboard, stringRes(R.string.pysanka__typing__physical), stringRes(R.string.pysanka__typing__physical_summary))
+    PrefToggle(prefs.physicalKeyboard.pysankaOwnLayout, stringRes(R.string.pysanka__typing__physical_layout), stringRes(R.string.pysanka__typing__physical_layout_summary))
 
     if (confirmForget) {
         androidx.compose.material3.AlertDialog(

@@ -76,6 +76,7 @@ import kotlinx.coroutines.sync.withLock
 import org.florisboard.lib.android.AndroidKeyguardManager
 import org.florisboard.lib.android.showLongToast
 import org.florisboard.lib.android.showLongToastSync
+import org.florisboard.lib.android.showShortToast
 import org.florisboard.lib.android.showShortToastSync
 import org.florisboard.lib.android.systemService
 import org.florisboard.lib.kotlin.collectIn
@@ -1098,6 +1099,24 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     fun onHardwareKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // Pysanka: a physical keyboard types into the field, so a clipboard search on screen ends
         ua.pysanka.clipboard.ClipSearch.stop()
+        // Pysanka: the keyboard's language on a physical keyboard too, and Ctrl+Space / Alt+Shift
+        if (event != null && prefs.physicalKeyboard.pysankaOwnLayout.get()) {
+            val language = subtypeManager.activeSubtype.primaryLocale.language
+            when (val action = ua.pysanka.typing.HardwareKeys.action(
+                keyCode, language, event.isShiftPressed, event.isCapsLockOn,
+                event.isCtrlPressed, event.isAltPressed, event.isMetaPressed,
+            )) {
+                ua.pysanka.typing.HardwareKeys.Action.SwitchLanguage -> {
+                    if (event.repeatCount == 0) pysankaSwitchLanguageAndSay()
+                    return true
+                }
+                is ua.pysanka.typing.HardwareKeys.Action.Type -> {
+                    editorInstance.commitText(action.text)
+                    return true
+                }
+                ua.pysanka.typing.HardwareKeys.Action.Pass -> Unit
+            }
+        }
         when (keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 handleHardwareKeyboardSpace()
@@ -1115,7 +1134,20 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
+    /** Pysanka: the next language; with the screen keyboard hidden, its name is shown briefly. */
+    private fun pysankaSwitchLanguageAndSay() {
+        scope.launch {
+            subtypeManager.switchToNextSubtype().join()
+            val name = subtypeManager.activeSubtype.primaryLocale.let { it.displayName(it) }
+            appContext.showShortToast(R.string.pysanka__typing__language_now, "name" to name)
+        }
+    }
+
     fun onHardwareKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        // Pysanka: the key-up of a key Pysanka typed itself is Pysanka's too
+        if (event != null && prefs.physicalKeyboard.pysankaOwnLayout.get() && !event.isCtrlPressed && !event.isAltPressed &&
+            !event.isMetaPressed && ua.pysanka.typing.HardwareKeys.types(keyCode, subtypeManager.activeSubtype.primaryLocale.language)
+        ) return true
         when (keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 inputEventDispatcher.sendUp(TextKeyData.SHIFT)

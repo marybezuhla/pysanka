@@ -706,6 +706,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "physical_keyboard__show_on_screen_keyboard",
             default = false,
         )
+        // Pysanka: a physical keyboard types in the keyboard's language (ua.pysanka.typing.HardwareKeys)
+        val pysankaOwnLayout = boolean(
+            key = "pysanka__physical_keyboard__own_layout",
+            default = true,
+        )
     }
 
     val smartbar = Smartbar()

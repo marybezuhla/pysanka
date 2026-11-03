@@ -440,4 +440,7 @@
     <string name="pysanka__ai__part_sentence">Речення</string>
     <string name="pysanka__ai__part_paragraph">Абзац</string>
     <string name="pysanka__ai__part_all">Усе поле</string>
+    <string name="pysanka__typing__physical_layout">Фізична клавіатура мовою Писанки</string>
+    <string name="pysanka__typing__physical_layout_summary">Друкує мовою, обраною в Писанці (українська, англійська). Мова перемикається Ctrl+Пробіл або Alt+Shift. Вимкнено: розкладка із системних налаштувань.</string>
+    <string name="pysanka__typing__language_now">Мова: {name}</string>
 </resources>
