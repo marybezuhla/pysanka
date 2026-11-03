@@ -20,10 +20,20 @@ object Hashtags {
     const val LIST = "tags"
 
     private val TYPED = Regex("""(?:^|[\s(«"])#([\p{L}\p{N}_]*)$""")
-    private val WORD = Regex("""[\p{L}][\p{L}\p{N}_'ʼ’-]*[\p{L}\p{N}]""")
+    /** A word that can be a hashtag: letters, digits and «_» only (no apostrophe or hyphen). */
+    private val WORD = Regex("""(?<![\p{L}\p{N}_'ʼ’-])[\p{L}][\p{L}\p{N}_]*(?![\p{L}\p{N}_'ʼ’-])""")
 
     /** The hashtag being typed right before the cursor (without «#»; empty just after «#»), or null. */
-    fun typed(textBefore: String): String? = TYPED.find(textBefore.takeLast(64))?.groupValues?.get(1)
+    fun typed(textBefore: String): String? {
+        val tail = textBefore.takeLast(64)
+        val m = TYPED.find(tail) ?: return null
+        // «#» at the very start of a cut tail: only if what comes before it is a boundary too
+        if (m.range.first == 0 && tail[0] == '#' && textBefore.length > tail.length) {
+            val before = textBefore[textBefore.length - tail.length - 1]
+            if (!before.isWhitespace() && before !in "(«\"") return null
+        }
+        return m.groupValues[1]
+    }
 
     /**
      * Up to [max] hashtags (without «#») for [prefix], from [own] ones, the [text] being written and

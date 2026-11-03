@@ -62,7 +62,9 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         for (ch in word) {
             if (ch == '\'' || ch == '’' || ch == 'ʼ' || ch == '-') continue
             val lc = ch.lowercaseChar()
-            val k = keyIndex[lc] ?: keyIndex[Normalizer.normalize(lc.toString(), Normalizer.Form.NFD)[0]] ?: return null
+            val k = keyIndex[lc] ?: keyIndex[Normalizer.normalize(lc.toString(), Normalizer.Form.NFD)[0]]
+                // A letter only in a key's popup (ґ on г): swiped through that key
+                ?: POPUP_BASE[lc]?.let { keyIndex[it] } ?: return null
             if (out.size == 0 || out.last() != k) out.add(k)
         }
         return if (out.size == 0) null else out.toArray()
@@ -91,19 +93,29 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
 
         val starts = nearKeys(xs[0], ys[0])
         val ends = nearKeys(xs[n - 1], ys[n - 1])
-        val best = ArrayList<Pair<Double, String>>()
+        // First a cheap look (where the swipe starts and ends, its length) keeps the likeliest
+        // [SHORTLIST]; only those get the full measures and their frequency looked up
+        val cheap = ArrayList<Pair<Double, Int>>()
+        val fx = xs[0]; val fy = ys[0]; val lx = xs[n - 1]; val ly = ys[n - 1]
         for (a in starts) for (b in ends) {
             val bucket = byEnds[a * 1024 + b] ?: continue
+            val endsCost = sq(kx[a] - fx, ky[a] - fy) + sq(kx[b] - lx, ky[b] - ly)
             for (j in 0 until bucket.size) {
                 val wi = bucket[j]
                 val il = idealLength[wi]
                 if (il > 0f && (userLength < 0.4f * il - 1.2f || userLength > 2.0f * il + 1.5f)) continue
-                val word = words[wi]
-                val f = frequency(word)
-                if (f <= 0) continue
-                val s = score(seqs[wi], il, user, userNorm, dense, userLength) + KAPPA * f / 255.0 + bonus(word)
-                best += s to word
+                val lr = if (il > 0.3f) ln(max(userLength, 1e-3f) / il).toDouble() else 0.0
+                cheap += (W_ENDS * endsCost + W_LENGTH * (lr - LENGTH_MEAN) * (lr - LENGTH_MEAN)) to wi
             }
+        }
+        val shortlist = if (cheap.size > SHORTLIST) cheap.sortedBy { it.first }.take(SHORTLIST) else cheap
+        val best = ArrayList<Pair<Double, String>>()
+        for ((_, wi) in shortlist) {
+            val word = words[wi]
+            val f = frequency(word)
+            if (f <= 0) continue
+            val s = score(seqs[wi], idealLength[wi], user, userNorm, dense, userLength) + KAPPA * f / 255.0 + bonus(word)
+            best += s to word
         }
         return best.sortedByDescending { it.first }.map { it.second }.distinct().take(max)
     }
@@ -167,6 +179,8 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         return -(W_SHAPE * shape * shape + W_LOC * loc * loc + W_VISITS * visits + W_ENDS * endsCost +
             W_DETOUR * detour + W_LENGTH * (lr - LENGTH_MEAN) * (lr - LENGTH_MEAN))
     }
+
+    private fun sq(dx: Float, dy: Float) = min((dx * dx + dy * dy).toDouble(), CAP)
 
     private fun segmentDistance2(px: Float, py: Float, a: Int, b: Int): Double {
         val ax = kx[a]; val ay = ky[a]
@@ -253,6 +267,11 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         private const val STEP = 0.25f
         private const val MAX_DENSE = 160
         private const val CAP = 4.0
+
+        /** How many words the cheap first look passes on to the full measures. */
+        private const val SHORTLIST = 400
+
+        private val POPUP_BASE = mapOf('ґ' to 'г')
 
         // Tuned on simulated swipes (scripts/swipe/tune.py)
         private const val W_SHAPE = 44.354

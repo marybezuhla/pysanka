@@ -75,7 +75,10 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
     /** Pysanka: hashtags for [prefix] (see [ua.pysanka.typing.Hashtags]); [text]: the text being written. */
     suspend fun pysankaHashtags(subtype: Subtype, prefix: String, text: String): List<String> {
         val dict = suggester(subtype)
-        val own = withContext(Dispatchers.IO) { UserWords.get(appContext, ua.pysanka.typing.Hashtags.LIST) }
+        // The person's own only with learning on (as for words)
+        val own = if (prefs.correction.pysankaLearnWords.get()) {
+            withContext(Dispatchers.IO) { UserWords.get(appContext, ua.pysanka.typing.Hashtags.LIST) }
+        } else null
         return ua.pysanka.typing.Hashtags.suggest(
             prefix, text, own,
             frequency = { dict?.frequency(it) ?: 0 },

@@ -86,7 +86,12 @@ class TextKeyboard(
     fun pysankaSplit(width: Float, gap: Float) {
         if (gap <= 0f) return
         val all = keys().asSequence().toList()
-        val bounds = all.map { ua.pysanka.ui.SplitKeyboard.Bounds(it.touchBounds.left, it.touchBounds.right, it.visibleBounds.left, it.visibleBounds.right) }
+        val bounds = all.map {
+            ua.pysanka.ui.SplitKeyboard.Bounds(
+                it.touchBounds.left, it.touchBounds.right, it.visibleBounds.left, it.visibleBounds.right,
+                isSpace = it.computedData.code == dev.patrickgold.florisboard.ime.text.key.KeyCode.SPACE,
+            )
+        }
         ua.pysanka.ui.SplitKeyboard.apply(width, gap, bounds)
         for ((k, b) in all.zip(bounds)) {
             k.touchBounds.left = b.touchLeft

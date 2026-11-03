@@ -62,9 +62,13 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
 
     // Pysanka: the swipe decoder (ua.pysanka.typing.swipe.SwipeDecoder) for this layout and word list,
     // with the key width all its distances are measured in
-    private var decoder: ua.pysanka.typing.swipe.SwipeDecoder? = null
-    private var keyWidth = 1f
-    private val decoderCache = LruCache<Subtype, Pair<ua.pysanka.typing.swipe.SwipeDecoder, Float>>(2)
+    @Volatile private var decoder: ua.pysanka.typing.swipe.SwipeDecoder? = null
+    @Volatile private var keyWidth = 1f
+    /** Built decoders by language and where the keys are (switching back and forth reuses them). */
+    private val decoderCache = LruCache<Pair<Subtype, Double>, Pair<ua.pysanka.typing.swipe.SwipeDecoder, Float>>(4)
+    /** The build waited for (a newer layout makes an older build's result go unused). */
+    @Volatile private var building = 0L
+    private val builder = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "pysanka-swipe").apply { isDaemon = true } }
 
     /**
      * The minimum distance between points to be added to a gesture.
@@ -132,8 +136,6 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         if (layoutSubtype == subtype && keys == keyViews && shape == geometry) {
             return
         }
-        // Pysanka: the same keys elsewhere: the decoder is built again for them
-        if (shape != geometry) decoderCache.remove(subtype)
         geometry = shape
 
         // if only layout changed but not subtype
@@ -187,24 +189,34 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         } else {
             this.pruner = cached
         }
-        // Pysanka: the decoder, built once per layout and word list
-        val decoded = if (invalidateCache) null else decoderCache.get(currentSubtype)
+        // Pysanka: the decoder for this language and these key places, built in the background
+        // (FlorisBoard's way answers until it is ready); distances in key spacing (touch width)
+        val cacheKey = currentSubtype to geometry
+        val decoded = if (invalidateCache) null else decoderCache.get(cacheKey)
         if (decoded != null) {
             decoder = decoded.first
             keyWidth = decoded.second
         } else {
+            decoder = null
             val letters = keys.filter { Character.isLetter(it.baseCode()) }
-            val width = letters.map { it.visibleBounds.width }.sorted().let { if (it.isEmpty()) 0f else it[it.size / 2] }
+            val width = letters.map { it.touchBounds.width }.sorted().let { if (it.isEmpty()) 0f else it[it.size / 2] }
             if (width > 0f) {
                 val points = HashMap<Char, ua.pysanka.typing.swipe.SwipeDecoder.Point>()
                 for (k in letters) {
                     val c = k.visibleBounds.center
                     points[Character.toLowerCase(k.baseCode()).toChar()] = ua.pysanka.typing.swipe.SwipeDecoder.Point(c.x / width, c.y / width)
                 }
-                val built = ua.pysanka.typing.swipe.SwipeDecoder(points, this.words)
-                decoder = built
-                keyWidth = width
-                decoderCache.put(currentSubtype, built to width)
+                val wordList = this.words
+                val ticket = ++building
+                builder.execute {
+                    val built = ua.pysanka.typing.swipe.SwipeDecoder(points, wordList)
+                    decoderCache.put(cacheKey, built to width)
+                    // Only if no newer layout came meanwhile
+                    if (building == ticket) {
+                        keyWidth = width
+                        decoder = built
+                    }
+                }
             }
         }
         this.currentSubtype = currentSubtype

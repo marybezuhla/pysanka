@@ -25,8 +25,9 @@ object SplitKeyboard {
 
     /**
      * Moves laid-out keys apart: everything is narrowed into ([width] - [gap]), then the right half
-     * moves right by [gap]; a key across the middle (the space bar) is stretched over it.
-     * [bounds]: each key's left and right, of its touch area and of what is drawn.
+     * moves right by [gap]. Only the space bar is stretched over the gap; any other key across the
+     * middle (a row with an odd number of keys) goes to the side its centre is on and is cut at the
+     * middle. [keys]: each key's left and right, of its touch area and of what is drawn.
      */
     fun apply(width: Float, gap: Float, keys: List<Bounds>) {
         if (gap <= 0f || width <= gap) return
@@ -34,16 +35,28 @@ object SplitKeyboard {
         val mid = (width - gap) / 2
         for (k in keys) {
             k.touchLeft *= s; k.touchRight *= s; k.drawnLeft *= s; k.drawnRight *= s
+            val across = k.touchLeft < mid - 1f && k.touchRight > mid + 1f
             when {
-                k.touchLeft >= mid - 1f -> {
+                across && k.isSpace -> {
+                    k.touchRight += gap; k.drawnRight += gap
+                }
+                across && (k.touchLeft + k.touchRight) / 2 < mid -> {
+                    // Stays left, cut at the middle
+                    val margin = k.touchRight - k.drawnRight
+                    k.touchRight = mid; k.drawnRight = minOf(k.drawnRight, mid - margin)
+                }
+                across -> {
+                    // Goes right, starting at the middle
+                    val margin = k.drawnLeft - k.touchLeft
+                    k.touchLeft = mid; k.drawnLeft = maxOf(k.drawnLeft, mid + margin)
                     k.touchLeft += gap; k.touchRight += gap; k.drawnLeft += gap; k.drawnRight += gap
                 }
-                k.touchRight > mid + 1f -> {
-                    k.touchRight += gap; k.drawnRight += gap
+                k.touchLeft >= mid - 1f -> {
+                    k.touchLeft += gap; k.touchRight += gap; k.drawnLeft += gap; k.drawnRight += gap
                 }
             }
         }
     }
 
-    class Bounds(var touchLeft: Float, var touchRight: Float, var drawnLeft: Float, var drawnRight: Float)
+    class Bounds(var touchLeft: Float, var touchRight: Float, var drawnLeft: Float, var drawnRight: Float, val isSpace: Boolean = false)
 }

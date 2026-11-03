@@ -1109,19 +1109,26 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         // Pysanka: the keyboard's language on a physical keyboard too, and Ctrl+Space / Alt+Shift
         if (event != null && prefs.physicalKeyboard.pysankaOwnLayout.get()) {
             val language = subtypeManager.activeSubtype.primaryLocale.language
-            when (val action = ua.pysanka.typing.HardwareKeys.action(
+            val action = ua.pysanka.typing.HardwareKeys.action(
                 keyCode, language, event.isShiftPressed, event.isCapsLockOn,
                 event.isCtrlPressed, event.isAltPressed, event.isMetaPressed,
-            )) {
+                systemChar = event.getUnicodeChar(event.metaState and KeyEvent.META_SHIFT_MASK.inv() and KeyEvent.META_CAPS_LOCK_ON.inv()),
+                altLeft = event.metaState and KeyEvent.META_ALT_LEFT_ON != 0,
+            )
+            // Anything pressed after Alt+Shift calls the switch off (Shift+Alt+arrow and the like)
+            pysankaArmed = action == ua.pysanka.typing.HardwareKeys.Action.ArmSwitch
+            when (action) {
                 ua.pysanka.typing.HardwareKeys.Action.SwitchLanguage -> {
                     if (event.repeatCount == 0) pysankaSwitchLanguageAndSay()
                     return true
                 }
                 is ua.pysanka.typing.HardwareKeys.Action.Type -> {
-                    editorInstance.commitText(action.text)
-                    return true
+                    if (editorInstance.commitText(action.text)) {
+                        pysankaTypedKeys.add(keyCode)
+                        return true
+                    }
                 }
-                ua.pysanka.typing.HardwareKeys.Action.Pass -> Unit
+                ua.pysanka.typing.HardwareKeys.Action.ArmSwitch, ua.pysanka.typing.HardwareKeys.Action.Pass -> Unit
             }
         }
         when (keyCode) {
@@ -1141,7 +1148,13 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
-    /** Pysanka: the next language; with the screen keyboard hidden, its name is shown briefly. */
+    /** Pysanka: Alt+Shift held, waiting to be let go with nothing else pressed (see HardwareKeys). */
+    private var pysankaArmed = false
+
+    /** Pysanka: keys typed by Pysanka itself (their key-ups are Pysanka's too). */
+    private val pysankaTypedKeys = HashSet<Int>()
+
+    /** Pysanka: the next language, its name shown briefly (the screen keyboard may be hidden). */
     private fun pysankaSwitchLanguageAndSay() {
         scope.launch {
             subtypeManager.switchToNextSubtype().join()
@@ -1152,9 +1165,14 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
     fun onHardwareKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         // Pysanka: the key-up of a key Pysanka typed itself is Pysanka's too
-        if (event != null && prefs.physicalKeyboard.pysankaOwnLayout.get() && !event.isCtrlPressed && !event.isAltPressed &&
-            !event.isMetaPressed && ua.pysanka.typing.HardwareKeys.types(keyCode, subtypeManager.activeSubtype.primaryLocale.language)
-        ) return true
+        if (pysankaTypedKeys.remove(keyCode)) return true
+        // Pysanka: Alt or Shift let go after Alt+Shift with nothing in between: the next language
+        if (pysankaArmed && (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
+                keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
+        ) {
+            pysankaArmed = false
+            pysankaSwitchLanguageAndSay()
+        }
         when (keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 inputEventDispatcher.sendUp(TextKeyData.SHIFT)

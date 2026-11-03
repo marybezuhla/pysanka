@@ -8,13 +8,19 @@ import android.view.KeyEvent
  * so switching the language in the keyboard changed nothing. The keys are taken by their place
  * (as on a US keyboard), so the system's own layout setting does not matter.
  *
- * The language switches with Ctrl+Space, Alt+Shift or the keyboard's own language key.
+ * English keeps the system's layout when that one types Latin letters (AZERTY, German, Dvorak stay
+ * as set); only over a layout of another alphabet is it typed as on a US keyboard.
+ *
+ * The language switches with Ctrl+Space, the keyboard's own language key, or left Alt and Shift
+ * pressed together and let go with nothing else in between (as on a computer).
  */
 object HardwareKeys {
     sealed interface Action {
         /** Not Pysanka's: the system or the app handles it. */
         data object Pass : Action
         data object SwitchLanguage : Action
+        /** Left Alt and Shift held: the language switches when one is let go, if nothing else was pressed. */
+        data object ArmSwitch : Action
         data class Type(val text: String) : Action
     }
 
@@ -22,25 +28,30 @@ object HardwareKeys {
      * What a key pressed on a physical keyboard does. [language]: the keyboard's ("uk", "en"…);
      * [shift], [caps]: Shift held, Caps Lock on; [ctrl], [alt], [meta]: those held.
      */
+    /**
+     * [systemChar]: what the system's own layout would type for this key (0 if nothing);
+     * [altLeft]: the left Alt is held (the right one is AltGr on many keyboards).
+     */
     fun action(
         keyCode: Int, language: String, shift: Boolean, caps: Boolean, ctrl: Boolean, alt: Boolean, meta: Boolean,
+        systemChar: Int = 0, altLeft: Boolean = alt,
     ): Action {
         if (keyCode == KeyEvent.KEYCODE_LANGUAGE_SWITCH) return Action.SwitchLanguage
         if (ctrl && !alt && !meta && keyCode == KeyEvent.KEYCODE_SPACE) return Action.SwitchLanguage
         val shiftKey = keyCode == KeyEvent.KEYCODE_SHIFT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT
-        val altKey = keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_ALT_RIGHT
-        if ((shiftKey && alt || altKey && shift) && !ctrl && !meta) return Action.SwitchLanguage
+        if ((shiftKey && altLeft || keyCode == KeyEvent.KEYCODE_ALT_LEFT && shift) && !ctrl && !meta) return Action.ArmSwitch
         // Shortcuts (Ctrl+C, Alt+Tab…) are the app's and the system's
         if (ctrl || alt || meta) return Action.Pass
         val map = MAPS[language] ?: return Action.Pass
+        // English over a Latin layout: the system's own (AZERTY, German…) is kept
+        if (language == "en" && !(Character.isLetter(systemChar) && Character.UnicodeScript.of(systemChar) != Character.UnicodeScript.LATIN)) {
+            return Action.Pass
+        }
         val (lower, upper) = map[keyCode] ?: return Action.Pass
-        // Caps Lock turns letters only, as on a computer
-        val up = if (lower.first().isLetter()) shift xor caps else shift
+        // Caps Lock turns letters only, as on a computer (ʼ is not one here)
+        val up = if (lower.first().isLetter() && lower != "ʼ") shift xor caps else shift
         return Action.Type(if (up) upper else lower)
     }
-
-    /** Whether Pysanka types this key itself (so its key-up is Pysanka's too). */
-    fun types(keyCode: Int, language: String) = MAPS[language]?.containsKey(keyCode) == true
 
     private fun keys(vararg pairs: Pair<Int, String>) = pairs.associate { (k, s) -> k to (s[0].toString() to s[1].toString()) }
 

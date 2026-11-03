@@ -276,7 +276,7 @@ fun AiPanel(modifier: Modifier = Modifier) {
         note = when {
             source != taken.text -> R.string.pysanka__ai__panel_previous
             source.isBlank() -> R.string.pysanka__ai__panel_empty
-            parts.size > 1 -> R.string.pysanka__ai__panel_part
+            parts.isNotEmpty() -> R.string.pysanka__ai__panel_part
             taken.mode == AiBridge.Mode.SELECTION -> R.string.pysanka__ai__panel_selection
             else -> R.string.pysanka__ai__panel_all
         },
