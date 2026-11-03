@@ -96,7 +96,7 @@
     <string name="pysanka__look__day_theme">Theme by day</string>
     <string name="pysanka__look__night_theme">Theme by night</string>
     <string name="pysanka__typing__glide">Swipe typing</string>
-    <string name="pysanka__typing__glide_summary">Slide your finger over the letters</string>
+    <string name="pysanka__typing__glide_summary">Slide your finger over the letters (Ukrainian and English)</string>
     <string name="pysanka__typing__glide_trail">Show the swipe trail</string>
     <string name="pysanka__typing__suggestions">Word suggestions</string>
     <string name="pysanka__typing__suggestions_summary">Above the keyboard</string>
