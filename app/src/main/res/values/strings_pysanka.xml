@@ -454,4 +454,5 @@
     <string name="pysanka__look__key_gaps">Gaps between keys</string>
     <string name="pysanka__look__key_gaps_usual">Usual</string>
     <string name="pysanka__look__key_gaps_wide">Wide</string>
+    <string name="pysanka__look__height_hint">Resize a floating keyboard by its frame</string>
 </resources>

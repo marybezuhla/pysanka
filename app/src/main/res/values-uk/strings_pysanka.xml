@@ -455,4 +455,5 @@
     <string name="pysanka__look__key_gaps">Відступи між клавішами</string>
     <string name="pysanka__look__key_gaps_usual">Звичайні</string>
     <string name="pysanka__look__key_gaps_wide">Просторі</string>
+    <string name="pysanka__look__height_hint">Плаваючу клавіатуру змінюйте рамкою</string>
 </resources>

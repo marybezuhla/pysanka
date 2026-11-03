@@ -342,7 +342,7 @@ private fun LookSettings() {
     }
     // The keyboard's height; a size set by dragging the keyboard's frame is let go, so this one shows
     val height by prefs.keyboard.pysankaHeight.observeAsState()
-    SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }) {
+    SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }, hint = stringRes(R.string.pysanka__look__height_hint)) {
         scope.launch {
             prefs.keyboard.pysankaHeight.set(it)
             // Only the height: one-handed side and other sizes stay
