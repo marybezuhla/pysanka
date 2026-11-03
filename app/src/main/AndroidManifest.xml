@@ -178,6 +178,22 @@
             </intent-filter>
         </activity>
 
+        <!-- Pysanka: offline translation of a selected word, from the text selection menu of any app
+             (only plain text); turned on or off in the settings (TranslateEntry.sync) -->
+        <activity
+            android:name="ua.pysanka.translate.TranslateActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/pysanka__translate__entry_label">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <!-- Pysanka: text from a photo or the camera; its own task, not in recent apps -->
         <activity
             android:name="ua.pysanka.ocr.TextFromImageActivity"

@@ -455,4 +455,27 @@
     <string name="pysanka__look__key_gaps_usual">Obișnuit</string>
     <string name="pysanka__look__key_gaps_wide">Larg</string>
     <string name="pysanka__look__height_hint">Redimensionați tastatura flotantă trăgând de chenar</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Traducere</string>
+    <string name="pysanka__translate__entry_label">Traduce (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Traducere</string>
+    <string name="pysanka__translate__quick_action__tooltip">Traduce cuvântul</string>
+    <string name="pysanka__translate__no_word">Puneți cursorul pe un cuvânt sau selectați-l.</string>
+    <string name="pysanka__translate__swap">Inversează limbile</string>
+    <string name="pysanka__translate__looking">Caut…</string>
+    <string name="pysanka__translate__unknown">„{word}” nu este în dicționare.</string>
+    <string name="pysanka__translate__none">Nu există traducere pentru „{word}” ({language}).</string>
+    <string name="pysanka__translate__via_english">Nu există traducere directă: aceasta trece prin engleză.</string>
+    <string name="pysanka__translate__source">Dicționare din Wikționar (CC BY-SA), fără internet</string>
+    <string name="pysanka__translate__too_long">Selectați un cuvânt sau o expresie scurtă.</string>
+    <string name="pysanka__translate__tap_to_replace">Atingeți o traducere pentru a înlocui selecția.</string>
+    <string name="pysanka__translate__copy">Copiază</string>
+    <string name="pysanka__translate__copied">Copiat</string>
+    <string name="pysanka__translate__not_here">Traducerea nu funcționează în câmpurile de parolă.</string>
+    <string name="pysanka__translate__target_auto">Automat</string>
+    <string name="pysanka__translate__state">Tradu în: {language}</string>
+    <string name="pysanka__translate__about">Cuvinte și expresii fixe între cele 12 limbi. Dicționarele sunt în aplicație, așa că totul funcționează fără internet. Butonul „Traducere” de deasupra tastaturii traduce cuvântul de la cursor.</string>
+    <string name="pysanka__translate__selection_menu">În meniul textului selectat</string>
+    <string name="pysanka__translate__selection_menu_hint">„Traduce (Pysanka)” în orice aplicație</string>
+    <string name="pysanka__translate__target">Tradu în</string>
 </resources>

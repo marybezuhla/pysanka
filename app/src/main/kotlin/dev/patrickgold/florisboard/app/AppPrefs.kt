@@ -198,6 +198,21 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: the offline translation dictionaries
+    val pysankaTranslate = PysankaTranslate()
+    inner class PysankaTranslate {
+        /** «Перекласти (Писанка)» in the text selection menu of every app (ua.pysanka.translate.TranslateEntry). */
+        val inSelectionMenu = boolean(
+            key = "pysanka__translate__selection_menu",
+            default = true,
+        )
+        /** The language translated into: "auto" (Ukrainian, or from Ukrainian another keyboard language) or a language. */
+        val target = string(
+            key = "pysanka__translate__target",
+            default = "auto",
+        )
+    }
+
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {

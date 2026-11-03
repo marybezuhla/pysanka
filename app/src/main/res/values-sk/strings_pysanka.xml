@@ -456,4 +456,27 @@
     <string name="pysanka__look__key_gaps_usual">Bežné</string>
     <string name="pysanka__look__key_gaps_wide">Široké</string>
     <string name="pysanka__look__height_hint">Veľkosť plávajúcej klávesnice zmeníte ťahaním za jej rám</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Preklad</string>
+    <string name="pysanka__translate__entry_label">Preložiť (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Preklad</string>
+    <string name="pysanka__translate__quick_action__tooltip">Preložiť slovo</string>
+    <string name="pysanka__translate__no_word">Umiestnite kurzor na slovo alebo ho označte.</string>
+    <string name="pysanka__translate__swap">Vymeniť jazyky</string>
+    <string name="pysanka__translate__looking">Hľadám…</string>
+    <string name="pysanka__translate__unknown">„{word}“ v slovníkoch nie je.</string>
+    <string name="pysanka__translate__none">Preklad „{word}“ chýba ({language}).</string>
+    <string name="pysanka__translate__via_english">Priamy preklad chýba, toto je preklad cez angličtinu.</string>
+    <string name="pysanka__translate__source">Slovníky z Wikislovníka (CC BY-SA), bez internetu</string>
+    <string name="pysanka__translate__too_long">Označte jedno slovo alebo krátky výraz.</string>
+    <string name="pysanka__translate__tap_to_replace">Ťuknite na preklad a nahradí označený text.</string>
+    <string name="pysanka__translate__copy">Kopírovať</string>
+    <string name="pysanka__translate__copied">Skopírované</string>
+    <string name="pysanka__translate__not_here">V poli pre heslo preklad nefunguje.</string>
+    <string name="pysanka__translate__target_auto">Automaticky</string>
+    <string name="pysanka__translate__state">Preklad do: {language}</string>
+    <string name="pysanka__translate__about">Slová a ustálené výrazy medzi 12 jazykmi. Slovníky sú v aplikácii, takže všetko funguje bez internetu. Tlačidlo „Preklad“ nad klávesnicou preloží slovo pri kurzore.</string>
+    <string name="pysanka__translate__selection_menu">V ponuke označeného textu</string>
+    <string name="pysanka__translate__selection_menu_hint">„Preložiť (Pysanka)“ v ktorejkoľvek aplikácii</string>
+    <string name="pysanka__translate__target">Preklad do</string>
 </resources>

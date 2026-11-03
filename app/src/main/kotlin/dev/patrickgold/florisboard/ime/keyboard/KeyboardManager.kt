@@ -999,6 +999,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 activeState.imeUiMode = ImeUiMode.PYSANKA_AI
             }
             KeyCode.PYSANKA_FIX_LAYOUT -> ua.pysanka.ime.FieldText.fixLayout()
+            // Pysanka: the word at the cursor translated, in place of the keys
+            KeyCode.PYSANKA_TRANSLATE -> if (ua.pysanka.translate.TranslateBridge.open()) {
+                activeState.imeUiMode = ImeUiMode.PYSANKA_TRANSLATE
+            }
             KeyCode.PYSANKA_TEXT_FROM_PHOTO, KeyCode.PYSANKA_TEXT_FROM_CAMERA -> {
                 val info = editorInstance.activeInfo
                 ua.pysanka.ocr.PendingInsert.opened(info)

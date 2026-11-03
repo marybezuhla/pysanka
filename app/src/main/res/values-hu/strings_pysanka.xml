@@ -454,4 +454,27 @@
     <string name="pysanka__look__key_gaps_usual">Szokásos</string>
     <string name="pysanka__look__key_gaps_wide">Széles</string>
     <string name="pysanka__look__height_hint">A lebegő billentyűzet a keretével méretezhető át</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Fordítás</string>
+    <string name="pysanka__translate__entry_label">Fordítás (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Fordítás</string>
+    <string name="pysanka__translate__quick_action__tooltip">Szó fordítása</string>
+    <string name="pysanka__translate__no_word">Tegye a kurzort egy szóra, vagy jelölje ki.</string>
+    <string name="pysanka__translate__swap">Nyelvek felcserélése</string>
+    <string name="pysanka__translate__looking">Keresés…</string>
+    <string name="pysanka__translate__unknown">„{word}” nincs a szótárakban.</string>
+    <string name="pysanka__translate__none">Nincs fordítás: „{word}” ({language}).</string>
+    <string name="pysanka__translate__via_english">Nincs közvetlen fordítás, ez angolon keresztüli fordítás.</string>
+    <string name="pysanka__translate__source">Szótárak a Wikiszótárból (CC BY-SA), internet nélkül</string>
+    <string name="pysanka__translate__too_long">Jelöljön ki egy szót vagy egy rövid kifejezést.</string>
+    <string name="pysanka__translate__tap_to_replace">Koppintson egy fordításra, hogy lecserélje a kijelölést.</string>
+    <string name="pysanka__translate__copy">Másolás</string>
+    <string name="pysanka__translate__copied">Másolva</string>
+    <string name="pysanka__translate__not_here">Jelszómezőben a fordítás nem működik.</string>
+    <string name="pysanka__translate__target_auto">Automatikus</string>
+    <string name="pysanka__translate__state">Fordítás erre: {language}</string>
+    <string name="pysanka__translate__about">Szavak és állandó kifejezések a 12 nyelv között. A szótárak az alkalmazásban vannak, így minden internet nélkül működik. A billentyűzet feletti „Fordítás” gomb a kurzornál lévő szót fordítja le.</string>
+    <string name="pysanka__translate__selection_menu">A kijelölt szöveg menüjében</string>
+    <string name="pysanka__translate__selection_menu_hint">„Fordítás (Pysanka)” bármely alkalmazásban</string>
+    <string name="pysanka__translate__target">Fordítás erre</string>
 </resources>

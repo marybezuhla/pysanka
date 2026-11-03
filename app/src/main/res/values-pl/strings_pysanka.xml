@@ -456,4 +456,27 @@
     <string name="pysanka__look__key_gaps_usual">Zwykłe</string>
     <string name="pysanka__look__key_gaps_wide">Szerokie</string>
     <string name="pysanka__look__height_hint">Zmień rozmiar pływającej klawiatury, ciągnąc za ramkę</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Tłumaczenie</string>
+    <string name="pysanka__translate__entry_label">Przetłumacz (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Tłumacz</string>
+    <string name="pysanka__translate__quick_action__tooltip">Przetłumacz słowo</string>
+    <string name="pysanka__translate__no_word">Ustaw kursor na słowie lub je zaznacz.</string>
+    <string name="pysanka__translate__swap">Zamień języki</string>
+    <string name="pysanka__translate__looking">Szukam…</string>
+    <string name="pysanka__translate__unknown">„{word}” nie ma w słownikach.</string>
+    <string name="pysanka__translate__none">Brak tłumaczenia „{word}” ({language}).</string>
+    <string name="pysanka__translate__via_english">Brak bezpośredniego tłumaczenia: to tłumaczenie przez angielski.</string>
+    <string name="pysanka__translate__source">Słowniki z Wikisłownika (CC BY-SA), bez internetu</string>
+    <string name="pysanka__translate__too_long">Zaznacz jedno słowo lub krótkie wyrażenie.</string>
+    <string name="pysanka__translate__tap_to_replace">Dotknij tłumaczenia, aby zastąpić zaznaczenie.</string>
+    <string name="pysanka__translate__copy">Kopiuj</string>
+    <string name="pysanka__translate__copied">Skopiowano</string>
+    <string name="pysanka__translate__not_here">Tłumaczenie nie działa w polach haseł.</string>
+    <string name="pysanka__translate__target_auto">Automatycznie</string>
+    <string name="pysanka__translate__state">Tłumacz na: {language}</string>
+    <string name="pysanka__translate__about">Słowa i stałe wyrażenia między 12 językami. Słowniki są w aplikacji, więc wszystko działa bez internetu. Przycisk „Tłumacz” nad klawiaturą tłumaczy słowo przy kursorze.</string>
+    <string name="pysanka__translate__selection_menu">W menu zaznaczonego tekstu</string>
+    <string name="pysanka__translate__selection_menu_hint">„Przetłumacz (Pysanka)” w każdej aplikacji</string>
+    <string name="pysanka__translate__target">Tłumacz na</string>
 </resources>

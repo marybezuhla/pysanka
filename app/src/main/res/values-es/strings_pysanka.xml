@@ -455,4 +455,27 @@
     <string name="pysanka__look__key_gaps_usual">Normal</string>
     <string name="pysanka__look__key_gaps_wide">Amplio</string>
     <string name="pysanka__look__height_hint">Cambia el tamaño del teclado flotante desde su marco</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Traducción</string>
+    <string name="pysanka__translate__entry_label">Traducir (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Traducir</string>
+    <string name="pysanka__translate__quick_action__tooltip">Traducir la palabra</string>
+    <string name="pysanka__translate__no_word">Coloca el cursor sobre una palabra o selecciónala.</string>
+    <string name="pysanka__translate__swap">Intercambiar idiomas</string>
+    <string name="pysanka__translate__looking">Buscando…</string>
+    <string name="pysanka__translate__unknown">«{word}» no está en los diccionarios.</string>
+    <string name="pysanka__translate__none">No hay traducción de «{word}» ({language}).</string>
+    <string name="pysanka__translate__via_english">No hay traducción directa: esta pasa por el inglés.</string>
+    <string name="pysanka__translate__source">Diccionarios de Wikcionario (CC BY-SA), sin internet</string>
+    <string name="pysanka__translate__too_long">Selecciona una palabra o una expresión corta.</string>
+    <string name="pysanka__translate__tap_to_replace">Toca una traducción para reemplazar la selección.</string>
+    <string name="pysanka__translate__copy">Copiar</string>
+    <string name="pysanka__translate__copied">Copiado</string>
+    <string name="pysanka__translate__not_here">La traducción no funciona en los campos de contraseña.</string>
+    <string name="pysanka__translate__target_auto">Automático</string>
+    <string name="pysanka__translate__state">Traducir a: {language}</string>
+    <string name="pysanka__translate__about">Palabras y expresiones fijas entre los 12 idiomas. Los diccionarios están en la app, así que todo funciona sin internet. El botón «Traducir» sobre el teclado traduce la palabra del cursor.</string>
+    <string name="pysanka__translate__selection_menu">En el menú del texto seleccionado</string>
+    <string name="pysanka__translate__selection_menu_hint">«Traducir (Pysanka)» en cualquier app</string>
+    <string name="pysanka__translate__target">Traducir a</string>
 </resources>

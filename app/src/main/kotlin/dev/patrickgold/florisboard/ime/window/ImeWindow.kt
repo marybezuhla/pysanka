@@ -227,6 +227,7 @@ private fun ImeInnerWindow() {
                 // Pysanka
                 ImeUiMode.PYSANKA_AI -> ProvideActualLayoutDirection { ua.pysanka.ai.AiPanel() }
                 ImeUiMode.PYSANKA_VOICE -> ProvideActualLayoutDirection { ua.pysanka.voice.VoicePanel() }
+                ImeUiMode.PYSANKA_TRANSLATE -> ProvideActualLayoutDirection { ua.pysanka.translate.TranslatePanel() }
             }
             ImeSystemUiFloating()
         }

@@ -153,6 +153,7 @@ data class TextKeyData(
                 PYSANKA_FIX_LAYOUT,
                 PYSANKA_TEXT_FROM_PHOTO,
                 PYSANKA_TEXT_FROM_CAMERA,
+                PYSANKA_TRANSLATE,
             )
         }
 
@@ -161,6 +162,7 @@ data class TextKeyData(
         val PYSANKA_FIX_LAYOUT = TextKeyData(type = KeyType.FUNCTION, code = KeyCode.PYSANKA_FIX_LAYOUT, label = "pysanka_fix_layout")
         val PYSANKA_TEXT_FROM_PHOTO = TextKeyData(type = KeyType.FUNCTION, code = KeyCode.PYSANKA_TEXT_FROM_PHOTO, label = "pysanka_text_from_photo")
         val PYSANKA_TEXT_FROM_CAMERA = TextKeyData(type = KeyType.FUNCTION, code = KeyCode.PYSANKA_TEXT_FROM_CAMERA, label = "pysanka_text_from_camera")
+        val PYSANKA_TRANSLATE = TextKeyData(type = KeyType.FUNCTION, code = KeyCode.PYSANKA_TRANSLATE, label = "pysanka_translate")
 
         /** Predefined key data for [KeyCode.UNSPECIFIED] */
         val UNSPECIFIED = TextKeyData(

@@ -455,4 +455,27 @@
     <string name="pysanka__look__key_gaps_usual">Normal</string>
     <string name="pysanka__look__key_gaps_wide">Large</string>
     <string name="pysanka__look__height_hint">Redimensionnez un clavier flottant par son cadre</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Traduction</string>
+    <string name="pysanka__translate__entry_label">Traduire (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Traduire</string>
+    <string name="pysanka__translate__quick_action__tooltip">Traduire le mot</string>
+    <string name="pysanka__translate__no_word">Placez le curseur sur un mot ou sélectionnez-le.</string>
+    <string name="pysanka__translate__swap">Inverser les langues</string>
+    <string name="pysanka__translate__looking">Recherche…</string>
+    <string name="pysanka__translate__unknown">« {word} » n’est pas dans les dictionnaires.</string>
+    <string name="pysanka__translate__none">Pas de traduction de « {word} » ({language}).</string>
+    <string name="pysanka__translate__via_english">Pas de traduction directe : celle-ci passe par l’anglais.</string>
+    <string name="pysanka__translate__source">Dictionnaires du Wiktionnaire (CC BY-SA), hors ligne</string>
+    <string name="pysanka__translate__too_long">Sélectionnez un mot ou une courte expression.</string>
+    <string name="pysanka__translate__tap_to_replace">Touchez une traduction pour remplacer la sélection.</string>
+    <string name="pysanka__translate__copy">Copier</string>
+    <string name="pysanka__translate__copied">Copié</string>
+    <string name="pysanka__translate__not_here">La traduction ne fonctionne pas dans les champs de mot de passe.</string>
+    <string name="pysanka__translate__target_auto">Automatique</string>
+    <string name="pysanka__translate__state">Traduire en : {language}</string>
+    <string name="pysanka__translate__about">Mots et expressions figées entre les 12 langues. Les dictionnaires sont dans l’application, tout fonctionne donc sans Internet. Le bouton « Traduire » au-dessus du clavier traduit le mot au curseur.</string>
+    <string name="pysanka__translate__selection_menu">Dans le menu du texte sélectionné</string>
+    <string name="pysanka__translate__selection_menu_hint">« Traduire (Pysanka) » dans n’importe quelle application</string>
+    <string name="pysanka__translate__target">Traduire en</string>
 </resources>

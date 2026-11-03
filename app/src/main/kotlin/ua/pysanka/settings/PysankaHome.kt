@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -157,6 +158,35 @@ fun PysankaHome(
                     },
                 )
             }) { v -> scope.launch { prefs.pysankaAi.emoji.set(v) } }
+        }
+
+        val translateMenu by prefs.pysankaTranslate.inSelectionMenu.observeAsState()
+        val translateTarget by prefs.pysankaTranslate.target.observeAsState()
+        val uiLocale = remember(context) { java.util.Locale.forLanguageTag(ua.pysanka.translate.TranslateChoice.ownLanguage(context)) }
+        val autoTarget = stringRes(R.string.pysanka__translate__target_auto)
+        val targetName = if (translateTarget in ua.pysanka.translate.Translations.LANGUAGES) {
+            ua.pysanka.translate.Translations.languageName(translateTarget, uiLocale)
+        } else {
+            autoTarget
+        }
+        Block(
+            stringRes(R.string.pysanka__translate__title),
+            stringRes(R.string.pysanka__translate__state, "language" to targetName),
+            icon = Icons.Outlined.Translate,
+        ) {
+            BlockNote(stringRes(R.string.pysanka__translate__about))
+            val scope = rememberCoroutineScope()
+            ToggleRow(stringRes(R.string.pysanka__translate__selection_menu), translateMenu, stringRes(R.string.pysanka__translate__selection_menu_hint)) { v ->
+                scope.launch {
+                    prefs.pysankaTranslate.inSelectionMenu.set(v)
+                    ua.pysanka.translate.TranslateEntry.sync(context)
+                }
+            }
+            ChoiceRow(
+                stringRes(R.string.pysanka__translate__target),
+                listOf("auto" to autoTarget) + ua.pysanka.translate.Translations.LANGUAGES.map { it to ua.pysanka.translate.Translations.languageName(it, uiLocale) },
+                if (translateTarget in ua.pysanka.translate.Translations.LANGUAGES) translateTarget else "auto",
+            ) { v -> scope.launch { prefs.pysankaTranslate.target.set(v) } }
         }
 
         val voiceState = stringRes(

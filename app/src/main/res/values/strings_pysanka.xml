@@ -455,4 +455,27 @@
     <string name="pysanka__look__key_gaps_usual">Usual</string>
     <string name="pysanka__look__key_gaps_wide">Wide</string>
     <string name="pysanka__look__height_hint">Resize a floating keyboard by its frame</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Translation</string>
+    <string name="pysanka__translate__entry_label">Translate (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Translate</string>
+    <string name="pysanka__translate__quick_action__tooltip">Translate the word</string>
+    <string name="pysanka__translate__no_word">Put the cursor on a word or select it.</string>
+    <string name="pysanka__translate__swap">Swap languages</string>
+    <string name="pysanka__translate__looking">Looking it up…</string>
+    <string name="pysanka__translate__unknown">“{word}” is not in the dictionaries.</string>
+    <string name="pysanka__translate__none">No translation of “{word}” ({language}).</string>
+    <string name="pysanka__translate__via_english">No direct translation: these go through English.</string>
+    <string name="pysanka__translate__source">Dictionaries from Wiktionary (CC BY-SA), offline</string>
+    <string name="pysanka__translate__too_long">Select one word or a short expression.</string>
+    <string name="pysanka__translate__tap_to_replace">Tap a translation to replace the selection.</string>
+    <string name="pysanka__translate__copy">Copy</string>
+    <string name="pysanka__translate__copied">Copied</string>
+    <string name="pysanka__translate__not_here">Translation does not work in password fields.</string>
+    <string name="pysanka__translate__target_auto">Automatic</string>
+    <string name="pysanka__translate__state">Translate into: {language}</string>
+    <string name="pysanka__translate__about">Words and set expressions between the 12 languages. The dictionaries are in the app, so it all works without the internet. The “Translate” button above the keyboard translates the word at the cursor.</string>
+    <string name="pysanka__translate__selection_menu">In the text selection menu</string>
+    <string name="pysanka__translate__selection_menu_hint">“Translate (Pysanka)” in any app</string>
+    <string name="pysanka__translate__target">Translate into</string>
 </resources>

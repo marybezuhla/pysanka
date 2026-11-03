@@ -68,8 +68,9 @@ data class QuickActionArrangement(
         val Default = QuickActionArrangement(
             stickyAction = QuickAction.InsertKey(TextKeyData.VOICE_INPUT),
             dynamicActions = listOf(
-                // Pysanka: the AI, fixing the layout and text from a photo / the camera come first
+                // Pysanka: the AI, translation, fixing the layout and text from a photo / the camera come first
                 QuickAction.InsertKey(TextKeyData.PYSANKA_AI),
+                QuickAction.InsertKey(TextKeyData.PYSANKA_TRANSLATE),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_FIX_LAYOUT),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_TEXT_FROM_PHOTO),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_TEXT_FROM_CAMERA),

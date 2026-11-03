@@ -454,4 +454,27 @@
     <string name="pysanka__look__key_gaps_usual">Normal</string>
     <string name="pysanka__look__key_gaps_wide">Breit</string>
     <string name="pysanka__look__height_hint">Die Größe einer schwebenden Tastatur am Rahmen ändern</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Übersetzung</string>
+    <string name="pysanka__translate__entry_label">Übersetzen (Pysanka)</string>
+    <string name="pysanka__translate__quick_action">Übersetzen</string>
+    <string name="pysanka__translate__quick_action__tooltip">Wort übersetzen</string>
+    <string name="pysanka__translate__no_word">Setzen Sie den Cursor auf ein Wort oder markieren Sie es.</string>
+    <string name="pysanka__translate__swap">Sprachen tauschen</string>
+    <string name="pysanka__translate__looking">Suche…</string>
+    <string name="pysanka__translate__unknown">„{word}“ ist nicht in den Wörterbüchern.</string>
+    <string name="pysanka__translate__none">Keine Übersetzung von „{word}“ ({language}).</string>
+    <string name="pysanka__translate__via_english">Keine direkte Übersetzung: Diese geht über Englisch.</string>
+    <string name="pysanka__translate__source">Wörterbücher aus dem Wiktionary (CC BY-SA), offline</string>
+    <string name="pysanka__translate__too_long">Markieren Sie ein Wort oder einen kurzen Ausdruck.</string>
+    <string name="pysanka__translate__tap_to_replace">Tippen Sie auf eine Übersetzung, um die Markierung zu ersetzen.</string>
+    <string name="pysanka__translate__copy">Kopieren</string>
+    <string name="pysanka__translate__copied">Kopiert</string>
+    <string name="pysanka__translate__not_here">In Passwortfeldern funktioniert die Übersetzung nicht.</string>
+    <string name="pysanka__translate__target_auto">Automatisch</string>
+    <string name="pysanka__translate__state">Übersetzen in: {language}</string>
+    <string name="pysanka__translate__about">Wörter und feste Wendungen zwischen den 12 Sprachen. Die Wörterbücher sind in der App, alles funktioniert also ohne Internet. Die Taste „Übersetzen“ über der Tastatur übersetzt das Wort am Cursor.</string>
+    <string name="pysanka__translate__selection_menu">Im Menü für markierten Text</string>
+    <string name="pysanka__translate__selection_menu_hint">„Übersetzen (Pysanka)“ in jeder App</string>
+    <string name="pysanka__translate__target">Übersetzen in</string>
 </resources>

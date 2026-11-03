@@ -20,9 +20,10 @@ enum class ImeUiMode(val value: Int) {
     TEXT(0),
     MEDIA(1),
     CLIPBOARD(2),
-    // Pysanka: the AI panel and dictation (fit the 3 bits of ImeStateFlags)
+    // Pysanka: the AI panel, dictation and translation (fit the 3 bits of ImeStateFlags)
     PYSANKA_AI(3),
-    PYSANKA_VOICE(4);
+    PYSANKA_VOICE(4),
+    PYSANKA_TRANSLATE(5);
 
     companion object {
         fun fromInt(int: Int) = entries.firstOrNull { it.value == int } ?: TEXT

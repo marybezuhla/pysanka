@@ -456,4 +456,27 @@
     <string name="pysanka__look__key_gaps_usual">Звичайні</string>
     <string name="pysanka__look__key_gaps_wide">Просторі</string>
     <string name="pysanka__look__height_hint">Плаваючу клавіатуру змінюйте рамкою</string>
+    <!-- Translation dictionaries -->
+    <string name="pysanka__translate__title">Переклад</string>
+    <string name="pysanka__translate__entry_label">Перекласти (Писанка)</string>
+    <string name="pysanka__translate__quick_action">Переклад</string>
+    <string name="pysanka__translate__quick_action__tooltip">Перекласти слово</string>
+    <string name="pysanka__translate__no_word">Поставте курсор на слово або виділіть його.</string>
+    <string name="pysanka__translate__swap">Поміняти мови</string>
+    <string name="pysanka__translate__looking">Шукаю…</string>
+    <string name="pysanka__translate__unknown">«{word}» немає в словниках.</string>
+    <string name="pysanka__translate__none">Немає перекладу «{word}» ({language}).</string>
+    <string name="pysanka__translate__via_english">Прямого перекладу немає, це переклад через англійську.</string>
+    <string name="pysanka__translate__source">Словники з Вікісловника (CC BY-SA), без інтернету</string>
+    <string name="pysanka__translate__too_long">Виділіть одне слово або короткий вираз.</string>
+    <string name="pysanka__translate__tap_to_replace">Торкніться перекладу, щоб замінити виділене.</string>
+    <string name="pysanka__translate__copy">Копіювати</string>
+    <string name="pysanka__translate__copied">Скопійовано</string>
+    <string name="pysanka__translate__not_here">У полі пароля переклад не працює.</string>
+    <string name="pysanka__translate__target_auto">Автоматично</string>
+    <string name="pysanka__translate__state">Мова перекладу: {language}</string>
+    <string name="pysanka__translate__about">Слова та сталі вирази між 12 мовами. Словники в застосунку, тож усе працює без інтернету. Кнопка «Переклад» над клавіатурою перекладає слово біля курсора.</string>
+    <string name="pysanka__translate__selection_menu">У меню виділеного тексту</string>
+    <string name="pysanka__translate__selection_menu_hint">«Перекласти (Писанка)» в будь-якому застосунку</string>
+    <string name="pysanka__translate__target">Мова перекладу</string>
 </resources>
