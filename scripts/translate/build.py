@@ -131,8 +131,14 @@ def main() -> None:
     meanings: dict[int, tuple] = {}
     forms: dict[str, dict[str, set[str]]] = {l: defaultdict(set) for l in LANGS}
 
+    def common(l: str, w: str) -> bool:
+        k = key(w)
+        return k in freq[l] or (" " in k and all(p in freq[l] for p in k.split(" ")))
+
     def add(head: str, gloss: str, words: dict[str, list[str]]) -> None:
-        words = {l: [clean(w) for w in ws if usable(clean(w))] for l, ws in words.items()}
+        # Only words people use (the keyboard's word list has them, or every part of an expression):
+        # all of Wiktionary would make the app hundreds of megabytes bigger
+        words = {l: [clean(w) for w in ws if usable(clean(w)) and common(l, clean(w))] for l, ws in words.items()}
         words = {l: list(dict.fromkeys(ws)) for l, ws in words.items() if ws}
         if len(words) < 2:
             return
