@@ -47,6 +47,8 @@ open class RealSettingsScreensTest {
         // is printed instead, so the test shows it
         Thread.setDefaultUncaughtExceptionHandler { thread, e -> System.err.println("Uncaught in ${thread.name}: ${e.stackTraceToString()}") }
         val app = ApplicationProvider.getApplicationContext<FlorisApplication>()
+        // A phone grants the app its own signature permission by itself; Robolectric does not
+        shadowOf(app).grantPermissions("${app.packageName}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")
         shadowOf(app.packageManager).addActivityIfNotPresent(ComponentName(app, ComponentActivity::class.java))
         // The settings are read in the background when the app starts
         val until = System.currentTimeMillis() + 10_000
