@@ -12,8 +12,8 @@ import java.util.Locale
  *
  * A word is found as written or by its dictionary form («ключа» → «ключ», «klucza» → «klucz»).
  * The translations are the words that share a meaning with it in the other language, the ones of
- * more meanings first; each comes with a hint of what meaning it is for, in the person's own
- * language when the dictionary has it («джерело» for "spring").
+ * more meanings first; each comes with a hint of what meaning it is for: its words in the person's
+ * own language («джерело» for "spring"), or in English when translating into that language.
  */
 object Translations {
     const val DIR = "ime/translate"
@@ -30,7 +30,7 @@ object Translations {
     data class Result(
         /** The translation, as written in the dictionary. */
         val word: String,
-        /** What meaning it is for (other words of it, or Wiktionary's short explanation). */
+        /** What meaning it is for (other words of it, in the person's language or English). */
         val hint: String?,
         /** Found only through English (no meaning joins the two languages directly). */
         val viaEnglish: Boolean = false,
@@ -65,9 +65,10 @@ object Translations {
 
     /** Whether the dictionaries are in this build. */
     fun available(context: Context): Boolean =
-        runCatching { context.assets.list(DIR)?.contains("meanings.txt") == true }.getOrDefault(false)
+        runCatching { context.assets.list(DIR)?.contains("uk.words.txt") == true }.getOrDefault(false)
 
-    private val STRESS = Regex("[́̀]")
+    /** Stress marks on Cyrillic letters (on Latin ones the same marks are letters: é, á, ó). */
+    private val STRESS = Regex("(?<=[\\u0400-\\u04FF])[\\u0301\\u0300]")
     private val SPACES = Regex("\\s+")
 
     /** The text as the dictionary keeps it: small letters, no stress marks, one kind of apostrophe. */
@@ -176,8 +177,8 @@ object Translations {
         exclude: Set<String>,
     ): List<Result> {
         val target = file(src, "$to.meanings.txt") ?: return emptyList()
-        val hints = if (hintLanguage != to) file(src, "$hintLanguage.meanings.txt") else null
-        val meanings = file(src, "meanings.txt")
+        // Hints in the person's language; else (translating into it) in English
+        val hints = file(src, "${if (hintLanguage != to) hintLanguage else if (to != "en") "en" else from}.meanings.txt")
         val found = LinkedHashMap<String, Found>()
         // Ids are in the order of the meanings: the most basic first
         for ((n, id) in ids.sorted().withIndex()) {
@@ -189,21 +190,21 @@ object Translations {
                 if (f != null) {
                     f.support++
                 } else {
-                    found[wk] = Found(w, n, 1, hint(id, hints, meanings, exclude + wk))
+                    found[wk] = Found(w, n, 1, hint(id, hints, exclude + wk))
                 }
             }
         }
-        return found.values.sortedWith(compareByDescending<Found> { it.support }.thenBy { it.first })
+        // A word many meanings agree on: those of a single stray meaning (the «@» called «собачка») are left out
+        val best = found.values.maxOfOrNull { it.support } ?: 0
+        val enough = if (best >= 4) best / 4 + 1 else 1
+        return found.values.filter { it.support >= enough }
+            .sortedWith(compareByDescending<Found> { it.support }.thenBy { it.first })
             .take(MAX_RESULTS).map { Result(it.word, it.hint) }
     }
 
-    private fun hint(id: String, hints: SortedLines?, meanings: SortedLines?, exclude: Set<String>): String? {
-        val own = hints?.find(id)?.split('|')?.filter { key(it) !in exclude }?.take(2)
-        if (!own.isNullOrEmpty()) return own.joinToString(", ")
-        val line = meanings?.line(id.toInt(36)) ?: return null
-        val gloss = line.substringAfter('\t').trim()
-        return gloss.ifEmpty { line.substringBefore('\t').substringAfter(':') }.takeIf { it.isNotEmpty() }
-    }
+    private fun hint(id: String, hints: SortedLines?, exclude: Set<String>): String? =
+        hints?.find(id)?.split('|')?.filter { it.isNotEmpty() && key(it) !in exclude }?.take(2)
+            ?.takeIf { it.isNotEmpty() }?.joinToString(", ")
 
     /** The name of [lang] in [ui]'s language, with a capital letter. */
     fun languageName(lang: String, ui: Locale): String =

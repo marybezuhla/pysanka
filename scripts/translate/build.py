@@ -10,11 +10,11 @@ A "meaning" joins the words that say the same thing in several languages:
 - a word of another language explained in a Wiktionary in short (Ukrainian «ключ» in the English
   one: "key", "wrench", "clef") – the explanation is the translation.
 Meanings with the same words are one. The more languages a meaning has, the more basic it is: it
-comes first.
+comes first. Wiktionary's explanations are not kept (in many languages, and large): what a meaning
+is, is shown by its words in the person's own language, or in English.
 
 Files (UTF-8, one entry a line, sorted, so the app finds a line by binary search without reading
 everything into objects):
-- meanings.txt: line N is meaning N: "<language>:<headword>\t<what it means>";
 - <lang>.words.txt: "<word>\t<meaning ids>" (word in small letters, without stress marks);
 - <lang>.forms.txt: "<form>\t<word>|<word>" (an inflected form and the words it is a form of);
 - <lang>.meanings.txt: "<meaning id>\t<word>|<word>" (the words of that language, commonest first).
@@ -45,7 +45,8 @@ STRESS = {"́", "̀"}
 def clean(w: str) -> str:
     """The word as shown: without stress marks, one kind of apostrophe, single spaces."""
     w = unicodedata.normalize("NFD", w.strip().translate(APOSTROPHES))
-    w = "".join(c for c in w if c not in STRESS)
+    # Stress marks only on Cyrillic letters: on Latin ones the same marks are letters (é, á, ó)
+    w = "".join(c for i, c in enumerate(w) if not (c in STRESS and i > 0 and "\u0400" <= w[i - 1] <= "\u04ff"))
     return re.sub(r"\s+", " ", unicodedata.normalize("NFC", w))
 
 
@@ -206,21 +207,19 @@ def main() -> None:
 
     index: dict[str, dict[str, list[int]]] = {l: defaultdict(list) for l in LANGS}
     per_lang: dict[str, list[str]] = {l: [] for l in LANGS}
-    with open(out / "meanings.txt", "w", encoding="utf-8") as f:
-        for i, (sig, (head, gloss, words)) in enumerate(ordered):
-            f.write(f"{head}\t{clean(gloss)[:100]}\n")
-            for l, ws in words:
-                ws = sorted(ws, key=lambda x: -freq[l].get(key(x), 0))[:MAX_WORDS]
-                per_lang[l].append(f"{b36(i)}\t{'|'.join(ws)}")
-                for x in ws:
-                    k = key(x)
-                    if len(index[l][k]) < MAX_IDS:
-                        index[l][k].append(i)
-                    if l in ("ru", "be") and "ё" in k:
-                        # Written without ё as often as with it
-                        k2 = k.replace("ё", "е")
-                        if len(index[l][k2]) < MAX_IDS:
-                            index[l][k2].append(i)
+    for i, (sig, (head, gloss, words)) in enumerate(ordered):
+        for l, ws in words:
+            ws = sorted(ws, key=lambda x: -freq[l].get(key(x), 0))[:MAX_WORDS]
+            per_lang[l].append(f"{b36(i)}\t{'|'.join(ws)}")
+            for x in ws:
+                k = key(x)
+                if len(index[l][k]) < MAX_IDS:
+                    index[l][k].append(i)
+                if l in ("ru", "be") and "ё" in k:
+                    # Written without ё as often as with it
+                    k2 = k.replace("ё", "е")
+                    if len(index[l][k2]) < MAX_IDS:
+                        index[l][k2].append(i)
 
     if lo is not None:
         for l, d in HUNSPELL.items():
