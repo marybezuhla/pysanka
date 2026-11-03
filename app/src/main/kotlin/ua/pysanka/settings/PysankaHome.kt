@@ -339,6 +339,7 @@ private fun EmojiSettings() {
     PrefChoice(prefs.emoji.preferredSkinTone, stringRes(R.string.prefs__media__emoji_preferred_skin_tone), EmojiSkinTone::class)
     PrefToggle(prefs.emoji.historyEnabled, stringRes(R.string.pysanka__emoji__history), stringRes(R.string.pysanka__emoji__history_summary))
     PrefToggle(prefs.emoji.suggestionEnabled, stringRes(R.string.pysanka__emoji__suggest), stringRes(R.string.pysanka__emoji__suggest_summary))
+    PrefToggle(prefs.suggestion.pysankaHashtags, stringRes(R.string.pysanka__hashtags__suggest), stringRes(R.string.pysanka__hashtags__suggest_summary))
     val suggest by prefs.emoji.suggestionEnabled.observeAsState()
     val type by prefs.emoji.suggestionType.observeAsState()
     ChoiceRow(

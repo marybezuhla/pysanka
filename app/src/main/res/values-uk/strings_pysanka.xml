@@ -443,4 +443,6 @@
     <string name="pysanka__typing__physical_layout">Фізична клавіатура мовою Писанки</string>
     <string name="pysanka__typing__physical_layout_summary">Друкує мовою, обраною в Писанці (українська, англійська). Мова перемикається Ctrl+Пробіл або Alt+Shift. Вимкнено: розкладка із системних налаштувань.</string>
     <string name="pysanka__typing__language_now">Мова: {name}</string>
+    <string name="pysanka__hashtags__suggest">Пропонувати хештеги</string>
+    <string name="pysanka__hashtags__suggest_summary">Після «#»: ваші хештеги, слова з допису й зі словника. Ваші хештеги запамʼятовуються зашифровано, як вивчені слова.</string>
 </resources>

@@ -72,6 +72,17 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         }
     }
 
+    /** Pysanka: hashtags for [prefix] (see [ua.pysanka.typing.Hashtags]); [text]: the text being written. */
+    suspend fun pysankaHashtags(subtype: Subtype, prefix: String, text: String): List<String> {
+        val dict = suggester(subtype)
+        val own = withContext(Dispatchers.IO) { UserWords.get(appContext, ua.pysanka.typing.Hashtags.LIST) }
+        return ua.pysanka.typing.Hashtags.suggest(
+            prefix, text, own,
+            frequency = { dict?.frequency(it) ?: 0 },
+            complete = { p -> dict?.suggest(p, 3)?.map { it.word }?.filter { PersonalWords.key(it).startsWith(PersonalWords.key(p)) }.orEmpty() },
+        )
+    }
+
     /**
      * Pysanka: the likely next letters; at a word's start also the first letters of the words the
      * person usually writes after the previous one (half and half with the word list's).

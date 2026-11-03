@@ -442,4 +442,6 @@
     <string name="pysanka__typing__physical_layout">Physical keyboard in Pysanka\'s language</string>
     <string name="pysanka__typing__physical_layout_summary">Types in the language chosen in Pysanka (Ukrainian, English). Ctrl+Space or Alt+Shift switches it. Off: the layout from the system settings.</string>
     <string name="pysanka__typing__language_now">Language: {name}</string>
+    <string name="pysanka__hashtags__suggest">Suggest hashtags</string>
+    <string name="pysanka__hashtags__suggest_summary">After «#»: your hashtags, words from the post and from the dictionary. Your hashtags are remembered encrypted, like learned words.</string>
 </resources>

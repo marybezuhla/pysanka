@@ -303,6 +303,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
         when (candidate) {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
+            // Pysanka: «#tag » in place of what was typed after «#»
+            is ua.pysanka.typing.HashtagCandidate -> {
+                if (editorInstance.pysankaCommitHashtag(candidate.tag)) ua.pysanka.typing.Hashtags.learn(appContext, candidate.tag)
+            }
             else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
     }
@@ -655,6 +659,9 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * enabled by the user.
      */
     private fun handleSpace(data: KeyData) {
+        // Pysanka: a hashtag finished with a space is remembered (see Hashtags.learn)
+        ua.pysanka.typing.Hashtags.typed(editorInstance.activeContent.textBeforeSelection)
+            ?.takeIf { it.isNotEmpty() }?.let { ua.pysanka.typing.Hashtags.learn(appContext, it) }
         val typed = editorInstance.activeContent.composingText
         // Pysanka: a correction worked out for an earlier keystroke is not applied
         val candidate = pysankaAutoCommitCandidate(bySpace = true)

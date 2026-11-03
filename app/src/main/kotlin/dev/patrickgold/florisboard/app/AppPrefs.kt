@@ -773,6 +773,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 
     val suggestion = Suggestion()
     inner class Suggestion {
+        // Pysanka: hashtags after «#» (ua.pysanka.typing.Hashtags)
+        val pysankaHashtags = boolean(
+            key = "pysanka__suggestion__hashtags",
+            default = true,
+        )
         val api30InlineSuggestionsEnabled = boolean(
             key = "suggestion__api30_inline_suggestions_enabled",
             default = true,
