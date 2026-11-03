@@ -202,7 +202,13 @@ class NlpManager(context: Context) {
             ) ua.pysanka.typing.Hashtags.typed(content.textBeforeSelection) else null
             if (tag != null) {
                 val latin = getSuggestionProvider(subtype) as? dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider
-                val tags = latin?.pysankaHashtags(subtype, tag, content.text).orEmpty()
+                // The post as far back as it goes (the keyboard's own copy is only its last few lines)
+                val post = runCatching {
+                    dev.patrickgold.florisboard.FlorisImeService.currentInputConnection()
+                        ?.getTextBeforeCursor(PYSANKA_POST_CHARS, 0)?.toString()
+                }.getOrNull()?.let { if (it.length >= PYSANKA_POST_CHARS) it.substringAfter(' ') else it }
+                    ?: content.text.toString()
+                val tags = latin?.pysankaHashtags(subtype, tag, post).orEmpty()
                 internalSuggestionsGuard.withLock {
                     if (internalSuggestions.first < reqTime) {
                         internalSuggestions = reqTime to tags
@@ -477,3 +483,6 @@ class NlpManager(context: Context) {
             }
     }
 }
+
+/** Pysanka: how much of a post before the cursor its hashtags are taken from. */
+private const val PYSANKA_POST_CHARS = 4000

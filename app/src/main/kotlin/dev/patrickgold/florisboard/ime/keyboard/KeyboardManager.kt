@@ -305,7 +305,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
             // Pysanka: «#tag » in place of what was typed after «#»
             is ua.pysanka.typing.HashtagCandidate -> {
-                if (editorInstance.pysankaCommitHashtag(candidate.tags)) candidate.tags.forEach { pysankaLearnHashtag(it) }
+                // Chosen one by one: the person's own at once; a few at once: learned like typed words (by use)
+                if (editorInstance.pysankaCommitHashtag(candidate.tags)) candidate.tags.forEach { pysankaLearnHashtag(it, insisted = candidate.tags.size == 1) }
             }
             else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
@@ -678,8 +679,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     /** Pysanka: a finished hashtag is learned under the same rules as words (see [pysankaMayLearn]). */
-    private fun pysankaLearnHashtag(tag: String) {
-        if (pysankaMayLearn()) ua.pysanka.typing.Hashtags.learn(appContext, tag)
+    private fun pysankaLearnHashtag(tag: String, insisted: Boolean = true) {
+        if (pysankaMayLearn()) ua.pysanka.typing.Hashtags.learn(appContext, tag, insisted)
     }
 
     /**

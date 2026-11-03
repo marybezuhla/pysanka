@@ -26,6 +26,9 @@ import dev.patrickgold.florisboard.app.FlorisPreferenceModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
@@ -268,12 +271,12 @@ class ImeWindowController(
         return when (windowConfig.mode) {
             ImeWindowMode.FIXED -> {
                 val constraints = ImeWindowConstraints.of(rootInsets, windowConfig.fixedMode)
-                val props = (
-                    windowConfig.fixedProps[windowConfig.fixedMode]
-                        ?: constraints.defaultProps.let { d ->
-                            if (heightPercent == 100) d else d.copy(keyboardHeight = d.keyboardHeight * (heightPercent / 100f))
-                        }
-                    ).constrained(constraints)
+                // A height not set by dragging (0, see PYSANKA_HEIGHT_UNSET) is the usual one times the settings' share
+                val base = windowConfig.fixedProps[windowConfig.fixedMode] ?: constraints.defaultProps.copy(keyboardHeight = PYSANKA_HEIGHT_UNSET)
+                val props = base.let { p ->
+                    if (p.keyboardHeight.isSpecified && p.keyboardHeight > PYSANKA_HEIGHT_UNSET) p
+                    else p.copy(keyboardHeight = constraints.defaultProps.keyboardHeight * (heightPercent / 100f))
+                }.constrained(constraints)
                 ImeWindowSpec.Fixed(
                     fixedMode = windowConfig.fixedMode,
                     props = props,
@@ -335,7 +338,8 @@ class ImeWindowController(
             val rootInsets = activeRootInsets.value
             val constraints = ImeWindowConstraints.of(rootInsets, ImeWindowMode.Fixed.COMPACT)
             updateWindowConfig { config ->
-                val props = config.fixedProps[ImeWindowMode.Fixed.COMPACT] ?: constraints.defaultProps
+                // Pysanka: the height left unspecified, so the settings' height still applies
+                val props = config.fixedProps[ImeWindowMode.Fixed.COMPACT] ?: constraints.defaultProps.copy(keyboardHeight = PYSANKA_HEIGHT_UNSET)
                 val newProps = updateProps(props)
                 config.copy(
                     mode = ImeWindowMode.FIXED,
@@ -565,3 +569,9 @@ class ImeWindowController(
             get() = isMoveGesture || isResizeGesture
     }
 }
+
+/**
+ * Pysanka: a saved keyboard height that means "not set by dragging": the settings' height applies.
+ * Not [Dp.Unspecified]: the settings are saved as JSON, which has no NaN.
+ */
+val PYSANKA_HEIGHT_UNSET: Dp = 0.dp

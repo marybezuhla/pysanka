@@ -233,11 +233,21 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     }
 
     private val lruSuggestionCache = LruCache<Pair<Gesture, Int>, List<String>>(SUGGESTION_CACHE_SIZE)
-    override fun getSuggestions(maxSuggestionCount: Int, gestureCompleted: Boolean): List<String> {
-        // Pysanka: the swipe as it is now. The finger keeps moving while a word is worked out (in the
-        // background), so the work and the cache must both use this copy: a result kept under the
-        // later, longer swipe gave the final word from half of the path
-        val gesture = synchronized(this.gesture) { this.gesture.clone() }
+    override fun getSuggestions(maxSuggestionCount: Int, gestureCompleted: Boolean): List<String> =
+        getSuggestions(copyGesture(), maxSuggestionCount)
+
+    /** Pysanka: a copy of the swipe so far (taken on the thread that adds the points). */
+    fun copyGesture(): Gesture = synchronized(gesture) { gesture.clone() }
+
+    /** Pysanka: the finished swipe, and the classifier emptied for the next one, in one step. */
+    fun takeGesture(): Gesture = synchronized(gesture) { gesture.clone().also { gesture.clear() } }
+
+    /**
+     * Pysanka: the words for [gesture], a copy. The finger keeps moving while a word is worked out
+     * (in the background), so the work and the cache must both use that copy: a result kept under
+     * the later, longer swipe gave the final word from half of the path.
+     */
+    fun getSuggestions(gesture: Gesture, maxSuggestionCount: Int): List<String> {
         return when (val cached = lruSuggestionCache.get(Pair(gesture, maxSuggestionCount))) {
             null -> {
                 val suggestions = unCachedGetSuggestions(gesture, maxSuggestionCount)
@@ -734,10 +744,13 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
             return true
         }
 
+        // Pysanka: only the points in use, as [equals] compares
         override fun hashCode(): Int {
-            var result = xs.contentHashCode()
-            result = 31 * result + ys.contentHashCode()
-            result = 31 * result + size
+            var result = size
+            for (i in 0 until size) {
+                result = 31 * result + xs[i].hashCode()
+                result = 31 * result + ys[i].hashCode()
+            }
             return result
         }
     }

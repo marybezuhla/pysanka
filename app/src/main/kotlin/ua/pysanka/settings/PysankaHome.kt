@@ -345,7 +345,12 @@ private fun LookSettings() {
     SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }) {
         scope.launch {
             prefs.keyboard.pysankaHeight.set(it)
-            prefs.keyboard.windowConfig.set(prefs.keyboard.windowConfig.get().mapValues { (_, c) -> c.copy(fixedProps = emptyMap()) })
+            // Only the height: one-handed side and other sizes stay
+            prefs.keyboard.windowConfig.set(
+                prefs.keyboard.windowConfig.get().mapValues { (_, c) ->
+                    c.copy(fixedProps = c.fixedProps.mapValues { (_, p) -> p.copy(keyboardHeight = dev.patrickgold.florisboard.ime.window.PYSANKA_HEIGHT_UNSET) })
+                },
+            )
         }
     }
     // Gaps between the keys: as usual, or wider (each key stands apart, as many keyboards draw them)

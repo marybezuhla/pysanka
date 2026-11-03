@@ -53,7 +53,8 @@ object Hashtags {
         }
         // 1. The person's own
         own?.let { o ->
-            val keys = if (p.isEmpty()) o.known().sortedByDescending { o.count(it) } else o.withPrefix(p, max)
+            // Right after «#» at most two, so the text's own key words still show
+            val keys = if (p.isEmpty()) o.known().sortedByDescending { o.count(it) }.take(2) else o.withPrefix(p, max)
             keys.take(max).forEach { add(o.display(it) ?: it) }
         }
         // 2. The text's key words
@@ -79,17 +80,23 @@ object Hashtags {
         "ю" to listOf("я", "ь"),
     )
 
-    /** Endings of describing words and verbs: they say less about a post than names of things. */
+    /**
+     * Endings of describing words and verbs: they say less about a post than names of things. Kept
+     * narrow: endings nouns often have too («роботи», «розмова», «памʼять», «землю») are not here.
+     */
     private val WEAK = listOf(
-        "ний", "ній", "ні", "ного", "ному", "ною", "них", "ним", "ними", "ська", "ське", "ські", "ський", "ова",
-        "ове", "овий", "ий", "ти", "тися", "ться", "ють", "ують", "ять", "ала", "ало", "али", "или", "іли",
-        "ила", "ило", "ував", "ює", "ує", "ає", "ись", "ися", "им", "ім", "лю", "аю", "ую", "яю", "ію", "ить", "ать", "ять", "еть", "уть",
+        "ний", "ній", "ні", "ного", "ному", "ною", "них", "ним", "ними", "ська", "ське", "ські", "ський",
+        "овий", "ий", "ати", "ити", "уть", "ють", "ують", "тися", "ться", "ала", "ало", "ила", "ило",
+        "ував", "ює", "ує", "ає", "ись", "ися", "им", "ім", "аю", "ую", "яю",
     )
 
-    /** Whether [key] looks like a describing word or a verb (see [WEAK]; «звикли», not «школи»). */
-    private fun weak(key: String): Boolean =
+    /**
+     * Whether [key] looks like a describing word or a verb (see [WEAK]); «-ли» («звикли») too, unless
+     * the word list has it without «и» («канали»: «канал»).
+     */
+    private fun weak(key: String, frequency: (String) -> Int): Boolean =
         WEAK.any { key.length > it.length + 2 && key.endsWith(it) } ||
-            (key.length > 4 && key.endsWith("ли") && key[key.length - 3] !in "ое")
+            (key.length > 4 && key.endsWith("ли") && key[key.length - 3] !in "ое" && frequency(key.dropLast(1)) == 0)
 
     /** Words that are never a hashtag by themselves (pronouns, little words, the most common verbs). */
     private val STOP = setOf(
@@ -116,9 +123,9 @@ object Hashtags {
             if (key.length <= ending.length + 2 || !key.endsWith(ending)) continue
             val base = key.dropLast(ending.length)
             // The commonest of the forms tried (the plain form usually is), the likelier first among equals
-            tries.map { base + it }.filter { it.length >= 4 && frequency(it) > 0 }
-                .maxByOrNull { frequency(it) }?.let { return it }
-            return key
+            val found = tries.map { base + it }.filter { it.length >= 4 && frequency(it) > 0 }.maxByOrNull { frequency(it) }
+            // The word as written stays if it is much commoner itself («гроші», not «гроша»)
+            return if (found != null && frequency(key) <= frequency(found) * 3 / 2) found else key
         }
         return key
     }
@@ -144,13 +151,16 @@ object Hashtags {
             g.forms += w
             g.count++
             // A capital not at a sentence's start: a name
-            val before = text.substring(0, m.range.first).trimEnd()
-            if (w.first().isUpperCase() && before.isNotEmpty() && before.last() !in ".!?…\n") g.name = true
+            if (w.first().isUpperCase()) {
+                var j = m.range.first - 1
+                while (j >= 0 && text[j] == ' ') j--
+                if (j >= 0 && text[j] !in ".!?…\n") g.name = true
+            }
         }
         val scored = groups.mapNotNull { (_, g) ->
             val known = g.forms.maxOf(frequency)
             if (known == 0 && g.count < 2) return@mapNotNull null
-            val weak = g.forms.count { weak(PersonalWords.key(it)) } * 2 > g.forms.size
+            val weak = g.forms.count { weak(PersonalWords.key(it), frequency) } * 2 > g.forms.size
             val best = if (g.name) g.forms.first() else if (weak) PersonalWords.key(g.forms.first()) else {
                 g.forms.map { plain(PersonalWords.key(it), frequency) }.maxWith(compareBy({ frequency(it) }, { -it.length }))
             }
@@ -163,11 +173,11 @@ object Hashtags {
     }
 
     /** A hashtag the person finished (with a space or a tap) is remembered, unless the field is private. */
-    fun learn(context: Context, tag: String) {
+    fun learn(context: Context, tag: String, insisted: Boolean = true) {
         if (ua.pysanka.privacy.FieldPrivacy.isPrivate || ua.pysanka.privacy.FieldPrivacy.isPassword) return
         val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
         if (!prefs.correction.pysankaLearnWords.get() || !prefs.suggestion.pysankaHashtags.get()) return
-        if (PersonalWords.isLearnable(tag)) UserWords.learn(context, LIST, tag, insisted = true, midSentence = false, previous = null)
+        if (PersonalWords.isLearnable(tag)) UserWords.learn(context, LIST, tag, insisted = insisted, midSentence = false, previous = null)
     }
 }
 
