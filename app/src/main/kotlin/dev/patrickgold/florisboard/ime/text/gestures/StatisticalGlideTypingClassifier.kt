@@ -122,12 +122,19 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         }
     }
 
+    // Pysanka: where the keys are (they move when the keyboard splits or changes size)
+    private var geometry = 0.0
+
     override fun setLayout(keyViews: List<TextKey>, subtype: Subtype) {
         setWordData(subtype)
+        val shape = keyViews.sumOf { (it.visibleBounds.center.x * 31f + it.visibleBounds.center.y).toDouble() }
         // stop duplicate calls
-        if (layoutSubtype == subtype && keys == keyViews) {
+        if (layoutSubtype == subtype && keys == keyViews && shape == geometry) {
             return
         }
+        // Pysanka: the same keys elsewhere: the decoder is built again for them
+        if (shape != geometry) decoderCache.remove(subtype)
+        geometry = shape
 
         // if only layout changed but not subtype
         val layoutChanged = layoutSubtype == subtype

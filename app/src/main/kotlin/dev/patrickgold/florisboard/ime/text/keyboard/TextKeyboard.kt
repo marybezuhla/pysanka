@@ -82,6 +82,20 @@ class TextKeyboard(
         return if (i == 0) hit else near[i - 1].first
     }
 
+    /** Pysanka: the keys moved apart into two halves with a [gap] between them (see [ua.pysanka.ui.SplitKeyboard]). */
+    fun pysankaSplit(width: Float, gap: Float) {
+        if (gap <= 0f) return
+        val all = keys().toList()
+        val bounds = all.map { ua.pysanka.ui.SplitKeyboard.Bounds(it.touchBounds.left, it.touchBounds.right, it.visibleBounds.left, it.visibleBounds.right) }
+        ua.pysanka.ui.SplitKeyboard.apply(width, gap, bounds)
+        for ((k, b) in all.zip(bounds)) {
+            k.touchBounds.left = b.touchLeft
+            k.touchBounds.right = b.touchRight
+            k.visibleBounds.left = b.drawnLeft
+            k.visibleBounds.right = b.drawnRight
+        }
+    }
+
     private fun pysankaLetter(key: TextKey): Char? {
         val data = key.computedData
         if (data.type != dev.patrickgold.florisboard.ime.text.key.KeyType.CHARACTER || data.code <= 0) return null

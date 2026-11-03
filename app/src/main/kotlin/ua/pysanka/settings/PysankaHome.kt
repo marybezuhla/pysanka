@@ -314,6 +314,17 @@ private fun LookSettings() {
     ThemeChoices()
     PrefToggle(prefs.other.pysankaSystemColors, stringRes(R.string.pysanka__look__system_colors), stringRes(R.string.pysanka__look__system_colors_summary))
     PrefToggle(prefs.keyboard.numberRow, stringRes(R.string.pysanka__look__number_row))
+    // A keyboard in two halves on wide screens (tablets, unfolded phones)
+    val split by prefs.keyboard.pysankaSplit.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__look__split),
+        listOf(
+            ua.pysanka.ui.SplitKeyboard.AUTO to stringRes(R.string.pysanka__look__split_auto),
+            ua.pysanka.ui.SplitKeyboard.ON to stringRes(R.string.pysanka__look__split_on),
+            ua.pysanka.ui.SplitKeyboard.OFF to stringRes(R.string.pysanka__look__split_off),
+        ),
+        split,
+    ) { v -> scope.launch { prefs.keyboard.pysankaSplit.set(v) } }
     PrefToggle(prefs.keyboard.hintedSymbolsEnabled, stringRes(R.string.pysanka__look__key_hints), stringRes(R.string.pysanka__look__key_hints_summary))
     val fontSize by prefs.keyboard.fontSizeMultiplierPortrait.observeAsState()
     SliderRow(stringRes(R.string.pysanka__look__font_size), fontSize, 50..150, 5, { "$it %" }) {

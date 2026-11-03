@@ -557,6 +557,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 
     val keyboard = Keyboard()
     inner class Keyboard {
+        // Pysanka: a keyboard split for two thumbs on wide screens: "auto" (a wide screen held
+        // sideways, an unfolded phone), "on", "off" (see ua.pysanka.ui.SplitKeyboard)
+        val pysankaSplit = string(
+            key = "pysanka__keyboard__split",
+            default = "auto",
+        )
         val windowConfig = custom(
             key = "keyboard__window_config",
             default = emptyMap(),
