@@ -261,6 +261,11 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.pysankaAutoCorrect, stringRes(R.string.pysanka__typing__auto_correct), stringRes(R.string.pysanka__typing__auto_correct_summary), enabled = suggestions)
     PrefToggle(prefs.correction.pysankaKeyTargeting, stringRes(R.string.pysanka__typing__key_targeting), stringRes(R.string.pysanka__typing__key_targeting_summary), enabled = suggestions)
     PrefToggle(prefs.correction.pysankaCalibrate, stringRes(R.string.pysanka__typing__calibrate), stringRes(R.string.pysanka__typing__calibrate_summary))
+    val calibrate by prefs.correction.pysankaCalibrate.observeAsState()
+    ActionRow(stringRes(R.string.pysanka__typing__forget_touches), stringRes(R.string.pysanka__typing__forget_touches_summary), enabled = calibrate) {
+        ua.pysanka.typing.KeyTargeting.Calibration.reset()
+        context.showShortToastSync(R.string.pysanka__typing__touches_forgotten)
+    }
     PrefToggle(prefs.correction.pysankaLearnWords, stringRes(R.string.pysanka__typing__learn_words), stringRes(R.string.pysanka__typing__learn_words_summary), enabled = suggestions)
     ActionRow(stringRes(R.string.pysanka__typing__forget_words), stringRes(R.string.pysanka__typing__forget_words_summary)) { confirmForget = true }
     val navController = LocalNavController.current

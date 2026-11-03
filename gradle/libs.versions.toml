@@ -10,7 +10,6 @@ androidx-core-splashscreen = "1.2.0"
 androidx-emoji2 = "1.6.0"
 androidx-exifinterface = "1.4.2"
 androidx-navigation = "2.9.6"
-androidx-profileinstaller = "1.4.1"
 androidx-room = "2.8.4"
 # Pysanka: encrypted clipboard
 sqlcipher-android = "4.19.1"
@@ -24,7 +23,6 @@ robolectric = "4.16.1"
 junit-vintage = "5.13.4"
 androidx-window = "1.5.1"
 cache4k = "0.14.0"
-coil = "3.3.0"
 kotlin = "2.3.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization-json = "1.9.0"
@@ -47,7 +45,6 @@ turbine = "1.2.1"
 [libraries]
 # Main
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-autofill = { module = "androidx.autofill:autofill", version.ref = "androidx-autofill" }
 androidx-collection-ktx = { module = "androidx.collection:collection-ktx", version.ref = "androidx-collection" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
@@ -63,7 +60,6 @@ androidx-emoji2 = { module = "androidx.emoji2:emoji2", version.ref = "androidx-e
 androidx-emoji2-views = { module = "androidx.emoji2:emoji2-views", version.ref = "androidx-emoji2" }
 androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "androidx-exifinterface" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
-androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "androidx-profileinstaller" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipher-android" }
@@ -74,8 +70,6 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-vintage" }
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
 cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
