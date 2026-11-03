@@ -36,7 +36,21 @@ object AiBridge {
     enum class Mode { SELECTION, ALL, INSERT }
 
     /** [start]/[end]: where the selection was (absolute offsets, -1 if unknown). */
-    data class Taken(val mode: Mode, val text: String, val start: Int = -1, val end: Int = -1)
+    /**
+     * [parts]: with nothing selected, the sentence and the paragraph around the cursor within
+     * [text] (see [TextParts]), when the field's offsets are known.
+     */
+    data class Taken(
+        val mode: Mode, val text: String, val start: Int = -1, val end: Int = -1,
+        val parts: Map<TextParts.Part, IntRange> = emptyMap(),
+    ) {
+        /** Only [part] of the field, as if it had been selected (the whole field for ALL). */
+        fun narrowed(part: TextParts.Part): Taken {
+            val r = parts[part] ?: return this
+            if (part == TextParts.Part.ALL) return this
+            return Taken(Mode.SELECTION, text.substring(r.first, r.last + 1), r.first, r.last + 1)
+        }
+    }
 
     data class Result(val mode: Mode, val original: String, val text: String, val start: Int, val end: Int)
 
@@ -86,10 +100,17 @@ object AiBridge {
             toast(R.string.pysanka__ai__not_here)
             return false
         }
-        val taken = ua.pysanka.ime.FieldText.textForAi(MAX_CHARS) ?: return false
+        var taken = ua.pysanka.ime.FieldText.textForAi(MAX_CHARS) ?: return false
         if (taken.text.length > MAX_CHARS) {
-            toast(R.string.pysanka__ai__too_long)
-            return false
+            // Too long as a whole: the paragraph around the cursor may still do (only if it is all
+            // there, not cut where the field's text was read up to)
+            val paragraph = taken.parts[TextParts.Part.PARAGRAPH]
+                ?.takeIf { it.last + 1 < taken.text.length && it.last + 1 - it.first <= MAX_CHARS }
+            if (paragraph == null) {
+                toast(R.string.pysanka__ai__too_long)
+                return false
+            }
+            taken = taken.copy(parts = taken.parts - TextParts.Part.ALL)
         }
         panel = Panel(info, taken)
         return true

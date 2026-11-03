@@ -55,8 +55,9 @@ class TextKeyboard(
         val drawn = getKeyForPos(rawX, rawY) ?: return null
         val drawnLetter = pysankaLetter(drawn) ?: return drawn
         // The person's usual offset taken off, but only ever from one letter to another
+        val zone = calibration.zone(rawX, rawY, pysankaWidth, pysankaHeight)
         val (pointerX, pointerY) = if (calibrate) {
-            drawn.touchBounds.let { calibration.adjust(rawX, rawY, it.right - it.left, it.bottom - it.top) }
+            drawn.touchBounds.let { calibration.adjust(rawX, rawY, it.right - it.left, it.bottom - it.top, zone) }
         } else {
             rawX to rawY
         }
@@ -77,8 +78,27 @@ class TextKeyboard(
         }
         // Learned from taps that went to the key they were on (a tap given to a neighbour says little),
         // and only where the offset was taken off (a raw tap still has it in)
-        if (calibrate && adjusted && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter))
+        if (calibrate && adjusted && i == 0) calibration.learn(x, y, pysankaTarget(hit, letter), zone)
         return if (i == 0) hit else near[i - 1].first
+    }
+
+    /** Pysanka: the keys moved apart into two halves with a [gap] between them (see [ua.pysanka.ui.SplitKeyboard]). */
+    fun pysankaSplit(width: Float, gap: Float) {
+        if (gap <= 0f) return
+        val all = keys().asSequence().toList()
+        val bounds = all.map {
+            ua.pysanka.ui.SplitKeyboard.Bounds(
+                it.touchBounds.left, it.touchBounds.right, it.visibleBounds.left, it.visibleBounds.right,
+                isSpace = it.computedData.code == dev.patrickgold.florisboard.ime.text.key.KeyCode.SPACE,
+            )
+        }
+        ua.pysanka.ui.SplitKeyboard.apply(width, gap, bounds)
+        for ((k, b) in all.zip(bounds)) {
+            k.touchBounds.left = b.touchLeft
+            k.touchBounds.right = b.touchRight
+            k.visibleBounds.left = b.drawnLeft
+            k.visibleBounds.right = b.drawnRight
+        }
     }
 
     private fun pysankaLetter(key: TextKey): Char? {

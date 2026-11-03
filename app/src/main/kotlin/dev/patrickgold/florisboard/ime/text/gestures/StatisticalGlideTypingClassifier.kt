@@ -60,6 +60,16 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         get() = currentSubtype == layoutSubtype && wordDataSubtype == layoutSubtype && wordDataSubtype != null
     private val prunerCache = LruCache<Subtype, Pruner>(PRUNER_CACHE_SIZE)
 
+    // Pysanka: the swipe decoder (ua.pysanka.typing.swipe.SwipeDecoder) for this layout and word list,
+    // with the key width all its distances are measured in
+    @Volatile private var decoder: ua.pysanka.typing.swipe.SwipeDecoder? = null
+    @Volatile private var keyWidth = 1f
+    /** Built decoders by language and where the keys are (switching back and forth reuses them). */
+    private val decoderCache = LruCache<Pair<Subtype, Double>, Pair<ua.pysanka.typing.swipe.SwipeDecoder, Float>>(4)
+    /** The build waited for (a newer layout makes an older build's result go unused). */
+    @Volatile private var building = 0L
+    private val builder = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "pysanka-swipe").apply { isDaemon = true } }
+
     /**
      * The minimum distance between points to be added to a gesture.
      */
@@ -116,12 +126,17 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         }
     }
 
+    // Pysanka: where the keys are (they move when the keyboard splits or changes size)
+    private var geometry = 0.0
+
     override fun setLayout(keyViews: List<TextKey>, subtype: Subtype) {
         setWordData(subtype)
+        val shape = keyViews.sumOf { (it.visibleBounds.center.x * 31f + it.visibleBounds.center.y).toDouble() }
         // stop duplicate calls
-        if (layoutSubtype == subtype && keys == keyViews) {
+        if (layoutSubtype == subtype && keys == keyViews && shape == geometry) {
             return
         }
+        geometry = shape
 
         // if only layout changed but not subtype
         val layoutChanged = layoutSubtype == subtype
@@ -174,6 +189,36 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         } else {
             this.pruner = cached
         }
+        // Pysanka: the decoder for this language and these key places, built in the background
+        // (FlorisBoard's way answers until it is ready); distances in key spacing (touch width)
+        val cacheKey = currentSubtype to geometry
+        val decoded = if (invalidateCache) null else decoderCache.get(cacheKey)
+        if (decoded != null) {
+            decoder = decoded.first
+            keyWidth = decoded.second
+        } else {
+            decoder = null
+            val letters = keys.filter { Character.isLetter(it.baseCode()) }
+            val width = letters.map { it.touchBounds.width }.sorted().let { if (it.isEmpty()) 0f else it[it.size / 2] }
+            if (width > 0f) {
+                val points = HashMap<Char, ua.pysanka.typing.swipe.SwipeDecoder.Point>()
+                for (k in letters) {
+                    val c = k.visibleBounds.center
+                    points[Character.toLowerCase(k.baseCode()).toChar()] = ua.pysanka.typing.swipe.SwipeDecoder.Point(c.x / width, c.y / width)
+                }
+                val wordList = this.words
+                val ticket = ++building
+                builder.execute {
+                    val built = ua.pysanka.typing.swipe.SwipeDecoder(points, wordList)
+                    decoderCache.put(cacheKey, built to width)
+                    // Only if no newer layout came meanwhile
+                    if (building == ticket) {
+                        keyWidth = width
+                        decoder = built
+                    }
+                }
+            }
+        }
         this.currentSubtype = currentSubtype
     }
 
@@ -199,6 +244,21 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     }
 
     private fun unCachedGetSuggestions(maxSuggestionCount: Int): List<String> {
+        // Pysanka: Pysanka's decoder (shape, location, letters in order, detours, length, word
+        // frequency and the person's habits); FlorisBoard's way below only if it is not ready
+        decoder?.let { d ->
+            val n = gesture.pointCount
+            if (n == 0) return emptyList()
+            val xs = FloatArray(n) { gesture.getX(it) / keyWidth }
+            val ys = FloatArray(n) { gesture.getY(it) / keyWidth }
+            val subtype = currentSubtype!!
+            val bonus = ua.pysanka.typing.swipe.SwipeContext.bonus(subtype.primaryLocale.language)
+            return d.decode(
+                xs, ys, n, maxSuggestionCount,
+                frequency = { w -> (nlpManager.getFrequencyForWord(subtype, w) * 255).toInt() },
+                bonus = bonus,
+            )
+        }
         val candidates = arrayListOf<String>()
         val candidateWeights = arrayListOf<Float>()
         val key = keys.firstOrNull() ?: return listOf()
@@ -520,6 +580,10 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
 
         val isEmpty: Boolean
             get() = size == 0
+
+        /** Pysanka: how many points the gesture has. */
+        val pointCount: Int
+            get() = size
 
         fun addPoint(x: Float, y: Float) {
             if (size >= MAX_SIZE) {

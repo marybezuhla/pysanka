@@ -196,6 +196,20 @@ class NlpManager(context: Context) {
     fun suggest(subtype: Subtype, content: EditorContent) {
         val reqTime = SystemClock.uptimeMillis()
         scope.launch {
+            // Pysanka: after «#», hashtags in place of word suggestions (not in private fields)
+            val tag = if (prefs.suggestion.pysankaHashtags.get() && !keyboardManager.activeState.isIncognitoMode &&
+                !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword
+            ) ua.pysanka.typing.Hashtags.typed(content.textBeforeSelection) else null
+            if (tag != null) {
+                val latin = getSuggestionProvider(subtype) as? dev.patrickgold.florisboard.ime.nlp.latin.LatinLanguageProvider
+                val tags = latin?.pysankaHashtags(subtype, tag, content.text).orEmpty()
+                internalSuggestionsGuard.withLock {
+                    if (internalSuggestions.first < reqTime) {
+                        internalSuggestions = reqTime to tags.map { ua.pysanka.typing.HashtagCandidate(it) }
+                    }
+                }
+                return@launch
+            }
             val emojiSuggestions = when {
                 prefs.emoji.suggestionEnabled.get() -> {
                     emojiSuggestionProvider.suggest(

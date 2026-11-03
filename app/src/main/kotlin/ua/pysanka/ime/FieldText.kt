@@ -74,8 +74,15 @@ object FieldText {
             return ua.pysanka.ai.AiBridge.Taken(ua.pysanka.ai.AiBridge.Mode.SELECTION, selected, start, end)
         }
         val all = wholeText(ic, et, limit)
+        // The sentence and paragraph around the cursor, when the text starts at the field's start (so
+        // their places are the field's own)
+        val parts = if (et?.text != null && et.startOffset == 0 && start >= 0 && start == end) {
+            ua.pysanka.ai.TextParts.around(all, start)
+        } else {
+            emptyMap()
+        }
         return ua.pysanka.ai.AiBridge.Taken(
-            if (all.isBlank()) ua.pysanka.ai.AiBridge.Mode.INSERT else ua.pysanka.ai.AiBridge.Mode.ALL, all, start, end,
+            if (all.isBlank()) ua.pysanka.ai.AiBridge.Mode.INSERT else ua.pysanka.ai.AiBridge.Mode.ALL, all, start, end, parts,
         )
     }
 

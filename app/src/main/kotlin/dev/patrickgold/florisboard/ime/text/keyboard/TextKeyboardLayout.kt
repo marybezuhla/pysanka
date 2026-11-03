@@ -119,6 +119,8 @@ fun TextKeyboardLayout(
     val glideEnabled = glideEnabledInternal && evaluator.editorInfo.isRichInputEditor &&
         evaluator.state.keyVariation != KeyVariation.PASSWORD
     val glideShowTrail by prefs.glide.showTrail.observeAsState()
+    // Pysanka: a split keyboard on wide screens (ua.pysanka.ui.SplitKeyboard)
+    val splitMode by prefs.keyboard.pysankaSplit.observeAsState()
     val glideTrailStyle = rememberSnyggThemeQuery(FlorisImeUi.GlideTrail.elementName)
     val glideTrailColor = glideTrailStyle.foreground(default = Color.Green)
 
@@ -222,9 +224,18 @@ fun TextKeyboardLayout(
         val keyMarginH by remember { derivedStateOf { windowSpec.keyMarginH.toPx() } }
         val keyMarginV by remember { derivedStateOf { windowSpec.keyMarginV.toPx() } }
 
+        // Pysanka: letters and symbols split on a wide screen; number pads stay whole
+        val splitGap = if (keyboard.mode == KeyboardMode.CHARACTERS || keyboard.mode == KeyboardMode.SYMBOLS ||
+            keyboard.mode == KeyboardMode.SYMBOLS2
+        ) {
+            ua.pysanka.ui.SplitKeyboard.gap(
+                splitMode, keyboardWidth, keyboardWidth.toDp().value,
+                configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE,
+            )
+        } else 0f
         val desiredKey = remember(
             keyboard, keyboardWidth, keyboardHeight, keyMarginH, keyMarginV,
-            keyboardRowBaseHeight, evaluator
+            keyboardRowBaseHeight, evaluator, splitGap,
         ) {
             TextKey(data = TextKeyData.UNSPECIFIED).also { desiredKey ->
                 desiredKey.touchBounds.apply {
@@ -242,6 +253,11 @@ fun TextKeyboardLayout(
                 }
                 desiredKey.visibleBounds.applyFrom(desiredKey.touchBounds).deflateBy(keyMarginH, keyMarginV)
                 keyboard.layout(keyboardWidth, keyboardHeight, desiredKey, true)
+                keyboard.pysankaSplit(keyboardWidth, splitGap)
+                // Pysanka: swipe knows where the keys are now (they moved if the size or split changed)
+                if (glideEnabled && keyboard.mode == KeyboardMode.CHARACTERS) {
+                    glideTypingManager.setLayout(keyboard.keys().asSequence().toList())
+                }
             }
         }
 

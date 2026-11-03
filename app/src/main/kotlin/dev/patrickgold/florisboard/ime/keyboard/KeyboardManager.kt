@@ -76,6 +76,7 @@ import kotlinx.coroutines.sync.withLock
 import org.florisboard.lib.android.AndroidKeyguardManager
 import org.florisboard.lib.android.showLongToast
 import org.florisboard.lib.android.showLongToastSync
+import org.florisboard.lib.android.showShortToast
 import org.florisboard.lib.android.showShortToastSync
 import org.florisboard.lib.android.systemService
 import org.florisboard.lib.kotlin.collectIn
@@ -295,13 +296,18 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
-    fun commitCandidate(candidate: SuggestionCandidate) {
+    /** [wholeWord] (Pysanka): a tapped suggestion replaces the whole word around the cursor. */
+    fun commitCandidate(candidate: SuggestionCandidate, wholeWord: Boolean = false) {
         scope.launch {
             candidate.sourceProvider?.notifySuggestionAccepted(subtypeManager.activeSubtype, candidate)
         }
         when (candidate) {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
-            else -> editorInstance.commitCompletion(candidate)
+            // Pysanka: «#tag » in place of what was typed after «#»
+            is ua.pysanka.typing.HashtagCandidate -> {
+                if (editorInstance.pysankaCommitHashtag(candidate.tag)) ua.pysanka.typing.Hashtags.learn(appContext, candidate.tag)
+            }
+            else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
     }
 
@@ -653,6 +659,9 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      * enabled by the user.
      */
     private fun handleSpace(data: KeyData) {
+        // Pysanka: a hashtag finished with a space is remembered (see Hashtags.learn)
+        ua.pysanka.typing.Hashtags.typed(editorInstance.activeContent.textBeforeSelection)
+            ?.takeIf { it.isNotEmpty() }?.let { ua.pysanka.typing.Hashtags.learn(appContext, it) }
         val typed = editorInstance.activeContent.composingText
         // Pysanka: a correction worked out for an earlier keystroke is not applied
         val candidate = pysankaAutoCommitCandidate(bySpace = true)
@@ -902,7 +911,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     fun pysankaTapCandidate(candidate: SuggestionCandidate) {
         val typed = editorInstance.activeContent.composingText
         pysankaLearn(typed, candidate, insisted = candidate.text.toString() == typed)
-        commitCandidate(candidate)
+        commitCandidate(candidate, wholeWord = true)
     }
 
     override fun onInputKeyUp(data: KeyData) = activeState.batchEdit {
@@ -1097,6 +1106,31 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     fun onHardwareKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         // Pysanka: a physical keyboard types into the field, so a clipboard search on screen ends
         ua.pysanka.clipboard.ClipSearch.stop()
+        // Pysanka: the keyboard's language on a physical keyboard too, and Ctrl+Space / Alt+Shift
+        if (event != null && prefs.physicalKeyboard.pysankaOwnLayout.get()) {
+            val language = subtypeManager.activeSubtype.primaryLocale.language
+            val action = ua.pysanka.typing.HardwareKeys.action(
+                keyCode, language, event.isShiftPressed, event.isCapsLockOn,
+                event.isCtrlPressed, event.isAltPressed, event.isMetaPressed,
+                systemChar = event.getUnicodeChar(event.metaState and KeyEvent.META_SHIFT_MASK.inv() and KeyEvent.META_CAPS_LOCK_ON.inv()),
+                altLeft = event.metaState and KeyEvent.META_ALT_LEFT_ON != 0,
+            )
+            // Anything pressed after Alt+Shift calls the switch off (Shift+Alt+arrow and the like)
+            pysankaArmed = action == ua.pysanka.typing.HardwareKeys.Action.ArmSwitch
+            when (action) {
+                ua.pysanka.typing.HardwareKeys.Action.SwitchLanguage -> {
+                    if (event.repeatCount == 0) pysankaSwitchLanguageAndSay()
+                    return true
+                }
+                is ua.pysanka.typing.HardwareKeys.Action.Type -> {
+                    if (editorInstance.commitText(action.text)) {
+                        pysankaTypedKeys.add(keyCode)
+                        return true
+                    }
+                }
+                ua.pysanka.typing.HardwareKeys.Action.ArmSwitch, ua.pysanka.typing.HardwareKeys.Action.Pass -> Unit
+            }
+        }
         when (keyCode) {
             KeyEvent.KEYCODE_SPACE -> {
                 handleHardwareKeyboardSpace()
@@ -1114,7 +1148,31 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
+    /** Pysanka: Alt+Shift held, waiting to be let go with nothing else pressed (see HardwareKeys). */
+    private var pysankaArmed = false
+
+    /** Pysanka: keys typed by Pysanka itself (their key-ups are Pysanka's too). */
+    private val pysankaTypedKeys = HashSet<Int>()
+
+    /** Pysanka: the next language, its name shown briefly (the screen keyboard may be hidden). */
+    private fun pysankaSwitchLanguageAndSay() {
+        scope.launch {
+            subtypeManager.switchToNextSubtype().join()
+            val name = subtypeManager.activeSubtype.primaryLocale.let { it.displayName(it) }
+            appContext.showShortToast(R.string.pysanka__typing__language_now, "name" to name)
+        }
+    }
+
     fun onHardwareKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        // Pysanka: the key-up of a key Pysanka typed itself is Pysanka's too
+        if (pysankaTypedKeys.remove(keyCode)) return true
+        // Pysanka: Alt or Shift let go after Alt+Shift with nothing in between: the next language
+        if (pysankaArmed && (keyCode == KeyEvent.KEYCODE_ALT_LEFT || keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
+                keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT)
+        ) {
+            pysankaArmed = false
+            pysankaSwitchLanguageAndSay()
+        }
         when (keyCode) {
             KeyEvent.KEYCODE_SHIFT_LEFT, KeyEvent.KEYCODE_SHIFT_RIGHT -> {
                 inputEventDispatcher.sendUp(TextKeyData.SHIFT)

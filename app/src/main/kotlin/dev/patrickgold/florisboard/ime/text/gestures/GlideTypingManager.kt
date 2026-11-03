@@ -47,6 +47,8 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var glideTypingClassifier = StatisticalGlideTypingClassifier(context)
     private var lastTime = System.currentTimeMillis()
+    // Pysanka: one preview at a time (a new one is not started while the last is still working)
+    private val previewing = java.util.concurrent.atomic.AtomicBoolean(false)
 
     override fun onGlideComplete(data: GlideTypingGesture.Detector.PointerData) {
         updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true) {
@@ -64,8 +66,10 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
         this.glideTypingClassifier.addGesturePoint(normalized)
 
         val time = System.currentTimeMillis()
-        if (prefs.glide.showPreview.get() && time - lastTime > prefs.glide.previewRefreshDelay.get()) {
-            updateSuggestionsAsync(1, false) {}
+        if (prefs.glide.showPreview.get() && time - lastTime > prefs.glide.previewRefreshDelay.get() &&
+            previewing.compareAndSet(false, true)
+        ) {
+            updateSuggestionsAsync(1, false) { previewing.set(false) }
             lastTime = time
         }
     }

@@ -334,13 +334,24 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
      *
      * @return True on success, false if an error occurred or the input connection is invalid.
      */
-    fun commitCompletion(candidate: SuggestionCandidate): Boolean {
+    fun commitCompletion(candidate: SuggestionCandidate, wholeWord: Boolean = false): Boolean {
         val text = candidate.text.toString()
         if (text.isEmpty() || activeInfo.isRawInputEditor) return false
         val content = activeContent
         return if (content.composing.isValid) {
-            phantomSpace.setActive(showComposingRegion = false, candidate = candidate)
-            super.finalizeComposingText(text)
+            // Pysanka: a suggestion tapped with the cursor inside a word: the word's rest after the
+            // cursor goes too, so it replaces the whole word (a space typed there splits it instead)
+            val tail = if (wholeWord) ua.pysanka.typing.WordTail.length(content.textAfterSelection) else 0
+            val ic = if (tail > 0) dev.patrickgold.florisboard.FlorisImeService.currentInputConnection() else null
+            // One edit for the app: the rest of the word goes and the suggestion comes in together
+            ic?.beginBatchEdit()
+            try {
+                ic?.deleteSurroundingText(0, tail)
+                phantomSpace.setActive(showComposingRegion = false, candidate = candidate)
+                super.finalizeComposingText(text)
+            } finally {
+                ic?.endBatchEdit()
+            }
         } else {
             val isPhantomSpaceActive = phantomSpace.determine(text)
             phantomSpace.setActive(showComposingRegion = false, candidate = candidate)
@@ -352,6 +363,22 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
                 // handled in finalizeComposingText if content.composing.isValid
                 updateLastCommitPosition()
             }
+        }
+    }
+
+    /** Pysanka: «#[tag] » in place of the hashtag being typed right before the cursor. */
+    fun pysankaCommitHashtag(tag: String): Boolean {
+        val typed = ua.pysanka.typing.Hashtags.typed(activeContent.textBeforeSelection) ?: return false
+        val ic = dev.patrickgold.florisboard.FlorisImeService.currentInputConnection() ?: return false
+        // The rest of the word after the cursor goes too («#ка|ва» is all replaced)
+        val tail = ua.pysanka.typing.WordTail.length(activeContent.textAfterSelection)
+        ic.beginBatchEdit()
+        try {
+            ic.finishComposingText()
+            ic.deleteSurroundingText(typed.length + 1, tail)
+            return ic.commitText("#$tag ", 1)
+        } finally {
+            ic.endBatchEdit()
         }
     }
 

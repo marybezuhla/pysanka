@@ -285,6 +285,7 @@ private fun TypingSettings() {
     PrefToggle(prefs.keyboard.popupEnabled, stringRes(R.string.pysanka__typing__popup), stringRes(R.string.pysanka__typing__popup_summary))
     PrefToggle(prefs.keyboard.spaceBarSwitchesToCharacters, stringRes(R.string.pysanka__typing__space_letters), stringRes(R.string.pysanka__typing__space_letters_summary))
     PrefToggle(prefs.physicalKeyboard.showOnScreenKeyboard, stringRes(R.string.pysanka__typing__physical), stringRes(R.string.pysanka__typing__physical_summary))
+    PrefToggle(prefs.physicalKeyboard.pysankaOwnLayout, stringRes(R.string.pysanka__typing__physical_layout), stringRes(R.string.pysanka__typing__physical_layout_summary))
 
     if (confirmForget) {
         androidx.compose.material3.AlertDialog(
@@ -313,6 +314,17 @@ private fun LookSettings() {
     ThemeChoices()
     PrefToggle(prefs.other.pysankaSystemColors, stringRes(R.string.pysanka__look__system_colors), stringRes(R.string.pysanka__look__system_colors_summary))
     PrefToggle(prefs.keyboard.numberRow, stringRes(R.string.pysanka__look__number_row))
+    // A keyboard in two halves on wide screens (tablets, unfolded phones)
+    val split by prefs.keyboard.pysankaSplit.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__look__split),
+        listOf(
+            ua.pysanka.ui.SplitKeyboard.AUTO to stringRes(R.string.pysanka__look__split_auto),
+            ua.pysanka.ui.SplitKeyboard.ON to stringRes(R.string.pysanka__look__split_on),
+            ua.pysanka.ui.SplitKeyboard.OFF to stringRes(R.string.pysanka__look__split_off),
+        ),
+        split,
+    ) { v -> scope.launch { prefs.keyboard.pysankaSplit.set(v) } }
     PrefToggle(prefs.keyboard.hintedSymbolsEnabled, stringRes(R.string.pysanka__look__key_hints), stringRes(R.string.pysanka__look__key_hints_summary))
     val fontSize by prefs.keyboard.fontSizeMultiplierPortrait.observeAsState()
     SliderRow(stringRes(R.string.pysanka__look__font_size), fontSize, 50..150, 5, { "$it %" }) {
@@ -338,6 +350,7 @@ private fun EmojiSettings() {
     PrefChoice(prefs.emoji.preferredSkinTone, stringRes(R.string.prefs__media__emoji_preferred_skin_tone), EmojiSkinTone::class)
     PrefToggle(prefs.emoji.historyEnabled, stringRes(R.string.pysanka__emoji__history), stringRes(R.string.pysanka__emoji__history_summary))
     PrefToggle(prefs.emoji.suggestionEnabled, stringRes(R.string.pysanka__emoji__suggest), stringRes(R.string.pysanka__emoji__suggest_summary))
+    PrefToggle(prefs.suggestion.pysankaHashtags, stringRes(R.string.pysanka__hashtags__suggest), stringRes(R.string.pysanka__hashtags__suggest_summary))
     val suggest by prefs.emoji.suggestionEnabled.observeAsState()
     val type by prefs.emoji.suggestionType.observeAsState()
     ChoiceRow(

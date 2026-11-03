@@ -86,6 +86,7 @@ class AiPanelScreensTest {
         note: Int = R.string.pysanka__ai__panel_selection,
         more: Boolean = false,
         message: String = MESSAGE,
+        parts: List<ua.pysanka.ai.TextParts.Part> = emptyList(),
     ) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/${if (dark) "podillia" else "kreyda"}.json")
             .bufferedReader().use { it.readText() }
@@ -119,6 +120,8 @@ class AiPanelScreensTest {
                                     modifier = Modifier.fillMaxWidth().height(300.dp),
                                     headerHeight = 40.dp,
                                     actions = none,
+                                    parts = parts,
+                                    part = ua.pysanka.ai.TextParts.Part.PARAGRAPH,
                                 ) }
                             }
                         }
@@ -162,6 +165,10 @@ class AiPanelScreensTest {
     @Test fun tooLong() = shot("ai-09-too-long", PanelStage.TooLong(AiAction.FRIENDLY))
     @Test fun failed() = shot("ai-10-failed", PanelStage.Failed(AiAction.TABLE))
     @Test fun noModel() = shot("ai-11-no-model", PanelStage.NoModel)
+    @Test fun parts() = shot(
+        "ai-12-parts", PanelStage.Menu, note = R.string.pysanka__ai__panel_part,
+        parts = ua.pysanka.ai.TextParts.Part.entries,
+    )
 
     private companion object {
         const val MESSAGE = "привіт не зможу завтра бо маю лікаря давай в четвер після обіду якщо тобі зручно"

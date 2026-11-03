@@ -11,7 +11,7 @@
   MPL 1.1), used only to keep Ukrainian words (no Russian words or misspellings from subtitles).
 
 - **Words by theme**, added to the same lists by `themes.py` (run after `build_dicts.py`):
-  Pysanka's own lists here (`slang_*`, `military_uk`, `state_uk`, `brands_*`, `medical_uk`,
+  Pysanka's own lists here (`everyday_uk`, `slang_*`, `military_uk`, `state_uk`, `brands_*`, `medical_uk`,
   `places_uk`; GPL-3.0-or-later; no Russian words, no swearing) and dict_uk's lists of medicines and first
   names (https://github.com/brown-uk/dict_uk), with forms from the uk_UA hunspell dictionary.
   `themes.py` also takes the Russian words (`STOP` in `build_dicts.py`) out of `uk.json`:

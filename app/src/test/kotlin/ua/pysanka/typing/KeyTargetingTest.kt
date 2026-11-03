@@ -65,4 +65,26 @@ class KeyTargetingTest : FunSpec({
         (c.dy <= 0.2f) shouldBe true
         c.reset()
     }
+
+    test("one part of the keyboard missed differently is learned for that part only") {
+        val c = KeyTargeting.Calibration
+        c.reset()
+        val key = KeyTargeting.Target(0f, 0f, 100f, 150f, 'о')
+        val left = c.zone(10f, 700f, 1000f, 800f)
+        val right = c.zone(990f, 700f, 1000f, 800f)
+        (left != right) shouldBe true
+        repeat(300) {
+            // Bottom left: always too far left; bottom right: right in the middle
+            val (x1, y1) = c.adjust(30f, 75f, 100f, 150f, left)
+            c.learn(x1, y1, key, left)
+            val (x2, y2) = c.adjust(50f, 75f, 100f, 150f, right)
+            c.learn(x2, y2, key, right)
+        }
+        val (lx, _) = c.adjust(30f, 75f, 100f, 150f, left)
+        val (rx, _) = c.adjust(50f, 75f, 100f, 150f, right)
+        // The left one is pulled toward the middle; the right one stays close to where it was
+        (lx > 40f) shouldBe true
+        (kotlin.math.abs(rx - 50f) < 6f) shouldBe true
+        c.reset()
+    }
 })

@@ -557,6 +557,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 
     val keyboard = Keyboard()
     inner class Keyboard {
+        // Pysanka: a keyboard split for two thumbs on wide screens: "auto" (a wide screen held
+        // sideways, an unfolded phone), "on", "off" (see ua.pysanka.ui.SplitKeyboard)
+        val pysankaSplit = string(
+            key = "pysanka__keyboard__split",
+            default = "auto",
+        )
         val windowConfig = custom(
             key = "keyboard__window_config",
             default = emptyMap(),
@@ -706,6 +712,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "physical_keyboard__show_on_screen_keyboard",
             default = false,
         )
+        // Pysanka: a physical keyboard types in the keyboard's language (ua.pysanka.typing.HardwareKeys)
+        val pysankaOwnLayout = boolean(
+            key = "pysanka__physical_keyboard__own_layout",
+            default = true,
+        )
     }
 
     val smartbar = Smartbar()
@@ -768,6 +779,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 
     val suggestion = Suggestion()
     inner class Suggestion {
+        // Pysanka: hashtags after «#» (ua.pysanka.typing.Hashtags)
+        val pysankaHashtags = boolean(
+            key = "pysanka__suggestion__hashtags",
+            default = true,
+        )
         val api30InlineSuggestionsEnabled = boolean(
             key = "suggestion__api30_inline_suggestions_enabled",
             default = true,

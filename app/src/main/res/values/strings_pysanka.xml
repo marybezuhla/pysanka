@@ -366,7 +366,7 @@
     <string name="pysanka__look__system_colors_summary">Material You instead of Pysanka\'s red and cream</string>
     <string name="pysanka__welcome__title">Welcome to Pysanka!</string>
     <string name="pysanka__welcome__lead">A keyboard that writes with you and tells no one.</string>
-    <string name="pysanka__welcome__promise">No internet. Your words and clipboard are encrypted. The AI, if you want it, runs right on your phone.</string>
+    <string name="pysanka__welcome__promise">No internet. Your words and clipboard are encrypted. AI can be added if you wish.</string>
     <string name="pysanka__privacy__crash_notifications">Notify me about crashes</string>
     <string name="pysanka__privacy__crash_notifications_summary">If Pysanka breaks, a notification shows the report (without anything you typed). Android will ask for permission.</string>
     <string name="pysanka__shortcuts__title">Text replacement</string>
@@ -388,7 +388,7 @@
     <string name="pysanka__setup__done">done</string>
     <string name="pysanka__voice__speak">Speak… {time}</string>
     <string name="pysanka__voice__auto_stop">Finish after a pause</string>
-    <string name="pysanka__voice__auto_stop_summary">Stay quiet for 2 seconds and the text appears. A tap on the microphone ends it sooner.</string>
+    <string name="pysanka__voice__auto_stop_summary">Pause for 2 seconds and the text appears. A tap on the microphone ends it sooner.</string>
     <string name="pysanka__voice__tap_to_speak">Tap the microphone and speak</string>
     <string name="pysanka__voice__speak_again">Dictate</string>
     <string name="pysanka__voice__keys">Back to the keys</string>
@@ -435,4 +435,17 @@
     <string name="pysanka__tag__move_down_named">Move «{name}» down</string>
     <string name="pysanka__tag__actions_named">Actions for the tag «{name}»</string>
     <string name="pysanka__setup__finish_after">Available after the two steps above</string>
+    <string name="pysanka__ai__panel_part">Nothing selected: choose what to work on</string>
+    <string name="pysanka__ai__part_sentence">Sentence</string>
+    <string name="pysanka__ai__part_paragraph">Paragraph</string>
+    <string name="pysanka__ai__part_all">Whole field</string>
+    <string name="pysanka__typing__physical_layout">Physical keyboard in Pysanka\'s language</string>
+    <string name="pysanka__typing__physical_layout_summary">Types in the language chosen in Pysanka (Ukrainian, English). Ctrl+Space or Alt+Shift switches it. Off: the layout from the system settings.</string>
+    <string name="pysanka__typing__language_now">Language: {name}</string>
+    <string name="pysanka__hashtags__suggest">Suggest hashtags</string>
+    <string name="pysanka__hashtags__suggest_summary">After «#»: your hashtags, words from the post and from the dictionary. Your hashtags are remembered encrypted, like learned words.</string>
+    <string name="pysanka__look__split">Split keyboard</string>
+    <string name="pysanka__look__split_auto">On a wide screen held sideways (tablet, foldable)</string>
+    <string name="pysanka__look__split_on">Always</string>
+    <string name="pysanka__look__split_off">Never</string>
 </resources>
