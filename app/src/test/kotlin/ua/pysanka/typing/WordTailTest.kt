@@ -21,4 +21,12 @@ class WordTailTest {
         // A dash after the word is not part of it
         assertEquals(2, WordTail.length("ло - так"))
     }
+
+    @Test fun closingQuoteAndDecomposedLetters() {
+        // 'he|llo': the closing quote stays
+        assertEquals(3, WordTail.length("llo' said"))
+        assertEquals(3, WordTail.length("llo’"))
+        // «й» typed as «и» and a combining breve: the whole word
+        assertEquals(4, WordTail.length("и\u0306ка є"))
+    }
 }

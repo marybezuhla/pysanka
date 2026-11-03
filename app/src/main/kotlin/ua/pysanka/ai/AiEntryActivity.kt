@@ -8,6 +8,10 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Pysanka: the AI editor from other apps, without the keyboard:
@@ -23,6 +27,10 @@ import androidx.activity.result.contract.ActivityResultContracts
  * text here, so only plain text is taken, and no more than [AiJob.HARD_MAX] characters.
  */
 class AiEntryActivity : ComponentActivity() {
+    private companion object {
+        const val SETTINGS_WAIT_MS = 2000L
+    }
+
     private val editor = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
         val text = r.data?.getStringExtra(AiEditorActivity.EXTRA_TEXT)
         if (intent.action == Intent.ACTION_PROCESS_TEXT && r.resultCode == RESULT_OK && text != null) {
@@ -35,6 +43,17 @@ class AiEntryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Already waiting for the editor (this screen was only recreated)
         if (savedInstanceState != null) return
+        // A cold start loads the settings in the background: wait for them (briefly), so the
+        // editor gets the person's "block screenshots" and language, not the defaults
+        lifecycleScope.launch {
+            withTimeoutOrNull(SETTINGS_WAIT_MS) {
+                dev.patrickgold.florisboard.FlorisApplication.getHack().preferenceStoreLoaded.first { it }
+            }
+            open()
+        }
+    }
+
+    private fun open() {
         val text: String
         val preset: AiAction
         var canReplace = false

@@ -19,7 +19,7 @@ object Hashtags {
     /** The learned hashtags' own list (see [UserWords]); not a language. */
     const val LIST = "tags"
 
-    private val TYPED = Regex("""(?:^|[\s(«"])#([\p{L}\p{N}_]*)$""")
+    private val TYPED = Regex("""(?:^|[\s(«"])#([\p{L}\p{N}_]*)\z""")
     /** A word that can be a hashtag: letters, digits and «_» only (no apostrophe or hyphen). */
     private val WORD = Regex("""(?<![\p{L}\p{N}_'ʼ’-])[\p{L}][\p{L}\p{N}_]*(?![\p{L}\p{N}_'ʼ’-])""")
 

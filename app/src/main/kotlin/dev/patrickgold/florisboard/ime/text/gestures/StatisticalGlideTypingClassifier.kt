@@ -191,8 +191,11 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
         }
         // Pysanka: the decoder for this language and these key places, built in the background
         // (FlorisBoard's way answers until it is ready); distances in key spacing (touch width)
+        // (the key places are part of the cache key, so a changed layout never finds a stale one)
         val cacheKey = currentSubtype to geometry
-        val decoded = if (invalidateCache) null else decoderCache.get(cacheKey)
+        val decoded = decoderCache.get(cacheKey)
+        // Any build still running for an earlier layout must not replace what is chosen here
+        val ticket = ++building
         if (decoded != null) {
             decoder = decoded.first
             keyWidth = decoded.second
@@ -207,7 +210,6 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
                     points[Character.toLowerCase(k.baseCode()).toChar()] = ua.pysanka.typing.swipe.SwipeDecoder.Point(c.x / width, c.y / width)
                 }
                 val wordList = this.words
-                val ticket = ++building
                 builder.execute {
                     val built = ua.pysanka.typing.swipe.SwipeDecoder(points, wordList)
                     decoderCache.put(cacheKey, built to width)

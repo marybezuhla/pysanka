@@ -348,7 +348,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
             try {
                 ic?.deleteSurroundingText(0, tail)
                 phantomSpace.setActive(showComposingRegion = false, candidate = candidate)
-                super.finalizeComposingText(text)
+                super.finalizeComposingText(text, removedAfter = if (ic != null) tail else 0)
             } finally {
                 ic?.endBatchEdit()
             }

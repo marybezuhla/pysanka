@@ -6,8 +6,8 @@ package ua.pysanka.typing
  * next word). After a full stop, a comma, a line break or a number there is none.
  */
 object PreviousWord {
-    private val WORD = Regex("""(?<![\p{L}\p{N}'’ʼ-])([\p{L}'’ʼ-]+) +$""")
-    private val WORD_AT_END = Regex("""(?<![\p{L}\p{N}'’ʼ-])([\p{L}'’ʼ-]+)$""")
+    private val WORD = Regex("""(?<![\p{L}\p{N}'’ʼ-])([\p{L}'’ʼ-]+) +\z""")
+    private val WORD_AT_END = Regex("""(?<![\p{L}\p{N}'’ʼ-])([\p{L}'’ʼ-]+)\z""")
 
     /** Enough for the longest learnable word, a few spaces and the character before it. */
     private const val TAIL = 48
