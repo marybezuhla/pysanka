@@ -42,8 +42,8 @@ THEMES = {
     "medical": (("uk",), 70),
     "places": (("uk", "ru"), 90),
     "names": (("uk",), 50),
-    # Ukrainian things in the other languages (culture, food, history, refugees' words)
-    "ukraine": ((), 100),
+    # Ukrainian things (culture, food, history; in the other languages also refugees' words)
+    "ukraine": (("uk",), 100),
 }
 
 # The languages added for 1.0: every theme whose list exists (<theme>_<lang>.txt), with the forms
