@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">O Pysanka é feito a partir do FlorisBoard, de The FlorisBoard Contributors (Apache 2.0); é um projeto independente, e o próprio Pysanka está sob a GPL-3.0 ou posterior</string>
     <string name="pysanka__about__license__summary">GPL-3.0 ou posterior: software livre, sem qualquer garantia. Código-fonte: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Fontes de dados</string>
-    <string name="pysanka__about__data__summary">Listas de palavras do FrequencyWords (CC BY-SA 4.0) e do dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), nomes de emojis do Unicode CLDR, reconhecimento de texto pelo PaddleOCR (Apache 2.0), ditado pelo Whisper (OpenAI, MIT) e whisper.cpp (MIT). O modelo de IA Gemma (Google) é transferido à parte, segundo os termos do Gemma.</string>
+    <string name="pysanka__about__data__summary">Listas de palavras do FrequencyWords (CC BY-SA 4.0) e do dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), dicionários de tradução do Wikcionário via wiktextract (CC BY-SA 4.0), nomes de emojis do Unicode CLDR, reconhecimento de texto pelo PaddleOCR (Apache 2.0), ditado pelo Whisper (OpenAI, MIT) e whisper.cpp (MIT). O modelo de IA Gemma (Google) é transferido à parte, segundo os termos do Gemma.</string>
     <string name="pysanka__error__copy">Não foi possível copiar</string>
     <string name="pysanka__error__license">Não foi possível mostrar o texto da licença. Está no repositório: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Não foi possível abrir: nenhuma aplicação do telefone consegue fazer isto</string>

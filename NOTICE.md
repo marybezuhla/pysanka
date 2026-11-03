@@ -54,6 +54,13 @@ those copies keep that licence.
   (`scripts/dict/*_<language>.txt`, GPL-3.0-or-later); `assets/ime/dict/extras.json` is made from them.
 - `assets/ime/keyboard/.../jcuken_belarusian.json` and the `be` popups: Pysanka's Belarusian layout
   (GPL-3.0-or-later), made after FlorisBoard's Russian one (Apache 2.0).
+- `app/src/main/assets/ime/translate/` — the offline translation dictionaries, made from Wiktionary
+  (https://www.wiktionary.org/; the English, German, French, Russian, Polish, Spanish and Portuguese
+  editions; text by the Wiktionary contributors, CC BY-SA 4.0 and GFDL) through the wiktextract
+  extracts of kaikki.org (Tatu Ylonen, https://github.com/tatuylonen/wiktextract). Changed: only the
+  words and translations are kept (no explanations), limited to the words of the keyboard's lists,
+  joined by meaning, with the forms of words from the LibreOffice hunspell dictionaries (used only while
+  the files are made). The files are under CC BY-SA 4.0; how they are made: `scripts/translate/`.
 - `app/src/main/assets/ime/media/emoji/uk.txt`, `ru.txt`, `pl.txt`, `hu.txt`, `ro.txt`, `sk.txt`, `be.txt` — emoji names and keywords in those languages from the Unicode
   Common Locale Data Repository (CLDR) v48, © Unicode, Inc., Unicode License v3
   (https://www.unicode.org/license.txt); made by `scripts/emoji_uk.py`. The other emoji files come

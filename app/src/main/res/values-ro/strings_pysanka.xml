@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">Pysanka este construită pe FlorisBoard de The FlorisBoard Contributors (Apache 2.0); este un proiect independent, iar Pysanka însăși este sub licența GPL-3.0 sau ulterioară</string>
     <string name="pysanka__about__license__summary">GPL-3.0 sau ulterioară: software liber, fără nicio garanție. Cod sursă: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Surse de date</string>
-    <string name="pysanka__about__data__summary">Liste de cuvinte din FrequencyWords (CC BY-SA 4.0) și dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), nume de emoji din Unicode CLDR, recunoașterea textului cu PaddleOCR (Apache 2.0), dictarea cu Whisper (OpenAI, MIT) și whisper.cpp (MIT). Modelul IA Gemma (Google) se descarcă separat, conform condițiilor Gemma.</string>
+    <string name="pysanka__about__data__summary">Liste de cuvinte din FrequencyWords (CC BY-SA 4.0) și dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), dicționare de traducere din Wikționar prin wiktextract (CC BY-SA 4.0), nume de emoji din Unicode CLDR, recunoașterea textului cu PaddleOCR (Apache 2.0), dictarea cu Whisper (OpenAI, MIT) și whisper.cpp (MIT). Modelul IA Gemma (Google) se descarcă separat, conform condițiilor Gemma.</string>
     <string name="pysanka__error__copy">Nu s-a putut copia</string>
     <string name="pysanka__error__license">Textul licenței nu a putut fi afișat. Îl găsiți în depozitul de cod: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Nu se poate deschide: nicio aplicație de pe telefon nu poate face asta</string>

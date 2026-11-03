@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">Pysanka powstała na bazie FlorisBoard autorstwa The FlorisBoard Contributors (Apache 2.0); to niezależny projekt, a sama Pysanka jest objęta licencją GPL-3.0 lub nowszą</string>
     <string name="pysanka__about__license__summary">GPL-3.0 lub nowsza: wolne oprogramowanie bez jakiejkolwiek gwarancji. Kod źródłowy: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Źródła danych</string>
-    <string name="pysanka__about__data__summary">Listy słów z FrequencyWords (CC BY-SA 4.0) i dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), nazwy emoji z Unicode CLDR, rozpoznawanie tekstu: PaddleOCR (Apache 2.0), dyktowanie: Whisper (OpenAI, MIT) i whisper.cpp (MIT). Model AI Gemma (Google) pobiera się osobno, na warunkach Gemma.</string>
+    <string name="pysanka__about__data__summary">Listy słów z FrequencyWords (CC BY-SA 4.0) i dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), słowniki tłumaczeń z Wikisłownika przez wiktextract (CC BY-SA 4.0), nazwy emoji z Unicode CLDR, rozpoznawanie tekstu: PaddleOCR (Apache 2.0), dyktowanie: Whisper (OpenAI, MIT) i whisper.cpp (MIT). Model AI Gemma (Google) pobiera się osobno, na warunkach Gemma.</string>
     <string name="pysanka__error__copy">Nie udało się skopiować</string>
     <string name="pysanka__error__license">Nie udało się wyświetlić tekstu licencji. Znajdziesz go w repozytorium: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Nie można tego otworzyć: żadna aplikacja na telefonie tego nie obsługuje</string>

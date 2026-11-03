@@ -4,6 +4,8 @@
   - Для кожної є свій словник, свайп, виправлення описок і емодзі до слів.
   - Є й тематичні слова: цифрові, побутові, міста України сучасною назвою, українські речі (вишиванка, борщ, статус захисту).
   - Мета: щоб українці за кордоном і їхні сусіди друкували своєю мовою в українській клавіатурі.
+- 🌐 **Переклад слів між 12 мовами без інтернету:** кнопка над клавіатурою перекладає слово біля курсора й ставить переклад на його місце, а «Перекласти (Писанка)» з'явився в меню виділеного тексту будь-якого застосунку. Словники з Вікісловника вже в застосунку, форми слів теж знаходяться («ключа» → key, klucz).
+- 🇺🇦 **Українські слова культури:** вишиванка, писанка, паляниця, колядка, трембіта тепер пропонуються під час набору й перекладаються.
 - 🇧🇾 **Білоруська:** нова розкладка з ў та і, словник з обома правописами (офіційним і тарашкевіцею).
 - ✍️ **Набір без діакритики виправляється сам:** «dziekuje» → «dziękuję», «fur» → «für», «manana» → «mañana».
 - 🗣️ **Налаштування 11 мовами:** «Мова налаштувань» або «Як у телефоні».
@@ -20,6 +22,7 @@
 **Pysanka 0.25.0**: a private keyboard for Android with no internet access. The last test version before 1.0.
 
 - 12 languages at the level of Ukrainian: Belarusian, Polish, Slovak, Hungarian, Romanian, German, French, Spanish, Portuguese, Russian, English and Ukrainian, each with its own word list, swipe, typo correction, emoji for words and themed words (digital and everyday words, Ukraine's cities by their current names, Ukrainian things). So that Ukrainians abroad and their neighbours type their own language in a Ukrainian keyboard.
+- Offline translation of words between the 12 languages: a button above the keyboard and "Translate (Pysanka)" in the text selection menu of any app, with Wiktionary dictionaries in the app.
 - Belarusian: a new layout with ў and і, a word list with both orthographies.
 - Letters typed without their marks are put right: «dziekuje» → «dziękuję», «fur» → «für».
 - Settings in 11 languages.

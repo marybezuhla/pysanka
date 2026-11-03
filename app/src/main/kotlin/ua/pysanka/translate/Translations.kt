@@ -79,22 +79,22 @@ object Translations {
         return SPACES.replace(bare, " ").lowercase(Locale.ROOT)
     }
 
-    private fun script(text: String): Char.UnicodeBlock? =
-        text.firstOrNull { it.isLetter() }?.let { Char.UnicodeBlock.of(it) }
+    private fun startsCyrillic(text: String): Boolean = text.firstOrNull { it.isLetter() }?.let { it in '\u0400'..'\u04FF' } == true
 
     private fun cyrillic(lang: String) = lang == "uk" || lang == "ru" || lang == "be"
 
     /** The dictionary forms of [k] in [lang]: itself if it is a word, and what it is a form of. */
-    fun lemmas(src: Source, lang: String, k: String): List<String> {
+    fun lemmas(src: Source, lang: String, k: String, endings: Boolean = true): List<String> {
         val words = file(src, "$lang.words.txt") ?: return emptyList()
         val out = LinkedHashSet<String>()
         if (words.find(k) != null) out += k
         file(src, "$lang.forms.txt")?.find(k)?.split('|')?.forEach { if (it.isNotEmpty()) out += it }
         if (out.isEmpty() && (lang == "ru" || lang == "be") && 'ё' in k) {
-            return lemmas(src, lang, k.replace('ё', 'е'))
+            return lemmas(src, lang, k.replace('ё', 'е'), endings)
         }
-        if (out.isEmpty() && lang == "en") {
-            // English endings ("keys", "opened", "running"): the dictionary has few forms of its own
+        if (lang == "en" && endings) {
+            // English endings ("keys", "opened", "running"): the dictionary has few forms of its own,
+            // and "keys" as a word of its own has fewer translations than "key"
             englishStems(k).firstOrNull { words.find(it) != null }?.let { out += it }
         }
         return out.toList()
@@ -106,7 +106,7 @@ object Translations {
             if (k.length > end.length + 2 && k.endsWith(end)) out += k.dropLast(end.length) + add
         }
         drop("ies", "y"); drop("es"); drop("s")
-        drop("ied", "y"); drop("ed"); drop("ed", "e"); drop("d")
+        drop("ied", "y"); drop("ed"); drop("ed", "e")
         drop("ing"); drop("ing", "e")
         // "running" → "run", "stopped" → "stop"
         for (end in listOf("ing", "ed")) {
@@ -123,7 +123,7 @@ object Translations {
     fun detect(src: Source, text: String, preferred: List<String>): String? {
         val k = key(text)
         if (k.isEmpty()) return null
-        val isCyrillic = script(k) == Char.UnicodeBlock.CYRILLIC
+        val isCyrillic = startsCyrillic(k)
         val order = (preferred + LANGUAGES).distinct().filter { it in LANGUAGES && cyrillic(it) == isCyrillic }
         // Letters only one language has decide by themselves («ї», «ў», «ъ»); «ы» is Russian or
         // Belarusian, «і» Ukrainian or Belarusian
@@ -141,7 +141,8 @@ object Translations {
             isCyrillic -> order.filter { it == "uk" || it == "ru" }
             else -> order
         }
-        narrowed.firstOrNull { lemmas(src, it, k).isNotEmpty() }?.let { return it }
+        // Words as they are first («Hund» is German, not "hun" + d)
+        narrowed.firstOrNull { lemmas(src, it, k, endings = false).isNotEmpty() }?.let { return it }
         return order.firstOrNull { lemmas(src, it, k).isNotEmpty() }
     }
 

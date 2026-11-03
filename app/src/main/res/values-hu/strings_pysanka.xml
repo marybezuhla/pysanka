@@ -33,7 +33,7 @@
     <string name="pysanka__about__based_on__summary">A Pysanka a The FlorisBoard Contributors FlorisBoard nevű billentyűzetére épül (Apache 2.0); önálló projekt, maga a Pysanka GPL-3.0 vagy újabb licenc alatt áll</string>
     <string name="pysanka__about__license__summary">GPL-3.0 vagy újabb: szabad szoftver, mindenféle garancia nélkül. Forráskód: github.com/Marybezu/pysanka</string>
     <string name="pysanka__about__data__title">Adatforrások</string>
-    <string name="pysanka__about__data__summary">Szólisták: FrequencyWords (CC BY-SA 4.0) és dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0); emojinevek: Unicode CLDR; szövegfelismerés: PaddleOCR (Apache 2.0); diktálás: Whisper (OpenAI, MIT) és whisper.cpp (MIT). A Gemma MI-modellt (Google) külön kell letölteni, a Gemma feltételei szerint.</string>
+    <string name="pysanka__about__data__summary">Szólisták: FrequencyWords (CC BY-SA 4.0) és dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0); fordítószótárak: Wikiszótár, wiktextract (CC BY-SA 4.0); emojinevek: Unicode CLDR; szövegfelismerés: PaddleOCR (Apache 2.0); diktálás: Whisper (OpenAI, MIT) és whisper.cpp (MIT). A Gemma MI-modellt (Google) külön kell letölteni, a Gemma feltételei szerint.</string>
     <string name="pysanka__error__copy">Nem sikerült másolni</string>
     <string name="pysanka__error__license">Nem sikerült megjeleníteni a licenc szövegét. Megtalálod a tárolóban: github.com/Marybezu/pysanka</string>
     <string name="pysanka__error__open">Nem sikerült megnyitni: a telefonon nincs erre alkalmas alkalmazás</string>
