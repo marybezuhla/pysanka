@@ -112,6 +112,10 @@ class FlorisImeService : LifecycleInputMethodService() {
         }
 
         /** Pysanka: hides the keyboard and opens one of Pysanka's own screens. */
+        /** Pysanka: the text before the cursor in the field the keyboard is in (for word pairs). */
+        fun pysankaTextBefore(): String? =
+            FlorisImeServiceReference.get()?.editorInstance?.activeContent?.textBeforeSelection
+
         fun pysankaLaunch(intent: (android.content.Context) -> Intent) {
             val ims = FlorisImeServiceReference.get() ?: return
             ims.requestHideSelf(0)

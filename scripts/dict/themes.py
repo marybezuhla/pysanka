@@ -31,6 +31,7 @@ from build_dicts import STOP  # noqa: E402
 # theme: (languages, frequency)
 THEMES = {
     "slang": (("uk", "en"), 100),
+    "everyday": (("uk",), 130),
     "military": (("uk",), 110),
     "state": (("uk",), 100),
     "brands": (("uk", "en"), 100),
