@@ -13,26 +13,26 @@
     <string name="emoji__history__pinned">Закріплено</string>
     <string name="emoji__history__recent">Останні</string>
     <!-- Quick action strings -->
-    <string name="quick_action__arrow_up" comment="Please mind the limited available space for the quick action strings">Курсор вгору</string>
-    <string name="quick_action__arrow_up__tooltip">Перемістити курсор на початок</string>
+    <string name="quick_action__arrow_up" comment="Please mind the limited available space for the quick action strings">Курсор угору</string>
+    <string name="quick_action__arrow_up__tooltip">Перемістити курсор угору</string>
     <string name="quick_action__arrow_down" comment="Please mind the limited available space for the quick action strings">Курсор униз</string>
-    <string name="quick_action__arrow_down__tooltip">Перемістити курсор в кінець</string>
-    <string name="quick_action__arrow_left" comment="Please mind the limited available space for the quick action strings">Курсор вліво</string>
-    <string name="quick_action__arrow_left__tooltip">Перемістити курсор вліво</string>
-    <string name="quick_action__arrow_right" comment="Please mind the limited available space for the quick action strings">Вправо</string>
-    <string name="quick_action__arrow_right__tooltip">Перемістити курсор вправо</string>
+    <string name="quick_action__arrow_down__tooltip">Перемістити курсор униз</string>
+    <string name="quick_action__arrow_left" comment="Please mind the limited available space for the quick action strings">Курсор ліворуч</string>
+    <string name="quick_action__arrow_left__tooltip">Перемістити курсор ліворуч</string>
+    <string name="quick_action__arrow_right" comment="Please mind the limited available space for the quick action strings">Курсор праворуч</string>
+    <string name="quick_action__arrow_right__tooltip">Перемістити курсор праворуч</string>
     <string name="quick_action__clipboard_clear_primary_clip" comment="Please mind the limited available space for the quick action strings">Стерти буфер</string>
-    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Видалити останній копійований текст</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Видалити останній скопійований текст</string>
     <string name="quick_action__clipboard_copy" comment="Please mind the limited available space for the quick action strings">Копіювати</string>
     <string name="quick_action__clipboard_copy__tooltip">Копіювати</string>
     <string name="quick_action__clipboard_cut" comment="Please mind the limited available space for the quick action strings">Вирізати</string>
     <string name="quick_action__clipboard_cut__tooltip">Вирізати</string>
     <string name="quick_action__clipboard_paste" comment="Please mind the limited available space for the quick action strings">Вставити</string>
     <string name="quick_action__clipboard_paste__tooltip">Вставити</string>
-    <string name="quick_action__clipboard_select_all" comment="Please mind the limited available space for the quick action strings">Обрати все</string>
+    <string name="quick_action__clipboard_select_all" comment="Please mind the limited available space for the quick action strings">Виділити все</string>
     <string name="quick_action__clipboard_select_all__tooltip">Виділити все</string>
-    <string name="quick_action__ime_ui_mode_clipboard" comment="Please mind the limited available space for the quick action strings">Буфер обміну</string>
-    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Відкрити буфер обміну</string>
+    <string name="quick_action__ime_ui_mode_clipboard" comment="Please mind the limited available space for the quick action strings">Буфер</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Відкрити буфер</string>
     <string name="quick_action__ime_ui_mode_media" comment="Please mind the limited available space for the quick action strings">Емодзі</string>
     <string name="quick_action__ime_ui_mode_media__tooltip">Відкрити панель емодзі</string>
     <string name="quick_action__language_switch" comment="Please mind the limited available space for the quick action strings">Змінити мову</string>
@@ -45,25 +45,25 @@
     <string name="quick_action__toggle_actions_overflow" comment="Please mind the limited available space for the quick action strings">Більше дій</string>
     <string name="quick_action__toggle_actions_overflow__tooltip">Показати або приховати додаткові дії</string>
     <string name="quick_action__toggle_incognito_mode" comment="Please mind the limited available space for the quick action strings">Інкогніто</string>
-    <string name="quick_action__toggle_incognito_mode__tooltip">Увімкнути режим інкогніто</string>
-    <string name="quick_action__toggle_autocorrect" comment="Please mind the limited available space for the quick action strings">Автокорекція</string>
-    <string name="quick_action__toggle_autocorrect__tooltip">Увімкнути автовиправлення</string>
-    <string name="quick_action__voice_input" comment="Please mind the limited available space for the quick action strings">Голос. Набір</string>
-    <string name="quick_action__voice_input__tooltip" comment="IME stands for Input Method Editor and is indirectly equivalent to 'keyboard'.">Відкрити постачальника голосового введення</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Режим інкогніто: увімкнути чи вимкнути</string>
+    <string name="quick_action__toggle_autocorrect" comment="Please mind the limited available space for the quick action strings">Описки</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Виправлення описок: увімкнути чи вимкнути</string>
+    <string name="quick_action__voice_input" comment="Please mind the limited available space for the quick action strings">Диктування</string>
+    <string name="quick_action__voice_input__tooltip" comment="IME stands for Input Method Editor and is indirectly equivalent to 'keyboard'.">Диктувати (розпізнавання на телефоні)</string>
     <string name="quick_action__one_handed_mode" comment="Please mind the limited available space for the quick action strings">Однією рукою</string>
-    <string name="quick_action__one_handed_mode__tooltip">Увімкнути режим роботи однією рукою</string>
+    <string name="quick_action__one_handed_mode__tooltip">Режим однієї руки: увімкнути чи вимкнути</string>
     <string name="quick_action__drag_marker" comment="This action is only used as a placeholder in the actions editor drag and drop screen and only visible in debug mode">Курсор</string>
     <string name="quick_action__drag_marker__tooltip" comment="This action is only used as a placeholder in the actions editor drag and drop screen and only visible in debug mode">Поточне положення курсора</string>
     <string name="quick_action__noop" comment="Noop=no operation; this action is only used as a placeholder in the actions editor drag and drop screen">Нічого</string>
     <string name="quick_action__noop__tooltip" comment="Noop=no operation; this action is only used as a placeholder in the actions editor drag and drop screen">Немає операцій</string>
-    <string name="quick_actions_overflow__customize_actions_button">Змінити упорядкування</string>
+    <string name="quick_actions_overflow__customize_actions_button">Змінити порядок</string>
     <string name="quick_actions_editor__header">Налаштувати порядок дій</string>
     <string name="quick_actions_editor__subheader_sticky_action">Закріплена дія ({n})</string>
     <string name="quick_actions_editor__subheader_dynamic_actions">Динамічні дії ({n})</string>
     <string name="quick_actions_editor__subheader_hidden_actions">Приховані дії ({n})</string>
-    <string name="select_subtype_panel__header">Вибрати підвид</string>
+    <string name="select_subtype_panel__header">Вибрати мову</string>
     <!-- Incognito mode strings -->
-    <string name="incognito_mode__toast_after_enabled">Режим інкогніто увімкнено\n\n{app_name} не перевірятиме слова, поки цей режим активовано</string>
+    <string name="incognito_mode__toast_after_enabled">Режим інкогніто увімкнено\n\n{app_name} не запамʼятовуватиме нових слів, поки він увімкнений</string>
     <string name="incognito_mode__toast_after_disabled">Режим інкогніто вимкнено</string>
     <!-- Settings UI strings -->
     <string name="settings__title" comment="Title of Settings">Налаштування</string>
@@ -78,43 +78,43 @@
     <string name="about__changelog__summary" comment="Preference summary">Що нового</string>
     <string name="about__repository__title" comment="Preference title">Репозиторій (GitHub)</string>
     <string name="about__repository__summary" comment="Preference summary">Вихідний код, обговорення, проблеми та інформація</string>
-    <string name="about__privacy_policy__title" comment="Preference title">Політика конфіденційності</string>
+    <string name="about__privacy_policy__title" comment="Preference title">Політика приватності</string>
     <string name="about__privacy_policy__summary" comment="Preference summary">Політика приватності для цього проєкту</string>
     <string name="about__project_license__title" comment="Preference title">Ліцензія проєкту</string>
-    <string name="about__third_party_licenses__title" comment="Preference title">Ліцензії третіх сторін</string>
+    <string name="about__third_party_licenses__title" comment="Preference title">Ліцензії сторонніх бібліотек</string>
     <string name="about__third_party_licenses__summary" comment="Preference summary">Ліцензії сторонніх бібліотек, що входять до цього застосунку</string>
     <!-- Setup UI strings -->
-    <string name="setup__footer__privacy_policy" comment="Privacy policy label for URL">Політика конфіденційності</string>
+    <string name="setup__footer__privacy_policy" comment="Privacy policy label for URL">Політика приватності</string>
     <string name="setup__footer__repository" comment="Repository label for URL">Код проєкту</string>
     <string name="setup__enable_ime__title">Увімкнути Писанку</string>
     <string name="setup__enable_ime__open_settings_btn">Відкрити системні налаштування</string>
-    <string name="setup__select_ime__title">Обрати Писанку</string>
+    <string name="setup__select_ime__title">Вибрати Писанку</string>
     <string name="setup__select_ime__description">Писанку ввімкнено. Щоб нею користуватися, виберіть її у вікні вибору клавіатури.</string>
     <string name="setup__select_ime__switch_keyboard_btn">Перемкнути клавіатуру</string>
     <string name="setup__finish_up__finish_btn">До налаштувань</string>
     <!-- Crash Dialog strings -->
     <string name="crash_dialog__title" comment="Title of crash dialog">Звіт про помилку Писанки</string>
-    <string name="crash_dialog__description" comment="Description of crash dialog">Вибачте за незручності, але стався збій у Писанці через несподівану помилку.</string>
-    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">Якщо ви хочете повідомити про цю помилку, спершу перевірте на GitHub, чи про цей збій ще не повідомляли.\nЯкщо ні, скопіюйте згенерований журнал збоїв і створіть нову проблему. Використовуйте шаблон «%s» і заповніть опис, кроки для відтворення, а в кінці вставте згенерований журнал збоїв. Це допоможе зробити Писанку кращою і стабільнішою для всіх. Дякуємо!</string>
-    <string name="crash_dialog__copy_to_clipboard" comment="Label of Copy to clipboard button in crash dialog">Зкопіювати в системний буфер обміну</string>
-    <string name="crash_dialog__copy_to_clipboard_success" comment="Label of Copy to clipboard success message in crash dialog">Зкопійовано в системний буфер обміну</string>
-    <string name="crash_dialog__copy_to_clipboard_failure" comment="Label of Copy to clipboard failure message in crash dialog">Не вдається скопіювати до системного буфера обміну: Не знайдено екземпляр диспетчера буфера обміну</string>
-    <string name="crash_dialog__open_issue_tracker" comment="Label of Open issue tracker button in crash dialog">Відкрити відстеження проблем (github.com)</string>
+    <string name="crash_dialog__description" comment="Description of crash dialog">Вибачте, у Писанці стався збій через неочікувану помилку.</string>
+    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">Якщо хочете повідомити про цю помилку, спершу перегляньте на GitHub (Issues), чи про неї ще не повідомляли.\nЯкщо ні, скопіюйте журнал збою, повідомте про помилку й опишіть, що ви робили перед збоєм, а журнал вставте в кінці. Дякуємо, це допомагає зробити Писанку стабільнішою!</string>
+    <string name="crash_dialog__copy_to_clipboard" comment="Label of Copy to clipboard button in crash dialog">Скопіювати в буфер обміну</string>
+    <string name="crash_dialog__copy_to_clipboard_success" comment="Label of Copy to clipboard success message in crash dialog">Скопійовано в буфер обміну</string>
+    <string name="crash_dialog__copy_to_clipboard_failure" comment="Label of Copy to clipboard failure message in crash dialog">Не вдалося скопіювати в буфер обміну</string>
+    <string name="crash_dialog__open_issue_tracker" comment="Label of Open issue tracker button in crash dialog">Відкрити Issues на GitHub</string>
     <string name="crash_dialog__close" comment="Label of Close button in crash dialog">Закрити</string>
     <string name="crash_notification_channel__title" comment="Title of crash notification channel">Звіти про помилки Писанки</string>
     <string name="crash_once_notification__title" comment="Title of the notification for a single crash">Писанка перестала працювати…</string>
-    <string name="crash_once_notification__body" comment="Body of the notification for a single crash">Натисність, щоб перегянути деталі про помилку</string>
+    <string name="crash_once_notification__body" comment="Body of the notification for a single crash">Торкніться, щоб переглянути подробиці</string>
     <string name="crash_multiple_notification__title" comment="Title of the notification for consecutive crashes">Здається, Писанка постійно перестає працювати…</string>
-    <string name="crash_multiple_notification__body" comment="Body of the notification for consecutive crashes">Повернення до попередньої клавіатури, щоб зупинити нескінченний цикл збою. Натисніть, щоб переглянути деталі про помилку</string>
+    <string name="crash_multiple_notification__body" comment="Body of the notification for consecutive crashes">Писанку замінено попередньою клавіатурою, щоб збої не повторювалися. Торкніться, щоб переглянути подробиці</string>
     <!-- Clipboard strings -->
-    <string name="clipboard__header_title">Буфер обміну</string>
-    <string name="clipboard__disabled__title">Журнал буфера обміну наразі вимкнено</string>
-    <string name="clipboard__disabled__message">Історія буфера обміну {app_name} дозволяє швидко зберігати й отримувати доступ до скопійованого тексту та зображень з можливістю закріплення елементів, налаштування автоматичного очищення та встановлення максимального ліміту елементів.</string>
-    <string name="clipboard__disabled__enable_button">Увімкнути історію буферу обміну</string>
-    <string name="clipboard__empty__title">Буфер обміну пустий</string>
-    <string name="clipboard__empty__message">Як тільки ви скопіюєте текст або зображення, вони з\'являться тут.</string>
+    <string name="clipboard__header_title">Буфер</string>
+    <string name="clipboard__disabled__title">Історію буфера вимкнено</string>
+    <string name="clipboard__disabled__message">Історія буфера зберігає скопійований текст і зображення, щоб їх можна було швидко вставити знову. Записи можна закріплювати, а старі видаляються самі.</string>
+    <string name="clipboard__disabled__enable_button">Увімкнути історію буфера</string>
+    <string name="clipboard__empty__title">Буфер порожній</string>
+    <string name="clipboard__empty__message">Щойно ви скопіюєте текст чи зображення, вони зʼявляться тут.</string>
     <string name="clipboard__locked__title">Буфер обміну заблоковано</string>
-    <string name="clipboard__locked__message">Щоб отримати доступ до історії буфера обміну, спочатку розблокуйте пристрій.</string>
+    <string name="clipboard__locked__message">Щоб побачити історію буфера, спершу розблокуйте телефон.</string>
     <string name="clipboard__group_pinned">Закріплено</string>
     <string name="clipboard__group_recent">Останні</string>
     <string name="clipboard__group_other">Інше</string>
@@ -126,22 +126,22 @@
     <string name="clip__delete_item">Видалити</string>
     <string name="clip__paste_item">Вставити</string>
     <string name="clipboard__cleared_primary_clip">Основний запис очищено</string>
-    <string name="clipboard__cleared_history">Очищена історія</string>
+    <string name="clipboard__cleared_history">Історію очищено</string>
     <!-- Action strings -->
     <string name="action__cancel">Скасувати</string>
     <string name="action__default">Скинути до типових</string>
     <string name="action__delete">Видалити</string>
     <string name="action__delete_confirm_title">Підтвердити видалення</string>
-    <string name="action__delete_confirm_message">Ви впевнені, що хочете видалити «{name}»? Ця дія не може бути скасована після виконання.</string>
+    <string name="action__delete_confirm_message">Ви впевнені, що хочете видалити «{name}»? Цю дію не можна скасувати.</string>
     <string name="action__discard">Скасувати</string>
     <string name="action__discard_confirm_title">Незбережені зміни</string>
-    <string name="action__discard_confirm_message">Ви впевнені, що хочете скасувати незбережені зміни? Ця дія не може бути скасована після виконання.</string>
+    <string name="action__discard_confirm_message">Ви впевнені, що хочете скасувати незбережені зміни? Цю дію не можна скасувати.</string>
     <string name="action__no">Ні</string>
-    <string name="action__ok">ГАРАЗД</string>
+    <string name="action__ok">Гаразд</string>
     <string name="action__save">Зберегти</string>
     <string name="action__yes">Так</string>
     <!-- General strings -->
-    <string name="general__no_browser_app_found_for_url">Не знайдено браузерного застосунку для обробки URL {url}</string>
+    <string name="general__no_browser_app_found_for_url">Немає браузера, щоб відкрити {url}</string>
     <!-- Enum label and description strings -->
     <string name="enum__emoji_skin_tone__default" comment="Enum value label">{emoji} Без тону (жовтий)</string>
     <string name="enum__emoji_skin_tone__light_skin_tone" comment="Enum value label">{emoji} Світлий</string>
@@ -153,7 +153,7 @@
     <string name="enum__incognito_mode__force_off__description" comment="Enum value description">Режим інкогніто завжди буде вимкнено, незалежно від переданих налаштувань цільової програми. Швидкі дії інкогніто на панелі швидкого доступу будуть недоступні з цим параметром.</string>
     <string name="enum__incognito_mode__force_on" comment="Enum value label">Завжди ввімкнений</string>
     <string name="enum__incognito_mode__force_on__description" comment="Enum value description">Режим інкогніто буде завжди ввімкнено, незалежно від переданих налаштувань цільової програми. Швидкі дії інкогніто на панелі швидкого доступу будуть недоступні з цим параметром.</string>
-    <string name="enum__incognito_mode__dynamic_on_off" comment="Enum value label">Динамічне перемикання</string>
+    <string name="enum__incognito_mode__dynamic_on_off" comment="Enum value label">Автоматично (за полем) або вручну</string>
     <string name="enum__incognito_mode__dynamic_on_off__description" comment="Enum value description">Рекомендований варіант. Режим інкогніто буде динамічно увімкнено або вимкнено за допомогою переданих налаштувань цільової програми або вручну за допомогою швидкої дії інкогніто на панелі швидкого доступу.</string>
     <string name="enum__swipe_action__no_action" comment="Enum value label">Немає дії</string>
     <string name="enum__swipe_action__cycle_to_previous_keyboard_mode" comment="Enum value label">Перейти до попереднього режиму клавіатури</string>
@@ -163,29 +163,30 @@
     <string name="enum__swipe_action__delete_words_precisely" comment="Enum value label">Точне видалення слова</string>
     <string name="enum__swipe_action__hide_keyboard" comment="Enum value label">Приховати клавіатуру</string>
     <string name="enum__swipe_action__insert_space" comment="Enum value label">Вставити пробіл</string>
-    <string name="enum__swipe_action__move_cursor_up" comment="Enum value label">Перемістити курсор вверх</string>
-    <string name="enum__swipe_action__move_cursor_down" comment="Enum value label">Перемістити курсор вниз</string>
+    <string name="enum__swipe_action__move_cursor_up" comment="Enum value label">Перемістити курсор угору</string>
+    <string name="enum__swipe_action__move_cursor_down" comment="Enum value label">Перемістити курсор униз</string>
     <string name="enum__swipe_action__move_cursor_left" comment="Enum value label">Перемістити курсор вліво</string>
     <string name="enum__swipe_action__move_cursor_right" comment="Enum value label">Перемістити курсор вправо</string>
-    <string name="enum__swipe_action__move_cursor_start_of_line" comment="Enum value label">Перемістити курсор на початок рядку</string>
-    <string name="enum__swipe_action__move_cursor_end_of_line" comment="Enum value label">Перемістити курсор в кінець рядку</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line" comment="Enum value label">Перемістити курсор на початок рядка</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line" comment="Enum value label">Перемістити курсор у кінець рядка</string>
     <string name="enum__swipe_action__move_cursor_start_of_page" comment="Enum value label">Перемістити курсор на початок тексту</string>
-    <string name="enum__swipe_action__move_cursor_end_of_page" comment="Enum value label">Перемістити курсор в кінець тексту</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page" comment="Enum value label">Перемістити курсор у кінець тексту</string>
     <string name="enum__swipe_action__switch_to_clipboard_context" comment="Enum value label">Відкрити буфер обміну/історію</string>
     <string name="enum__swipe_action__shift" comment="Enum value label">Shift</string>
     <string name="enum__swipe_action__redo" comment="Enum value label">Повторити</string>
     <string name="enum__swipe_action__undo" comment="Enum value label">Відмінити</string>
     <string name="enum__swipe_action__select_characters_precisely" comment="Enum value label">Точне виділення символів</string>
     <string name="enum__swipe_action__select_words_precisely" comment="Enum value label">Точне виділення слів</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Показати вибір мови</string>
     <string name="enum__swipe_action__show_input_method_picker" comment="Enum value label">Показати вибір клавіатури</string>
     <string name="enum__swipe_action__switch_to_prev_keyboard" comment="Enum value label">Перемкнутися на попередню клавіатуру</string>
-    <string name="enum__swipe_action__switch_to_prev_subtype" comment="Enum value label">Перемкнутись на попередню розкладку</string>
-    <string name="enum__swipe_action__switch_to_next_subtype" comment="Enum value label">Перемкнутись на наступну розкладку</string>
-    <string name="enum__swipe_action__toggle_smartbar_visibility" comment="Enum value label">Перемикання видимості розумної панелі</string>
-    <string name="enum__theme_mode__always_day" comment="Enum value label">Завжди день</string>
-    <string name="enum__theme_mode__always_night" comment="Enum value label">Завжди ніч</string>
-    <string name="enum__theme_mode__follow_system" comment="Enum value label">Дотримуватись системи</string>
-    <string name="enum__theme_mode__follow_time" comment="Enum value label">Дотримуватись часу</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype" comment="Enum value label">Перемкнутися на попередню мову</string>
+    <string name="enum__swipe_action__switch_to_next_subtype" comment="Enum value label">Перемкнутися на наступну мову</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility" comment="Enum value label">Показати чи сховати панель над клавіатурою</string>
+    <string name="enum__theme_mode__always_day" comment="Enum value label">Завжди денна тема</string>
+    <string name="enum__theme_mode__always_night" comment="Enum value label">Завжди нічна тема</string>
+    <string name="enum__theme_mode__follow_system" comment="Enum value label">Як у системі</string>
+    <string name="enum__theme_mode__follow_time" comment="Enum value label">За часом доби</string>
     <!-- Pysanka: translations missing from FlorisBoard -->
     <string name="quick_action__ime_hide_ui">Сховати клавіатуру</string>
     <string name="quick_action__ime_hide_ui__tooltip">Сховати клавіатуру</string>
@@ -195,7 +196,6 @@
     <string name="quick_action__floating_window_mode__tooltip">Плаваюча клавіатура: увімкнути чи вимкнути</string>
     <string name="quick_action__resize_mode">Розмір</string>
     <string name="quick_action__resize_mode__tooltip">Змінити розмір клавіатури</string>
-    <string name="crash_dialog__bug_report_template">Звіт про збій</string>
     <string name="clipboard__confirm_clear_unfiltered_history__message">Очистити всю історію буфера? Видаляться всі записи, крім закріплених.</string>
     <string name="clipboard__confirm_clear_filtered_history__message">Очистити історію буфера? Видаляться всі показані записи, крім закріплених.</string>
     <string name="action__reset">Скинути</string>

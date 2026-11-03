@@ -17,7 +17,7 @@
 
     <!-- Quick action strings -->
     <string name="quick_action__arrow_up" comment="Please mind the limited available space for the quick action strings">Arrow up</string>
-    <string name="quick_action__arrow_up__tooltip">Perform arrow up</string>
+    <string name="quick_action__arrow_up__tooltip">Move the cursor up</string>
     <string name="quick_action__arrow_down" comment="Please mind the limited available space for the quick action strings">Arrow down</string>
     <string name="quick_action__arrow_down__tooltip">Perform arrow down</string>
     <string name="quick_action__arrow_left" comment="Please mind the limited available space for the quick action strings">Arrow left</string>
@@ -55,8 +55,8 @@
     <string name="quick_action__toggle_incognito_mode__tooltip">Toggle incognito mode</string>
     <string name="quick_action__toggle_autocorrect" comment="Please mind the limited available space for the quick action strings">Autocorrect</string>
     <string name="quick_action__toggle_autocorrect__tooltip">Toggle autocorrect</string>
-    <string name="quick_action__voice_input" comment="Please mind the limited available space for the quick action strings">Voice input</string>
-    <string name="quick_action__voice_input__tooltip" comment="IME stands for Input Method Editor and is indirectly equivalent to 'keyboard'.">Open voice input provider</string>
+    <string name="quick_action__voice_input" comment="Please mind the limited available space for the quick action strings">Dictation</string>
+    <string name="quick_action__voice_input__tooltip" comment="IME stands for Input Method Editor and is indirectly equivalent to 'keyboard'.">Dictate (recognised on the phone)</string>
     <string name="quick_action__floating_window_mode" comment="Please mind the limited available space for the quick action strings">Floating</string>
     <string name="quick_action__floating_window_mode__tooltip">Toggle floating keyboard window mode</string>
     <string name="quick_action__one_handed_mode" comment="Please mind the limited available space for the quick action strings">One-handed</string>
@@ -76,14 +76,14 @@
 
     <!-- Incognito mode strings -->
     <string name="incognito_mode__toast_after_enabled">Incognito mode is now enabled\n\n{app_name} will not learn words from your input while this mode is active</string>
-    <string name="incognito_mode__toast_after_disabled">Incognito mode is now disabled by default</string>
+    <string name="incognito_mode__toast_after_disabled">Incognito mode is off</string>
 
     <!-- Settings UI strings -->
     <string name="settings__title" comment="Title of Settings">Settings</string>
     <string name="settings__preview_keyboard" comment="Hint for try your setup box">Try out your setup</string>
 
-    <string name="settings__home__ime_not_enabled" comment="Error message shown in Home fragment when Pysanka is not enabled in the system">Pysanka is not enabled in the system and thus won\'t be available as an input method in the input picker. Click here to resolve this issue.</string>
-    <string name="settings__home__ime_not_selected" comment="Warning message shown in Home fragment when Pysanka is not selected as the default keyboard">Pysanka is not selected as the default input method. Click here to resolve this issue.</string>
+    <string name="settings__home__ime_not_enabled" comment="Error message shown in Home fragment when Pysanka is not enabled in the system">Pysanka is not enabled in the system and thus won\'t be available as an input method in the input picker. Tap here to fix it.</string>
+    <string name="settings__home__ime_not_selected" comment="Warning message shown in Home fragment when Pysanka is not selected as the default keyboard">Pysanka is not selected as the default input method. Tap here to fix it.</string>
 
     <!-- About UI strings -->
     <string name="about__title" comment="Title of About activity">About</string>
@@ -116,7 +116,7 @@
     <!-- Crash Dialog strings -->
     <string name="crash_dialog__title" comment="Title of crash dialog">Pysanka error report</string>
     <string name="crash_dialog__description" comment="Description of crash dialog">Sorry for the inconvenience, but Pysanka has crashed due to an unexpected error.</string>
-    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">If you wish to report this error, first check out the issue tracker on GitHub if your crash has not already been reported.\nIf it hasn\'t, copy the generated crash log and open a new issue. Use the \"%s\" template and fill out the description, the steps to reproduce, and paste the generated crash log at the end. This helps in making Pysanka better and more stable for everyone. Thank you!</string>
+    <string name="crash_dialog__report_instructions" comment="Issue tracker report instructions for the crash dialog. The %s placeholder is the name of the crash report template and always in English/LTR.">If you wish to report this error, first check the Issues on GitHub to see whether it has already been reported.\nIf not, copy the crash log, open a new issue, describe what you were doing before the crash and paste the log at the end. Thank you, this helps make Pysanka more stable!</string>
     <string name="crash_dialog__bug_report_template" comment="Name of the template to use in the GitHub issue tracker (is always in English)" translatable="false">Crash report</string>
     <string name="crash_dialog__copy_to_clipboard" comment="Label of Copy to clipboard button in crash dialog">Copy to system clipboard</string>
     <string name="crash_dialog__copy_to_clipboard_success" comment="Label of Copy to clipboard success message in crash dialog">Copied to system clipboard</string>
@@ -184,7 +184,7 @@
     <string name="enum__incognito_mode__force_off__description" comment="Enum value description">Incognito mode will always be disabled, regardless of the target app\'s passed options. The incognito quick action in the Smartbar will not be available with this option.</string>
     <string name="enum__incognito_mode__force_on" comment="Enum value label">Force on</string>
     <string name="enum__incognito_mode__force_on__description" comment="Enum value description">Incognito mode will always be enabled, regardless of the target app\'s passed options. The incognito quick action in the Smartbar will not be available with this option.</string>
-    <string name="enum__incognito_mode__dynamic_on_off" comment="Enum value label">Dynamically on/off</string>
+    <string name="enum__incognito_mode__dynamic_on_off" comment="Enum value label">Automatic (by field) or by hand</string>
     <string name="enum__incognito_mode__dynamic_on_off__description" comment="Enum value description">Recommended option. Incognito mode will be dynamically enabled or disabled either through the target app\'s passed options or by manually toggling it through the incognito quick action in the Smartbar.</string>
 
     <string name="enum__swipe_action__no_action" comment="Enum value label">No action</string>
@@ -210,15 +210,16 @@
     <string name="enum__swipe_action__undo" comment="Enum value label">Undo</string>
     <string name="enum__swipe_action__select_characters_precisely" comment="Enum value label">Select characters precisely</string>
     <string name="enum__swipe_action__select_words_precisely" comment="Enum value label">Select words precisely</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Show language picker</string>
     <string name="enum__swipe_action__show_input_method_picker" comment="Enum value label">Show input method picker</string>
     <string name="enum__swipe_action__switch_to_prev_keyboard" comment="Enum value label">Switch to previous keyboard</string>
     <string name="enum__swipe_action__switch_to_prev_subtype" comment="Enum value label">Switch to previous subtype</string>
     <string name="enum__swipe_action__switch_to_next_subtype" comment="Enum value label">Switch to next subtype</string>
     <string name="enum__swipe_action__toggle_smartbar_visibility" comment="Enum value label">Toggle Smartbar visibility</string>
 
-    <string name="enum__theme_mode__always_day" comment="Enum value label">Always day</string>
-    <string name="enum__theme_mode__always_night" comment="Enum value label">Always night</string>
-    <string name="enum__theme_mode__follow_system" comment="Enum value label">Follow system</string>
-    <string name="enum__theme_mode__follow_time" comment="Enum value label">Follow time</string>
+    <string name="enum__theme_mode__always_day" comment="Enum value label">Always the day theme</string>
+    <string name="enum__theme_mode__always_night" comment="Enum value label">Always the night theme</string>
+    <string name="enum__theme_mode__follow_system" comment="Enum value label">As the system</string>
+    <string name="enum__theme_mode__follow_time" comment="Enum value label">By time of day</string>
 
 </resources>

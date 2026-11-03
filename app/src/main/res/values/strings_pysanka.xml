@@ -43,8 +43,8 @@
     <string name="pysanka__tag__manage">Manage tags</string>
     <string name="pysanka__tag__create_first">Create tags in settings</string>
     <string name="pysanka__tag__screen_title">Clipboard tags</string>
-    <string name="pysanka__tag__screen_summary">Your own coloured tags for the history; the slider above the history filters by them</string>
-    <string name="pysanka__tag__screen_hint">Tags appear in the slider above the clipboard history. Long-press an item in the history and choose “Tags” to add or remove them. Links, phone numbers, codes, emails and images are tagged automatically.</string>
+    <string name="pysanka__tag__screen_summary">Your own coloured tags for the history; the strip above the history filters by them</string>
+    <string name="pysanka__tag__screen_hint">Tags appear in the strip above the clipboard history. Long-press an item in the history and choose “Tags” to add or remove them. Links, phone numbers, codes, emails and images are tagged automatically.</string>
     <string name="pysanka__tag__none_yet">No tags yet.</string>
     <string name="pysanka__tag__add">Add a tag</string>
     <string name="pysanka__tag__name">Name</string>
@@ -160,7 +160,7 @@
     <string name="pysanka__ai__fix_with_ai">Fix with AI</string>
     <string name="pysanka__ai__action_fix">Grammar</string>
     <string name="pysanka__ai__action_fix_ocr">Fix recognised text</string>
-    <string name="pysanka__ai__action_russisms">Russianisms</string>
+    <string name="pysanka__ai__action_russisms">Remove Russianisms</string>
     <string name="pysanka__ai__action_friendly">Friendlier</string>
     <string name="pysanka__ai__action_formal">More formal</string>
     <string name="pysanka__ai__action_shorter">Shorter</string>
@@ -328,7 +328,7 @@
     <string name="pysanka__ai__limits">Social media limits</string>
     <string name="pysanka__ai__show_count">Character counter</string>
     <string name="pysanka__ai__show_count_summary">Above the AI tiles: how many characters; a tap shows the limits of X, Bluesky, Threads, Mastodon, Instagram, LinkedIn</string>
-    <string name="pysanka__ai__thread_no_history">The clipboard history cannot take the parts now (it is off, shorter, not ready yet, or this is a private field): copy them with a tap.</string>
+    <string name="pysanka__ai__thread_no_history">The clipboard history cannot take the parts now (it is off, too short, not ready yet, or this is a private field): copy them with a tap.</string>
     <string name="pysanka__typing__key_targeting">More accurate key taps</string>
     <string name="pysanka__typing__key_targeting_summary">A tap near the edge between two letters goes to the one more likely in the word (the keys look the same)</string>
     <string name="pysanka__typing__calibrate">Adapt to my taps</string>
@@ -350,7 +350,7 @@
     <string name="pysanka__ai__drafts_tag">Drafts</string>
     <string name="pysanka__ai__drafts_done">The versions are in the clipboard history, tagged “Drafts”</string>
     <string name="pysanka__clipboard_lock__failed">Could not open the fingerprint screen.</string>
-    <string name="pysanka__ai__drafts_failed">The clipboard history cannot take the versions now (it is off, shorter, not ready yet, or this is a private field).</string>
+    <string name="pysanka__ai__drafts_failed">The clipboard history cannot take the versions now (it is off, too short, not ready yet, or this is a private field).</string>
     <string name="pysanka__ai__emoji">Emoji in AI posts</string>
     <string name="pysanka__ai__emoji_none">none</string>
     <string name="pysanka__ai__emoji_one">one</string>
@@ -448,7 +448,7 @@
     <string name="pysanka__hashtags__suggest">Suggest hashtags</string>
     <string name="pysanka__hashtags__suggest_summary">After «#»: your hashtags, words from the post and from the dictionary. Your hashtags are remembered encrypted, like learned words.</string>
     <string name="pysanka__look__split">Split keyboard</string>
-    <string name="pysanka__look__split_auto">By itself on a tablet or foldable</string>
+    <string name="pysanka__look__split_auto">Automatic on a tablet or foldable</string>
     <string name="pysanka__look__split_on">Always</string>
     <string name="pysanka__look__split_off">Never</string>
 </resources>

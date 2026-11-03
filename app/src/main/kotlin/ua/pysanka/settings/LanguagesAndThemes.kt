@@ -139,10 +139,17 @@ fun themeNames(): Map<String, String> = linkedMapOf(
 /** The day and the night theme, as small pictures of the keyboard (see [ThemePicker]). */
 @Composable
 fun ThemeChoices() {
-    Text(stringRes(R.string.pysanka__look__day_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
-    ThemePicker(night = false)
-    Text(stringRes(R.string.pysanka__look__night_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
-    ThemePicker(night = true)
+    val prefs by FlorisPreferenceStore
+    val mode by prefs.theme.mode.observeAsState()
+    // Only the theme that can show: "always day" never uses the night one, and the other way round
+    if (mode != dev.patrickgold.florisboard.ime.theme.ThemeMode.ALWAYS_NIGHT) {
+        Text(stringRes(R.string.pysanka__look__day_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
+        ThemePicker(night = false)
+    }
+    if (mode != dev.patrickgold.florisboard.ime.theme.ThemeMode.ALWAYS_DAY) {
+        Text(stringRes(R.string.pysanka__look__night_theme), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 16.dp, top = 8.dp))
+        ThemePicker(night = true)
+    }
 }
 
 /** The language of these settings: as the phone, Ukrainian or English (each named in itself). */
