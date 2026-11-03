@@ -16,6 +16,14 @@ class EmojiForWordTest : FunSpec({
         pysankaEmojiFor(all, "кава", 3) shouldBe listOf(coffee)
         pysankaEmojiFor(all, "Серце", 3) shouldBe listOf(heart)
     }
+    test("little words offer none, and the more specific emoji comes first") {
+        val sick = Emoji("🤮", "обличчя, що блює", listOf("блювання", "мені погано", "нудить"))
+        val nest = Emoji("🪹", "порожнє гніздо", listOf("гніздечко", "гніздо", "гілка", "дім", "порожнє гніздо"))
+        val house = Emoji("🏠", "будинок", listOf("будинок", "будівля", "дім"))
+        pysankaEmojiFor(listOf(sick), "мені", 3) shouldBe emptyList()
+        pysankaEmojiFor(listOf(nest, house), "дім", 3) shouldBe listOf(house, nest)
+        pysankaEmojiFor(listOf(nest, house), "будинок", 3) shouldBe listOf(house)
+    }
     test("a beginning: only from four letters, and after whole words") {
         pysankaEmojiFor(all, "кав", 3) shouldBe emptyList()
         pysankaEmojiFor(all, "наро", 3) shouldBe listOf(cake)

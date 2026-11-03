@@ -655,10 +655,6 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     /**
-     * Handles a [KeyCode.SPACE] event. Also handles the auto-correction of two space taps if
-     * enabled by the user.
-     */
-    /**
      * Pysanka: what Space does to the word before it (on screen and on a physical keyboard): a
      * finished hashtag or word is learned, an auto-correction is applied (and can be taken back by
      * the next Backspace). Returns the candidate committed, if any.
@@ -686,6 +682,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         if (pysankaMayLearn()) ua.pysanka.typing.Hashtags.learn(appContext, tag)
     }
 
+    /**
+     * Handles a [KeyCode.SPACE] event. Also handles the auto-correction of two space taps if
+     * enabled by the user.
+     */
     private fun handleSpace(data: KeyData) {
         val candidate = pysankaCommitBySpace()
         if (prefs.keyboard.spaceBarSwitchesToCharacters.get()) {
@@ -931,6 +931,8 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         // finished (the rest stays) and such a piece of a word is not learned
         if (asTyped && ua.pysanka.typing.WordTail.length(content.textAfterSelection) > 0) {
             commitCandidate(candidate, wholeWord = false)
+            // No space comes before the rest of the word
+            editorInstance.phantomSpace.setInactive()
             return
         }
         pysankaLearn(typed, candidate, insisted = asTyped)

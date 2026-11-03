@@ -186,7 +186,7 @@
     <string name="pysanka__ai__import_failed">The file could not be copied. Try again.</string>
     <string name="pysanka__ai__original_kept">The downloaded file could not be deleted: delete it in Files.</string>
     <string name="pysanka__ai__ready">Model installed ({size} MB).</string>
-    <string name="pysanka__ai__how_to_use">Tap ✦ on the bar above the keyboard: the AI assistant opens in place of the keys for the selected text (or the whole field): grammar, style, summary, translation, replies to the message on the clipboard and more. “Expand” opens the full editor. The AI never works in password, incognito or "no learning" fields.</string>
+    <string name="pysanka__ai__how_to_use">Tap ✦ on the bar above the keyboard: the AI assistant opens in place of the keys for the selected text (or the whole field): grammar, style, summary, translation, replies to the message on the clipboard and more. “Expand” opens the full editor. The AI never works in password, incognito or “no learning” fields.</string>
     <string name="pysanka__ai__delete">Delete the model</string>
     <string name="pysanka__ai__copied_instead">The answer could not be put back safely, so it was copied: paste it where you need it.</string>
     <string name="pysanka__links__clean">Clean copied links</string>
@@ -194,7 +194,7 @@
     <string name="pysanka__photo_history__added">Added to the clipboard history</string>
     <string name="pysanka__photo_history__button">Add a photo to the history</string>
     <string name="pysanka__layout__quick_action">Fix layout</string>
-    <string name="pysanka__layout__quick_action__tooltip">Text typed on the wrong layout: "ghbdsn" → "привіт" (the selection or the last word)</string>
+    <string name="pysanka__layout__quick_action__tooltip">Text typed on the wrong layout: “ghbdsn” → “привіт” (the selection or the last word)</string>
     <string name="pysanka__ai__entry_label">Pysanka AI</string>
     <string name="pysanka__ai__action_list">List</string>
     <string name="pysanka__ai__action_table">Table</string>
@@ -306,7 +306,7 @@
     <string name="pysanka__voice__nothing">Nothing heard. Again?</string>
     <string name="pysanka__voice__failed">Couldn\'t recognise it. Again?</string>
     <string name="pysanka__voice__no_mic_now">The microphone is busy elsewhere</string>
-    <string name="pysanka__voice__not_here">Dictation does not work in password, incognito and "no learning" fields.</string>
+    <string name="pysanka__voice__not_here">Dictation does not work in password, incognito and “no learning” fields.</string>
     <string name="pysanka__voice__set_up">To dictate, allow the microphone.</string>
     <string name="pysanka__voice__unsupported">This phone\'s processor cannot run dictation.</string>
     <string name="pysanka__voice__about">Whisper (OpenAI) recognises speech entirely on the phone: the sound is never sent anywhere or saved, only kept in memory while it is recognised. The Whisper base model comes with the app: nothing to download.</string>
