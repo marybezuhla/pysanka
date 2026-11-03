@@ -73,17 +73,20 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
     }
 
     /** Pysanka: hashtags for [prefix] (see [ua.pysanka.typing.Hashtags]); [text]: the text being written. */
-    suspend fun pysankaHashtags(subtype: Subtype, prefix: String, text: String): List<String> {
+    suspend fun pysankaHashtags(subtype: Subtype, prefix: String, text: String): List<ua.pysanka.typing.HashtagCandidate> {
         val dict = suggester(subtype)
         // The person's own only with learning on (as for words)
         val own = if (prefs.correction.pysankaLearnWords.get()) {
             withContext(Dispatchers.IO) { UserWords.get(appContext, ua.pysanka.typing.Hashtags.LIST) }
         } else null
-        return ua.pysanka.typing.Hashtags.suggest(
-            prefix, text, own,
-            frequency = { dict?.frequency(it) ?: 0 },
-            complete = { p -> dict?.suggest(p, 3)?.map { it.word }?.filter { PersonalWords.key(it).startsWith(PersonalWords.key(p)) }.orEmpty() },
-        )
+        val frequency = { w: String -> dict?.frequency(w) ?: 0 }
+        val complete = { p: String -> dict?.suggest(p, 3)?.map { it.word }?.filter { PersonalWords.key(it).startsWith(PersonalWords.key(p)) }.orEmpty() }
+        val single = ua.pysanka.typing.Hashtags.suggest(prefix, text, own, frequency, complete)
+            .map { ua.pysanka.typing.HashtagCandidate(it) }
+        // Right after «#»: the text's key words, all at once, first
+        if (prefix.isNotEmpty()) return single
+        val bundle = ua.pysanka.typing.Hashtags.keywords(text, frequency, complete, ua.pysanka.typing.Hashtags.BUNDLE)
+        return if (bundle.size >= 2) listOf(ua.pysanka.typing.HashtagCandidate(bundle)) + single else single
     }
 
     /**

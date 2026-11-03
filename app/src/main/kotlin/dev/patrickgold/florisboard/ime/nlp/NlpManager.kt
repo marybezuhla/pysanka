@@ -205,7 +205,7 @@ class NlpManager(context: Context) {
                 val tags = latin?.pysankaHashtags(subtype, tag, content.text).orEmpty()
                 internalSuggestionsGuard.withLock {
                     if (internalSuggestions.first < reqTime) {
-                        internalSuggestions = reqTime to tags.map { ua.pysanka.typing.HashtagCandidate(it) }
+                        internalSuggestions = reqTime to tags
                     }
                 }
                 return@launch

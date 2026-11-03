@@ -367,7 +367,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
     }
 
     /** Pysanka: «#[tag] » in place of the hashtag being typed right before the cursor. */
-    fun pysankaCommitHashtag(tag: String): Boolean {
+    fun pysankaCommitHashtag(tags: List<String>): Boolean {
         val typed = ua.pysanka.typing.Hashtags.typed(activeContent.textBeforeSelection) ?: return false
         val ic = dev.patrickgold.florisboard.FlorisImeService.currentInputConnection() ?: return false
         // The rest of the word after the cursor goes too («#ка|ва» is all replaced)
@@ -376,7 +376,7 @@ class EditorInstance(context: Context) : AbstractEditorInstance(context) {
         try {
             ic.finishComposingText()
             ic.deleteSurroundingText(typed.length + 1, tail)
-            return ic.commitText("#$tag ", 1)
+            return ic.commitText(tags.joinToString(" ") { "#$it" } + " ", 1)
         } finally {
             ic.endBatchEdit()
         }

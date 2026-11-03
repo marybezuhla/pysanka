@@ -305,7 +305,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             is ClipboardSuggestionCandidate -> editorInstance.commitClipboardItem(candidate.clipboardItem)
             // Pysanka: «#tag » in place of what was typed after «#»
             is ua.pysanka.typing.HashtagCandidate -> {
-                if (editorInstance.pysankaCommitHashtag(candidate.tag)) pysankaLearnHashtag(candidate.tag)
+                if (editorInstance.pysankaCommitHashtag(candidate.tags)) candidate.tags.forEach { pysankaLearnHashtag(it) }
             }
             else -> editorInstance.commitCompletion(candidate, wholeWord)
         }
