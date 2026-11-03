@@ -38,7 +38,7 @@ import java.io.File
  */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [34], qualifiers = "uk-w400dp-h2000dp-xxhdpi")
+@Config(sdk = [34], qualifiers = "uk-w400dp-h1800dp-xhdpi")
 open class RealSettingsScreensTest {
     protected open val prefix = "real"
 
@@ -101,7 +101,7 @@ open class RealSettingsScreensTest {
  * Pysanka: the same screens on Android 8.0, the oldest Pysanka runs on: they must draw there too
  * (an API newer than the phone would fail here).
  */
-@Config(sdk = [26], qualifiers = "uk-w360dp-h2000dp-xhdpi")
+@Config(sdk = [26], qualifiers = "uk-w360dp-h1800dp-mdpi")
 class RealSettingsScreensAndroid8Test : RealSettingsScreensTest() {
     override val prefix = "android8"
 }

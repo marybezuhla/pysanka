@@ -187,6 +187,8 @@ android {
 }
 
 tasks.withType<Test> {
+    // Pysanka: the screenshot tests start the whole app for each picture
+    maxHeapSize = "3g"
     testLogging {
         events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
     }
