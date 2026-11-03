@@ -1,6 +1,6 @@
 # Word lists for suggestions and swipe
 
-`app/src/main/assets/ime/dict/uk.json`, `en.json` and `ru.json` — the most frequent words with a frequency
+`app/src/main/assets/ime/dict/uk.json`, `en.json`, `ru.json`, and the languages added for 1.0 (`build_more.py`: pl, hu, ro, sk, es, pt, fr, de; `build_be.py`: Belarusian from Belacorpus and two hunspell dictionaries, official and tarask) — the most frequent words with a frequency
 1..255, made by `build_dicts.py` from:
 
 - **FrequencyWords** by Hermit Dave (https://github.com/hermitdave/FrequencyWords), word counts
@@ -27,4 +27,16 @@
 git clone --depth 1 https://github.com/hermitdave/FrequencyWords fw
 git clone --depth 1 --filter=blob:none --sparse https://github.com/LibreOffice/dictionaries lo && (cd lo && git sparse-checkout set uk_UA ru_RU)
 python3 -I scripts/dict/build_dicts.py fw lo/uk_UA app/src/main/assets/ime/dict lo/ru_RU
+```
+
+The languages added for 1.0 (libhunspell must be installed; the dictionaries checked out as above
+with `git sparse-checkout set uk_UA ru_RU pl_PL hu_HU ro be_BY sk_SK es pt_PT pt_BR fr_FR de`):
+
+```sh
+python3 -I scripts/dict/build_more.py fw lo app/src/main/assets/ime/dict
+git clone --depth 1 https://github.com/lidia-m/belacorpus_corpus && git clone --depth 1 https://github.com/375gnu/spell-be-tarask
+(cd spell-be-tarask && make be_BY@tarask.aff be_BY@tarask.dic VERSION_NUMBER=0)
+python3 -I scripts/dict/build_be.py belacorpus_corpus lo/be_BY spell-be-tarask app/src/main/assets/ime/dict
+python3 -I scripts/dict/themes.py dict_uk lo/uk_UA app/src/main/assets/ime/dict lo/ru_RU
+python3 -I scripts/dict/extras.py app/src/main/assets/ime/dict
 ```

@@ -1,0 +1,163 @@
+# Services, banks, shops, delivery and telecoms used in French-speaking countries, as people type them; Pysanka's own list (GPL-3.0-or-later).
+# Apps and online services
+WhatsApp
+Telegram
+Signal
+Messenger
+Instagram
+Facebook
+TikTok
+Snapchat
+YouTube
+Netflix
+Spotify
+Deezer
+Gmail
+Outlook
+Google
+Waze
+Doctolib
+Ameli
+Leboncoin
+Vinted
+Marketplace
+Kijiji
+Amazon
+Cdiscount
+AliExpress
+Temu
+Shein
+Galaxus
+Ricardo
+Tutti
+Jumia
+Airbnb
+Booking
+BlaBlaCar
+Uber
+Uber Eats
+Deliveroo
+Just Eat
+Too Good To Go
+Lydia
+Wero
+Paylib
+PayPal
+Twint
+Payconiq
+Bancontact
+Interac
+itsme
+FranceConnect
+Pronote
+Canal+
+# Telecoms
+Orange
+SFR
+Bouygues
+Bouygues Telecom
+Free
+Sosh
+Proximus
+Telenet
+Swisscom
+Sunrise
+Salt
+Vidéotron
+Bell
+Telus
+Rogers
+Fizz
+Koodo
+MTN
+Moov
+Airtel
+Wave
+Orange Money
+# Banks
+BNP Paribas
+Société Générale
+Crédit Agricole
+Crédit Mutuel
+Caisse d'Épargne
+La Banque Postale
+LCL
+Boursorama
+BoursoBank
+Revolut
+N26
+Qonto
+Belfius
+KBC
+ING
+UBS
+PostFinance
+Raiffeisen
+Desjardins
+Banque Nationale
+RBC
+TD
+# Shops
+Carrefour
+Leclerc
+Auchan
+Intermarché
+Lidl
+Aldi
+Monoprix
+Franprix
+Picard
+Casino
+Delhaize
+Colruyt
+Migros
+Coop
+Denner
+IGA
+Maxi
+Provigo
+Metro
+Super C
+Jean Coutu
+Pharmaprix
+Couche-Tard
+Tim Hortons
+Canadian Tire
+Fnac
+Darty
+Boulanger
+Decathlon
+Ikea
+Leroy Merlin
+Castorama
+Action
+Primark
+Zara
+# Delivery and post
+La Poste
+Colissimo
+Chronopost
+Mondial Relay
+Relais Colis
+DPD
+DHL
+UPS
+bpost
+Postes Canada
+Purolator
+# Transport and public services
+SNCF
+TGV
+Ouigo
+TER
+RATP
+Navigo
+SNCB
+STIB
+TEC
+CFF
+STM
+Hydro-Québec
+CAF
+France Travail
+URSSAF

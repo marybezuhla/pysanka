@@ -1,0 +1,256 @@
+# Cities and regions of Spain, Latin America and Ukraine, and neighbouring countries, in Spanish; Pysanka's own list (GPL-3.0-or-later).
+# Ucrania
+Ucrania
+Kyiv
+Járkiv
+Kharkiv
+Odesa
+Dnipró
+Dnipro
+Leópolis
+Lviv
+Zaporiyia
+Zaporizhzhia
+Mykolaiv
+Mariúpol
+Vínnytsia
+Jersón
+Kherson
+Poltava
+Chernihiv
+Cherkasy
+Sumy
+Zhytomyr
+Rivne
+Lutsk
+Ternópil
+Ivano-Frankivsk
+Úzhgorod
+Uzhhorod
+Chernivtsí
+Jmelnytsky
+Kropyvnytsky
+Kryvyi Rih
+Donetsk
+Luhansk
+Lugansk
+Crimea
+Sebastopol
+Simferópol
+Bajmut
+Avdíivka
+Bucha
+Irpín
+Hostómel
+Chernóbil
+Chornóbil
+Donbás
+Transcarpatia
+Galitzia
+Volinia
+Podilia
+Bucovina
+Polesia
+Dniéper
+Cárpatos
+# Vecinos de Ucrania
+Polonia
+Varsovia
+Cracovia
+Rumanía
+Rumania
+Bucarest
+Moldavia
+Chisináu
+Hungría
+Budapest
+Eslovaquia
+Bratislava
+Bielorrusia
+Minsk
+Rusia
+Moscú
+Lituania
+Letonia
+Estonia
+Chequia
+Praga
+Alemania
+Berlín
+Europa
+# España
+España
+Madrid
+Barcelona
+Valencia
+Sevilla
+Zaragoza
+Málaga
+Murcia
+Palma
+Bilbao
+Alicante
+Córdoba
+Valladolid
+Vigo
+Gijón
+Granada
+Vitoria
+La Coruña
+A Coruña
+Oviedo
+Santander
+Pamplona
+Salamanca
+Toledo
+Cádiz
+Almería
+Huelva
+Jaén
+Burgos
+León
+Logroño
+Badajoz
+Cáceres
+Tarragona
+Girona
+Lleida
+Castellón
+Elche
+Benidorm
+Marbella
+Torrevieja
+Cartagena
+Santiago de Compostela
+San Sebastián
+Donostia
+Ibiza
+Mallorca
+Menorca
+Tenerife
+Canarias
+Las Palmas
+Andalucía
+Cataluña
+Galicia
+Asturias
+Cantabria
+Aragón
+Navarra
+Extremadura
+Castilla
+Euskadi
+País Vasco
+Baleares
+Portugal
+Lisboa
+# México
+México
+CDMX
+Guadalajara
+Monterrey
+Puebla
+Tijuana
+Querétaro
+Mérida
+Cancún
+Toluca
+Chihuahua
+Juárez
+Acapulco
+Oaxaca
+Veracruz
+Morelia
+Hermosillo
+Culiacán
+Saltillo
+Aguascalientes
+Jalisco
+Yucatán
+Chiapas
+Sonora
+Sinaloa
+Guanajuato
+Michoacán
+# Centroamérica y Caribe
+Guatemala
+Honduras
+Tegucigalpa
+El Salvador
+San Salvador
+Nicaragua
+Managua
+Costa Rica
+San José
+Panamá
+Cuba
+La Habana
+República Dominicana
+Santo Domingo
+Puerto Rico
+San Juan
+# Sudamérica
+Colombia
+Bogotá
+Medellín
+Cali
+Barranquilla
+Bucaramanga
+Antioquia
+Venezuela
+Caracas
+Maracaibo
+Ecuador
+Quito
+Guayaquil
+Cuenca
+Perú
+Lima
+Arequipa
+Cusco
+Trujillo
+Bolivia
+La Paz
+Santa Cruz
+Cochabamba
+Sucre
+Chile
+Santiago
+Valparaíso
+Viña del Mar
+Concepción
+Antofagasta
+Temuco
+Argentina
+Buenos Aires
+Rosario
+Mendoza
+Tucumán
+Mar del Plata
+Salta
+Bariloche
+Patagonia
+Paraguay
+Asunción
+Uruguay
+Montevideo
+Brasil
+# Estados Unidos
+Estados Unidos
+EE. UU.
+EEUU
+Nueva York
+Los Ángeles
+Miami
+Houston
+Chicago
+San Antonio
+Dallas
+Phoenix
+San Diego
+Texas
+California
+Florida
+Arizona
+Nuevo México
+Canadá

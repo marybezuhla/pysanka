@@ -1,0 +1,153 @@
+# Services, banks, shops, delivery, telecoms and apps used in Hungary and by Hungarians in Transcarpathia, as people type them; Pysanka's own list (GPL-3.0-or-later).
+# Bankok és fizetés
+OTP
+OTP-s
+OTP-nél
+OTP-hez
+K&H
+Erste
+Raiffeisen
+MBH
+CIB
+UniCredit
+Gránit
+Revolut
+Revolutra
+Revoluton
+Revolutos
+Wise
+Simple
+SimplePay
+Barion
+PayPal
+Apple Pay
+Google Pay
+SZÉP-kártya
+SZÉP-kártyával
+Monobank
+PrivatBank
+# Telefon és internet
+Telekom
+Telekomos
+Telekomnál
+Yettel
+Yettelnél
+Yettelt
+One
+Digi
+Digis
+Kyivstar
+Vodafone
+# Boltok és webáruházak
+Tesco
+Tescóban
+Tescóba
+Lidl
+Lidlben
+Lidlbe
+Aldi
+Aldiban
+Spar
+Sparban
+Interspar
+Auchan
+Auchanban
+Penny
+CBA
+Coop
+Rossmann
+Rossmannban
+dm
+Müller
+Decathlon
+IKEA
+IKEA-ban
+MediaMarkt
+Euronics
+eMAG
+eMAG-on
+Alza
+Árukereső
+Jófogás
+Jófogáson
+Vatera
+Temu
+Shein
+AliExpress
+Amazon
+# Csomag és kiszállítás
+Foxpost
+Foxpostba
+Foxpostos
+GLS
+MPL
+Magyar Posta
+Posta
+Packeta
+DPD
+Express One
+Sameday
+Nova Posta
+Ukrposta
+Wolt
+Wolton
+Woltos
+Foodora
+Bolt
+Bolttal
+Főtaxi
+# Közlekedés
+MÁV
+MÁV-os
+Volán
+BKV
+BKK
+BudapestGO
+Flixbus
+Wizz Air
+Ryanair
+Waze
+# Hivatal
+Ügyfélkapu
+NAV
+eSzemélyi
+EESZT
+Diia
+# Alkalmazások és média
+Viber
+Viberen
+Messenger
+Messengeren
+WhatsApp
+WhatsAppon
+Telegram
+Telegramon
+Instagram
+Insta
+Instán
+Instagramon
+Facebook
+Facebookon
+Fb
+TikTok
+TikTokon
+YouTube
+YouTube-on
+Gmail
+Google Térkép
+Spotify
+Netflix
+Netflixen
+HBO Max
+Disney+
+RTL
+TV2
+M1
+Telex
+Index
+444
+HVG
+Origo
+24.hu
+Kárpátalja.ma
+Kárpáti Igaz Szó

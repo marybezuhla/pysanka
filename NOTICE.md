@@ -36,7 +36,24 @@ those copies keep that licence.
   also gives the forms of the words added by theme (`scripts/dict/*_ru.txt`, GPL-3.0-or-later); the
   dictionary itself is not part of Pysanka.
 
-- `app/src/main/assets/ime/media/emoji/uk.txt`, `ru.txt` — Ukrainian and Russian emoji names and keywords from the Unicode
+- `app/src/main/assets/ime/dict/pl.json`, `hu.json`, `ro.json`, `sk.json`, `es.json`, `pt.json`, `fr.json`,
+  `de.json` — word lists made the same way from FrequencyWords (OpenSubtitles 2018, CC BY-SA 4.0; for
+  Portuguese the Portuguese and Brazilian counts together), under CC BY-SA 4.0. Only words that a
+  LibreOffice hunspell dictionary of the language accepts are kept (https://github.com/LibreOffice/dictionaries:
+  pl_PL, hu_HU, ro, sk_SK, es, pt_PT and pt_BR, fr_FR, de; each under its own free licence, see its README
+  there); the dictionaries are used only while the lists are made and are not part of Pysanka
+  (`scripts/dict/build_more.py`).
+- `app/src/main/assets/ime/dict/be.json` — the Belarusian word list: word counts from Belacorpus
+  (L. F. Mazzitelli, 2021, https://github.com/Belarusian-Corpus; only the counts are used, no text),
+  words kept if LibreOffice's be_BY dictionary (official orthography) or spell-be-tarask
+  (https://github.com/375gnu/spell-be-tarask, classical orthography, M. Udodau, H. Valoshka,
+  CC BY-SA 3.0) accepts them; the list is under CC BY-SA 4.0 (`scripts/dict/build_be.py`).
+- Words added to all these lists by theme (everyday and digital words, chat words, places, services,
+  Ukrainian things) and the lists of swear words and little words: Pysanka's own lists
+  (`scripts/dict/*_<language>.txt`, GPL-3.0-or-later); `assets/ime/dict/extras.json` is made from them.
+- `assets/ime/keyboard/.../jcuken_belarusian.json` and the `be` popups: Pysanka's Belarusian layout
+  (GPL-3.0-or-later), made after FlorisBoard's Russian one (Apache 2.0).
+- `app/src/main/assets/ime/media/emoji/uk.txt`, `ru.txt`, `pl.txt`, `hu.txt`, `ro.txt`, `sk.txt`, `be.txt` — emoji names and keywords in those languages from the Unicode
   Common Locale Data Repository (CLDR) v48, © Unicode, Inc., Unicode License v3
   (https://www.unicode.org/license.txt); made by `scripts/emoji_uk.py`. The other emoji files come
   from FlorisBoard, made from the same CLDR data.

@@ -1,0 +1,147 @@
+# Brands, services, banks, shops and apps used in Poland; Pysanka's own list (GPL-3.0-or-later).
+# Banki i płatności
+PKO
+PKO BP
+IKO
+mBank
+mBanku
+ING
+Pekao
+Santander
+Millennium
+Alior
+BNP Paribas
+Credit Agricole
+VeloBank
+Revolut
+BLIK
+PayPal
+Przelewy24
+PayU
+Google Pay
+Apple Pay
+Monobank
+PrivatBank
+# Sklepy
+Biedronka
+Biedronce
+Lidl
+Lidlu
+Żabka
+Żabce
+Kaufland
+Auchan
+Carrefour
+Netto
+Dino
+Stokrotka
+Lewiatan
+Rossmann
+Rossmannie
+Hebe
+Pepco
+Action
+Media Expert
+RTV Euro AGD
+x-kom
+Empik
+IKEA
+Leroy Merlin
+Castorama
+OBI
+Decathlon
+Sinsay
+Reserved
+CCC
+Zalando
+Allegro
+Allegro Smart
+OLX
+Vinted
+Temu
+AliExpress
+Amazon
+Ceneo
+# Dostawa
+InPost
+Paczkomat
+Orlen Paczka
+DPD
+DHL
+GLS
+Poczta Polska
+Nova Poshta
+Pyszne.pl
+Glovo
+Wolt
+Uber Eats
+Uber
+Bolt
+FreeNow
+# Telekomy
+Orange
+Play
+Plus
+T-Mobile
+Heyah
+Nju
+Virgin Mobile
+UPC
+Netia
+Vectra
+Kyivstar
+Vodafone
+lifecell
+# Transport i urzędy
+PKP Intercity
+Koleo
+jakdojade
+FlixBus
+Ryanair
+Wizz Air
+LOT
+Orlen
+ZTM
+MPK
+mObywatel
+ePUAP
+NFZ
+IKP
+ZUS
+PUE ZUS
+Diia
+# Aplikacje i media
+WhatsApp
+Messenger
+Telegram
+Viber
+Signal
+Instagram
+Facebook
+TikTok
+YouTube
+Snapchat
+Netflix
+Spotify
+Gmail
+Google
+Android
+iPhone
+Samsung
+Xiaomi
+Onet
+WP
+Interia
+TVN
+Polsat
+TVP
+Pudelek
+Booking
+Airbnb
+Otodom
+Pracuj.pl
+LinkedIn
+Teams
+Zoom
+Librus
+Vulcan

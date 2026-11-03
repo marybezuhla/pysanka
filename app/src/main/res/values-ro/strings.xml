@@ -1,0 +1,211 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Pysanka</string>
+
+    <string name="key__phone_pause">Pauză</string>
+    <string name="key__phone_wait">Așteaptă</string>
+
+    <string name="prefs__media__emoji_preferred_skin_tone">Nuanța preferată a pielii pentru emoji</string>
+
+    <string name="emoji__history__empty_message">Nu există emoji folosite recent. Când începeți să tastați emoji, acestea vor apărea automat aici.</string>
+    <string name="emoji__history__phone_locked_message">Pentru a vedea istoricul emoji, deblocați mai întâi dispozitivul.</string>
+    <string name="emoji__history__usage_tip">Sfat: atingeți lung un emoji din istoric pentru a-l fixa sau elimina!</string>
+    <string name="emoji__history__removal_success_message">{emoji} a fost eliminat din istoricul emoji</string>
+    <string name="emoji__history__pinned">Fixate</string>
+    <string name="emoji__history__recent">Recente</string>
+
+    <string name="quick_action__arrow_up">Săgeată sus</string>
+    <string name="quick_action__arrow_up__tooltip">Mută cursorul în sus</string>
+    <string name="quick_action__arrow_down">Săgeată jos</string>
+    <string name="quick_action__arrow_down__tooltip">Mută cursorul în jos</string>
+    <string name="quick_action__arrow_left">Săgeată stânga</string>
+    <string name="quick_action__arrow_left__tooltip">Mută cursorul la stânga</string>
+    <string name="quick_action__arrow_right">Săgeată dreapta</string>
+    <string name="quick_action__arrow_right__tooltip">Mută cursorul la dreapta</string>
+    <string name="quick_action__ime_hide_ui">Ascunde tastatura</string>
+    <string name="quick_action__ime_hide_ui__tooltip">Ascunde tastatura</string>
+    <string name="quick_action__clipboard_clear_primary_clip">Golește clipboardul</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Golește elementul curent din clipboard</string>
+    <string name="quick_action__clipboard_copy">Copiază</string>
+    <string name="quick_action__clipboard_copy__tooltip">Copiază în clipboard</string>
+    <string name="quick_action__clipboard_cut">Decupează</string>
+    <string name="quick_action__clipboard_cut__tooltip">Decupează în clipboard</string>
+    <string name="quick_action__clipboard_paste">Lipește</string>
+    <string name="quick_action__clipboard_paste__tooltip">Lipește din clipboard</string>
+    <string name="quick_action__clipboard_select_all">Selectează tot</string>
+    <string name="quick_action__clipboard_select_all__tooltip">Selectează tot textul</string>
+    <string name="quick_action__forward_delete">Șterge înainte</string>
+    <string name="quick_action__ime_ui_mode_clipboard">Clipboard</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Deschide istoricul clipboardului</string>
+    <string name="quick_action__ime_ui_mode_media">Emoji</string>
+    <string name="quick_action__ime_ui_mode_media__tooltip">Deschide panoul emoji</string>
+    <string name="quick_action__language_switch">Schimbă limba</string>
+    <string name="quick_action__language_switch__tooltip">Trece la altă limbă</string>
+    <string name="quick_action__settings">Setări</string>
+    <string name="quick_action__settings__tooltip">Deschide setările</string>
+    <string name="quick_action__undo">Anulează</string>
+    <string name="quick_action__undo__tooltip">Anulează ultima introducere</string>
+    <string name="quick_action__redo">Refă</string>
+    <string name="quick_action__redo__tooltip">Refă ultima introducere</string>
+    <string name="quick_action__toggle_actions_overflow">Mai multe</string>
+    <string name="quick_action__toggle_actions_overflow__tooltip">Afișează sau ascunde acțiunile suplimentare</string>
+    <string name="quick_action__toggle_incognito_mode">Incognito</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Activează sau dezactivează modul incognito</string>
+    <string name="quick_action__toggle_autocorrect">Corectare</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Activează sau dezactivează corectarea automată</string>
+    <string name="quick_action__voice_input">Dictare</string>
+    <string name="quick_action__voice_input__tooltip">Dictați (recunoaștere pe telefon)</string>
+    <string name="quick_action__floating_window_mode">Flotantă</string>
+    <string name="quick_action__floating_window_mode__tooltip">Activează sau dezactivează tastatura flotantă</string>
+    <string name="quick_action__one_handed_mode">O mână</string>
+    <string name="quick_action__one_handed_mode__tooltip">Activează sau dezactivează modul cu o mână</string>
+    <string name="quick_action__resize_mode">Dimensiune</string>
+    <string name="quick_action__resize_mode__tooltip">Activează sau dezactivează redimensionarea</string>
+    <string name="quick_action__drag_marker">Marcaj de tragere</string>
+    <string name="quick_action__drag_marker__tooltip">Poziția curentă a marcajului de tragere</string>
+    <string name="quick_action__noop">Nimic</string>
+    <string name="quick_action__noop__tooltip">Nicio acțiune</string>
+    <string name="quick_actions_overflow__customize_actions_button">Reordonați acțiunile</string>
+    <string name="quick_actions_editor__header">Ordinea acțiunilor</string>
+    <string name="quick_actions_editor__subheader_sticky_action">Acțiune fixă ({n})</string>
+    <string name="quick_actions_editor__subheader_dynamic_actions">Acțiuni dinamice ({n})</string>
+    <string name="quick_actions_editor__subheader_hidden_actions">Acțiuni ascunse ({n})</string>
+    <string name="select_subtype_panel__header">Alegeți limba</string>
+
+    <string name="incognito_mode__toast_after_enabled">Modul incognito este activat\n\n{app_name} nu va învăța cuvinte din ce tastați cât timp acest mod este activ</string>
+    <string name="incognito_mode__toast_after_disabled">Modul incognito este dezactivat</string>
+
+    <string name="settings__title">Setări</string>
+    <string name="settings__preview_keyboard">Încercați tastatura aici</string>
+
+    <string name="settings__home__ime_not_enabled">Pysanka nu este activată în sistem, așa că nu apare printre metodele de introducere. Atingeți aici pentru a remedia.</string>
+    <string name="settings__home__ime_not_selected">Pysanka nu este selectată ca tastatură prestabilită. Atingeți aici pentru a remedia.</string>
+
+    <string name="about__title">Despre</string>
+
+    <string name="about__version__title">Versiune</string>
+    <string name="about__version_copied__title">Versiunea a fost copiată în clipboard</string>
+    <string name="about__changelog__title">Istoricul modificărilor</string>
+    <string name="about__changelog__summary">Ce este nou</string>
+    <string name="about__repository__title">Depozit de cod (GitHub)</string>
+    <string name="about__repository__summary">Cod sursă, discuții, probleme raportate și informații</string>
+    <string name="about__privacy_policy__title">Politica de confidențialitate</string>
+    <string name="about__privacy_policy__summary">Politica de confidențialitate a acestui proiect</string>
+    <string name="about__project_license__title">Licența proiectului</string>
+    <string name="about__third_party_licenses__title">Licențe terță parte</string>
+    <string name="about__third_party_licenses__summary">Licențele bibliotecilor terță parte incluse în aplicație</string>
+
+    <string name="setup__footer__privacy_policy">Politica de confidențialitate</string>
+    <string name="setup__footer__repository">Cod sursă</string>
+
+    <string name="setup__enable_ime__title">Activați {app_name}</string>
+    <string name="setup__enable_ime__open_settings_btn">Deschideți setările sistemului</string>
+
+    <string name="setup__select_ime__title">Selectați {app_name}</string>
+    <string name="setup__select_ime__description">{app_name} este activată. Pentru a o folosi, alegeți-o din lista de tastaturi.</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Schimbați tastatura</string>
+
+    <string name="setup__finish_up__finish_btn">Deschideți setările</string>
+
+    <string name="crash_dialog__title">Raport de eroare Pysanka</string>
+    <string name="crash_dialog__description">Ne pare rău, Pysanka s-a oprit din cauza unei erori neașteptate.</string>
+    <string name="crash_dialog__report_instructions">Dacă doriți să raportați eroarea, verificați mai întâi pe GitHub, la Issues, dacă nu a fost deja raportată.\nDacă nu, copiați jurnalul erorii, deschideți un issue nou, descrieți ce făceați înainte de eroare și lipiți jurnalul la sfârșit. Vă mulțumim, astfel Pysanka devine mai stabilă!</string>
+    <string name="crash_dialog__copy_to_clipboard">Copiați în clipboardul sistemului</string>
+    <string name="crash_dialog__copy_to_clipboard_success">Copiat în clipboardul sistemului</string>
+    <string name="crash_dialog__copy_to_clipboard_failure">Nu se poate copia în clipboardul sistemului: managerul de clipboard nu a fost găsit</string>
+    <string name="crash_dialog__open_issue_tracker">Deschideți lista de probleme (github.com)</string>
+    <string name="crash_dialog__close">Închideți</string>
+    <string name="crash_notification_channel__title">Rapoarte de eroare Pysanka</string>
+    <string name="crash_once_notification__title">Pysanka s-a oprit…</string>
+    <string name="crash_once_notification__body">Atingeți pentru detaliile erorii</string>
+    <string name="crash_multiple_notification__title">Pysanka se oprește în mod repetat…</string>
+    <string name="crash_multiple_notification__body">Revenim la tastatura anterioară pentru a opri opririle repetate. Atingeți pentru detaliile erorii</string>
+
+    <string name="clipboard__header_title">Clipboard</string>
+    <string name="clipboard__disabled__title">Istoricul clipboardului este dezactivat</string>
+    <string name="clipboard__disabled__message">Istoricul clipboardului din {app_name} păstrează textele și imaginile copiate, ca să le folosiți rapid din nou. Puteți fixa elemente, configura ștergerea automată și stabili un număr maxim de elemente.</string>
+    <string name="clipboard__disabled__enable_button">Activați istoricul clipboardului</string>
+    <string name="clipboard__empty__title">Clipboardul este gol</string>
+    <string name="clipboard__empty__message">Textele și imaginile pe care le copiați vor apărea aici.</string>
+    <string name="clipboard__locked__title">Clipboardul este blocat</string>
+    <string name="clipboard__locked__message">Pentru a vedea istoricul clipboardului, deblocați mai întâi dispozitivul.</string>
+    <string name="clipboard__group_pinned">Fixate</string>
+    <string name="clipboard__group_recent">Recente</string>
+    <string name="clipboard__group_other">Altele</string>
+    <string name="clipboard__item_description_email">E-mail</string>
+    <string name="clipboard__item_description_url">URL</string>
+    <string name="clipboard__item_description_phone">Telefon</string>
+    <string name="clip__unpin_item">Anulați fixarea</string>
+    <string name="clip__pin_item">Fixați</string>
+    <string name="clip__delete_item">Ștergeți</string>
+    <string name="clip__paste_item">Lipiți</string>
+    <string name="clipboard__cleared_primary_clip">Clipboardul a fost golit</string>
+    <string name="clipboard__cleared_history">Istoricul a fost șters</string>
+    <string name="clipboard__confirm_clear_unfiltered_history__message">Sigur doriți să ștergeți tot istoricul clipboardului? Vor fi șterse toate elementele, cu excepția celor fixate.</string>
+    <string name="clipboard__confirm_clear_filtered_history__message">Sigur doriți să ștergeți istoricul clipboardului? Vor fi șterse toate elementele filtrate acum, cu excepția celor fixate.</string>
+
+    <string name="action__cancel">Anulați</string>
+    <string name="action__default">Prestabilit</string>
+    <string name="action__delete">Ștergeți</string>
+    <string name="action__delete_confirm_title">Confirmați ștergerea</string>
+    <string name="action__delete_confirm_message">Sigur doriți să ștergeți „{name}”? Acțiunea nu poate fi anulată.</string>
+    <string name="action__reset">Resetați</string>
+    <string name="action__discard">Renunțați</string>
+    <string name="action__discard_confirm_title">Modificări nesalvate</string>
+    <string name="action__discard_confirm_message">Sigur doriți să renunțați la modificările nesalvate? Acțiunea nu poate fi anulată.</string>
+    <string name="action__no">Nu</string>
+    <string name="action__ok">OK</string>
+    <string name="action__save">Salvați</string>
+    <string name="action__yes">Da</string>
+
+    <string name="general__no_browser_app_found_for_url">Nu există niciun browser care să deschidă adresa {url}</string>
+
+    <string name="enum__emoji_skin_tone__default">{emoji} Nuanță prestabilită</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone">{emoji} Nuanță deschisă</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone">{emoji} Nuanță medie-deschisă</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone">{emoji} Nuanță medie</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone">{emoji} Nuanță medie-închisă</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone">{emoji} Nuanță închisă</string>
+
+    <string name="enum__incognito_mode__force_off">Mereu dezactivat</string>
+    <string name="enum__incognito_mode__force_off__description">Modul incognito va fi mereu dezactivat, indiferent de opțiunile transmise de aplicație. Acțiunea rapidă incognito din Smartbar nu va fi disponibilă.</string>
+    <string name="enum__incognito_mode__force_on">Mereu activat</string>
+    <string name="enum__incognito_mode__force_on__description">Modul incognito va fi mereu activat, indiferent de opțiunile transmise de aplicație. Acțiunea rapidă incognito din Smartbar nu va fi disponibilă.</string>
+    <string name="enum__incognito_mode__dynamic_on_off">Automat (după câmp) sau manual</string>
+    <string name="enum__incognito_mode__dynamic_on_off__description">Opțiunea recomandată. Modul incognito se activează sau se dezactivează automat după opțiunile transmise de aplicație sau manual, din acțiunea rapidă incognito din Smartbar.</string>
+
+    <string name="enum__swipe_action__no_action">Nicio acțiune</string>
+    <string name="enum__swipe_action__cycle_to_previous_keyboard_mode">Modul anterior al tastaturii</string>
+    <string name="enum__swipe_action__cycle_to_next_keyboard_mode">Modul următor al tastaturii</string>
+    <string name="enum__swipe_action__delete_characters_precisely">Șterge caractere precis</string>
+    <string name="enum__swipe_action__delete_word">Șterge cuvântul dinaintea cursorului</string>
+    <string name="enum__swipe_action__delete_words_precisely">Șterge cuvinte precis</string>
+    <string name="enum__swipe_action__hide_keyboard">Ascunde tastatura</string>
+    <string name="enum__swipe_action__insert_space">Inserează un spațiu</string>
+    <string name="enum__swipe_action__move_cursor_up">Mută cursorul în sus</string>
+    <string name="enum__swipe_action__move_cursor_down">Mută cursorul în jos</string>
+    <string name="enum__swipe_action__move_cursor_left">Mută cursorul la stânga</string>
+    <string name="enum__swipe_action__move_cursor_right">Mută cursorul la dreapta</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line">Mută cursorul la începutul rândului</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line">Mută cursorul la sfârșitul rândului</string>
+    <string name="enum__swipe_action__move_cursor_start_of_page">Mută cursorul la începutul textului</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page">Mută cursorul la sfârșitul textului</string>
+    <string name="enum__swipe_action__switch_to_clipboard_context">Deschide clipboardul/istoricul</string>
+    <string name="enum__swipe_action__switch_to_media_context">Deschide panoul emoji</string>
+    <string name="enum__swipe_action__shift">Shift</string>
+    <string name="enum__swipe_action__redo">Refă</string>
+    <string name="enum__swipe_action__undo">Anulează</string>
+    <string name="enum__swipe_action__select_characters_precisely">Selectează caractere precis</string>
+    <string name="enum__swipe_action__select_words_precisely">Selectează cuvinte precis</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Afișează lista de limbi</string>
+    <string name="enum__swipe_action__show_input_method_picker">Afișează lista de tastaturi</string>
+    <string name="enum__swipe_action__switch_to_prev_keyboard">Trece la tastatura anterioară</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype">Trece la limba anterioară</string>
+    <string name="enum__swipe_action__switch_to_next_subtype">Trece la limba următoare</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility">Afișează sau ascunde Smartbar</string>
+
+    <string name="enum__theme_mode__always_day">Mereu tema de zi</string>
+    <string name="enum__theme_mode__always_night">Mereu tema de noapte</string>
+    <string name="enum__theme_mode__follow_system">Ca sistemul</string>
+    <string name="enum__theme_mode__follow_time">După ora din zi</string>
+
+</resources>

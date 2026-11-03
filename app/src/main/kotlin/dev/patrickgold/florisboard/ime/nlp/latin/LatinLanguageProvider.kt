@@ -62,6 +62,8 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
 
     private suspend fun suggester(subtype: Subtype): WordSuggester? {
         val lang = subtype.primaryLocale.language
+        // Pysanka: the languages' lists of swear words and little words (assets)
+        ua.pysanka.typing.LanguageExtras.load(appContext)
         return suggesters.withLock { map ->
             // A language without a list is remembered as such (not looked for on every key)
             if (lang in map) return@withLock map[lang]
@@ -73,7 +75,7 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
                 } else {
                     emptyMap()
                 }
-                WordSuggester(words, KeyNeighbours.forLanguage(lang))
+                WordSuggester(words, KeyNeighbours.forLanguage(lang), lang)
             }.getOrNull().also { map[lang] = it }
         }
     }

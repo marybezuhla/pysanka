@@ -20,7 +20,12 @@ package ua.pysanka.typing
  *
  * The case of what was typed is kept («Прив» → «Привіт», «ПРИВ» → «ПРИВІТ»).
  */
-class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, String> = emptyMap()) {
+class WordSuggester(
+    words: Map<String, Int>,
+    private val neighbours: Map<Char, String> = emptyMap(),
+    // Pysanka: whose swear words are kept from the suggestions (see Offensive); null: any language's
+    private val language: String? = null,
+) {
     data class Suggestion(val word: String, val autoCorrect: Boolean)
 
     companion object {
@@ -66,10 +71,55 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
     private val sorted: Array<String> = freq.keys.sorted().toTypedArray()
     private val alphabet: String = freq.keys.flatMap { it.asIterable() }.toSortedSet().joinToString("")
 
+    /**
+     * Pysanka: words with Latin letters with marks (ą, ő, ș, ñ, ü, é…, and ł, ß), by how they are
+     * often typed without them («dziekuje» → «dziękuję», «fur» → «für»), sorted for the beginning.
+     * Empty for Cyrillic lists (й, ї, ё are letters of their own there).
+     */
+    private val bareKeys: Array<Pair<String, String>> by lazy {
+        freq.keys.mapNotNull { k -> bare(k).takeIf { it != k }?.let { it to k } }.sortedBy { it.first }.toTypedArray()
+    }
+
     /** The most frequent words for each beginning of one or two letters (worked out once). */
     private val shortPrefixes = java.util.concurrent.ConcurrentHashMap<String, List<String>>()
 
     private fun norm(word: String) = PersonalWords.key(word)
+
+    /** Pysanka: a word as typed without the marks of Latin letters (see [bareKeys]). */
+    private fun bare(word: String): String {
+        if (word.all { it < '\u00C0' }) return word
+        val sb = StringBuilder()
+        for (ch in word) {
+            when (ch) {
+                'ł' -> sb.append('l'); 'ø' -> sb.append('o'); 'đ' -> sb.append('d')
+                'ß' -> sb.append("ss"); 'æ' -> sb.append("ae"); 'œ' -> sb.append("oe")
+                else -> {
+                    val d = java.text.Normalizer.normalize(ch.toString(), java.text.Normalizer.Form.NFD)
+                    if (d.length > 1 && d[0] in 'a'..'z') sb.append(d[0]) else sb.append(ch)
+                }
+            }
+        }
+        return sb.toString()
+    }
+
+    /** Pysanka: list words that, without their marks, begin with [prefix] (typed without marks). */
+    private fun withBarePrefix(prefix: String, limit: Int): List<String> {
+        val keys = bareKeys
+        if (keys.isEmpty()) return emptyList()
+        var lo = 0
+        var hi = keys.size
+        while (lo < hi) {
+            val mid = (lo + hi) ushr 1
+            if (keys[mid].first < prefix) lo = mid + 1 else hi = mid
+        }
+        val out = ArrayList<String>()
+        var i = lo
+        while (i < keys.size && keys[i].first.startsWith(prefix)) {
+            out += keys[i].second
+            i++
+        }
+        return out.sortedByDescending { freq[it] ?: 0 }.take(limit)
+    }
 
     /** Pysanka: a word with «ё» written as people often type it («ещё» → «еще»), to show one of the two. */
     private fun yo(key: String) = key.replace('ё', 'е')
@@ -126,13 +176,15 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
         }
         // Completions: shorter words that are already complete rank a little higher
         val ownStarts = own?.withPrefix(lower, 50).orEmpty()
-        for (cand in withPrefix(lower) + ownStarts) {
+        // Pysanka: typed without the marks of its letters («dziekuj» → «dziękuję»): as if typed with them
+        val unmarked = if (bare(lower) == lower) withBarePrefix(lower, 50) else emptyList()
+        for (cand in withPrefix(lower) + ownStarts + unmarked) {
             val c = f(cand).takeIf { it > 0 }?.toDouble() ?: continue
             val extra = cand.length - lower.length
             scored.merge(cand, c * (if (extra == 0) 1.2 else 1.0 / (1 + extra * 0.05)), ::maxOf)
         }
         if (known) scored[lower] = maxOf(scored[lower] ?: 0.0, f(lower) * 1.5)
-        if (blockOffensive) scored.keys.removeAll { it != lower && Offensive.isOffensive(it) }
+        if (blockOffensive) scored.keys.removeAll { it != lower && Offensive.isOffensive(it, language) }
         // One spelling of a word written with «ё» or «е» («ещё», «еще»): the likelier one
         val ranked = scored.entries.sortedByDescending { it.value }.distinctBy { yo(it.key) }.take(max)
         val best = ranked.firstOrNull()
@@ -142,7 +194,8 @@ class WordSuggester(words: Map<String, Int>, private val neighbours: Map<Char, S
             lower !in rejected && best.key in freq && f(best.key) >= AUTO_MIN_FREQ &&
             (!typed.first().isUpperCase() || f(best.key) >= AUTO_CAPITAL_MIN_FREQ) &&
             best.key.length in (lower.length - 1)..(lower.length + 1) &&
-            isOneEditAway(lower, best.key) && best.value >= second * AUTO_MARGIN
+            // One slip, or only the marks of its letters left out («dziekuje» → «dziękuję»)
+            (isOneEditAway(lower, best.key) || bare(best.key) == lower) && best.value >= second * AUTO_MARGIN
         val autoWord = best?.key
         // What usually comes after the previous word (a pair used [PersonalWords.PAIR_KNOWN] times) ranks higher
         val order = if (own != null && previous != null) {

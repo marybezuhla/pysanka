@@ -166,7 +166,7 @@ android {
         noCompress += "bin"
         // Pysanka: the interface is Ukrainian and English only (FlorisBoard's other translations,
         // Russian among them, stay out of the APK); keyboard languages are not affected
-        localeFilters += listOf("en", "uk")
+        localeFilters += listOf("en", "uk", "be", "pl", "sk", "hu", "ro", "de", "fr", "es", "pt")
     }
 
     // Pysanka: LiteRT-LM loads its native parts from files (as in Tarilka)

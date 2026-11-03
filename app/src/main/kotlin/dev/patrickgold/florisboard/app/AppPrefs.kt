@@ -852,5 +852,5 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 }
 
 /** Pysanka: the settings languages offered ("auto": as the phone). */
-val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
+val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en", "be", "pl", "sk", "hu", "ro", "de", "fr", "es", "pt")
 

@@ -1,18 +1,31 @@
 package ua.pysanka.typing
 
 /**
- * Pysanka: which letters sit next to each other on the layouts Pysanka sets up (Ukrainian and
- * Russian ЙЦУКЕН, English QWERTY), so a slip onto a neighbouring key counts as a likelier typing error.
+ * Pysanka: which letters sit next to each other on the layouts Pysanka sets up for the languages
+ * with a word list (ЙЦУКЕН, QWERTY, QWERTZ, AZERTY and their national variants), so a slip onto a
+ * neighbouring key counts as a likelier typing error.
  */
 object KeyNeighbours {
     private val UK = listOf("йцукенгшщзхї", "фівапролджє", "ячсмитьбю")
     private val EN = listOf("qwertyuiop", "asdfghjkl", "zxcvbnm")
     private val RU = listOf("йцукенгшщзх", "фывапролджэ", "ячсмитьбю")
+    private val BE = listOf("йцукенгшўзх", "фывапролджэ", "ячсмітьбю")
+    private val QWERTZ = listOf("qwertzuiop", "asdfghjkl", "yxcvbnm")
+    private val AZERTY = listOf("azertyuiop", "qsdfghjklm", "wxcvbn")
+    private val HU = listOf("qwertzuiopö", "asdfghjkléá", "yxcvbnmü")
+    private val ES = listOf("qwertyuiop", "asdfghjklñ", "zxcvbnm")
 
     fun forLanguage(language: String): Map<Char, String> = when (language) {
         "uk" -> build(UK)
         "en" -> build(EN)
         "ru" -> build(RU)
+        "be" -> build(BE)
+        // QWERTY with letters with marks in the popups
+        "pl", "ro", "pt" -> build(EN)
+        "es" -> build(ES)
+        "de", "sk" -> build(QWERTZ)
+        "hu" -> build(HU)
+        "fr" -> build(AZERTY)
         else -> emptyMap()
     }
 

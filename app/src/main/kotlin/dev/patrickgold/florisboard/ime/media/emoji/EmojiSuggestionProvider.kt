@@ -160,7 +160,7 @@ private fun String.containsWeighted(other: String, ignoreCase: Boolean = false):
  */
 internal fun pysankaEmojiFor(emojis: List<Emoji>, query: String, max: Int): List<Emoji> {
     val q = query.lowercase()
-    if (q in PYSANKA_EMOJI_STOP_WORDS) return emptyList()
+    if (q in PYSANKA_EMOJI_STOP_WORDS || q in ua.pysanka.typing.LanguageExtras.stop) return emptyList()
     fun score(e: Emoji): Int {
         val name = e.name.lowercase()
         val keywords = e.keywords.map { it.lowercase() }

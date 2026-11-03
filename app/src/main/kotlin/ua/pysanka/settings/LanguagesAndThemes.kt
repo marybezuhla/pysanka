@@ -152,7 +152,7 @@ fun ThemeChoices() {
     }
 }
 
-/** The language of these settings: as the phone, Ukrainian or English (each named in itself). */
+/** The language of these settings: as the phone, or one of Pysanka's (each named in itself). */
 @Composable
 private fun SettingsLanguage() {
     val prefs by FlorisPreferenceStore
@@ -162,6 +162,15 @@ private fun SettingsLanguage() {
         "auto" to stringRes(R.string.pysanka__settings__ui_language_auto),
         "uk" to "Українська",
         "en" to "English",
+        "be" to "Беларуская",
+        "pl" to "Polski",
+        "sk" to "Slovenčina",
+        "hu" to "Magyar",
+        "ro" to "Română",
+        "de" to "Deutsch",
+        "fr" to "Français",
+        "es" to "Español",
+        "pt" to "Português",
     )
     ChoiceRow(
         stringRes(R.string.pysanka__settings__ui_language),

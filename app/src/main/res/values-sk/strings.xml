@@ -1,0 +1,211 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Pysanka</string>
+
+    <string name="key__phone_pause">Pauza</string>
+    <string name="key__phone_wait">Čakať</string>
+
+    <string name="prefs__media__emoji_preferred_skin_tone">Preferovaný odtieň pleti emodži</string>
+
+    <string name="emoji__history__empty_message">Zatiaľ ste nepoužili žiadne emodži. Keď ich začnete písať, automaticky sa tu zobrazia.</string>
+    <string name="emoji__history__phone_locked_message">Ak chcete zobraziť históriu emodži, najprv odomknite zariadenie.</string>
+    <string name="emoji__history__usage_tip">Tip: Dlhým stlačením emodži v histórii ho pripnete alebo odstránite!</string>
+    <string name="emoji__history__removal_success_message">{emoji} bolo odstránené z histórie emodži</string>
+    <string name="emoji__history__pinned">Pripnuté</string>
+    <string name="emoji__history__recent">Nedávne</string>
+
+    <string name="quick_action__arrow_up">Šípka hore</string>
+    <string name="quick_action__arrow_up__tooltip">Posunúť kurzor hore</string>
+    <string name="quick_action__arrow_down">Šípka dole</string>
+    <string name="quick_action__arrow_down__tooltip">Posunúť kurzor dole</string>
+    <string name="quick_action__arrow_left">Šípka doľava</string>
+    <string name="quick_action__arrow_left__tooltip">Posunúť kurzor doľava</string>
+    <string name="quick_action__arrow_right">Šípka doprava</string>
+    <string name="quick_action__arrow_right__tooltip">Posunúť kurzor doprava</string>
+    <string name="quick_action__ime_hide_ui">Skryť klávesnicu</string>
+    <string name="quick_action__ime_hide_ui__tooltip">Skryť klávesnicu</string>
+    <string name="quick_action__clipboard_clear_primary_clip">Vymazať schránku</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Vymazať aktuálny obsah schránky</string>
+    <string name="quick_action__clipboard_copy">Kopírovať</string>
+    <string name="quick_action__clipboard_copy__tooltip">Kopírovať do schránky</string>
+    <string name="quick_action__clipboard_cut">Vystrihnúť</string>
+    <string name="quick_action__clipboard_cut__tooltip">Vystrihnúť do schránky</string>
+    <string name="quick_action__clipboard_paste">Prilepiť</string>
+    <string name="quick_action__clipboard_paste__tooltip">Prilepiť zo schránky</string>
+    <string name="quick_action__clipboard_select_all">Vybrať všetko</string>
+    <string name="quick_action__clipboard_select_all__tooltip">Vybrať celý text</string>
+    <string name="quick_action__forward_delete">Zmazať vpred</string>
+    <string name="quick_action__ime_ui_mode_clipboard">Schránka</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Otvoriť históriu schránky</string>
+    <string name="quick_action__ime_ui_mode_media">Emodži</string>
+    <string name="quick_action__ime_ui_mode_media__tooltip">Otvoriť panel emodži</string>
+    <string name="quick_action__language_switch">Prepnúť jazyk</string>
+    <string name="quick_action__language_switch__tooltip">Prepnúť jazyk klávesnice</string>
+    <string name="quick_action__settings">Nastavenia</string>
+    <string name="quick_action__settings__tooltip">Otvoriť nastavenia</string>
+    <string name="quick_action__undo">Späť</string>
+    <string name="quick_action__undo__tooltip">Vrátiť posledný zápis</string>
+    <string name="quick_action__redo">Znova</string>
+    <string name="quick_action__redo__tooltip">Zopakovať posledný zápis</string>
+    <string name="quick_action__toggle_actions_overflow">Ďalšie akcie</string>
+    <string name="quick_action__toggle_actions_overflow__tooltip">Zobraziť alebo skryť ďalšie akcie</string>
+    <string name="quick_action__toggle_incognito_mode">Inkognito</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Zapnúť alebo vypnúť režim inkognito</string>
+    <string name="quick_action__toggle_autocorrect">Opravy</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Zapnúť alebo vypnúť automatické opravy</string>
+    <string name="quick_action__voice_input">Diktovanie</string>
+    <string name="quick_action__voice_input__tooltip">Diktovať (rozpoznáva sa v telefóne)</string>
+    <string name="quick_action__floating_window_mode">Plávajúca</string>
+    <string name="quick_action__floating_window_mode__tooltip">Zapnúť alebo vypnúť plávajúcu klávesnicu</string>
+    <string name="quick_action__one_handed_mode">Jedna ruka</string>
+    <string name="quick_action__one_handed_mode__tooltip">Zapnúť alebo vypnúť režim jednej ruky</string>
+    <string name="quick_action__resize_mode">Veľkosť</string>
+    <string name="quick_action__resize_mode__tooltip">Zapnúť alebo vypnúť zmenu veľkosti</string>
+    <string name="quick_action__drag_marker">Značka presunu</string>
+    <string name="quick_action__drag_marker__tooltip">Aktuálna poloha značky presunu</string>
+    <string name="quick_action__noop">Žiadna</string>
+    <string name="quick_action__noop__tooltip">Bez akcie</string>
+    <string name="quick_actions_overflow__customize_actions_button">Zmeniť poradie akcií</string>
+    <string name="quick_actions_editor__header">Poradie akcií</string>
+    <string name="quick_actions_editor__subheader_sticky_action">Pevná akcia ({n})</string>
+    <string name="quick_actions_editor__subheader_dynamic_actions">Dynamické akcie ({n})</string>
+    <string name="quick_actions_editor__subheader_hidden_actions">Skryté akcie ({n})</string>
+    <string name="select_subtype_panel__header">Vyberte jazyk</string>
+
+    <string name="incognito_mode__toast_after_enabled">Režim inkognito je zapnutý\n\n{app_name} sa počas neho neučí slová z toho, čo píšete</string>
+    <string name="incognito_mode__toast_after_disabled">Režim inkognito je vypnutý</string>
+
+    <string name="settings__title">Nastavenia</string>
+    <string name="settings__preview_keyboard">Vyskúšajte si nastavenia</string>
+
+    <string name="settings__home__ime_not_enabled">Pysanka nie je zapnutá v systéme, a preto ju nemožno vybrať ako klávesnicu. Klepnutím to opravíte.</string>
+    <string name="settings__home__ime_not_selected">Pysanka nie je vybratá ako predvolená klávesnica. Klepnutím to opravíte.</string>
+
+    <string name="about__title">Informácie</string>
+
+    <string name="about__version__title">Verzia</string>
+    <string name="about__version_copied__title">Verzia bola skopírovaná do schránky</string>
+    <string name="about__changelog__title">Zoznam zmien</string>
+    <string name="about__changelog__summary">Čo je nové</string>
+    <string name="about__repository__title">Repozitár (GitHub)</string>
+    <string name="about__repository__summary">Zdrojový kód, diskusie, hlásenia chýb a informácie</string>
+    <string name="about__privacy_policy__title">Zásady ochrany súkromia</string>
+    <string name="about__privacy_policy__summary">Zásady ochrany súkromia tohto projektu</string>
+    <string name="about__project_license__title">Licencia projektu</string>
+    <string name="about__third_party_licenses__title">Licencie tretích strán</string>
+    <string name="about__third_party_licenses__summary">Licencie knižníc tretích strán použitých v aplikácii</string>
+
+    <string name="setup__footer__privacy_policy">Zásady ochrany súkromia</string>
+    <string name="setup__footer__repository">Zdrojový kód</string>
+
+    <string name="setup__enable_ime__title">Zapnite {app_name}</string>
+    <string name="setup__enable_ime__open_settings_btn">Otvoriť nastavenia systému</string>
+
+    <string name="setup__select_ime__title">Vyberte {app_name}</string>
+    <string name="setup__select_ime__description">{app_name} je zapnutá. Ak ju chcete používať, vyberte ju v zozname klávesníc.</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Prepnúť klávesnicu</string>
+
+    <string name="setup__finish_up__finish_btn">Otvoriť nastavenia</string>
+
+    <string name="crash_dialog__title">Hlásenie o chybe Pysanky</string>
+    <string name="crash_dialog__description">Ospravedlňujeme sa, Pysanka spadla pre neočakávanú chybu.</string>
+    <string name="crash_dialog__report_instructions">Ak chcete chybu nahlásiť, najprv v časti Issues na GitHube skontrolujte, či už nebola nahlásená.\nAk nie, skopírujte záznam o chybe, otvorte nové hlásenie, opíšte, čo ste robili pred pádom, a na koniec vložte záznam. Ďakujeme, pomáhate tým, aby bola Pysanka stabilnejšia!</string>
+    <string name="crash_dialog__copy_to_clipboard">Kopírovať do systémovej schránky</string>
+    <string name="crash_dialog__copy_to_clipboard_success">Skopírované do systémovej schránky</string>
+    <string name="crash_dialog__copy_to_clipboard_failure">Nedá sa kopírovať do systémovej schránky: správca schránky sa nenašiel</string>
+    <string name="crash_dialog__open_issue_tracker">Otvoriť hlásenia chýb (github.com)</string>
+    <string name="crash_dialog__close">Zavrieť</string>
+    <string name="crash_notification_channel__title">Hlásenia o chybách Pysanky</string>
+    <string name="crash_once_notification__title">Pysanka prestala fungovať…</string>
+    <string name="crash_once_notification__body">Klepnutím zobrazíte podrobnosti o chybe</string>
+    <string name="crash_multiple_notification__title">Pysanka zrejme opakovane padá…</string>
+    <string name="crash_multiple_notification__body">Prepíname na predchádzajúcu klávesnicu, aby sa pády neopakovali donekonečna. Klepnutím zobrazíte podrobnosti o chybe</string>
+
+    <string name="clipboard__header_title">Schránka</string>
+    <string name="clipboard__disabled__title">História schránky je vypnutá</string>
+    <string name="clipboard__disabled__message">História schránky v aplikácii {app_name} uchováva text a obrázky, ktoré skopírujete, aby ste ich mohli rýchlo znova použiť. Položky môžete pripnúť, nastaviť automatické čistenie aj maximálny počet položiek.</string>
+    <string name="clipboard__disabled__enable_button">Zapnúť históriu schránky</string>
+    <string name="clipboard__empty__title">Schránka je prázdna</string>
+    <string name="clipboard__empty__message">Keď skopírujete text alebo obrázky, zobrazia sa tu.</string>
+    <string name="clipboard__locked__title">Schránka je zamknutá</string>
+    <string name="clipboard__locked__message">Ak chcete zobraziť históriu schránky, najprv odomknite zariadenie.</string>
+    <string name="clipboard__group_pinned">Pripnuté</string>
+    <string name="clipboard__group_recent">Nedávne</string>
+    <string name="clipboard__group_other">Ostatné</string>
+    <string name="clipboard__item_description_email">E-mail</string>
+    <string name="clipboard__item_description_url">Odkaz</string>
+    <string name="clipboard__item_description_phone">Telefón</string>
+    <string name="clip__unpin_item">Odopnúť</string>
+    <string name="clip__pin_item">Pripnúť</string>
+    <string name="clip__delete_item">Odstrániť</string>
+    <string name="clip__paste_item">Prilepiť</string>
+    <string name="clipboard__cleared_primary_clip">Schránka bola vymazaná</string>
+    <string name="clipboard__cleared_history">História bola vymazaná</string>
+    <string name="clipboard__confirm_clear_unfiltered_history__message">Naozaj chcete vymazať celú históriu schránky? Odstránia sa všetky položky okrem pripnutých.</string>
+    <string name="clipboard__confirm_clear_filtered_history__message">Naozaj chcete vymazať históriu schránky? Odstránia sa všetky práve vyfiltrované položky okrem pripnutých.</string>
+
+    <string name="action__cancel">Zrušiť</string>
+    <string name="action__default">Predvolené</string>
+    <string name="action__delete">Odstrániť</string>
+    <string name="action__delete_confirm_title">Potvrdiť odstránenie</string>
+    <string name="action__delete_confirm_message">Naozaj chcete odstrániť „{name}“? Túto akciu nie je možné vrátiť späť.</string>
+    <string name="action__reset">Obnoviť</string>
+    <string name="action__discard">Zahodiť</string>
+    <string name="action__discard_confirm_title">Neuložené zmeny</string>
+    <string name="action__discard_confirm_message">Naozaj chcete zahodiť neuložené zmeny? Túto akciu nie je možné vrátiť späť.</string>
+    <string name="action__no">Nie</string>
+    <string name="action__ok">OK</string>
+    <string name="action__save">Uložiť</string>
+    <string name="action__yes">Áno</string>
+
+    <string name="general__no_browser_app_found_for_url">Nenašiel sa prehliadač, ktorý by otvoril odkaz {url}</string>
+
+    <string name="enum__emoji_skin_tone__default">{emoji} Predvolený odtieň pleti</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone">{emoji} Svetlý odtieň pleti</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone">{emoji} Stredne svetlý odtieň pleti</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone">{emoji} Stredný odtieň pleti</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone">{emoji} Stredne tmavý odtieň pleti</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone">{emoji} Tmavý odtieň pleti</string>
+
+    <string name="enum__incognito_mode__force_off">Vždy vypnutý</string>
+    <string name="enum__incognito_mode__force_off__description">Režim inkognito bude vždy vypnutý bez ohľadu na nastavenia aplikácie, do ktorej píšete. Rýchla akcia Inkognito na lište Smartbar nebude pri tejto možnosti dostupná.</string>
+    <string name="enum__incognito_mode__force_on">Vždy zapnutý</string>
+    <string name="enum__incognito_mode__force_on__description">Režim inkognito bude vždy zapnutý bez ohľadu na nastavenia aplikácie, do ktorej píšete. Rýchla akcia Inkognito na lište Smartbar nebude pri tejto možnosti dostupná.</string>
+    <string name="enum__incognito_mode__dynamic_on_off">Automaticky (podľa poľa) alebo ručne</string>
+    <string name="enum__incognito_mode__dynamic_on_off__description">Odporúčaná možnosť. Režim inkognito sa zapne alebo vypne podľa nastavení aplikácie, do ktorej píšete, alebo ho prepnete ručne rýchlou akciou Inkognito na lište Smartbar.</string>
+
+    <string name="enum__swipe_action__no_action">Žiadna akcia</string>
+    <string name="enum__swipe_action__cycle_to_previous_keyboard_mode">Predchádzajúci režim klávesnice</string>
+    <string name="enum__swipe_action__cycle_to_next_keyboard_mode">Ďalší režim klávesnice</string>
+    <string name="enum__swipe_action__delete_characters_precisely">Presne mazať znaky</string>
+    <string name="enum__swipe_action__delete_word">Zmazať slovo pred kurzorom</string>
+    <string name="enum__swipe_action__delete_words_precisely">Presne mazať slová</string>
+    <string name="enum__swipe_action__hide_keyboard">Skryť klávesnicu</string>
+    <string name="enum__swipe_action__insert_space">Vložiť medzeru</string>
+    <string name="enum__swipe_action__move_cursor_up">Posunúť kurzor hore</string>
+    <string name="enum__swipe_action__move_cursor_down">Posunúť kurzor dole</string>
+    <string name="enum__swipe_action__move_cursor_left">Posunúť kurzor doľava</string>
+    <string name="enum__swipe_action__move_cursor_right">Posunúť kurzor doprava</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line">Kurzor na začiatok riadka</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line">Kurzor na koniec riadka</string>
+    <string name="enum__swipe_action__move_cursor_start_of_page">Kurzor na začiatok textu</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page">Kurzor na koniec textu</string>
+    <string name="enum__swipe_action__switch_to_clipboard_context">Otvoriť históriu schránky</string>
+    <string name="enum__swipe_action__switch_to_media_context">Otvoriť panel emodži</string>
+    <string name="enum__swipe_action__shift">Shift</string>
+    <string name="enum__swipe_action__redo">Znova</string>
+    <string name="enum__swipe_action__undo">Späť</string>
+    <string name="enum__swipe_action__select_characters_precisely">Presne vyberať znaky</string>
+    <string name="enum__swipe_action__select_words_precisely">Presne vyberať slová</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Zobraziť výber jazyka</string>
+    <string name="enum__swipe_action__show_input_method_picker">Zobraziť výber klávesnice</string>
+    <string name="enum__swipe_action__switch_to_prev_keyboard">Prepnúť na predchádzajúcu klávesnicu</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype">Predchádzajúci jazyk</string>
+    <string name="enum__swipe_action__switch_to_next_subtype">Ďalší jazyk</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility">Zobraziť alebo skryť lištu Smartbar</string>
+
+    <string name="enum__theme_mode__always_day">Vždy denná téma</string>
+    <string name="enum__theme_mode__always_night">Vždy nočná téma</string>
+    <string name="enum__theme_mode__follow_system">Podľa systému</string>
+    <string name="enum__theme_mode__follow_time">Podľa dennej doby</string>
+
+</resources>

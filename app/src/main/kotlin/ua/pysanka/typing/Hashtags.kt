@@ -162,7 +162,7 @@ object Hashtags {
         for ((i, m) in WORD.findAll(text).withIndex()) {
             val w = m.value
             val key = PersonalWords.key(w)
-            if (key.length < 4 || key in STOP || key.any { it.isDigit() } || key in tagged) continue
+            if (key.length < 4 || key in STOP || key in LanguageExtras.stop || key.any { it.isDigit() } || key in tagged) continue
             val g = groups.getOrPut(stem(key)) { Group(first = i) }
             g.forms += w
             g.count++
