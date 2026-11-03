@@ -1,27 +1,34 @@
-**Писанка 0.23.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія перед 1.0.
+**Писанка 0.24.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія перед 1.0.
 
-- ✍️ **Новий свайп:** Писанка тепер стежить, чи рух проходить через літери слова по порядку і чи не відхиляється від його шляху, а ще враховує ваші звичні пари слів. На змодельованих рухах правильне слово першим у 90 % випадків, раніше 75 %.
-- 📚 **Словник знає повсякденні й цифрові слова,** яких бракувало: клавіатура, застосунок, налаштування, вкладка, доставка…
-- 🎯 **Точніший набір:** клавіатура вивчає, куди ви влучаєте в різних частинах екрана (краї, нижній ряд), і на початку слова зважає на ваші звичні пари слів.
-- 🔤 **Підказка замінює все слово,** навіть коли курсор стоїть посередині.
-- ✦ **ШІ на шматок тексту:** без виділення можна обрати речення, абзац або все поле (типово абзац).
-- ⌨️ **Фізична клавіатура** друкує мовою Писанки, а Ctrl+Пробіл чи Alt+Shift перемикає мову.
-- #️⃣ **Хештеги після «#»:** ваші, слова з допису й зі словника. Окремий перемикач у налаштуваннях емодзі.
-- 📱 **Розділена клавіатура** на планшетах і розкладних телефонах: дві половини під великі пальці (на звичайному телефоні за бажанням, «Завжди»).
-- Дрібні правки текстів (вітання, «Зробіть паузу на 2 секунди»).
+- ✍️ **Свайп розпізнає весь рух.** Раніше слово часто бралося з половини шляху («подивись» ставало «позбутися»). Тепер завжди з повного руху, а слова при швидких свайпах підряд ставляться в правильному порядку.
+- #️⃣ **Миттєві хештеги без ШІ:** одразу після «#» перша підказка дає до 4 хештегів із ключових слів допису («#клавіатура #свайп»), один дотик ставить усі. ШІ-дію «Хештеги» прибрано: вона була повільна й неточна.
+- 📏 **Висота клавіатури й відступи між клавішами** у «Вигляді»: висота 80–130 %, відступи «Звичайні» або «Просторі», коли клавіші стоять окремо.
+- 🗂 **Розділи налаштувань відкриваються по одному.**
+- 🙂 **Емодзі до слів точніші:** «мені» більше не дає 🤮, а на «дім» першим іде 🏠.
+- 👆 **«Забути мої дотики»** у «Наборі»: клавіатура заново вчиться, куди ви влучаєте.
+- 🔒 **Приватність:**
+  - хештеги вчаться за тими самими правилами, що й слова;
+  - текст із фото, відкритого з приватного поля, не потрапляє в історію буфера;
+  - ШІ з «Поділитися» завжди враховує «Заборонити знімки екрана».
+- ⌨️ **Фізична клавіатура:** англійська поверх української розкладки дає @ на Shift+2; пробіл вчить слова.
+- Виправлено:
+  - заміна слова посеред тексту могла стерти текст після нього;
+  - після Enter ще пропонувалися хештеги.
+- Тексти українською й англійською вичищено: друкарські помилки, кальки, однакові назви скрізь.
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
 
 ---
 
-**Pysanka 0.23.0**: a private keyboard for Android with no internet access. A test version before 1.0.
+**Pysanka 0.24.0**: a private keyboard for Android with no internet access. A test version before 1.0.
 
-- A new swipe decoder: it checks that the swipe passes the word's letters in order and does not stray from its path, and it knows your usual word pairs. On simulated swipes the right word comes first 90 % of the time, up from 75 %.
-- The dictionary knows everyday and digital words it lacked.
-- More accurate typing: the keyboard learns where you tap in different parts of the screen, and uses your usual word pairs at a word's start.
-- A suggestion replaces the whole word, even with the cursor in its middle.
-- AI on part of the text: with nothing selected, choose the sentence, the paragraph or the whole field (the paragraph at first).
-- A physical keyboard types in Pysanka's language; Ctrl+Space or Alt+Shift switches it.
-- Hashtags after «#»: yours, words from the post and from the dictionary; a separate toggle in the emoji settings.
-- A split keyboard on tablets and foldables (on a phone if you choose «Always»).
-- Small text fixes.
+- Swipe reads the whole path. Before, the word was often taken from half of it; now always from the full swipe, and quick swipes in a row come out in order.
+- Instant hashtags without AI: right after «#» the first suggestion is up to 4 hashtags from the post's key words; one tap puts them all. The slow, imprecise AI hashtag action is gone.
+- Keyboard height (80–130 %) and gaps between keys (usual or wide) in the Look settings.
+- Settings blocks open one at a time.
+- Better emoji for words.
+- «Forget my touches» resets the learned tap offset.
+- Privacy: hashtags are learned under the same rules as words; text from a photo opened in a private field stays out of the clipboard history; the AI from Share always respects «Block screenshots».
+- Physical keyboard: English over a Ukrainian system layout types US signs; Space learns words.
+- Fixed: replacing a word mid-text could delete text after it; hashtags were offered after Enter.
+- Ukrainian and English texts cleaned up.
