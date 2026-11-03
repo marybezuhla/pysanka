@@ -139,7 +139,10 @@ def main() -> None:
     def add(head: str, gloss: str, words: dict[str, list[str]]) -> None:
         # Only words people use (the keyboard's word list has them, or every part of an expression):
         # all of Wiktionary would make the app hundreds of megabytes bigger
-        words = {l: [clean(w) for w in ws if usable(clean(w)) and common(l, clean(w))] for l, ws in words.items()}
+        # A meaning with a Ukrainian word people use keeps its rarer words in the other languages
+        # («вишиванка» → "vyshyvanka", «писанка» → "pisanka")
+        ukrainian = any(common("uk", clean(w)) for w in words.get("uk", ()))
+        words = {l: [clean(w) for w in ws if usable(clean(w)) and (ukrainian or common(l, clean(w)))] for l, ws in words.items()}
         words = {l: list(dict.fromkeys(ws)) for l, ws in words.items() if ws}
         if len(words) < 2:
             return
