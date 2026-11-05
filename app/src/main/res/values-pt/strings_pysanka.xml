@@ -355,11 +355,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">muitos</string>
     <string name="pysanka__templates__not_ready">O histórico da área de transferência ainda não está pronto. Tente de novo daqui a pouco.</string>
-    <string name="pysanka__theme__kreyda">Giz</string>
+    <string name="pysanka__theme__linen">Linho</string>
     <string name="pysanka__theme__visk">Cera de abelha</string>
     <string name="pysanka__theme__nebo">Céu</string>
-    <string name="pysanka__theme__podillia">Podólia</string>
-    <string name="pysanka__theme__hutsulshchyna">Hutsul</string>
+    <string name="pysanka__theme__mak">Papoula</string>
+    <string name="pysanka__theme__smereka">Abeto</string>
     <string name="pysanka__theme__chornozem">Terra negra</string>
     <string name="pysanka__theme__system">Cores do sistema</string>
     <string name="pysanka__theme__system_dark">Escuro, cores do sistema</string>

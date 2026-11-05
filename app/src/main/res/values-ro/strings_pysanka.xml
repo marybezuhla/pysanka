@@ -356,11 +356,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">multe</string>
     <string name="pysanka__templates__not_ready">Istoricul clipboardului nu este încă gata. Încercați din nou peste câteva clipe.</string>
-    <string name="pysanka__theme__kreyda">Cretă</string>
+    <string name="pysanka__theme__linen">In</string>
     <string name="pysanka__theme__visk">Ceară de albine</string>
     <string name="pysanka__theme__nebo">Cer</string>
-    <string name="pysanka__theme__podillia">Podolia</string>
-    <string name="pysanka__theme__hutsulshchyna">Huțul</string>
+    <string name="pysanka__theme__mak">Mac</string>
+    <string name="pysanka__theme__smereka">Molid</string>
     <string name="pysanka__theme__chornozem">Cernoziom</string>
     <string name="pysanka__theme__system">Culorile sistemului</string>
     <string name="pysanka__theme__system_dark">Întunecat, culorile sistemului</string>

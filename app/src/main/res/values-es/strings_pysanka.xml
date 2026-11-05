@@ -356,11 +356,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">muchos</string>
     <string name="pysanka__templates__not_ready">El historial del portapapeles aún no está listo. Vuelve a intentarlo en un momento.</string>
-    <string name="pysanka__theme__kreyda">Tiza</string>
+    <string name="pysanka__theme__linen">Lino</string>
     <string name="pysanka__theme__visk">Cera</string>
     <string name="pysanka__theme__nebo">Cielo</string>
-    <string name="pysanka__theme__podillia">Podilia</string>
-    <string name="pysanka__theme__hutsulshchyna">Hutsul</string>
+    <string name="pysanka__theme__mak">Amapola</string>
+    <string name="pysanka__theme__smereka">Abeto</string>
     <string name="pysanka__theme__chornozem">Tierra negra</string>
     <string name="pysanka__theme__system">Colores del sistema</string>
     <string name="pysanka__theme__system_dark">Oscuro, colores del sistema</string>

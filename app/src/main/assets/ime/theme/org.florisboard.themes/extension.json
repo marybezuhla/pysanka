@@ -12,8 +12,8 @@
   },
   "themes": [
     {
-      "id": "kreyda",
-      "label": "Kreyda",
+      "id": "linen",
+      "label": "Linen",
       "authors": [
         "Pysanka"
       ],
@@ -36,16 +36,16 @@
       "isNight": false
     },
     {
-      "id": "podillia",
-      "label": "Podillia",
+      "id": "mak",
+      "label": "Mak",
       "authors": [
         "Pysanka"
       ],
       "isNight": true
     },
     {
-      "id": "hutsulshchyna",
-      "label": "Hutsulshchyna",
+      "id": "smereka",
+      "label": "Smereka",
       "authors": [
         "Pysanka"
       ],

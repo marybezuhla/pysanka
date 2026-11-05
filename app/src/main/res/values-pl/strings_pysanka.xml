@@ -357,11 +357,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">dużo</string>
     <string name="pysanka__templates__not_ready">Historia schowka nie jest jeszcze gotowa. Spróbuj ponownie za chwilę.</string>
-    <string name="pysanka__theme__kreyda">Kreda</string>
+    <string name="pysanka__theme__linen">Len</string>
     <string name="pysanka__theme__visk">Wosk</string>
     <string name="pysanka__theme__nebo">Niebo</string>
-    <string name="pysanka__theme__podillia">Podole</string>
-    <string name="pysanka__theme__hutsulshchyna">Hucułszczyzna</string>
+    <string name="pysanka__theme__mak">Mak</string>
+    <string name="pysanka__theme__smereka">Świerk</string>
     <string name="pysanka__theme__chornozem">Czarnoziem</string>
     <string name="pysanka__theme__system">Kolory systemu</string>
     <string name="pysanka__theme__system_dark">Ciemny, kolory systemu</string>

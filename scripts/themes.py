@@ -19,7 +19,7 @@ OUT = os.path.join(ROOT, "app/src/main/assets/ime/theme/org.florisboard.themes")
 
 # id, label (shown when no translation is known), night?, colours
 THEMES = [
-    ("kreyda", "Kreyda", False, dict(
+    ("linen", "Linen", False, dict(
         background="#e6dfd5", background_variant="#dad1c5", surface="#f8f3eb", surface_variant="#ebe3d8",
         popup="#f1ebe2", popup_focused="#d6c9b8", text="#2b2420", text_variant="#5a5048", text_background="#2b2420",
         primary="#a3392c", primary_variant="#85291f", on_primary="#fff8f0", secondary="#7d5a12",
@@ -34,12 +34,12 @@ THEMES = [
         popup="#e8edf2", popup_focused="#c1cedb", text="#1e2a3c", text_variant="#4a596d", text_background="#1e2a3c",
         primary="#3d5f94", primary_variant="#2f4c78", on_primary="#ffffff", secondary="#a3392c",
         one_hand="#e1e9f4")),
-    ("podillia", "Podillia", True, dict(
+    ("mak", "Mak", True, dict(
         background="#15110f", background_variant="#1e1916", surface="#2a2320", surface_variant="#3a312c",
         popup="#3a312c", popup_focused="#7a2a22", text="#f1e6d2", text_variant="#c2b5a3", text_background="#ede3d3",
         primary="#b03d31", primary_variant="#8a2c23", on_primary="#fff6ee", secondary="#c99a3a",
         one_hand="#2a1a17")),
-    ("hutsulshchyna", "Hutsulshchyna", True, dict(
+    ("smereka", "Smereka", True, dict(
         background="#101a15", background_variant="#17241d", surface="#1e2e25", surface_variant="#2a3d32",
         popup="#2a3d32", popup_focused="#6e4c14", text="#ece6d6", text_variant="#b9bba8", text_background="#e6e0d0",
         primary="#c98f3a", primary_variant="#ad7a2e", on_primary="#1a1208", secondary="#d6a64e",
