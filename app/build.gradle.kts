@@ -15,6 +15,7 @@
  */
 
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.security.MessageDigest
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -256,6 +257,30 @@ dependencies {
     testImplementation(libs.androidx.test.ext)
     testRuntimeOnly(libs.junit.vintage.engine)
 }
+
+// Pysanka: the dictation model is too large for Git, so the build downloads it (assets/voice/SOURCE.md).
+// Without it, or with any other file, the build stops: an APK must not ship without dictation or with
+// a model nobody checked.
+val checkVoiceModel by tasks.registering {
+    val dir = layout.projectDirectory.dir("src/main/assets/voice").asFile
+    inputs.files(fileTree(dir))
+    doLast {
+        val sums = File(dir, "SHA256SUMS").readLines().filter { it.isNotBlank() }
+        for (line in sums) {
+            val (want, name) = line.trim().split(Regex("\\s+"), limit = 2)
+            val file = File(dir, name.removePrefix("*"))
+            if (!file.isFile) throw GradleException("Dictation model missing: download $name as in ${dir}/SOURCE.md")
+            val md = MessageDigest.getInstance("SHA-256")
+            file.inputStream().use { input ->
+                val buf = ByteArray(1 shl 20)
+                while (true) { val n = input.read(buf); if (n < 0) break; md.update(buf, 0, n) }
+            }
+            val got = md.digest().joinToString("") { "%02x".format(it) }
+            if (got != want) throw GradleException("$name: SHA-256 $got, expected $want")
+        }
+    }
+}
+tasks.named("preBuild") { dependsOn(checkVoiceModel) }
 
 fun getGitCommitHash(short: Boolean = false): Provider<String> {
     if (!rootProject.file(".git").exists()) {
