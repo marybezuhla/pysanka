@@ -493,4 +493,6 @@
     <string name="pysanka__lists__style_auto">Cum le arată aplicația (Markdown în Joplin, Obsidian, Markor)</string>
     <string name="pysanka__lists__style_symbols">Simboluri ☐ ☑ •</string>
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
+    <string name="pysanka__settings__lists">Liste și sarcini</string>
+    <string name="pysanka__settings__lists_state">Continuă cu Enter: {continue}</string>
 </resources>

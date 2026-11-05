@@ -493,4 +493,6 @@
     <string name="pysanka__lists__style_auto">As the app shows them (Markdown in Joplin, Obsidian, Markor)</string>
     <string name="pysanka__lists__style_symbols">Symbols ☐ ☑ •</string>
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
+    <string name="pysanka__settings__lists">Lists and to-dos</string>
+    <string name="pysanka__settings__lists_state">Continue with Enter: {continue}</string>
 </resources>
