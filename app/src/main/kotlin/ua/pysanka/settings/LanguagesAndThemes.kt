@@ -126,12 +126,12 @@ fun LanguagesBlock() {
 /** Pysanka's themes by their id, in the language of the settings (in the order they are offered). */
 @Composable
 fun themeNames(): Map<String, String> = linkedMapOf(
-    "kreyda" to stringRes(R.string.pysanka__theme__kreyda),
+    "linen" to stringRes(R.string.pysanka__theme__linen),
     "visk" to stringRes(R.string.pysanka__theme__visk),
     "nebo" to stringRes(R.string.pysanka__theme__nebo),
     "floris_day_my" to stringRes(R.string.pysanka__theme__system),
-    "podillia" to stringRes(R.string.pysanka__theme__podillia),
-    "hutsulshchyna" to stringRes(R.string.pysanka__theme__hutsulshchyna),
+    "mak" to stringRes(R.string.pysanka__theme__mak),
+    "smereka" to stringRes(R.string.pysanka__theme__smereka),
     "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
     "floris_night_my" to stringRes(R.string.pysanka__theme__system_dark),
 )

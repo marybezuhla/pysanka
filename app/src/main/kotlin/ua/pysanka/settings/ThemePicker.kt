@@ -49,12 +49,12 @@ private class Look(val background: Color, val key: Color, val text: Color, val a
 
 /** The themes that come with Pysanka, as in [themeNames]: id, extension, night. */
 private val THEMES = listOf(
-    Triple("kreyda", "org.florisboard.themes", false),
+    Triple("linen", "org.florisboard.themes", false),
     Triple("visk", "org.florisboard.themes", false),
     Triple("nebo", "org.florisboard.themes", false),
     Triple("floris_day_my", "org.florisboard.themes.my", false),
-    Triple("podillia", "org.florisboard.themes", true),
-    Triple("hutsulshchyna", "org.florisboard.themes", true),
+    Triple("mak", "org.florisboard.themes", true),
+    Triple("smereka", "org.florisboard.themes", true),
     Triple("chornozem", "org.florisboard.themes", true),
     Triple("floris_night_my", "org.florisboard.themes.my", true),
 )

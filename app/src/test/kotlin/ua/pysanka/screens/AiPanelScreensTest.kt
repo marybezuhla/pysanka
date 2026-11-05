@@ -88,7 +88,7 @@ class AiPanelScreensTest {
         message: String = MESSAGE,
         parts: List<ua.pysanka.ai.TextParts.Part> = emptyList(),
     ) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
-        val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/${if (dark) "podillia" else "kreyda"}.json")
+        val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/${if (dark) "mak" else "linen"}.json")
             .bufferedReader().use { it.readText() }
         val stylesheet = SnyggStylesheet.fromJson(json).getOrThrow()
         scenario.onActivity { activity ->

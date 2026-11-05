@@ -357,11 +357,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">шмат</string>
     <string name="pysanka__templates__not_ready">Гісторыя буфера абмену яшчэ не гатовая. Паспрабуйце праз хвілінку.</string>
-    <string name="pysanka__theme__kreyda">Крэйда</string>
+    <string name="pysanka__theme__linen">Лён</string>
     <string name="pysanka__theme__visk">Воск</string>
     <string name="pysanka__theme__nebo">Неба</string>
-    <string name="pysanka__theme__podillia">Падолле</string>
-    <string name="pysanka__theme__hutsulshchyna">Гуцульшчына</string>
+    <string name="pysanka__theme__mak">Мак</string>
+    <string name="pysanka__theme__smereka">Яліна</string>
     <string name="pysanka__theme__chornozem">Чарназём</string>
     <string name="pysanka__theme__system">Колеры сістэмы</string>
     <string name="pysanka__theme__system_dark">Цёмная, колеры сістэмы</string>

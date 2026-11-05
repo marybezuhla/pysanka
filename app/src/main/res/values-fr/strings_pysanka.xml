@@ -356,11 +356,11 @@
     <string name="pysanka__ai__emoji_some">2–3</string>
     <string name="pysanka__ai__emoji_many">beaucoup</string>
     <string name="pysanka__templates__not_ready">L’historique du presse-papiers n’est pas encore prêt. Réessayez dans un instant.</string>
-    <string name="pysanka__theme__kreyda">Craie</string>
+    <string name="pysanka__theme__linen">Lin</string>
     <string name="pysanka__theme__visk">Cire d’abeille</string>
     <string name="pysanka__theme__nebo">Ciel</string>
-    <string name="pysanka__theme__podillia">Podolie</string>
-    <string name="pysanka__theme__hutsulshchyna">Houtsoule</string>
+    <string name="pysanka__theme__mak">Coquelicot</string>
+    <string name="pysanka__theme__smereka">Épicéa</string>
     <string name="pysanka__theme__chornozem">Terre noire</string>
     <string name="pysanka__theme__system">Couleurs du système</string>
     <string name="pysanka__theme__system_dark">Sombre, couleurs du système</string>

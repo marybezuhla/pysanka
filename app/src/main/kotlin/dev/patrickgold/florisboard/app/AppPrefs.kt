@@ -854,12 +854,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val dayThemeId = custom(
             key = "theme__day_theme_id",
-            default = extCoreTheme("kreyda"), // Pysanka: its own themes (scripts/themes.py)
+            default = extCoreTheme("linen"), // Pysanka: its own themes (scripts/themes.py)
             serializer = ExtensionComponentName.Serializer,
         )
         val nightThemeId = custom(
             key = "theme__night_theme_id",
-            default = extCoreTheme("podillia"),
+            default = extCoreTheme("mak"),
             serializer = ExtensionComponentName.Serializer,
         )
         val accentColor = custom(
