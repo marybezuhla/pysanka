@@ -15,6 +15,7 @@
  */
 
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.security.MessageDigest
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -269,7 +270,7 @@ val checkVoiceModel by tasks.registering {
             val (want, name) = line.trim().split(Regex("\\s+"), limit = 2)
             val file = File(dir, name.removePrefix("*"))
             if (!file.isFile) throw GradleException("Dictation model missing: download $name as in ${dir}/SOURCE.md")
-            val md = java.security.MessageDigest.getInstance("SHA-256")
+            val md = MessageDigest.getInstance("SHA-256")
             file.inputStream().use { input ->
                 val buf = ByteArray(1 shl 20)
                 while (true) { val n = input.read(buf); if (n < 0) break; md.update(buf, 0, n) }
