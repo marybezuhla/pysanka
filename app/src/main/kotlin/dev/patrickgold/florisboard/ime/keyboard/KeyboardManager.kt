@@ -551,12 +551,24 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     /**
      * Handles a [KeyCode.ENTER] event.
      */
+    // Pysanka: Enter actions that do not make a new line
+    private val PYSANKA_ENTER_ACTIONS = setOf(
+        ImeOptions.Action.DONE, ImeOptions.Action.GO, ImeOptions.Action.NEXT,
+        ImeOptions.Action.PREVIOUS, ImeOptions.Action.SEARCH, ImeOptions.Action.SEND,
+    )
+
     private fun handleEnter() {
         val info = editorInstance.activeInfo
         // Pysanka: the word before Enter is finished too
         pysankaLearn(editorInstance.activeContent.composingText, null)
         val isShiftPressed = inputEventDispatcher.isPressed(KeyCode.SHIFT)
         if (editorInstance.tryPerformEnterCommitRaw()) {
+            return
+        }
+        // Pysanka: Enter that makes a new line, in a list: the next item (or the end of the list)
+        val newLine = info.imeOptions.flagNoEnterAction || info.inputAttributes.flagTextMultiLine && isShiftPressed ||
+            info.imeOptions.action !in PYSANKA_ENTER_ACTIONS
+        if (newLine && info.inputAttributes.flagTextMultiLine && ua.pysanka.ime.Lists.onEnter(info.packageName)) {
             return
         }
         if (info.imeOptions.flagNoEnterAction || info.inputAttributes.flagTextMultiLine && isShiftPressed) {
@@ -999,6 +1011,12 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 activeState.imeUiMode = ImeUiMode.PYSANKA_AI
             }
             KeyCode.PYSANKA_FIX_LAYOUT -> ua.pysanka.ime.FieldText.fixLayout()
+            // Pysanka: the word at the cursor translated, in place of the keys
+            KeyCode.PYSANKA_TRANSLATE -> if (ua.pysanka.translate.TranslateBridge.open()) {
+                activeState.imeUiMode = ImeUiMode.PYSANKA_TRANSLATE
+            }
+            // Pysanka: lists, to-dos and the date, in place of the keys
+            KeyCode.PYSANKA_LISTS -> activeState.imeUiMode = ImeUiMode.PYSANKA_LISTS
             KeyCode.PYSANKA_TEXT_FROM_PHOTO, KeyCode.PYSANKA_TEXT_FROM_CAMERA -> {
                 val info = editorInstance.activeInfo
                 ua.pysanka.ocr.PendingInsert.opened(info)

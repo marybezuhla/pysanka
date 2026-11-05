@@ -62,12 +62,20 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
 
     private suspend fun suggester(subtype: Subtype): WordSuggester? {
         val lang = subtype.primaryLocale.language
+        // Pysanka: the languages' lists of swear words and little words (assets)
+        ua.pysanka.typing.LanguageExtras.load(appContext)
         return suggesters.withLock { map ->
             // A language without a list is remembered as such (not looked for on every key)
             if (lang in map) return@withLock map[lang]
+            // A language without a list (Polish, German…) gets an empty one: the person's own words
+            // and text shortcuts still come, corrections never (see ua.pysanka.typing.WordLists)
             runCatching {
-                val raw = appContext.assets.readText("ime/dict/$lang.json")
-                WordSuggester(Json.decodeFromString(wordDataSerializer, raw), KeyNeighbours.forLanguage(lang))
+                val words = if (ua.pysanka.typing.WordLists.has(appContext, lang)) {
+                    Json.decodeFromString(wordDataSerializer, appContext.assets.readText("ime/dict/$lang.json"))
+                } else {
+                    emptyMap()
+                }
+                WordSuggester(words, KeyNeighbours.forLanguage(lang), lang)
             }.getOrNull().also { map[lang] = it }
         }
     }
@@ -81,11 +89,16 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         } else null
         val frequency = { w: String -> dict?.frequency(w) ?: 0 }
         val complete = { p: String -> dict?.suggest(p, 3)?.map { it.word }?.filter { PersonalWords.key(it).startsWith(PersonalWords.key(p)) }.orEmpty() }
-        val single = ua.pysanka.typing.Hashtags.suggest(prefix, text, own, frequency, complete)
+        val hasList = ua.pysanka.typing.WordLists.has(appContext, subtype.primaryLocale.language)
+        val language = subtype.primaryLocale.language
+        val single = ua.pysanka.typing.Hashtags.suggest(prefix, text, own, frequency, complete, hasList = hasList, language = language)
             .map { ua.pysanka.typing.HashtagCandidate(it) }
         // Right after «#»: the text's key words, all at once, first
         if (prefix.isNotEmpty()) return single
-        val bundle = ua.pysanka.typing.Hashtags.keywords(text, frequency, complete, ua.pysanka.typing.Hashtags.BUNDLE)
+        val bundle = ua.pysanka.typing.Hashtags.keywords(
+            text, frequency, complete, ua.pysanka.typing.Hashtags.BUNDLE,
+            hasList = hasList, language = language,
+        )
         return if (bundle.size >= 2) listOf(ua.pysanka.typing.HashtagCandidate(bundle)) + single else single
     }
 
@@ -139,6 +152,8 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         allowPossiblyOffensive: Boolean,
         isPrivateSession: Boolean,
     ): SpellingResult {
+        // Pysanka: no list, nothing to check against
+        if (!ua.pysanka.typing.WordLists.has(appContext, subtype.primaryLocale.language)) return SpellingResult.unspecified()
         val dict = suggester(subtype) ?: return SpellingResult.unspecified()
         // Pysanka: the spell checker is open to other apps, so it never uses the learned words
         // (an app could otherwise test which words the person uses)
@@ -157,17 +172,18 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         val word = content.composingText
         val dict = suggester(subtype)
         if (dict == null) {
-            // Pysanka: a language without a word list: taps as drawn
             ua.pysanka.typing.KeyTargeting.publish(null)
             return emptyList()
         }
+        // Pysanka: a language without a word list: taps as drawn, no corrections
+        val hasList = ua.pysanka.typing.WordLists.has(appContext, subtype.primaryLocale.language)
         val own = if (mayShowOwn(isPrivateSession)) withContext(Dispatchers.IO) { own(subtype) } else null
         // Pysanka: the shortcuts in memory before taps are judged (see TextShortcuts.startsWith)
         if (!ua.pysanka.privacy.FieldPrivacy.isPassword) ua.pysanka.typing.TextShortcuts.load(appContext)
         // Pysanka: the likely next letters, for a tap near the edge between two keys (KeyTargeting);
         // never in a private or password field, nor while a word the person taught is being typed
         ua.pysanka.typing.KeyTargeting.publish(
-            if (prefs.correction.pysankaKeyTargeting.get() && !isPrivateSession && keyboardManager.activeState.isComposingEnabled &&
+            if (hasList && prefs.correction.pysankaKeyTargeting.get() && !isPrivateSession && keyboardManager.activeState.isComposingEnabled &&
                 !ua.pysanka.privacy.FieldPrivacy.isPrivate && !ua.pysanka.privacy.FieldPrivacy.isPassword &&
                 (word.isEmpty() || own?.withPrefix(PersonalWords.key(word), 1).isNullOrEmpty()) &&
                 // nor while a text-replacement shortcut is being typed (it is no word of the list)
@@ -193,9 +209,12 @@ class LatinLanguageProvider(context: Context) : SpellingProvider, SuggestionProv
         val shortcut = if (ua.pysanka.privacy.FieldPrivacy.isPassword || AutoCorrect.isRejected(word)) null else {
             ua.pysanka.typing.TextShortcuts.find(word)?.let { listOf(ua.pysanka.typing.ShortcutCandidate(word, it)) }
         }
-        val autoCorrect = prefs.correction.pysankaAutoCorrect.get() && shortcut == null
+        val autoCorrect = hasList && prefs.correction.pysankaAutoCorrect.get() && shortcut == null
         val previous = PreviousWord.of(content.textBeforeSelection.dropLast(word.length))
-        val found = dict.suggest(word, maxCandidateCount, AutoCorrect.rejected, own, previous)
+        val found = dict.suggest(
+            word, maxCandidateCount, AutoCorrect.rejected, own, previous,
+            blockOffensive = prefs.suggestion.blockPossiblyOffensive.get(),
+        )
         AutoCorrect.suggestedFor = word
         // Pysanka: Ukrainian words with an apostrophe get the same ʼ the key types (smart punctuation),
         // not the list's straight one, unless one was typed (then that one is kept)

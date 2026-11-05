@@ -3,6 +3,12 @@ import numpy as np
 
 UK_ROWS = ["йцукенгшщзхї", "фівапролджє", "ячсмитьбю"]
 EN_ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+RU_ROWS = ["йцукенгшщзх", "фывапролджэ", "ячсмитьбю"]
+BE_ROWS = ["йцукенгшўзх", "фывапролджэ", "ячсмітьбю"]
+QWERTZ_ROWS = ["qwertzuiop", "asdfghjkl", "yxcvbnm"]
+AZERTY_ROWS = ["azertyuiop", "qsdfghjklm", "wxcvbn"]
+HU_ROWS = ["qwertzuiopö", "asdfghjkléá", "yxcvbnmü"]
+ES_ROWS = ["qwertyuiop", "asdfghjklñ", "zxcvbnm"]
 H = 1.35  # key height / width
 def layout(rows, offsets):
     keys = {}
@@ -12,6 +18,11 @@ def layout(rows, offsets):
     return keys
 UK = layout(UK_ROWS, [0, 0.5, 1.5])
 EN = layout(EN_ROWS, [0, 0.5, 1.5])
+RU = layout(RU_ROWS, [0, 0.5, 1.5])
+QZ = layout(QWERTZ_ROWS, [0, 0.5, 1.5])
+KEYS = {"uk": UK, "en": EN, "ru": RU, "be": layout(BE_ROWS, [0, 0.5, 1.5]), "pl": EN, "ro": EN, "pt": EN,
+        "es": layout(ES_ROWS, [0, 0.5, 1.5]), "de": QZ, "sk": QZ, "hu": layout(HU_ROWS, [0, 0.5, 1.5]),
+        "fr": layout(AZERTY_ROWS, [0, 0.5, 1.5])}
 
 def load(lang):
     d = json.load(open(pathlib.Path(__file__).resolve().parents[2] / f"app/src/main/assets/ime/dict/{lang}.json", encoding="utf-8"))
@@ -20,7 +31,7 @@ def load(lang):
 def key_seq(word, keys):
     seq = []
     for ch in word.lower():
-        c = ch if ch in keys else unicodedata.normalize("NFD", ch)[0]
+        c = ch if ch in keys else {"ґ": "г", "ъ": "ь", "ł": "l", "ß": "s", "æ": "a", "œ": "o", "ő": "ö", "ű": "ü"}.get(ch, unicodedata.normalize("NFD", ch)[0])
         if c in keys:
             seq.append(c)
     return seq

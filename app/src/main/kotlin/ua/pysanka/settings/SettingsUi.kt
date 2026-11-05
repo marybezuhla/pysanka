@@ -1,5 +1,7 @@
 package ua.pysanka.settings
 
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.BorderStroke
@@ -78,6 +80,7 @@ fun blockTint(): Tint {
 /** Pysanka: the one open block of a screen (by its title), for blocks that open one at a time. */
 val LocalOpenBlock = androidx.compose.runtime.compositionLocalOf<androidx.compose.runtime.MutableState<String?>?> { null }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun Block(
     title: String,
@@ -91,13 +94,21 @@ fun Block(
     val shared = LocalOpenBlock.current
     var ownOpen by rememberSaveable(title) { mutableStateOf(startOpen) }
     val open = if (shared != null) shared.value == title else ownOpen
+    // An opened block is scrolled into view (the one above may have just closed, moving it up)
+    val seen = androidx.compose.runtime.remember { androidx.compose.foundation.relocation.BringIntoViewRequester() }
+    androidx.compose.runtime.LaunchedEffect(open) {
+        if (open) {
+            kotlinx.coroutines.delay(BLOCK_SCROLL_DELAY_MS)
+            seen.bringIntoView()
+        }
+    }
     fun toggle() {
         if (shared != null) shared.value = if (open) null else title else ownOpen = !ownOpen
     }
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, tint.container),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().bringIntoViewRequester(seen),
     ) {
         val stateText = org.florisboard.lib.compose.stringRes(
             if (open) dev.patrickgold.florisboard.R.string.pysanka__settings__block_open else dev.patrickgold.florisboard.R.string.pysanka__settings__block_closed,
@@ -182,7 +193,8 @@ fun <T> ChoiceRow(title: String, options: List<Pair<T, String>>, selected: T, en
             onDismissRequest = { asking = false },
             title = { Text(title) },
             text = {
-                Column {
+                // Scrolls when the choices are more than the screen holds (the settings' languages)
+                Column(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
                     for ((value, label) in options) {
                         Row(
                             Modifier.fillMaxWidth().heightIn(min = 48.dp)
@@ -204,13 +216,18 @@ fun <T> ChoiceRow(title: String, options: List<Pair<T, String>>, selected: T, en
 
 /** A value on a scale, shown as it is set. */
 @Composable
-fun SliderRow(title: String, value: Int, range: IntRange, step: Int, label: @Composable (Int) -> String, enabled: Boolean = true, onChange: (Int) -> Unit) {
+fun SliderRow(
+    title: String, value: Int, range: IntRange, step: Int, label: @Composable (Int) -> String, enabled: Boolean = true,
+    hint: String? = null,
+    onChange: (Int) -> Unit,
+) {
     var v by androidx.compose.runtime.remember(value) { mutableStateOf(value.toFloat()) }
     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f), color = textColor(enabled))
             Text(label(v.roundToInt()), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        if (hint != null) Text(hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         val valueText = label(v.roundToInt())
         Slider(
             // Read out with its name and value, not as a bare slider
@@ -277,3 +294,6 @@ private fun RowText(title: String, hint: String?, enabled: Boolean, modifier: Mo
 
 @Composable
 private fun textColor(enabled: Boolean) = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 1f else 0.5f)
+
+/** Pysanka: an opened block is scrolled to once the one above has closed. */
+private const val BLOCK_SCROLL_DELAY_MS = 80L

@@ -19,7 +19,7 @@ OUT = os.path.join(ROOT, "app/src/main/assets/ime/theme/org.florisboard.themes")
 
 # id, label (shown when no translation is known), night?, colours
 THEMES = [
-    ("kreyda", "Kreyda", False, dict(
+    ("linen", "Linen", False, dict(
         background="#e6dfd5", background_variant="#dad1c5", surface="#f8f3eb", surface_variant="#ebe3d8",
         popup="#f1ebe2", popup_focused="#d6c9b8", text="#2b2420", text_variant="#5a5048", text_background="#2b2420",
         primary="#a3392c", primary_variant="#85291f", on_primary="#fff8f0", secondary="#7d5a12",
@@ -34,12 +34,22 @@ THEMES = [
         popup="#e8edf2", popup_focused="#c1cedb", text="#1e2a3c", text_variant="#4a596d", text_background="#1e2a3c",
         primary="#3d5f94", primary_variant="#2f4c78", on_primary="#ffffff", secondary="#a3392c",
         one_hand="#e1e9f4")),
-    ("podillia", "Podillia", True, dict(
+    ("glyna", "Glyna", False, dict(
+        background="#f4eee5", background_variant="#e8e0d4", surface="#ffffff", surface_variant="#efe7dc",
+        popup="#f8f3ec", popup_focused="#dccdb9", text="#2a211c", text_variant="#6b5d52", text_background="#2a211c",
+        primary="#9c4524", primary_variant="#7f381d", on_primary="#fff8f2", secondary="#8a5a2b",
+        one_hand="#f6e6df")),
+    ("kalyna", "Kalyna", False, dict(
+        background="#f3e6e3", background_variant="#e8d8d4", surface="#fffaf8", surface_variant="#f1e3df",
+        popup="#f8efec", popup_focused="#dcc4be", text="#2a1e1f", text_variant="#62504f", text_background="#2a1e1f",
+        primary="#a3263a", primary_variant="#85202f", on_primary="#fff8f6", secondary="#3f6b3a",
+        one_hand="#f0dede")),
+    ("mak", "Mak", True, dict(
         background="#15110f", background_variant="#1e1916", surface="#2a2320", surface_variant="#3a312c",
         popup="#3a312c", popup_focused="#7a2a22", text="#f1e6d2", text_variant="#c2b5a3", text_background="#ede3d3",
         primary="#b03d31", primary_variant="#8a2c23", on_primary="#fff6ee", secondary="#c99a3a",
         one_hand="#2a1a17")),
-    ("hutsulshchyna", "Hutsulshchyna", True, dict(
+    ("smereka", "Smereka", True, dict(
         background="#101a15", background_variant="#17241d", surface="#1e2e25", surface_variant="#2a3d32",
         popup="#2a3d32", popup_focused="#6e4c14", text="#ece6d6", text_variant="#b9bba8", text_background="#e6e0d0",
         primary="#c98f3a", primary_variant="#ad7a2e", on_primary="#1a1208", secondary="#d6a64e",
@@ -49,6 +59,16 @@ THEMES = [
         popup="#241f1b", popup_focused="#5e4512", text="#ded3c2", text_variant="#a89c8b", text_background="#d8cdbc",
         primary="#b98e3e", primary_variant="#a37e36", on_primary="#1a1206", secondary="#b98e3e",
         one_hand="#14100c")),
+    ("zhar", "Zhar", True, dict(
+        background="#1c1a18", background_variant="#211f1c", surface="#2c2824", surface_variant="#3a352f",
+        popup="#3a352f", popup_focused="#7a4a30", text="#f0e8de", text_variant="#b8ada0", text_background="#ebe3d8",
+        primary="#e3a07e", primary_variant="#c98563", on_primary="#2b140a", secondary="#d9b07a",
+        one_hand="#2a1e18")),
+    ("zoriana_nich", "Zoriana nich", True, dict(
+        background="#0b1020", background_variant="#101629", surface="#161e36", surface_variant="#222b47",
+        popup="#222b47", popup_focused="#3a4a80", text="#e8ecf6", text_variant="#a9b2c9", text_background="#e2e7f2",
+        primary="#93a9ea", primary_variant="#7a92d6", on_primary="#0f1733", secondary="#e6c15a",
+        one_hand="#141a30")),
 ]
 
 

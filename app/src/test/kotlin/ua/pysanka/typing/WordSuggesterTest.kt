@@ -25,4 +25,12 @@ class WordSuggesterTest : FunSpec({
     test("words with an apostrophe") {
         s.suggest("п'я", 1).map { it.word } shouldBe listOf("п'ять")
     }
+
+    test("one spelling of a word with «ё», and no swear words unless typed in full") {
+        val ru = WordSuggester(mapOf("еще" to 187, "ещё" to 178, "сука" to 90, "сумка" to 80), KeyNeighbours.forLanguage("ru"))
+        ru.suggest("ещ", 3).map { it.word } shouldBe listOf("еще")
+        ru.suggest("су", 3).map { it.word } shouldBe listOf("сумка")
+        ru.suggest("сука", 3).map { it.word }.first() shouldBe "сука"
+        ru.suggest("су", 3, blockOffensive = false).map { it.word } shouldBe listOf("сука", "сумка")
+    }
 })

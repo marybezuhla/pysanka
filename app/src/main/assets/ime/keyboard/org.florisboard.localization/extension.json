@@ -28,6 +28,7 @@
     { "id": "default", "authors": [ "patrickgold" ] },
     { "id": "ar", "authors": [ "HeiWiper" ] },
     { "id": "ast", "authors": [ "Softastur" ] },
+    { "id": "be", "authors": [ "pysanka" ] },
     { "id": "bg", "authors": [ "iorvethe" ] },
     { "id": "bn-BD", "authors": [ "iamrasel" ] },
     { "id": "ca", "authors": [ "mikelloc" ] },
@@ -440,6 +441,15 @@
       "popupMapping": "org.florisboard.localization:ka-std",
       "preferred": {
         "characters": "org.florisboard.layouts:georgian_standard"
+      }
+    },
+    {
+      "languageTag": "be-BY",
+      "composer": "org.florisboard.composers:appender",
+      "currencySet": "org.florisboard.currencysets:euro",
+      "popupMapping": "org.florisboard.localization:be",
+      "preferred": {
+        "characters": "org.florisboard.layouts:jcuken_belarusian"
       }
     },
     {

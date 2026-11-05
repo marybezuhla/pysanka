@@ -62,9 +62,10 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         for (ch in word) {
             if (ch == '\'' || ch == '’' || ch == 'ʼ' || ch == '-') continue
             val lc = ch.lowercaseChar()
-            val k = keyIndex[lc] ?: keyIndex[Normalizer.normalize(lc.toString(), Normalizer.Form.NFD)[0]]
-                // A letter only in a key's popup (ґ on г): swiped through that key
-                ?: POPUP_BASE[lc]?.let { keyIndex[it] } ?: return null
+            // A letter only in a key's popup (ґ on г, ъ on ь, ő on ö): swiped through that key; a
+            // letter with a mark (ą, ñ, ü…) through its letter
+            val k = keyIndex[lc] ?: POPUP_BASE[lc]?.let { keyIndex[it] }
+                ?: keyIndex[Normalizer.normalize(lc.toString(), Normalizer.Form.NFD)[0]] ?: return null
             if (out.size == 0 || out.last() != k) out.add(k)
         }
         return if (out.size == 0) null else out.toArray()
@@ -271,7 +272,12 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         /** How many words the cheap first look passes on to the full measures. */
         private const val SHORTLIST = 400
 
-        private val POPUP_BASE = mapOf('ґ' to 'г')
+        // ґ on г (Ukrainian, Belarusian); ё on е and ъ on ь (Russian); letters that are not a mark
+        // on another letter (ł, ß, æ, œ, ø); Hungarian ő, ű on its ö, ü keys
+        private val POPUP_BASE = mapOf(
+            'ґ' to 'г', 'ё' to 'е', 'ъ' to 'ь', 'ł' to 'l', 'ß' to 's', 'æ' to 'a', 'œ' to 'o', 'ø' to 'o',
+            'ő' to 'ö', 'ű' to 'ü',
+        )
 
         // Tuned on simulated swipes (scripts/swipe/tune.py)
         private const val W_SHAPE = 44.354

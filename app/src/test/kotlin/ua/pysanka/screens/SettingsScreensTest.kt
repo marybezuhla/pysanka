@@ -84,8 +84,8 @@ class SettingsScreensTest {
                             ) {}
                             dev.patrickgold.florisboard.app.setup.SetupStep(2, "Вибрати Писанку", done = false, active = false, text = "", button = "") {}
                             Text(app.getString(dev.patrickgold.florisboard.R.string.pysanka__setup__look), color = MaterialTheme.colorScheme.onSurface)
-                            ua.pysanka.settings.ThemeRow(false, androidx.compose.ui.graphics.Color(0xFF6750A4), "kreyda") {}
-                            ua.pysanka.settings.ThemeRow(true, androidx.compose.ui.graphics.Color(0xFF6750A4), "podillia") {}
+                            ua.pysanka.settings.ThemeRow(false, androidx.compose.ui.graphics.Color(0xFF6750A4), "linen") {}
+                            ua.pysanka.settings.ThemeRow(true, androidx.compose.ui.graphics.Color(0xFF6750A4), "mak") {}
                             return@Column
                         }
                         Block("Мови", "Українська, Англійська (Сполучені Штати)", icon = Icons.Default.Language) {}

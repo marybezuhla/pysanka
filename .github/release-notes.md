@@ -1,34 +1,40 @@
-**Писанка 0.24.0**: приватна клавіатура для Android без доступу до інтернету. Тестова версія перед 1.0.
+**Писанка 0.25.0**: приватна клавіатура для Android без доступу до інтернету. Остання тестова версія перед 1.0.
 
-- ✍️ **Свайп розпізнає весь рух.** Раніше слово часто бралося з половини шляху («подивись» ставало «позбутися»). Тепер завжди з повного руху, а слова при швидких свайпах підряд ставляться в правильному порядку.
-- #️⃣ **Миттєві хештеги без ШІ:** одразу після «#» перша підказка дає до 4 хештегів із ключових слів допису («#клавіатура #свайп»), один дотик ставить усі. ШІ-дію «Хештеги» прибрано: вона була повільна й неточна.
-- 📏 **Висота клавіатури й відступи між клавішами** у «Вигляді»: висота 80–130 %, відступи «Звичайні» або «Просторі», коли клавіші стоять окремо.
-- 🗂 **Розділи налаштувань відкриваються по одному.**
-- 🙂 **Емодзі до слів точніші:** «мені» більше не дає 🤮, а на «дім» першим іде 🏠.
-- 👆 **«Забути мої дотики»** у «Наборі»: клавіатура заново вчиться, куди ви влучаєте.
-- 🔒 **Приватність:**
-  - хештеги вчаться за тими самими правилами, що й слова;
-  - текст із фото, відкритого з приватного поля, не потрапляє в історію буфера;
-  - ШІ з «Поділитися» завжди враховує «Заборонити знімки екрана».
-- ⌨️ **Фізична клавіатура:** англійська поверх української розкладки дає @ на Shift+2; пробіл вчить слова.
-- Виправлено:
-  - заміна слова посеред тексту могла стерти текст після нього;
-  - після Enter ще пропонувалися хештеги.
-- Тексти українською й англійською вичищено: друкарські помилки, кальки, однакові назви скрізь.
+- 🌍 **12 мов на рівні української:** білоруська, польська, словацька, угорська, румунська, німецька, французька, іспанська, португальська, російська, англійська й українська.
+  - Для кожної є свій словник, свайп, виправлення описок і емодзі до слів.
+  - Є й тематичні слова: цифрові, побутові, міста України сучасною назвою, українські речі (вишиванка, борщ, статус захисту).
+  - Мета: щоб українці за кордоном і їхні сусіди друкували своєю мовою в українській клавіатурі.
+- 🌐 **Переклад слів між 12 мовами без інтернету:** кнопка над клавіатурою перекладає слово біля курсора й ставить переклад на його місце, а «Перекласти (Писанка)» з'явився в меню виділеного тексту будь-якого застосунку. Словники з Вікісловника вже в застосунку, форми слів теж знаходяться («ключа» → key, klucz).
+- ☑️ **Списки, справи й дата, як у нотатках:** кнопка «Списки» над клавіатурою ставить •, 1. чи ☐, повторний дотик позначає справу ☑, Enter продовжує список (на порожньому пункті завершує). У Joplin, Obsidian і Markor це Markdown, який вони показують своїми чекбоксами. Дата й час мовою клавіатури.
+- 🇺🇦 **Українські слова культури:** вишиванка, писанка, паляниця, колядка, трембіта тепер пропонуються під час набору й перекладаються.
+- 🇧🇾 **Білоруська:** нова розкладка з ў та і, словник з обома правописами (офіційним і тарашкевіцею).
+- ✍️ **Набір без діакритики виправляється сам:** «dziekuje» → «dziękuję», «fur» → «für», «manana» → «mañana».
+- 🗣️ **Налаштування 11 мовами:** «Мова налаштувань» або «Як у телефоні».
+- 🔁 **Російська:** повноцінний словник і свайп, щоб людям було легше переходити на українську.
+- 🚫 **Лайка** не пропонується, поки слово не набране повністю. Для кожної мови свій список.
+- 🧩 **Мова без словника** працює чесно: без свайпу, але з заміною тексту й вивченими словами.
+- ⚙️ **Налаштування:** відкритий розділ сам прокручується на екран; під висотою клавіатури є підказка для плаваючої.
+- 🎙️ **Точніше диктування українською:** тепер модель Whisper small замість base, тож менше русизмів і помилок. Застосунок через це більший (близько 250 МБ), а розпізнавання трохи довше.
+- 🎨 **Усі теми, як в інших застосунках:** нові Калина, Глина, Зоряна ніч і Жар; вибір рядками по три, і денна тема одразу ставить свою нічну пару (і навпаки).
+- 💙💛 **Слово від авторки** в розділі «Про застосунок»: як виникла ідея, про війну й офіційні способи підтримати Україну.
+- Виправлено: «еще» й «ещё» не пропонуються обидва; назви міст не перебивають звичайні слова.
 
-📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/Marybezu/pysanka`.
+📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/marybezuhla/pysanka`.
 
 ---
 
-**Pysanka 0.24.0**: a private keyboard for Android with no internet access. A test version before 1.0.
+**Pysanka 0.25.0**: a private keyboard for Android with no internet access. The last test version before 1.0.
 
-- Swipe reads the whole path. Before, the word was often taken from half of it; now always from the full swipe, and quick swipes in a row come out in order.
-- Instant hashtags without AI: right after «#» the first suggestion is up to 4 hashtags from the post's key words; one tap puts them all. The slow, imprecise AI hashtag action is gone.
-- Keyboard height (80–130 %) and gaps between keys (usual or wide) in the Look settings.
-- Settings blocks open one at a time.
-- Better emoji for words.
-- «Forget my touches» resets the learned tap offset.
-- Privacy: hashtags are learned under the same rules as words; text from a photo opened in a private field stays out of the clipboard history; the AI from Share always respects «Block screenshots».
-- Physical keyboard: English over a Ukrainian system layout types US signs; Space learns words.
-- Fixed: replacing a word mid-text could delete text after it; hashtags were offered after Enter.
-- Ukrainian and English texts cleaned up.
+- 12 languages at the level of Ukrainian: Belarusian, Polish, Slovak, Hungarian, Romanian, German, French, Spanish, Portuguese, Russian, English and Ukrainian, each with its own word list, swipe, typo correction, emoji for words and themed words (digital and everyday words, Ukraine's cities by their current names, Ukrainian things). So that Ukrainians abroad and their neighbours type their own language in a Ukrainian keyboard.
+- Offline translation of words between the 12 languages: a button above the keyboard and "Translate (Pysanka)" in the text selection menu of any app, with Wiktionary dictionaries in the app.
+- Lists, to-dos and the date as in note apps: •, 1. and ☐ from a button above the keyboard, a second tap ticks a to-do, Enter continues the list; Markdown in Joplin, Obsidian and Markor.
+- Belarusian: a new layout with ў and і, a word list with both orthographies.
+- Letters typed without their marks are put right: «dziekuje» → «dziękuję», «fur» → «für».
+- Settings in 11 languages.
+- Russian with a full word list and swipe, to make the move to Ukrainian easier.
+- Swear words are offered only when typed in full, with a list for each language.
+- A language without a word list: no swipe, but text shortcuts and learned words work.
+- More accurate dictation: Whisper small instead of base, with fewer mistakes in Ukrainian. The app is larger (about 250 MB) and recognition takes a little longer.
+- All the themes of the other apps: new Viburnum, Clay, Starry night and Embers; chosen in rows of three, and a day theme brings its night pair (and the other way round).
+- A word from the author in About: how the idea came, the war, and official ways to support Ukraine.
+- Settings: an opened block scrolls into view.

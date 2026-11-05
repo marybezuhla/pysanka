@@ -190,12 +190,12 @@ private object VoiceEngine {
 }
 
 /**
- * Pysanka: Whisper base (OpenAI, MIT; whisper.cpp's 5-bit file) comes with the app
- * (assets/voice, its SHA-256 and source next to it), stored uncompressed so it is mapped from the
+ * Pysanka: Whisper small (OpenAI, MIT; whisper.cpp's 5-bit file) comes with the app
+ * (assets/voice: downloaded by the build, its SHA-256 and source next to it), stored uncompressed so it is mapped from the
  * APK rather than copied.
  */
 object VoiceModel {
-    private const val ASSET = "voice/ggml-base-q5_1.bin"
+    private const val ASSET = "voice/ggml-small-q5_1.bin"
 
     /** The file, mapped; whisper copies what it needs while loading, then this can go. */
     fun map(context: Context): java.nio.ByteBuffer? = runCatching {

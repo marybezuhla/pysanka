@@ -81,6 +81,8 @@ import dev.patrickgold.florisboard.ime.text.key.KeyVariation
 import dev.patrickgold.florisboard.ime.theme.FlorisImeUi
 import dev.patrickgold.florisboard.ime.window.LocalWindowController
 import dev.patrickgold.florisboard.keyboardManager
+// Pysanka: the active language, for swipe only where it has a word list
+import dev.patrickgold.florisboard.subtypeManager
 import dev.patrickgold.florisboard.lib.FlorisRect
 import dev.patrickgold.florisboard.lib.Pointer
 import dev.patrickgold.florisboard.lib.PointerMap
@@ -117,7 +119,9 @@ fun TextKeyboardLayout(
     val keyboard = evaluator.keyboard as TextKeyboard
     val glideEnabledInternal by prefs.glide.enabled.observeAsState()
     val glideEnabled = glideEnabledInternal && evaluator.editorInfo.isRichInputEditor &&
-        evaluator.state.keyVariation != KeyVariation.PASSWORD
+        evaluator.state.keyVariation != KeyVariation.PASSWORD &&
+        // Pysanka: no swipe in a language without a word list (it would type nothing)
+        ua.pysanka.typing.WordLists.has(context, evaluator.subtype.primaryLocale.language)
     val glideShowTrail by prefs.glide.showTrail.observeAsState()
     // Pysanka: a split keyboard on wide screens (ua.pysanka.ui.SplitKeyboard)
     val splitMode by prefs.keyboard.pysankaSplit.observeAsState()
@@ -412,6 +416,9 @@ private class TextKeyboardLayoutController(
     private val prefs by FlorisPreferenceStore
     private val editorInstance by context.editorInstance()
     private val keyboardManager by context.keyboardManager()
+    // Pysanka: for isGlideEnabled (swipe only in a language with a word list)
+    private val subtypeManagerForGlide by context.subtypeManager()
+    private val appContextForGlide = context.applicationContext
 
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val inputFeedbackController get() = FlorisImeService.inputFeedbackController()
@@ -433,7 +440,9 @@ private class TextKeyboardLayoutController(
     var size = Size.Zero
 
     val isGlideEnabled: Boolean get() = prefs.glide.enabled.get() && editorInstance.activeInfo.isRichInputEditor &&
-        keyboardManager.activeState.keyVariation != KeyVariation.PASSWORD
+        keyboardManager.activeState.keyVariation != KeyVariation.PASSWORD &&
+        // Pysanka: see above
+        ua.pysanka.typing.WordLists.has(appContextForGlide, subtypeManagerForGlide.activeSubtype.primaryLocale.language)
 
     fun onTouchEventInternal(event: MotionEvent) {
         flogDebug { "event=$event" }

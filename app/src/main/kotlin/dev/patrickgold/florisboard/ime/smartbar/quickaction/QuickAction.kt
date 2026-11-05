@@ -105,6 +105,8 @@ fun QuickAction.computeDisplayName(evaluator: ComputingEvaluator): String {
             KeyCode.PYSANKA_FIX_LAYOUT -> R.string.pysanka__layout__quick_action
             KeyCode.PYSANKA_TEXT_FROM_PHOTO -> R.string.pysanka__ocr__from_photo
             KeyCode.PYSANKA_TEXT_FROM_CAMERA -> R.string.pysanka__ocr__from_camera
+            KeyCode.PYSANKA_TRANSLATE -> R.string.pysanka__translate__quick_action
+            KeyCode.PYSANKA_LISTS -> R.string.pysanka__lists__quick_action
             // TODO: In the future this will be merged into the resize keyboard panel, for now it is a separate action
             KeyCode.TOGGLE_COMPACT_LAYOUT -> R.string.quick_action__one_handed_mode
             KeyCode.TOGGLE_RESIZE_MODE -> R.string.quick_action__resize_mode
@@ -150,6 +152,8 @@ fun QuickAction.computeTooltip(evaluator: ComputingEvaluator): String {
             KeyCode.PYSANKA_FIX_LAYOUT -> R.string.pysanka__layout__quick_action__tooltip
             KeyCode.PYSANKA_TEXT_FROM_PHOTO -> R.string.pysanka__ocr__from_photo__tooltip
             KeyCode.PYSANKA_TEXT_FROM_CAMERA -> R.string.pysanka__ocr__from_camera__tooltip
+            KeyCode.PYSANKA_TRANSLATE -> R.string.pysanka__translate__quick_action__tooltip
+            KeyCode.PYSANKA_LISTS -> R.string.pysanka__lists__quick_action__tooltip
             // TODO: In the future this will be merged into the resize keyboard panel, for now it is a separate action
             KeyCode.TOGGLE_COMPACT_LAYOUT -> R.string.quick_action__one_handed_mode__tooltip
             KeyCode.TOGGLE_RESIZE_MODE -> R.string.quick_action__resize_mode__tooltip

@@ -256,6 +256,12 @@
         "direction": "ltr"
       },
       {
+        "id": "jcuken_belarusian",
+        "label": "Belarusian (ЙЦУКЕН)",
+        "authors": [ "pysanka" ],
+        "direction": "ltr"
+      },
+      {
         "id": "jcuken_russian",
         "label": "Russian (ЙЦУКЕН)",
         "authors": [ "williamtheaker" ],

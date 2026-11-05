@@ -198,6 +198,36 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: lists, to-dos and the date (ua.pysanka.ime.Lists)
+    val pysankaLists = PysankaLists()
+    inner class PysankaLists {
+        /** Enter after a list item starts the next one; on an empty item it ends the list. */
+        val continueOnEnter = boolean(
+            key = "pysanka__lists__continue",
+            default = true,
+        )
+        /** How items are written: AUTO (Markdown in Markdown note apps), SYMBOLS or MARKDOWN. */
+        val style = string(
+            key = "pysanka__lists__style",
+            default = "AUTO",
+        )
+    }
+
+    // Pysanka: the offline translation dictionaries
+    val pysankaTranslate = PysankaTranslate()
+    inner class PysankaTranslate {
+        /** «Перекласти (Писанка)» in the text selection menu of every app (ua.pysanka.translate.TranslateEntry). */
+        val inSelectionMenu = boolean(
+            key = "pysanka__translate__selection_menu",
+            default = true,
+        )
+        /** The language translated into: "auto" (Ukrainian, or from Ukrainian another keyboard language) or a language. */
+        val target = string(
+            key = "pysanka__translate__target",
+            default = "auto",
+        )
+    }
+
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {
@@ -824,12 +854,12 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
         val dayThemeId = custom(
             key = "theme__day_theme_id",
-            default = extCoreTheme("kreyda"), // Pysanka: its own themes (scripts/themes.py)
+            default = extCoreTheme("linen"), // Pysanka: its own themes (scripts/themes.py)
             serializer = ExtensionComponentName.Serializer,
         )
         val nightThemeId = custom(
             key = "theme__night_theme_id",
-            default = extCoreTheme("podillia"),
+            default = extCoreTheme("mak"),
             serializer = ExtensionComponentName.Serializer,
         )
         val accentColor = custom(
@@ -852,5 +882,5 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
 }
 
 /** Pysanka: the settings languages offered ("auto": as the phone). */
-val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en")
+val PYSANKA_SETTINGS_LANGUAGES = listOf("auto", "uk", "en", "be", "pl", "sk", "hu", "ro", "de", "fr", "es", "pt")
 

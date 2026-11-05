@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Pysanka</string>
+
+    <string name="key__phone_pause">Pausa</string>
+    <string name="key__phone_wait">Espera</string>
+
+    <string name="prefs__media__emoji_preferred_skin_tone">Tono de piel preferido de los emojis</string>
+
+    <string name="emoji__history__empty_message">Aún no hay emojis recientes. Cuando empieces a usarlos, aparecerán aquí automáticamente.</string>
+    <string name="emoji__history__phone_locked_message">Para ver tu historial de emojis, primero desbloquea el dispositivo.</string>
+    <string name="emoji__history__usage_tip">Consejo: mantén presionado un emoji del historial para fijarlo o quitarlo.</string>
+    <string name="emoji__history__removal_success_message">{emoji} se quitó del historial de emojis</string>
+    <string name="emoji__history__pinned">Fijados</string>
+    <string name="emoji__history__recent">Recientes</string>
+
+    <string name="quick_action__arrow_up">Arriba</string>
+    <string name="quick_action__arrow_up__tooltip">Mover el cursor hacia arriba</string>
+    <string name="quick_action__arrow_down">Abajo</string>
+    <string name="quick_action__arrow_down__tooltip">Mover el cursor hacia abajo</string>
+    <string name="quick_action__arrow_left">Izquierda</string>
+    <string name="quick_action__arrow_left__tooltip">Mover el cursor a la izquierda</string>
+    <string name="quick_action__arrow_right">Derecha</string>
+    <string name="quick_action__arrow_right__tooltip">Mover el cursor a la derecha</string>
+    <string name="quick_action__ime_hide_ui">Ocultar teclado</string>
+    <string name="quick_action__ime_hide_ui__tooltip">Ocultar el teclado</string>
+    <string name="quick_action__clipboard_clear_primary_clip">Vaciar portapapeles</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Borrar lo último que copiaste</string>
+    <string name="quick_action__clipboard_copy">Copiar</string>
+    <string name="quick_action__clipboard_copy__tooltip">Copiar al portapapeles</string>
+    <string name="quick_action__clipboard_cut">Cortar</string>
+    <string name="quick_action__clipboard_cut__tooltip">Cortar al portapapeles</string>
+    <string name="quick_action__clipboard_paste">Pegar</string>
+    <string name="quick_action__clipboard_paste__tooltip">Pegar del portapapeles</string>
+    <string name="quick_action__clipboard_select_all">Seleccionar todo</string>
+    <string name="quick_action__clipboard_select_all__tooltip">Seleccionar todo el texto</string>
+    <string name="quick_action__forward_delete">Borrar hacia delante</string>
+    <string name="quick_action__ime_ui_mode_clipboard">Portapapeles</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Abrir el historial del portapapeles</string>
+    <string name="quick_action__ime_ui_mode_media">Emojis</string>
+    <string name="quick_action__ime_ui_mode_media__tooltip">Abrir el panel de emojis</string>
+    <string name="quick_action__language_switch">Cambiar idioma</string>
+    <string name="quick_action__language_switch__tooltip">Cambiar el idioma del teclado</string>
+    <string name="quick_action__settings">Ajustes</string>
+    <string name="quick_action__settings__tooltip">Abrir los ajustes</string>
+    <string name="quick_action__undo">Deshacer</string>
+    <string name="quick_action__undo__tooltip">Deshacer lo último que escribiste</string>
+    <string name="quick_action__redo">Rehacer</string>
+    <string name="quick_action__redo__tooltip">Rehacer lo último que escribiste</string>
+    <string name="quick_action__toggle_actions_overflow">Más acciones</string>
+    <string name="quick_action__toggle_actions_overflow__tooltip">Mostrar u ocultar más acciones</string>
+    <string name="quick_action__toggle_incognito_mode">Incógnito</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Activar o desactivar el modo incógnito</string>
+    <string name="quick_action__toggle_autocorrect">Autocorrección</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Activar o desactivar la autocorrección</string>
+    <string name="quick_action__voice_input">Dictado</string>
+    <string name="quick_action__voice_input__tooltip">Dictar (se reconoce en el teléfono)</string>
+    <string name="quick_action__floating_window_mode">Flotante</string>
+    <string name="quick_action__floating_window_mode__tooltip">Activar o desactivar el teclado flotante</string>
+    <string name="quick_action__one_handed_mode">Una mano</string>
+    <string name="quick_action__one_handed_mode__tooltip">Activar o desactivar el modo una mano</string>
+    <string name="quick_action__resize_mode">Tamaño</string>
+    <string name="quick_action__resize_mode__tooltip">Activar o desactivar el cambio de tamaño</string>
+    <string name="quick_action__drag_marker">Marcador</string>
+    <string name="quick_action__drag_marker__tooltip">Posición actual del marcador de arrastre</string>
+    <string name="quick_action__noop">Ninguna</string>
+    <string name="quick_action__noop__tooltip">Sin acción</string>
+    <string name="quick_actions_overflow__customize_actions_button">Ordenar acciones</string>
+    <string name="quick_actions_editor__header">Orden de las acciones</string>
+    <string name="quick_actions_editor__subheader_sticky_action">Acción fija ({n})</string>
+    <string name="quick_actions_editor__subheader_dynamic_actions">Acciones dinámicas ({n})</string>
+    <string name="quick_actions_editor__subheader_hidden_actions">Acciones ocultas ({n})</string>
+    <string name="select_subtype_panel__header">Elegir idioma</string>
+
+    <string name="incognito_mode__toast_after_enabled">El modo incógnito está activado\n\n{app_name} no aprenderá palabras de lo que escribas mientras esté activo</string>
+    <string name="incognito_mode__toast_after_disabled">El modo incógnito está desactivado</string>
+
+    <string name="settings__title">Ajustes</string>
+    <string name="settings__preview_keyboard">Prueba aquí tu configuración</string>
+
+    <string name="settings__home__ime_not_enabled">Pysanka no está activado en el sistema, así que no aparece en la lista de teclados. Toca aquí para solucionarlo.</string>
+    <string name="settings__home__ime_not_selected">Pysanka no es tu teclado predeterminado. Toca aquí para solucionarlo.</string>
+
+    <string name="about__title">Información</string>
+
+    <string name="about__version__title">Versión</string>
+    <string name="about__version_copied__title">Versión copiada al portapapeles</string>
+    <string name="about__changelog__title">Registro de cambios</string>
+    <string name="about__changelog__summary">Novedades</string>
+    <string name="about__repository__title">Repositorio (GitHub)</string>
+    <string name="about__repository__summary">Código fuente, debates, incidencias e información</string>
+    <string name="about__privacy_policy__title">Política de privacidad</string>
+    <string name="about__privacy_policy__summary">La política de privacidad de este proyecto</string>
+    <string name="about__project_license__title">Licencia del proyecto</string>
+    <string name="about__third_party_licenses__title">Licencias de terceros</string>
+    <string name="about__third_party_licenses__summary">Licencias de las bibliotecas de terceros incluidas en esta app</string>
+
+    <string name="setup__footer__privacy_policy">Política de privacidad</string>
+    <string name="setup__footer__repository">Código fuente</string>
+
+    <string name="setup__enable_ime__title">Activa {app_name}</string>
+    <string name="setup__enable_ime__open_settings_btn">Abrir ajustes del sistema</string>
+
+    <string name="setup__select_ime__title">Elige {app_name}</string>
+    <string name="setup__select_ime__description">{app_name} está activado. Para usarlo, elígelo en el selector de teclados.</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Cambiar teclado</string>
+
+    <string name="setup__finish_up__finish_btn">Abrir los ajustes</string>
+
+    <string name="crash_dialog__title">Informe de error de Pysanka</string>
+    <string name="crash_dialog__description">Lo sentimos: Pysanka se cerró por un error inesperado.</string>
+    <string name="crash_dialog__report_instructions">Si quieres informar de este error, primero revisa las incidencias (Issues) en GitHub por si ya se informó.\nSi no, copia el registro del error, abre una incidencia nueva, describe qué hacías antes del fallo y pega el registro al final. ¡Gracias! Así Pysanka será más estable.</string>
+    <string name="crash_dialog__copy_to_clipboard">Copiar al portapapeles del sistema</string>
+    <string name="crash_dialog__copy_to_clipboard_success">Copiado al portapapeles del sistema</string>
+    <string name="crash_dialog__copy_to_clipboard_failure">No se puede copiar al portapapeles del sistema: no se encontró el administrador del portapapeles</string>
+    <string name="crash_dialog__open_issue_tracker">Abrir incidencias (github.com)</string>
+    <string name="crash_dialog__close">Cerrar</string>
+    <string name="crash_notification_channel__title">Informes de errores de Pysanka</string>
+    <string name="crash_once_notification__title">Pysanka dejó de funcionar…</string>
+    <string name="crash_once_notification__body">Toca para ver los detalles del error</string>
+    <string name="crash_multiple_notification__title">Pysanka falla una y otra vez…</string>
+    <string name="crash_multiple_notification__body">Se volvió al teclado anterior para que los fallos no se repitan. Toca para ver los detalles del error</string>
+
+    <string name="clipboard__header_title">Portapapeles</string>
+    <string name="clipboard__disabled__title">El historial del portapapeles está desactivado</string>
+    <string name="clipboard__disabled__message">El historial del portapapeles de {app_name} guarda los textos e imágenes que copias para que los vuelvas a usar rápido. Puedes fijar elementos, configurar la limpieza automática y poner un límite de elementos.</string>
+    <string name="clipboard__disabled__enable_button">Activar el historial del portapapeles</string>
+    <string name="clipboard__empty__title">Tu portapapeles está vacío</string>
+    <string name="clipboard__empty__message">Los textos e imágenes que copies aparecerán aquí.</string>
+    <string name="clipboard__locked__title">Tu portapapeles está bloqueado</string>
+    <string name="clipboard__locked__message">Para ver el historial del portapapeles, primero desbloquea el dispositivo.</string>
+    <string name="clipboard__group_pinned">Fijados</string>
+    <string name="clipboard__group_recent">Recientes</string>
+    <string name="clipboard__group_other">Otros</string>
+    <string name="clipboard__item_description_email">Correo</string>
+    <string name="clipboard__item_description_url">URL</string>
+    <string name="clipboard__item_description_phone">Teléfono</string>
+    <string name="clip__unpin_item">Dejar de fijar</string>
+    <string name="clip__pin_item">Fijar</string>
+    <string name="clip__delete_item">Eliminar</string>
+    <string name="clip__paste_item">Pegar</string>
+    <string name="clipboard__cleared_primary_clip">Se vació el portapapeles</string>
+    <string name="clipboard__cleared_history">Historial borrado</string>
+    <string name="clipboard__confirm_clear_unfiltered_history__message">¿Quieres borrar todo el historial del portapapeles? Se eliminarán todos los elementos, excepto los fijados.</string>
+    <string name="clipboard__confirm_clear_filtered_history__message">¿Quieres borrar el historial del portapapeles? Se eliminarán todos los elementos filtrados ahora, excepto los fijados.</string>
+
+    <string name="action__cancel">Cancelar</string>
+    <string name="action__default">Predeterminado</string>
+    <string name="action__delete">Eliminar</string>
+    <string name="action__delete_confirm_title">Confirmar eliminación</string>
+    <string name="action__delete_confirm_message">¿Seguro que quieres eliminar «{name}»? No se podrá deshacer.</string>
+    <string name="action__reset">Restablecer</string>
+    <string name="action__discard">Descartar</string>
+    <string name="action__discard_confirm_title">Cambios sin guardar</string>
+    <string name="action__discard_confirm_message">¿Seguro que quieres descartar los cambios sin guardar? No se podrá deshacer.</string>
+    <string name="action__no">No</string>
+    <string name="action__ok">Aceptar</string>
+    <string name="action__save">Guardar</string>
+    <string name="action__yes">Sí</string>
+
+    <string name="general__no_browser_app_found_for_url">No hay ningún navegador para abrir {url}</string>
+
+    <string name="enum__emoji_skin_tone__default">{emoji} Tono de piel predeterminado</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone">{emoji} Tono de piel claro</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone">{emoji} Tono de piel medio claro</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone">{emoji} Tono de piel medio</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone">{emoji} Tono de piel medio oscuro</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone">{emoji} Tono de piel oscuro</string>
+
+    <string name="enum__incognito_mode__force_off">Siempre desactivado</string>
+    <string name="enum__incognito_mode__force_off__description">El modo incógnito estará siempre desactivado, sin importar lo que indique la app. La acción rápida de incógnito no estará disponible en la barra de acciones con esta opción.</string>
+    <string name="enum__incognito_mode__force_on">Siempre activado</string>
+    <string name="enum__incognito_mode__force_on__description">El modo incógnito estará siempre activado, sin importar lo que indique la app. La acción rápida de incógnito no estará disponible en la barra de acciones con esta opción.</string>
+    <string name="enum__incognito_mode__dynamic_on_off">Automático (según el campo) o a mano</string>
+    <string name="enum__incognito_mode__dynamic_on_off__description">Opción recomendada. El modo incógnito se activa o desactiva según lo que indique la app, o a mano con la acción rápida de incógnito en la barra de acciones.</string>
+
+    <string name="enum__swipe_action__no_action">Ninguna acción</string>
+    <string name="enum__swipe_action__cycle_to_previous_keyboard_mode">Ir al modo de teclado anterior</string>
+    <string name="enum__swipe_action__cycle_to_next_keyboard_mode">Ir al modo de teclado siguiente</string>
+    <string name="enum__swipe_action__delete_characters_precisely">Borrar caracteres con precisión</string>
+    <string name="enum__swipe_action__delete_word">Borrar la palabra antes del cursor</string>
+    <string name="enum__swipe_action__delete_words_precisely">Borrar palabras con precisión</string>
+    <string name="enum__swipe_action__hide_keyboard">Ocultar el teclado</string>
+    <string name="enum__swipe_action__insert_space">Insertar un espacio</string>
+    <string name="enum__swipe_action__move_cursor_up">Mover el cursor hacia arriba</string>
+    <string name="enum__swipe_action__move_cursor_down">Mover el cursor hacia abajo</string>
+    <string name="enum__swipe_action__move_cursor_left">Mover el cursor a la izquierda</string>
+    <string name="enum__swipe_action__move_cursor_right">Mover el cursor a la derecha</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line">Mover el cursor al inicio de la línea</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line">Mover el cursor al final de la línea</string>
+    <string name="enum__swipe_action__move_cursor_start_of_page">Mover el cursor al inicio del texto</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page">Mover el cursor al final del texto</string>
+    <string name="enum__swipe_action__switch_to_clipboard_context">Abrir el historial del portapapeles</string>
+    <string name="enum__swipe_action__switch_to_media_context">Abrir el panel de emojis</string>
+    <string name="enum__swipe_action__shift">Mayúsculas</string>
+    <string name="enum__swipe_action__redo">Rehacer</string>
+    <string name="enum__swipe_action__undo">Deshacer</string>
+    <string name="enum__swipe_action__select_characters_precisely">Seleccionar caracteres con precisión</string>
+    <string name="enum__swipe_action__select_words_precisely">Seleccionar palabras con precisión</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Mostrar el selector de idioma</string>
+    <string name="enum__swipe_action__show_input_method_picker">Mostrar el selector de teclados</string>
+    <string name="enum__swipe_action__switch_to_prev_keyboard">Cambiar al teclado anterior</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype">Cambiar al idioma anterior</string>
+    <string name="enum__swipe_action__switch_to_next_subtype">Cambiar al idioma siguiente</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility">Mostrar u ocultar la barra de acciones</string>
+
+    <string name="enum__theme_mode__always_day">Siempre el tema de día</string>
+    <string name="enum__theme_mode__always_night">Siempre el tema de noche</string>
+    <string name="enum__theme_mode__follow_system">Como el sistema</string>
+    <string name="enum__theme_mode__follow_time">Según la hora del día</string>
+
+</resources>

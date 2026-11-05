@@ -77,7 +77,7 @@ class VoicePanelScreensTest {
         dark: Boolean = false,
         hold: Boolean = false,
         canTakeBack: Boolean = false,
-        theme: String = if (dark) "podillia" else "kreyda",
+        theme: String = if (dark) "mak" else "linen",
     ) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         val json = app.assets.open("ime/theme/org.florisboard.themes/stylesheets/$theme.json").bufferedReader().use { it.readText() }
         val stylesheet = SnyggStylesheet.fromJson(json).getOrThrow()
@@ -133,7 +133,7 @@ class VoicePanelScreensTest {
     @Test fun inserted() = shot("voice-03-inserted", VoiceInput.State.Idle, canTakeBack = true)
     @Test fun insertedDark() = shot("voice-03-inserted-dark", VoiceInput.State.Idle, dark = true, canTakeBack = true)
     @Test fun recognising() = shot("voice-04-recognising", VoiceInput.State.Recognising, theme = "nebo")
-    @Test fun hold() = shot("voice-05-hold", listening, hold = true, theme = "hutsulshchyna")
+    @Test fun hold() = shot("voice-05-hold", listening, hold = true, theme = "smereka")
     @Test fun failed() = shot("voice-06-failed", VoiceInput.State.Failed(R.string.pysanka__voice__nothing), theme = "chornozem")
 
     private companion object {

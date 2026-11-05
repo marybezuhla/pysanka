@@ -1,0 +1,34 @@
+cords	cord
+cs	church slavonic
+emp	electromagnetic pulse
+est	eastern standard time
+exeter	oxford
+frg	federal republic of germany
+fri	friday
+gdp	gross domestic product
+highball	highball glass
+hq	headquarters
+ie	indian english
+interlocking	interlock
+irl	in real life
+ivf	in vitro fertilization
+kayaking	kayak
+llc	limited liability company
+mv	merchant vessel|mitral valve|motor vehicle|music video
+oct	october
+prez	president
+pvc	permanent virtual circuit
+qa	quality assurance
+queens	cambridge|kingston|oxford
+rcmp	royal canadian mounted police
+reversing	reverse
+rf	russian federation
+seating	seat
+sq	square
+std	sexually transmitted disease
+tov	void
+ui	unemployment insurance|urinary incontinence|user interface
+usb	universal serial bus
+ussr	ukrainian soviet socialist republic
+vp	verb phrase|vice president
+wmd	weapon of mass destruction

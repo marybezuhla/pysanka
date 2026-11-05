@@ -1,0 +1,211 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Пісанка</string>
+
+    <string name="key__phone_pause">Паўза</string>
+    <string name="key__phone_wait">Чаканне</string>
+
+    <string name="prefs__media__emoji_preferred_skin_tone">Колер скуры эмодзі</string>
+
+    <string name="emoji__history__empty_message">Тут пакуль пуста. Эмодзі, якія вы ўводзіце, з\'явяцца тут самі.</string>
+    <string name="emoji__history__phone_locked_message">Каб убачыць гісторыю эмодзі, спачатку разблакіруйце прыладу.</string>
+    <string name="emoji__history__usage_tip">Падказка: доўга націсніце на эмодзі ў гісторыі, каб замацаваць або выдаліць яго!</string>
+    <string name="emoji__history__removal_success_message">{emoji} выдалена з гісторыі эмодзі</string>
+    <string name="emoji__history__pinned">Замацаваныя</string>
+    <string name="emoji__history__recent">Нядаўнія</string>
+
+    <string name="quick_action__arrow_up">Стрэлка ўверх</string>
+    <string name="quick_action__arrow_up__tooltip">Перамясціць курсор уверх</string>
+    <string name="quick_action__arrow_down">Стрэлка ўніз</string>
+    <string name="quick_action__arrow_down__tooltip">Перамясціць курсор уніз</string>
+    <string name="quick_action__arrow_left">Стрэлка ўлева</string>
+    <string name="quick_action__arrow_left__tooltip">Перамясціць курсор улева</string>
+    <string name="quick_action__arrow_right">Стрэлка ўправа</string>
+    <string name="quick_action__arrow_right__tooltip">Перамясціць курсор управа</string>
+    <string name="quick_action__ime_hide_ui">Схаваць клавіятуру</string>
+    <string name="quick_action__ime_hide_ui__tooltip">Схаваць клавіятуру</string>
+    <string name="quick_action__clipboard_clear_primary_clip">Ачысціць буфер</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">Ачысціць бягучы змест буфера абмену</string>
+    <string name="quick_action__clipboard_copy">Капіяваць</string>
+    <string name="quick_action__clipboard_copy__tooltip">Капіяваць у буфер абмену</string>
+    <string name="quick_action__clipboard_cut">Выразаць</string>
+    <string name="quick_action__clipboard_cut__tooltip">Выразаць у буфер абмену</string>
+    <string name="quick_action__clipboard_paste">Уставіць</string>
+    <string name="quick_action__clipboard_paste__tooltip">Уставіць з буфера абмену</string>
+    <string name="quick_action__clipboard_select_all">Вылучыць усё</string>
+    <string name="quick_action__clipboard_select_all__tooltip">Вылучыць увесь тэкст</string>
+    <string name="quick_action__forward_delete">Выдаліць наперад</string>
+    <string name="quick_action__ime_ui_mode_clipboard">Буфер абмену</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Адкрыць гісторыю буфера абмену</string>
+    <string name="quick_action__ime_ui_mode_media">Эмодзі</string>
+    <string name="quick_action__ime_ui_mode_media__tooltip">Адкрыць панэль эмодзі</string>
+    <string name="quick_action__language_switch">Змяніць мову</string>
+    <string name="quick_action__language_switch__tooltip">Пераключыць мову</string>
+    <string name="quick_action__settings">Налады</string>
+    <string name="quick_action__settings__tooltip">Адкрыць налады</string>
+    <string name="quick_action__undo">Адрабіць</string>
+    <string name="quick_action__undo__tooltip">Адрабіць апошні ўвод</string>
+    <string name="quick_action__redo">Паўтарыць</string>
+    <string name="quick_action__redo__tooltip">Паўтарыць адроблены ўвод</string>
+    <string name="quick_action__toggle_actions_overflow">Іншыя дзеянні</string>
+    <string name="quick_action__toggle_actions_overflow__tooltip">Паказаць або схаваць дадатковыя дзеянні</string>
+    <string name="quick_action__toggle_incognito_mode">Інкогніта</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Уключыць або выключыць рэжым інкогніта</string>
+    <string name="quick_action__toggle_autocorrect">Аўтавыпраўленне</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Уключыць або выключыць аўтавыпраўленне</string>
+    <string name="quick_action__voice_input">Дыктоўка</string>
+    <string name="quick_action__voice_input__tooltip">Дыктаваць (распазнаецца на тэлефоне)</string>
+    <string name="quick_action__floating_window_mode">Плывучая</string>
+    <string name="quick_action__floating_window_mode__tooltip">Уключыць або выключыць плывучае акно клавіятуры</string>
+    <string name="quick_action__one_handed_mode">Адной рукой</string>
+    <string name="quick_action__one_handed_mode__tooltip">Уключыць або выключыць рэжым для адной рукі</string>
+    <string name="quick_action__resize_mode">Памер</string>
+    <string name="quick_action__resize_mode__tooltip">Уключыць або выключыць змену памеру</string>
+    <string name="quick_action__drag_marker">Маркер перацягвання</string>
+    <string name="quick_action__drag_marker__tooltip">Бягучае месца маркера перацягвання</string>
+    <string name="quick_action__noop">Няма</string>
+    <string name="quick_action__noop__tooltip">Без дзеяння</string>
+    <string name="quick_actions_overflow__customize_actions_button">Змяніць парадак дзеянняў</string>
+    <string name="quick_actions_editor__header">Парадак дзеянняў</string>
+    <string name="quick_actions_editor__subheader_sticky_action">Замацаванае дзеянне ({n})</string>
+    <string name="quick_actions_editor__subheader_dynamic_actions">Зменлівыя дзеянні ({n})</string>
+    <string name="quick_actions_editor__subheader_hidden_actions">Схаваныя дзеянні ({n})</string>
+    <string name="select_subtype_panel__header">Выбар мовы</string>
+
+    <string name="incognito_mode__toast_after_enabled">Рэжым інкогніта ўключаны\n\nПакуль ён дзейнічае, {app_name} не запамінае словы з таго, што вы набіраеце</string>
+    <string name="incognito_mode__toast_after_disabled">Рэжым інкогніта выключаны</string>
+
+    <string name="settings__title">Налады</string>
+    <string name="settings__preview_keyboard">Паспрабуйце свае налады</string>
+
+    <string name="settings__home__ime_not_enabled">Пісанка не ўключана ў сістэме, таму яе няма сярод спосабаў уводу. Націсніце тут, каб выправіць.</string>
+    <string name="settings__home__ime_not_selected">Пісанка не выбрана асноўнай клавіятурай. Націсніце тут, каб выправіць.</string>
+
+    <string name="about__title">Пра праграму</string>
+
+    <string name="about__version__title">Версія</string>
+    <string name="about__version_copied__title">Версія скапіявана ў буфер абмену</string>
+    <string name="about__changelog__title">Спіс змяненняў</string>
+    <string name="about__changelog__summary">Што новага</string>
+    <string name="about__repository__title">Рэпазіторый (GitHub)</string>
+    <string name="about__repository__summary">Зыходны код, абмеркаванні, памылкі і звесткі</string>
+    <string name="about__privacy_policy__title">Палітыка прыватнасці</string>
+    <string name="about__privacy_policy__summary">Палітыка прыватнасці гэтага праекта</string>
+    <string name="about__project_license__title">Ліцэнзія праекта</string>
+    <string name="about__third_party_licenses__title">Ліцэнзіі іншых бібліятэк</string>
+    <string name="about__third_party_licenses__summary">Ліцэнзіі старонніх бібліятэк, якія ўваходзяць у праграму</string>
+
+    <string name="setup__footer__privacy_policy">Палітыка прыватнасці</string>
+    <string name="setup__footer__repository">Зыходны код</string>
+
+    <string name="setup__enable_ime__title">Уключыце {app_name}</string>
+    <string name="setup__enable_ime__open_settings_btn">Адкрыць налады сістэмы</string>
+
+    <string name="setup__select_ime__title">Выберыце {app_name}</string>
+    <string name="setup__select_ime__description">{app_name} уключана. Каб карыстацца ёю, выберыце яе ў спісе клавіятур.</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Змяніць клавіятуру</string>
+
+    <string name="setup__finish_up__finish_btn">Адкрыць налады</string>
+
+    <string name="crash_dialog__title">Справаздача пра памылку Пісанкі</string>
+    <string name="crash_dialog__description">Прабачце, Пісанка спынілася праз нечаканую памылку.</string>
+    <string name="crash_dialog__report_instructions">Калі хочаце паведаміць пра гэтую памылку, спачатку праверце Issues на GitHub: магчыма, пра яе ўжо паведамілі.\nКалі не, скапіюйце журнал збою, адкрыйце новае паведамленне (New issue), апішыце, што вы рабілі перад збоем, і ўстаўце журнал у канцы. Дзякуй, гэта дапамагае зрабіць Пісанку больш стабільнай!</string>
+    <string name="crash_dialog__copy_to_clipboard">Скапіяваць у буфер абмену сістэмы</string>
+    <string name="crash_dialog__copy_to_clipboard_success">Скапіявана ў буфер абмену сістэмы</string>
+    <string name="crash_dialog__copy_to_clipboard_failure">Не ўдалося скапіяваць у буфер абмену: менеджар буфера абмену не знойдзены</string>
+    <string name="crash_dialog__open_issue_tracker">Адкрыць спіс памылак (github.com)</string>
+    <string name="crash_dialog__close">Закрыць</string>
+    <string name="crash_notification_channel__title">Справаздачы пра памылкі Пісанкі</string>
+    <string name="crash_once_notification__title">Пісанка перастала працаваць…</string>
+    <string name="crash_once_notification__body">Націсніце, каб убачыць падрабязнасці</string>
+    <string name="crash_multiple_notification__title">Здаецца, Пісанка раз за разам перастае працаваць…</string>
+    <string name="crash_multiple_notification__body">Вяртаемся да папярэдняй клавіятуры, каб спыніць бясконцыя збоі. Націсніце, каб убачыць падрабязнасці</string>
+
+    <string name="clipboard__header_title">Буфер абмену</string>
+    <string name="clipboard__disabled__title">Гісторыя буфера абмену выключана</string>
+    <string name="clipboard__disabled__message">Гісторыя буфера абмену {app_name} дазваляе хутка захоўваць і знаходзіць скапіяваныя тэксты і выявы, замацоўваць запісы, наладжваць аўтаматычную ачыстку і найбольшую колькасць запісаў.</string>
+    <string name="clipboard__disabled__enable_button">Уключыць гісторыю буфера</string>
+    <string name="clipboard__empty__title">Буфер абмену пусты</string>
+    <string name="clipboard__empty__message">Скапіяваныя тэксты і выявы з\'явяцца тут.</string>
+    <string name="clipboard__locked__title">Буфер абмену заблакіраваны</string>
+    <string name="clipboard__locked__message">Каб убачыць гісторыю буфера абмену, спачатку разблакіруйце прыладу.</string>
+    <string name="clipboard__group_pinned">Замацаваныя</string>
+    <string name="clipboard__group_recent">Нядаўнія</string>
+    <string name="clipboard__group_other">Іншае</string>
+    <string name="clipboard__item_description_email">Электронная пошта</string>
+    <string name="clipboard__item_description_url">Спасылка</string>
+    <string name="clipboard__item_description_phone">Тэлефон</string>
+    <string name="clip__unpin_item">Адмацаваць</string>
+    <string name="clip__pin_item">Замацаваць</string>
+    <string name="clip__delete_item">Выдаліць</string>
+    <string name="clip__paste_item">Уставіць</string>
+    <string name="clipboard__cleared_primary_clip">Буфер абмену ачышчаны</string>
+    <string name="clipboard__cleared_history">Гісторыя ачышчана</string>
+    <string name="clipboard__confirm_clear_unfiltered_history__message">Ачысціць усю гісторыю буфера абмену? Будуць выдалены ўсе запісы, акрамя замацаваных.</string>
+    <string name="clipboard__confirm_clear_filtered_history__message">Ачысціць гісторыю буфера абмену? Будуць выдалены ўсе адфільтраваныя запісы, акрамя замацаваных.</string>
+
+    <string name="action__cancel">Скасаваць</string>
+    <string name="action__default">Стандартна</string>
+    <string name="action__delete">Выдаліць</string>
+    <string name="action__delete_confirm_title">Пацвердзіце выдаленне</string>
+    <string name="action__delete_confirm_message">Выдаліць «{name}»? Гэта дзеянне нельга будзе адрабіць.</string>
+    <string name="action__reset">Скінуць</string>
+    <string name="action__discard">Адкінуць</string>
+    <string name="action__discard_confirm_title">Незахаваныя змены</string>
+    <string name="action__discard_confirm_message">Адкінуць незахаваныя змены? Гэта дзеянне нельга будзе адрабіць.</string>
+    <string name="action__no">Не</string>
+    <string name="action__ok">Добра</string>
+    <string name="action__save">Захаваць</string>
+    <string name="action__yes">Так</string>
+
+    <string name="general__no_browser_app_found_for_url">Няма браўзера, каб адкрыць спасылку {url}</string>
+
+    <string name="enum__emoji_skin_tone__default">{emoji} Стандартны колер скуры</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone">{emoji} Светлы колер скуры</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone">{emoji} Сярэдне-светлы колер скуры</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone">{emoji} Сярэдні колер скуры</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone">{emoji} Сярэдне-цёмны колер скуры</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone">{emoji} Цёмны колер скуры</string>
+
+    <string name="enum__incognito_mode__force_off">Заўсёды выключаны</string>
+    <string name="enum__incognito_mode__force_off__description">Рэжым інкогніта заўсёды выключаны, што б ні перадавала праграма. Кнопкі інкогніта ў Smartbar з гэтым варыянтам не будзе.</string>
+    <string name="enum__incognito_mode__force_on">Заўсёды ўключаны</string>
+    <string name="enum__incognito_mode__force_on__description">Рэжым інкогніта заўсёды ўключаны, што б ні перадавала праграма. Кнопкі інкогніта ў Smartbar з гэтым варыянтам не будзе.</string>
+    <string name="enum__incognito_mode__dynamic_on_off">Аўтаматычна (паводле поля) або ўручную</string>
+    <string name="enum__incognito_mode__dynamic_on_off__description">Рэкамендуецца. Рэжым інкогніта ўключаецца і выключаецца сам, паводле таго, што перадае праграма, або ўручную кнопкай інкогніта ў Smartbar.</string>
+
+    <string name="enum__swipe_action__no_action">Без дзеяння</string>
+    <string name="enum__swipe_action__cycle_to_previous_keyboard_mode">Папярэдні рэжым клавіятуры</string>
+    <string name="enum__swipe_action__cycle_to_next_keyboard_mode">Наступны рэжым клавіятуры</string>
+    <string name="enum__swipe_action__delete_characters_precisely">Дакладна выдаляць сімвалы</string>
+    <string name="enum__swipe_action__delete_word">Выдаліць слова перад курсорам</string>
+    <string name="enum__swipe_action__delete_words_precisely">Дакладна выдаляць словы</string>
+    <string name="enum__swipe_action__hide_keyboard">Схаваць клавіятуру</string>
+    <string name="enum__swipe_action__insert_space">Уставіць прабел</string>
+    <string name="enum__swipe_action__move_cursor_up">Курсор уверх</string>
+    <string name="enum__swipe_action__move_cursor_down">Курсор уніз</string>
+    <string name="enum__swipe_action__move_cursor_left">Курсор улева</string>
+    <string name="enum__swipe_action__move_cursor_right">Курсор управа</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line">Курсор на пачатак радка</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line">Курсор у канец радка</string>
+    <string name="enum__swipe_action__move_cursor_start_of_page">Курсор на пачатак старонкі</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page">Курсор у канец старонкі</string>
+    <string name="enum__swipe_action__switch_to_clipboard_context">Адкрыць буфер абмену і гісторыю</string>
+    <string name="enum__swipe_action__switch_to_media_context">Адкрыць панэль эмодзі</string>
+    <string name="enum__swipe_action__shift">Shift</string>
+    <string name="enum__swipe_action__redo">Паўтарыць</string>
+    <string name="enum__swipe_action__undo">Адрабіць</string>
+    <string name="enum__swipe_action__select_characters_precisely">Дакладна вылучаць сімвалы</string>
+    <string name="enum__swipe_action__select_words_precisely">Дакладна вылучаць словы</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Паказаць выбар мовы</string>
+    <string name="enum__swipe_action__show_input_method_picker">Паказаць выбар клавіятуры</string>
+    <string name="enum__swipe_action__switch_to_prev_keyboard">Да папярэдняй клавіятуры</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype">Да папярэдняй мовы</string>
+    <string name="enum__swipe_action__switch_to_next_subtype">Да наступнай мовы</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility">Паказаць або схаваць Smartbar</string>
+
+    <string name="enum__theme_mode__always_day">Заўсёды дзённая тэма</string>
+    <string name="enum__theme_mode__always_night">Заўсёды начная тэма</string>
+    <string name="enum__theme_mode__follow_system">Як у сістэме</string>
+    <string name="enum__theme_mode__follow_time">Паводле часу сутак</string>
+
+</resources>

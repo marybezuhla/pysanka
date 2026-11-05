@@ -49,6 +49,8 @@ import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.SentimentSatisfiedAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SpaceBar
+import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.filled.Checklist
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.patrickgold.florisboard.FlorisImeService
 import dev.patrickgold.florisboard.R
@@ -240,6 +242,8 @@ fun ComputingEvaluator.computeImageVector(data: KeyData): ImageVector? {
         KeyCode.PYSANKA_FIX_LAYOUT -> Icons.Default.SwapHoriz
         KeyCode.PYSANKA_TEXT_FROM_PHOTO -> Icons.Default.DocumentScanner
         KeyCode.PYSANKA_TEXT_FROM_CAMERA -> Icons.Default.PhotoCamera
+        KeyCode.PYSANKA_TRANSLATE -> Icons.Default.Translate
+        KeyCode.PYSANKA_LISTS -> Icons.Default.Checklist
         KeyCode.DELETE -> {
             Icons.AutoMirrored.Outlined.Backspace
         }

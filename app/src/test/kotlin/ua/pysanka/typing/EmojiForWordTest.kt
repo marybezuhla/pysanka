@@ -35,5 +35,9 @@ class EmojiForWordTest : FunSpec({
         val en = File(dir, "en.txt").readLines().filter { it.isNotBlank() && !it.startsWith("#") }
         uk.map { it.substringBefore(';') } shouldBe en.map { it.substringBefore(';') }
         uk.first { it.startsWith("☕;") }.contains("кава") shouldBe true
+        // Russian too, for people moving to Ukrainian
+        val ru = File(dir, "ru.txt").readLines().filter { it.isNotBlank() && !it.startsWith("#") }
+        ru.map { it.substringBefore(';') } shouldBe en.map { it.substringBefore(';') }
+        ru.first { it.startsWith("☕;") }.contains("кофе") shouldBe true
     }
 })

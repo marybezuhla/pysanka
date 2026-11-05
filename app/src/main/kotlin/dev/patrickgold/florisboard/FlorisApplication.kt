@@ -129,6 +129,8 @@ class FlorisApplication : Application() {
                 datastoreName = FlorisPreferenceModel.NAME,
             )
             preferenceStoreLoaded.value = true
+            // Pysanka: "Translate (Pysanka)" in the selection menu as the settings say
+            runCatching { ua.pysanka.translate.TranslateEntry.sync(this@FlorisApplication) }
         }
         extensionManager.value.init()
         clipboardManager.value.initializeForContext(this)

@@ -45,6 +45,8 @@ object Hashtags {
      */
     fun suggest(
         prefix: String, text: String, own: PersonalWords?, frequency: (String) -> Int, complete: (String) -> List<String>, max: Int = 5,
+        hasList: Boolean = true,
+        language: String? = null,
     ): List<String> {
         val p = PersonalWords.key(prefix)
         val out = LinkedHashMap<String, String>()
@@ -58,7 +60,7 @@ object Hashtags {
             keys.take(max).forEach { add(o.display(it) ?: it) }
         }
         // 2. The text's key words
-        keywords(text, frequency, complete, max = 12).filter { PersonalWords.key(it).startsWith(p) }.forEach { add(it) }
+        keywords(text, frequency, complete, max = 12, hasList = hasList, language = language).filter { PersonalWords.key(it).startsWith(p) }.forEach { add(it) }
         // 3. The word list
         if (p.length >= 2) complete(prefix).forEach { add(it) }
         return out.values.toList()
@@ -111,6 +113,13 @@ object Hashtags {
         "буду", "будеш", "будемо", "одне", "один", "одна", "одні", "таких", "такий", "така", "таке", "такі",
         "наскільки", "настільки", "скільки", "стільки", "подивись", "подивіться", "дивись", "будь", "ласка",
         "дякую", "привіт", "добре", "звісно", "напевно", "мабуть", "взагалі", "особливо", "майже",
+        "меня", "мне", "тебя", "тебе", "него", "нему", "она", "они", "нами", "вами", "ними", "себя", "себе",
+        "который", "которая", "которое", "которые", "этот", "этого", "этой", "этих", "этом", "того", "тоже",
+        "также", "потому", "почему", "когда", "тогда", "теперь", "сейчас", "очень", "может", "можно", "нужно",
+        "надо", "будет", "было", "была", "были", "быть", "есть", "нету", "чтобы", "если", "только", "даже",
+        "после", "через", "около", "просто", "хочу", "хочет", "знаю", "думаю", "весь", "всех", "всем", "другой",
+        "много", "мало", "больше", "меньше", "всегда", "никогда", "иногда", "сегодня", "завтра", "вчера", "туда",
+        "сюда", "откуда", "куда", "или", "однако", "типа", "короче", "вообще", "спасибо", "привет", "пожалуйста",
         "this", "that", "with", "from", "have", "your", "about", "would", "could", "should", "there", "their",
         "they", "them", "what", "when", "where", "which", "will", "just", "more", "very", "some", "into", "than",
     )
@@ -139,14 +148,24 @@ object Hashtags {
      * name (not at a sentence's start). Hashtags the text already has are left out.
      */
     @Suppress("UNUSED_PARAMETER")
-    fun keywords(text: String, frequency: (String) -> Int, complete: (String) -> List<String> = { emptyList() }, max: Int = 5): List<String> {
+    fun keywords(
+        text: String,
+        frequency: (String) -> Int,
+        complete: (String) -> List<String> = { emptyList() },
+        max: Int = 5,
+        // Pysanka: false for a language without a word list: every word is unknown there, so one
+        // used once counts too, and no word is turned into another form
+        hasList: Boolean = true,
+        // Pysanka: whose little words are left out (see LanguageExtras.stop)
+        language: String? = null,
+    ): List<String> {
         val tagged = Regex("""#([\p{L}\p{N}_]+)""").findAll(text).map { PersonalWords.key(it.groupValues[1]) }.toSet()
         class Group(val forms: MutableList<String> = mutableListOf(), var count: Int = 0, var first: Int = 0, var name: Boolean = false)
         val groups = LinkedHashMap<String, Group>()
         for ((i, m) in WORD.findAll(text).withIndex()) {
             val w = m.value
             val key = PersonalWords.key(w)
-            if (key.length < 4 || key in STOP || key.any { it.isDigit() } || key in tagged) continue
+            if (key.length < 4 || key in STOP || key in LanguageExtras.stop(language) || key.any { it.isDigit() } || key in tagged) continue
             val g = groups.getOrPut(stem(key)) { Group(first = i) }
             g.forms += w
             g.count++
@@ -159,9 +178,9 @@ object Hashtags {
         }
         val scored = groups.mapNotNull { (_, g) ->
             val known = g.forms.maxOf(frequency)
-            if (known == 0 && g.count < 2) return@mapNotNull null
+            if (hasList && known == 0 && g.count < 2) return@mapNotNull null
             val weak = g.forms.count { weak(PersonalWords.key(it), frequency) } * 2 > g.forms.size
-            val best = if (g.name) g.forms.first() else if (weak) PersonalWords.key(g.forms.first()) else {
+            val best = if (g.name) g.forms.first() else if (weak || !hasList) PersonalWords.key(g.forms.first()) else {
                 g.forms.map { plain(PersonalWords.key(it), frequency) }.maxWith(compareBy({ frequency(it) }, { -it.length }))
             }
             val rarity = if (known == 0) 0.6 else (256 - known) / 256.0

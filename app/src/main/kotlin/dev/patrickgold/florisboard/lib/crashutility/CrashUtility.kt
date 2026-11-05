@@ -72,6 +72,9 @@ abstract class CrashUtility private constructor() {
          * @return True if the installation was successful, false otherwise.
          */
         fun install(context: Context?): Boolean {
+            // Pysanka: not in the tests on a computer (Robolectric), where ending the process would
+            // end every test after the one with a background error
+            if (android.os.Build.FINGERPRINT == "robolectric") return false
             if (context == null) {
                 flogError(LogTopic.CRASH_UTILITY) {
                     "Can't install crash handler with a null Context object, doing nothing!"

@@ -64,7 +64,7 @@ class Feat:
 
 if __name__ == "__main__":
     lang, n, seed, outp = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), sys.argv[4]
-    d = load(lang); keys = UK if lang == "uk" else EN
+    d = load(lang); keys = KEYS[lang]
     words = {w: f for w, f in d.items() if key_seq(w, keys) and len(key_seq(w,keys)) == len([c for c in w.lower() if c.isalpha()])}
     top = sorted(words.items(), key=lambda kv: -kv[1])[:8000]
     rng = random.Random(seed)

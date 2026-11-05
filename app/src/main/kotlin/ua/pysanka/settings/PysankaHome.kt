@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -64,7 +66,10 @@ import kotlin.reflect.KClass
  * their defaults.
  */
 @Composable
-fun PysankaHome() {
+fun PysankaHome(
+    /** The block open at first (its title); for the screenshot tests. */
+    initialOpen: String? = null,
+) {
     val prefs by FlorisPreferenceStore
     val navController = LocalNavController.current
     val context = LocalContext.current
@@ -73,7 +78,7 @@ fun PysankaHome() {
     fun state(v: Boolean) = if (v) on else off
 
     // One block open at a time: opening another closes it
-    val openBlock = rememberSaveable { mutableStateOf<String?>(null) }
+    val openBlock = rememberSaveable { mutableStateOf(initialOpen) }
     androidx.compose.runtime.CompositionLocalProvider(LocalOpenBlock provides openBlock) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
@@ -92,6 +97,14 @@ fun PysankaHome() {
             stringRes(R.string.pysanka__settings__typing_state, "glide" to state(glide), "suggestions" to state(suggestions), "correct" to state(autoCorrect)),
             icon = Icons.Outlined.Keyboard,
         ) { TypingSettings() }
+
+        // Lists and to-dos on their own, easy to find rather than among the typing switches
+        val listsOn by prefs.pysankaLists.continueOnEnter.observeAsState()
+        Block(
+            stringRes(R.string.pysanka__settings__lists),
+            stringRes(R.string.pysanka__settings__lists_state, "continue" to state(listsOn)),
+            icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
+        ) { ListsSettings() }
 
         val mode by prefs.theme.mode.observeAsState()
         val numberRow by prefs.keyboard.numberRow.observeAsState()
@@ -154,6 +167,35 @@ fun PysankaHome() {
                     },
                 )
             }) { v -> scope.launch { prefs.pysankaAi.emoji.set(v) } }
+        }
+
+        val translateMenu by prefs.pysankaTranslate.inSelectionMenu.observeAsState()
+        val translateTarget by prefs.pysankaTranslate.target.observeAsState()
+        val uiLocale = remember(context) { java.util.Locale.forLanguageTag(ua.pysanka.translate.TranslateChoice.ownLanguage(context)) }
+        val autoTarget = stringRes(R.string.pysanka__translate__target_auto)
+        val targetName = if (translateTarget in ua.pysanka.translate.Translations.LANGUAGES) {
+            ua.pysanka.translate.Translations.languageName(translateTarget, uiLocale)
+        } else {
+            autoTarget
+        }
+        Block(
+            stringRes(R.string.pysanka__translate__title),
+            stringRes(R.string.pysanka__translate__state, "language" to targetName),
+            icon = Icons.Outlined.Translate,
+        ) {
+            BlockNote(stringRes(R.string.pysanka__translate__about))
+            val scope = rememberCoroutineScope()
+            ToggleRow(stringRes(R.string.pysanka__translate__selection_menu), translateMenu, stringRes(R.string.pysanka__translate__selection_menu_hint)) { v ->
+                scope.launch {
+                    prefs.pysankaTranslate.inSelectionMenu.set(v)
+                    ua.pysanka.translate.TranslateEntry.sync(context)
+                }
+            }
+            ChoiceRow(
+                stringRes(R.string.pysanka__translate__target),
+                listOf("auto" to autoTarget) + ua.pysanka.translate.Translations.LANGUAGES.map { it to ua.pysanka.translate.Translations.languageName(it, uiLocale) },
+                if (translateTarget in ua.pysanka.translate.Translations.LANGUAGES) translateTarget else "auto",
+            ) { v -> scope.launch { prefs.pysankaTranslate.target.set(v) } }
         }
 
         val voiceState = stringRes(
@@ -252,6 +294,23 @@ private fun PanelActionsRow() {
 }
 
 @Composable
+private fun ListsSettings() {
+    val prefs by FlorisPreferenceStore
+    val scope = rememberCoroutineScope()
+    PrefToggle(prefs.pysankaLists.continueOnEnter, stringRes(R.string.pysanka__lists__continue), stringRes(R.string.pysanka__lists__continue_summary))
+    val listStyle by prefs.pysankaLists.style.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__lists__style),
+        listOf(
+            "AUTO" to stringRes(R.string.pysanka__lists__style_auto),
+            "SYMBOLS" to stringRes(R.string.pysanka__lists__style_symbols),
+            "MARKDOWN" to stringRes(R.string.pysanka__lists__style_markdown),
+        ),
+        listStyle,
+    ) { v -> scope.launch { prefs.pysankaLists.style.set(v) } }
+}
+
+@Composable
 private fun TypingSettings() {
     val prefs by FlorisPreferenceStore
     val context = LocalContext.current
@@ -342,7 +401,7 @@ private fun LookSettings() {
     }
     // The keyboard's height; a size set by dragging the keyboard's frame is let go, so this one shows
     val height by prefs.keyboard.pysankaHeight.observeAsState()
-    SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }) {
+    SliderRow(stringRes(R.string.pysanka__look__height), height, 80..130, 5, { "$it %" }, hint = stringRes(R.string.pysanka__look__height_hint)) {
         scope.launch {
             prefs.keyboard.pysankaHeight.set(it)
             // Only the height: one-handed side and other sizes stay

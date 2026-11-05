@@ -1,0 +1,211 @@
+# Chat abbreviations and colloquial French (France, Belgium, Switzerland, Québec, Africa); Pysanka's own list (GPL-3.0-or-later). No swearing, no slurs.
+# Chat abbreviations
+mdr
+ptdr
+lol
+jpp
+jsp
+jsais
+chais
+tkt
+slt
+bjr
+bsr
+cc
+coucou
+stp
+svp
+dsl
+pk
+pq
+pcq
+pck
+psk
+mtn
+jtm
+bcp
+qqn
+qqch
+qqc
+tjrs
+tjs
+ajd
+auj
+dac
+d'acc
+ok
+oki
+okay
+bref
+osef
+askip
+wsh
+wesh
+re
+bn
+bne
+bisous
+bisou
+bises
+biz
+gros bisous
+a plus
+à plus
+à toute
+à demain
+bonne nuit
+bonne journée
+bonne soirée
+merci
+mercii
+de rien
+pas de souci
+pas de soucis
+pas de problème
+mrc
+nn
+ouais
+ouaip
+ouep
+yep
+nope
+mouais
+bah
+ben
+bin
+euh
+hein
+ah bon
+oups
+ouf
+youpi
+genre
+grave
+trop
+trop bien
+carrément
+clairement
+franchement
+vraiment
+tranquille
+tranquillou
+tqt
+# Colloquial words
+pote
+potes
+copain
+copine
+copains
+copines
+meuf
+mec
+mecs
+frérot
+frère
+reuf
+sœurette
+daron
+daronne
+darons
+boulot
+taf
+taffer
+thune
+thunes
+fric
+sous
+bouffe
+bouffer
+dodo
+kiffer
+kiffe
+kiffé
+kif
+chelou
+relou
+vénère
+dingue
+zarbi
+chanmé
+stylé
+stylée
+cool
+sympa
+nickel
+génial
+super
+top
+canon
+nul
+nulle
+galère
+galérer
+flemme
+la flemme
+crevé
+crevée
+claqué
+bosser
+bossé
+binge
+spoiler
+spoilé
+ghoster
+ghosté
+crush
+date
+swiper
+matcher
+streamer
+# Québec
+chum
+blonde
+pis
+tsé
+faque
+toune
+tounes
+pantoute
+tantôt
+niaiser
+niaise
+jaser
+placoter
+bébelle
+bébelles
+plate
+chicane
+dépanneur
+gang
+char
+dret
+icitte
+asteure
+lâche pas
+c'est le fun
+c'est plate
+# Belgium and Switzerland
+une fois
+kot
+koter
+guindaille
+drache
+dracher
+babbeler
+natel
+panosse
+poutzer
+cornet
+schlouk
+# Francophone Africa
+enjailler
+enjaillé
+enjaillement
+gaou
+go
+Babi
+maquis
+on dit quoi
+chap chap
+yako
+dêh

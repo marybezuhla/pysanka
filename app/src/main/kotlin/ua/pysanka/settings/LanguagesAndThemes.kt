@@ -126,14 +126,18 @@ fun LanguagesBlock() {
 /** Pysanka's themes by their id, in the language of the settings (in the order they are offered). */
 @Composable
 fun themeNames(): Map<String, String> = linkedMapOf(
-    "kreyda" to stringRes(R.string.pysanka__theme__kreyda),
-    "visk" to stringRes(R.string.pysanka__theme__visk),
-    "nebo" to stringRes(R.string.pysanka__theme__nebo),
     "floris_day_my" to stringRes(R.string.pysanka__theme__system),
-    "podillia" to stringRes(R.string.pysanka__theme__podillia),
-    "hutsulshchyna" to stringRes(R.string.pysanka__theme__hutsulshchyna),
-    "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
+    "nebo" to stringRes(R.string.pysanka__theme__nebo),
+    "kalyna" to stringRes(R.string.pysanka__theme__kalyna),
+    "linen" to stringRes(R.string.pysanka__theme__linen),
+    "visk" to stringRes(R.string.pysanka__theme__visk),
+    "glyna" to stringRes(R.string.pysanka__theme__glyna),
     "floris_night_my" to stringRes(R.string.pysanka__theme__system_dark),
+    "zoriana_nich" to stringRes(R.string.pysanka__theme__zoriana_nich),
+    "mak" to stringRes(R.string.pysanka__theme__mak),
+    "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
+    "smereka" to stringRes(R.string.pysanka__theme__smereka),
+    "zhar" to stringRes(R.string.pysanka__theme__zhar),
 )
 
 /** The day and the night theme, as small pictures of the keyboard (see [ThemePicker]). */
@@ -152,7 +156,7 @@ fun ThemeChoices() {
     }
 }
 
-/** The language of these settings: as the phone, Ukrainian or English (each named in itself). */
+/** The language of these settings: as the phone, or one of Pysanka's (each named in itself). */
 @Composable
 private fun SettingsLanguage() {
     val prefs by FlorisPreferenceStore
@@ -162,6 +166,15 @@ private fun SettingsLanguage() {
         "auto" to stringRes(R.string.pysanka__settings__ui_language_auto),
         "uk" to "Українська",
         "en" to "English",
+        "be" to "Беларуская",
+        "pl" to "Polski",
+        "sk" to "Slovenčina",
+        "hu" to "Magyar",
+        "ro" to "Română",
+        "de" to "Deutsch",
+        "fr" to "Français",
+        "es" to "Español",
+        "pt" to "Português",
     )
     ChoiceRow(
         stringRes(R.string.pysanka__settings__ui_language),

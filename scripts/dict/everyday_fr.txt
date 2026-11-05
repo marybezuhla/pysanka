@@ -1,0 +1,574 @@
+# Everyday and digital French words (France, Belgium, Switzerland, Québec, Africa) that subtitles lack; Pysanka's own list (GPL-3.0-or-later).
+# Phone and apps
+smartphone
+smartphones
+portable
+portables
+cellulaire
+cellulaires
+cell
+natel
+GSM
+téléphone
+téléphones
+tablette
+tablettes
+ordinateur
+ordinateurs
+ordi
+ordis
+appli
+applis
+application
+applications
+app
+apps
+écran
+écrans
+clavier
+claviers
+chargeur
+chargeurs
+recharger
+rechargé
+batterie
+batteries
+écouteurs
+oreillettes
+casque
+enceinte
+Bluetooth
+Wi-Fi
+wifi
+connexion
+connexions
+connecté
+connectée
+déconnecté
+déconnectée
+hors ligne
+en ligne
+réseau
+réseaux
+forfait
+forfaits
+données mobiles
+recharge
+carte SIM
+eSIM
+nuage
+cloud
+sauvegarde
+sauvegardes
+sauvegarder
+sauvegardé
+synchroniser
+synchronisation
+télécharger
+téléchargé
+téléchargée
+téléchargement
+téléchargements
+téléverser
+installer
+installé
+désinstaller
+mise à jour
+mises à jour
+mettre à jour
+redémarrer
+redémarrage
+paramètres
+réglages
+notification
+notifications
+capture d'écran
+captures d'écran
+screenshot
+mot de passe
+mots de passe
+identifiant
+identifiants
+code PIN
+code de vérification
+authentification
+double authentification
+empreinte
+reconnaissance faciale
+déverrouiller
+verrouiller
+copier
+coller
+copié
+collé
+presse-papiers
+glisser
+balayer
+appuyer
+toucher
+zoomer
+partager
+partagé
+partagée
+lien
+liens
+pièce jointe
+pièces jointes
+fichier
+fichiers
+dossier
+dossiers
+PDF
+photo
+photos
+selfie
+selfies
+vidéo
+vidéos
+story
+stories
+emoji
+emojis
+émoji
+émojis
+GIF
+mème
+mèmes
+hashtag
+hashtags
+abonné
+abonnés
+abonnée
+abonnées
+abonnement
+abonnements
+s'abonner
+désabonner
+publication
+publications
+publier
+publié
+commentaire
+commentaires
+commenter
+liker
+liké
+j'aime
+profil
+profils
+compte
+comptes
+navigateur
+moteur de recherche
+QR code
+code QR
+# Messaging
+message
+messages
+texto
+textos
+SMS
+MMS
+courriel
+courriels
+e-mail
+e-mails
+mail
+mails
+messagerie
+boîte de réception
+boîte vocale
+répondeur
+vocal
+vocaux
+message vocal
+appel
+appels
+appel vidéo
+visio
+visioconférence
+appeler
+rappeler
+rappelle
+rappelez
+écrire
+écris
+écrivez
+envoyer
+envoyé
+envoyée
+envoie
+envoyez
+reçu
+reçue
+reçus
+groupe
+groupes
+discussion
+conversation
+contact
+contacts
+bloquer
+bloqué
+# Banking and money
+banque
+banques
+compte bancaire
+carte bancaire
+carte de crédit
+carte de débit
+virement
+virements
+virement instantané
+prélèvement
+prélèvements
+IBAN
+RIB
+solde
+découvert
+facture
+factures
+paiement
+paiements
+payer
+payé
+payée
+rembourser
+remboursement
+remboursé
+sans contact
+espèces
+monnaie
+euros
+centimes
+francs
+dollars
+cents
+FCFA
+retrait
+distributeur
+guichet automatique
+salaire
+loyer
+impôts
+TVA
+taxes
+épargne
+budget
+# Delivery and shopping
+livraison
+livraisons
+livreur
+livreuse
+livré
+livrée
+colis
+point relais
+suivi
+numéro de suivi
+commande
+commandes
+commander
+commandé
+panier
+promo
+promos
+réduction
+soldes
+code promo
+retour
+caisse
+ticket de caisse
+supermarché
+épicerie
+dépanneur
+boulangerie
+pharmacie
+magasin
+magasins
+centre commercial
+magasiner
+magasinage
+shopping
+courses
+faire les courses
+liste de courses
+# Work and school
+boulot
+travail
+télétravail
+réunion
+réunions
+rendez-vous
+rdv
+agenda
+calendrier
+planning
+horaires
+congé
+congés
+vacances
+RTT
+collègue
+collègues
+patron
+patronne
+chef
+CV
+entretien
+stage
+stagiaire
+contrat
+CDI
+CDD
+intérim
+chômage
+école
+écoles
+collège
+lycée
+cégep
+université
+fac
+cours
+devoirs
+examen
+examens
+bac
+diplôme
+prof
+profs
+élève
+élèves
+étudiant
+étudiante
+étudiants
+cantine
+garderie
+crèche
+maternelle
+# Health
+médecin
+médecins
+docteur
+généraliste
+dentiste
+urgences
+hôpital
+clinique
+ordonnance
+ordonnances
+médicament
+médicaments
+vaccin
+vaccins
+carte Vitale
+mutuelle
+assurance maladie
+arrêt maladie
+fièvre
+rhume
+grippe
+covid
+toux
+mal de tête
+mal de ventre
+allergie
+pansement
+rendez-vous médical
+# Home
+appartement
+appart
+maison
+logement
+studio
+colocation
+coloc
+propriétaire
+locataire
+bail
+caution
+charges
+électricité
+chauffage
+eau chaude
+internet
+box
+fibre
+poubelle
+poubelles
+recyclage
+lessive
+machine à laver
+lave-vaisselle
+frigo
+frigidaire
+micro-ondes
+aspirateur
+ménage
+clés
+clefs
+voisin
+voisine
+voisins
+# Transport
+bus
+autobus
+tram
+métro
+RER
+train
+trains
+gare
+arrêt
+station
+billet
+billets
+ticket
+titre de transport
+abonnement mensuel
+correspondance
+retard
+retards
+annulé
+annulée
+grève
+grèves
+voiture
+voitures
+auto
+char
+taxi
+covoiturage
+vélo
+trottinette
+trottinettes
+parking
+stationnement
+essence
+diesel
+borne de recharge
+permis
+permis de conduire
+autoroute
+bouchon
+bouchons
+embouteillage
+trafic
+aéroport
+vol
+vols
+avion
+valise
+# Weather
+météo
+pluie
+pleut
+neige
+orage
+orages
+canicule
+chaleur
+froid
+vent
+soleil
+nuageux
+brouillard
+verglas
+grêle
+degrés
+température
+alerte météo
+# Food
+déjeuner
+dîner
+souper
+petit-déjeuner
+goûter
+brunch
+apéro
+café
+thé
+pain
+baguette
+croissant
+croissants
+pain au chocolat
+chocolatine
+viennoiseries
+fromage
+pâtes
+pizza
+burger
+frites
+poutine
+salade
+soupe
+sandwich
+kebab
+sushi
+dessert
+gâteau
+yaourt
+yogourt
+lait
+œufs
+beurre
+légumes
+fruits
+restaurant
+resto
+restos
+plat du jour
+à emporter
+sur place
+réservation
+réserver
+# Numbers and time words people type
+septante
+huitante
+octante
+nonante
+aujourd'hui
+demain
+hier
+ce soir
+ce matin
+week-end
+fin de semaine
+lundi
+mardi
+mercredi
+jeudi
+vendredi
+samedi
+dimanche
+janvier
+février
+mars
+avril
+mai
+juin
+juillet
+août
+septembre
+octobre
+novembre
+décembre
+# Administration
+papiers
+carte d'identité
+passeport
+titre de séjour
+préfecture
+mairie
+commune
+attestation
+justificatif
+justificatif de domicile
+formulaire
+démarche
+démarches
+rendez-vous en ligne
+numéro de sécurité sociale
+assurance

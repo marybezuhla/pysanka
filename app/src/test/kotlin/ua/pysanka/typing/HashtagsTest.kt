@@ -60,4 +60,10 @@ class HashtagsTest {
         // At a sentence's start a capital is not a name
         assertTrue("Кава" !in keywords("Кава зранку. Кава вдень."))
     }
+
+    @Test fun aLanguageWithoutAWordList() {
+        // Every word is unknown there: one used once counts, forms are left as written
+        val tags = Hashtags.keywords("Rano kawa i spacer nad rzeką", { 0 }, max = 4, hasList = false)
+        assertTrue("kawa" in tags && "spacer" in tags)
+    }
 }

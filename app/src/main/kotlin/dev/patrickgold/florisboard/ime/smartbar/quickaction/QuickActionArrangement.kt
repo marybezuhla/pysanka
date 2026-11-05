@@ -68,8 +68,10 @@ data class QuickActionArrangement(
         val Default = QuickActionArrangement(
             stickyAction = QuickAction.InsertKey(TextKeyData.VOICE_INPUT),
             dynamicActions = listOf(
-                // Pysanka: the AI, fixing the layout and text from a photo / the camera come first
+                // Pysanka: the AI, translation, lists and the date, fixing the layout and text from a photo / the camera come first
                 QuickAction.InsertKey(TextKeyData.PYSANKA_AI),
+                QuickAction.InsertKey(TextKeyData.PYSANKA_TRANSLATE),
+                QuickAction.InsertKey(TextKeyData.PYSANKA_LISTS),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_FIX_LAYOUT),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_TEXT_FROM_PHOTO),
                 QuickAction.InsertKey(TextKeyData.PYSANKA_TEXT_FROM_CAMERA),
@@ -107,8 +109,11 @@ data class QuickActionArrangement(
         }
 
         override fun deserialize(value: String): QuickActionArrangement {
-            // Pysanka: a saved bar that cannot be read gives the usual one, never a crash
-            return runCatching { QuickActionJsonConfig.decodeFromString<QuickActionArrangement>(value) }.getOrDefault(Default)
+            // Pysanka: a saved bar that cannot be read gives the usual one, never a crash; actions added
+            // in a new version (translation) join a saved bar at its end, so they can be found and moved
+            val saved = runCatching { QuickActionJsonConfig.decodeFromString<QuickActionArrangement>(value) }.getOrNull() ?: return Default
+            val missing = Default.dynamicActions.filter { it !in saved }
+            return if (missing.isEmpty()) saved else saved.copy(dynamicActions = saved.dynamicActions + missing)
         }
     }
 }

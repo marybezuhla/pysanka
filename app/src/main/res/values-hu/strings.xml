@@ -1,0 +1,211 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Pysanka</string>
+
+    <string name="key__phone_pause">Szünet</string>
+    <string name="key__phone_wait">Várakozás</string>
+
+    <string name="prefs__media__emoji_preferred_skin_tone">Emojik alapértelmezett bőrszíne</string>
+
+    <string name="emoji__history__empty_message">Még nincsenek nemrég használt emojik. Amint emojikat írsz, automatikusan itt jelennek meg.</string>
+    <string name="emoji__history__phone_locked_message">Az emojielőzmények megtekintéséhez először oldd fel a készüléket.</string>
+    <string name="emoji__history__usage_tip">Tipp: az előzményekben egy emojit hosszan megnyomva rögzítheted vagy eltávolíthatod!</string>
+    <string name="emoji__history__removal_success_message">{emoji} eltávolítva az emojielőzményekből</string>
+    <string name="emoji__history__pinned">Rögzített</string>
+    <string name="emoji__history__recent">Legutóbbiak</string>
+
+    <string name="quick_action__arrow_up">Felfelé</string>
+    <string name="quick_action__arrow_up__tooltip">Kurzor mozgatása felfelé</string>
+    <string name="quick_action__arrow_down">Lefelé</string>
+    <string name="quick_action__arrow_down__tooltip">Kurzor mozgatása lefelé</string>
+    <string name="quick_action__arrow_left">Balra</string>
+    <string name="quick_action__arrow_left__tooltip">Kurzor mozgatása balra</string>
+    <string name="quick_action__arrow_right">Jobbra</string>
+    <string name="quick_action__arrow_right__tooltip">Kurzor mozgatása jobbra</string>
+    <string name="quick_action__ime_hide_ui">Elrejtés</string>
+    <string name="quick_action__ime_hide_ui__tooltip">Billentyűzet elrejtése</string>
+    <string name="quick_action__clipboard_clear_primary_clip">Vágólap ürítése</string>
+    <string name="quick_action__clipboard_clear_primary_clip__tooltip">A vágólapon lévő aktuális elem törlése</string>
+    <string name="quick_action__clipboard_copy">Másolás</string>
+    <string name="quick_action__clipboard_copy__tooltip">Másolás a vágólapra</string>
+    <string name="quick_action__clipboard_cut">Kivágás</string>
+    <string name="quick_action__clipboard_cut__tooltip">Kivágás a vágólapra</string>
+    <string name="quick_action__clipboard_paste">Beillesztés</string>
+    <string name="quick_action__clipboard_paste__tooltip">Beillesztés a vágólapról</string>
+    <string name="quick_action__clipboard_select_all">Az összes</string>
+    <string name="quick_action__clipboard_select_all__tooltip">Az egész szöveg kijelölése</string>
+    <string name="quick_action__forward_delete">Törlés előre</string>
+    <string name="quick_action__ime_ui_mode_clipboard">Vágólap</string>
+    <string name="quick_action__ime_ui_mode_clipboard__tooltip">Vágólapelőzmények megnyitása</string>
+    <string name="quick_action__ime_ui_mode_media">Emoji</string>
+    <string name="quick_action__ime_ui_mode_media__tooltip">Emojipanel megnyitása</string>
+    <string name="quick_action__language_switch">Nyelvváltás</string>
+    <string name="quick_action__language_switch__tooltip">Váltás a következő nyelvre</string>
+    <string name="quick_action__settings">Beállítások</string>
+    <string name="quick_action__settings__tooltip">Beállítások megnyitása</string>
+    <string name="quick_action__undo">Visszavonás</string>
+    <string name="quick_action__undo__tooltip">Az utolsó bevitel visszavonása</string>
+    <string name="quick_action__redo">Újra</string>
+    <string name="quick_action__redo__tooltip">A visszavont bevitel visszaállítása</string>
+    <string name="quick_action__toggle_actions_overflow">Továbbiak</string>
+    <string name="quick_action__toggle_actions_overflow__tooltip">További műveletek megjelenítése vagy elrejtése</string>
+    <string name="quick_action__toggle_incognito_mode">Inkognitó</string>
+    <string name="quick_action__toggle_incognito_mode__tooltip">Inkognitó mód be- vagy kikapcsolása</string>
+    <string name="quick_action__toggle_autocorrect">Autom. javítás</string>
+    <string name="quick_action__toggle_autocorrect__tooltip">Automatikus javítás be- vagy kikapcsolása</string>
+    <string name="quick_action__voice_input">Diktálás</string>
+    <string name="quick_action__voice_input__tooltip">Diktálás (a felismerés a telefonon történik)</string>
+    <string name="quick_action__floating_window_mode">Lebegő</string>
+    <string name="quick_action__floating_window_mode__tooltip">Lebegő billentyűzet be- vagy kikapcsolása</string>
+    <string name="quick_action__one_handed_mode">Egykezes</string>
+    <string name="quick_action__one_handed_mode__tooltip">Egykezes mód be- vagy kikapcsolása</string>
+    <string name="quick_action__resize_mode">Átméretezés</string>
+    <string name="quick_action__resize_mode__tooltip">Átméretezési mód be- vagy kikapcsolása</string>
+    <string name="quick_action__drag_marker">Húzásjelölő</string>
+    <string name="quick_action__drag_marker__tooltip">A húzásjelölő jelenlegi helye</string>
+    <string name="quick_action__noop">Nincs</string>
+    <string name="quick_action__noop__tooltip">Nincs művelet</string>
+    <string name="quick_actions_overflow__customize_actions_button">Műveletek átrendezése</string>
+    <string name="quick_actions_editor__header">Műveletek sorrendje</string>
+    <string name="quick_actions_editor__subheader_sticky_action">Állandó művelet ({n})</string>
+    <string name="quick_actions_editor__subheader_dynamic_actions">Változó műveletek ({n})</string>
+    <string name="quick_actions_editor__subheader_hidden_actions">Rejtett műveletek ({n})</string>
+    <string name="select_subtype_panel__header">Nyelv kiválasztása</string>
+
+    <string name="incognito_mode__toast_after_enabled">Inkognitó mód bekapcsolva\n\nAmíg be van kapcsolva, a {app_name} nem tanul szavakat abból, amit írsz</string>
+    <string name="incognito_mode__toast_after_disabled">Inkognitó mód kikapcsolva</string>
+
+    <string name="settings__title">Beállítások</string>
+    <string name="settings__preview_keyboard">Próbáld ki a beállításaidat</string>
+
+    <string name="settings__home__ime_not_enabled">A Pysanka nincs bekapcsolva a rendszerben, ezért nem választható ki billentyűzetként. Koppints ide a javításhoz.</string>
+    <string name="settings__home__ime_not_selected">A Pysanka nem az alapértelmezett billentyűzet. Koppints ide a javításhoz.</string>
+
+    <string name="about__title">Névjegy</string>
+
+    <string name="about__version__title">Verzió</string>
+    <string name="about__version_copied__title">Verziószám a vágólapra másolva</string>
+    <string name="about__changelog__title">Változásnapló</string>
+    <string name="about__changelog__summary">Újdonságok</string>
+    <string name="about__repository__title">Tároló (GitHub)</string>
+    <string name="about__repository__summary">Forráskód, beszélgetések, hibajegyek és információk</string>
+    <string name="about__privacy_policy__title">Adatvédelmi irányelvek</string>
+    <string name="about__privacy_policy__summary">A projekt adatvédelmi irányelvei</string>
+    <string name="about__project_license__title">A projekt licence</string>
+    <string name="about__third_party_licenses__title">Harmadik felek licencei</string>
+    <string name="about__third_party_licenses__summary">Az alkalmazásban használt külső könyvtárak licencei</string>
+
+    <string name="setup__footer__privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="setup__footer__repository">Forráskód</string>
+
+    <string name="setup__enable_ime__title">A {app_name} bekapcsolása</string>
+    <string name="setup__enable_ime__open_settings_btn">Rendszerbeállítások megnyitása</string>
+
+    <string name="setup__select_ime__title">A {app_name} kiválasztása</string>
+    <string name="setup__select_ime__description">A {app_name} be van kapcsolva. A használatához válaszd ki a billentyűzetválasztóban.</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Billentyűzetváltás</string>
+
+    <string name="setup__finish_up__finish_btn">Beállítások megnyitása</string>
+
+    <string name="crash_dialog__title">Pysanka hibajelentés</string>
+    <string name="crash_dialog__description">Elnézést a kellemetlenségért: a Pysanka egy váratlan hiba miatt összeomlott.</string>
+    <string name="crash_dialog__report_instructions">Ha jelezni szeretnéd ezt a hibát, előbb nézd meg a GitHubon az Issues részt, hátha valaki már bejelentette.\nHa nem, másold ki az összeomlási naplót, nyiss egy új hibajegyet, írd le, mit csináltál az összeomlás előtt, és illeszd be a naplót a végére. Köszönjük, ezzel segítesz stabilabbá tenni a Pysankát!</string>
+    <string name="crash_dialog__copy_to_clipboard">Másolás a rendszer vágólapjára</string>
+    <string name="crash_dialog__copy_to_clipboard_success">A rendszer vágólapjára másolva</string>
+    <string name="crash_dialog__copy_to_clipboard_failure">Nem sikerült a rendszer vágólapjára másolni: a vágólapkezelő nem található</string>
+    <string name="crash_dialog__open_issue_tracker">Hibakövető megnyitása (github.com)</string>
+    <string name="crash_dialog__close">Bezárás</string>
+    <string name="crash_notification_channel__title">Pysanka hibajelentések</string>
+    <string name="crash_once_notification__title">A Pysanka leállt…</string>
+    <string name="crash_once_notification__body">Koppints a hiba részleteiért</string>
+    <string name="crash_multiple_notification__title">Úgy tűnik, a Pysanka újra és újra leáll…</string>
+    <string name="crash_multiple_notification__body">Visszaváltás az előző billentyűzetre, hogy megszakadjon az összeomlások sorozata. Koppints a hiba részleteiért</string>
+
+    <string name="clipboard__header_title">Vágólap</string>
+    <string name="clipboard__disabled__title">A vágólapelőzmények ki vannak kapcsolva</string>
+    <string name="clipboard__disabled__message">A {app_name} vágólapelőzményeiben gyorsan elérheted a másolt szövegeket és képeket: az elemeket rögzítheted, beállíthatod az automatikus törlést és az elemek legnagyobb számát.</string>
+    <string name="clipboard__disabled__enable_button">Vágólapelőzmények bekapcsolása</string>
+    <string name="clipboard__empty__title">A vágólap üres</string>
+    <string name="clipboard__empty__message">Amint szöveget vagy képet másolsz, itt jelenik meg.</string>
+    <string name="clipboard__locked__title">A vágólap zárolva van</string>
+    <string name="clipboard__locked__message">A vágólapelőzmények megtekintéséhez először oldd fel a készüléket.</string>
+    <string name="clipboard__group_pinned">Rögzített</string>
+    <string name="clipboard__group_recent">Legutóbbiak</string>
+    <string name="clipboard__group_other">Egyéb</string>
+    <string name="clipboard__item_description_email">E-mail</string>
+    <string name="clipboard__item_description_url">Link</string>
+    <string name="clipboard__item_description_phone">Telefonszám</string>
+    <string name="clip__unpin_item">Rögzítés feloldása</string>
+    <string name="clip__pin_item">Rögzítés</string>
+    <string name="clip__delete_item">Törlés</string>
+    <string name="clip__paste_item">Beillesztés</string>
+    <string name="clipboard__cleared_primary_clip">Vágólap kiürítve</string>
+    <string name="clipboard__cleared_history">Előzmények törölve</string>
+    <string name="clipboard__confirm_clear_unfiltered_history__message">Biztosan törlöd a teljes vágólapelőzményt? Ez minden elemet érint, kivéve a rögzítetteket.</string>
+    <string name="clipboard__confirm_clear_filtered_history__message">Biztosan törlöd a vágólapelőzményeket? Ez minden most szűrt elemet érint, kivéve a rögzítetteket.</string>
+
+    <string name="action__cancel">Mégse</string>
+    <string name="action__default">Alapértelmezett</string>
+    <string name="action__delete">Törlés</string>
+    <string name="action__delete_confirm_title">Törlés megerősítése</string>
+    <string name="action__delete_confirm_message">Biztosan törlöd ezt: „{name}”? Ez a művelet nem vonható vissza.</string>
+    <string name="action__reset">Visszaállítás</string>
+    <string name="action__discard">Elvetés</string>
+    <string name="action__discard_confirm_title">Nem mentett módosítások</string>
+    <string name="action__discard_confirm_message">Biztosan elveted a nem mentett módosításokat? Ez a művelet nem vonható vissza.</string>
+    <string name="action__no">Nem</string>
+    <string name="action__ok">OK</string>
+    <string name="action__save">Mentés</string>
+    <string name="action__yes">Igen</string>
+
+    <string name="general__no_browser_app_found_for_url">Nincs böngésző, amely megnyitná ezt a linket: {url}</string>
+
+    <string name="enum__emoji_skin_tone__default">{emoji} Alapértelmezett bőrszín</string>
+    <string name="enum__emoji_skin_tone__light_skin_tone">{emoji} Világos bőrszín</string>
+    <string name="enum__emoji_skin_tone__medium_light_skin_tone">{emoji} Közepesen világos bőrszín</string>
+    <string name="enum__emoji_skin_tone__medium_skin_tone">{emoji} Közepes bőrszín</string>
+    <string name="enum__emoji_skin_tone__medium_dark_skin_tone">{emoji} Közepesen sötét bőrszín</string>
+    <string name="enum__emoji_skin_tone__dark_skin_tone">{emoji} Sötét bőrszín</string>
+
+    <string name="enum__incognito_mode__force_off">Mindig ki</string>
+    <string name="enum__incognito_mode__force_off__description">Az inkognitó mód mindig ki van kapcsolva, akármit kér az alkalmazás. Ilyenkor a billentyűzet feletti sávban nincs inkognitó gomb.</string>
+    <string name="enum__incognito_mode__force_on">Mindig be</string>
+    <string name="enum__incognito_mode__force_on__description">Az inkognitó mód mindig be van kapcsolva, akármit kér az alkalmazás. Ilyenkor a billentyűzet feletti sávban nincs inkognitó gomb.</string>
+    <string name="enum__incognito_mode__dynamic_on_off">Automatikusan (mező szerint) vagy kézzel</string>
+    <string name="enum__incognito_mode__dynamic_on_off__description">Ajánlott. Az inkognitó mód magától be- vagy kikapcsol, ha az alkalmazás kéri, és kézzel is átkapcsolhatod a billentyűzet feletti sáv inkognitó gombjával.</string>
+
+    <string name="enum__swipe_action__no_action">Nincs művelet</string>
+    <string name="enum__swipe_action__cycle_to_previous_keyboard_mode">Előző billentyűzetmód</string>
+    <string name="enum__swipe_action__cycle_to_next_keyboard_mode">Következő billentyűzetmód</string>
+    <string name="enum__swipe_action__delete_characters_precisely">Karakterek pontos törlése</string>
+    <string name="enum__swipe_action__delete_word">A kurzor előtti szó törlése</string>
+    <string name="enum__swipe_action__delete_words_precisely">Szavak pontos törlése</string>
+    <string name="enum__swipe_action__hide_keyboard">Billentyűzet elrejtése</string>
+    <string name="enum__swipe_action__insert_space">Szóköz beszúrása</string>
+    <string name="enum__swipe_action__move_cursor_up">Kurzor felfelé</string>
+    <string name="enum__swipe_action__move_cursor_down">Kurzor lefelé</string>
+    <string name="enum__swipe_action__move_cursor_left">Kurzor balra</string>
+    <string name="enum__swipe_action__move_cursor_right">Kurzor jobbra</string>
+    <string name="enum__swipe_action__move_cursor_start_of_line">Kurzor a sor elejére</string>
+    <string name="enum__swipe_action__move_cursor_end_of_line">Kurzor a sor végére</string>
+    <string name="enum__swipe_action__move_cursor_start_of_page">Kurzor a szöveg elejére</string>
+    <string name="enum__swipe_action__move_cursor_end_of_page">Kurzor a szöveg végére</string>
+    <string name="enum__swipe_action__switch_to_clipboard_context">Vágólapelőzmények megnyitása</string>
+    <string name="enum__swipe_action__switch_to_media_context">Emojipanel megnyitása</string>
+    <string name="enum__swipe_action__shift">Shift</string>
+    <string name="enum__swipe_action__redo">Újra</string>
+    <string name="enum__swipe_action__undo">Visszavonás</string>
+    <string name="enum__swipe_action__select_characters_precisely">Karakterek pontos kijelölése</string>
+    <string name="enum__swipe_action__select_words_precisely">Szavak pontos kijelölése</string>
+    <string name="pysanka__swipe_action__show_subtype_picker">Nyelvválasztó megjelenítése</string>
+    <string name="enum__swipe_action__show_input_method_picker">Billentyűzetválasztó megjelenítése</string>
+    <string name="enum__swipe_action__switch_to_prev_keyboard">Váltás az előző billentyűzetre</string>
+    <string name="enum__swipe_action__switch_to_prev_subtype">Váltás az előző nyelvre</string>
+    <string name="enum__swipe_action__switch_to_next_subtype">Váltás a következő nyelvre</string>
+    <string name="enum__swipe_action__toggle_smartbar_visibility">Felső sáv megjelenítése vagy elrejtése</string>
+
+    <string name="enum__theme_mode__always_day">Mindig a nappali téma</string>
+    <string name="enum__theme_mode__always_night">Mindig az éjszakai téma</string>
+    <string name="enum__theme_mode__follow_system">A rendszer szerint</string>
+    <string name="enum__theme_mode__follow_time">Napszak szerint</string>
+
+</resources>

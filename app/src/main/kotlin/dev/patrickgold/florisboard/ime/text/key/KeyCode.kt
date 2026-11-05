@@ -126,6 +126,8 @@ object KeyCode {
     const val PYSANKA_FIX_LAYOUT =          -952
     const val PYSANKA_TEXT_FROM_PHOTO =     -953
     const val PYSANKA_TEXT_FROM_CAMERA =    -954
+    const val PYSANKA_TRANSLATE =           -955
+    const val PYSANKA_LISTS =               -956
 
     const val MULTIPLE_CODE_POINTS =        -902
     const val DRAG_MARKER =                 -991

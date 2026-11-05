@@ -1,0 +1,60 @@
+name: Refresh translation data
+
+# Run by hand (or by pushing the wikt-refresh branch). Takes the Wiktionary extracts of kaikki.org
+# (wiktextract; CC BY-SA 4.0 and GFDL), keeps only Pysanka's twelve languages and writes them to the
+# wikt-data branch, from which scripts/translate/build.py makes the dictionaries in the app.
+on:
+  workflow_dispatch:
+  push:
+    branches: [wikt-refresh]
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [en, de, fr, ru, pl, es, pt]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Extract
+        shell: bash
+        run: |
+          set -o pipefail
+          if [ "${{ matrix.edition }}" = en ]; then url=https://kaikki.org/dictionary/raw-wiktextract-data.jsonl.gz
+          else url=https://kaikki.org/${{ matrix.edition }}wiktionary/raw-wiktextract-data.jsonl.gz; fi
+          curl -sSfL --retry 3 "$url" | gzip -dc | python3 -I scripts/translate/extract.py ${{ matrix.edition }} data
+          ls -l data
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: wikt-${{ matrix.edition }}
+          retention-days: 3
+          path: data/
+
+  publish:
+    needs: extract
+    # Only when every edition was taken: else the data of a missing one would silently disappear
+    if: needs.extract.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: wikt-*
+          merge-multiple: true
+          path: out
+      - name: Push
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          ls -l
+          git init -q && git checkout -q -b wikt-data && git add . && git -c user.name=ci -c user.email=ci@localhost commit -qm "wiktextract ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" wikt-data

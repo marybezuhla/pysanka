@@ -115,7 +115,12 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
 
         val started = generation.get()
         scope.launch(if (commit) finals else Dispatchers.Default) {
+            // Pysanka: no swear words or slurs (see ua.pysanka.typing.Offensive); one spelling of «ё»/«е»
+            val block = prefs.suggestion.blockPossiblyOffensive.get()
+            val language = subtypeManager.activeSubtype.primaryLocale.language
             val suggestions = glideTypingClassifier.getSuggestions(path, MAX_SUGGESTION_COUNT)
+                .filter { !(block && ua.pysanka.typing.Offensive.isOffensive(it, language)) }
+                .distinctBy { it.lowercase().replace('ё', 'е') }
 
             withContext(Dispatchers.Main) {
                 if (!commit && started != generation.get()) {
