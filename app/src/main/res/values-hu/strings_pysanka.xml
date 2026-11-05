@@ -492,4 +492,6 @@
     <string name="pysanka__lists__style_auto">Ahogy az alkalmazás mutatja (Markdown a Joplinban, Obsidianban, Markorban)</string>
     <string name="pysanka__lists__style_symbols">Szimbólumok ☐ ☑ •</string>
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
+    <string name="pysanka__settings__lists">Listák és teendők</string>
+    <string name="pysanka__settings__lists_state">Folytatás Enterrel: {continue}</string>
 </resources>

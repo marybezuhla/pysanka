@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Keyboard
@@ -96,6 +97,14 @@ fun PysankaHome(
             stringRes(R.string.pysanka__settings__typing_state, "glide" to state(glide), "suggestions" to state(suggestions), "correct" to state(autoCorrect)),
             icon = Icons.Outlined.Keyboard,
         ) { TypingSettings() }
+
+        // Lists and to-dos on their own, easy to find rather than among the typing switches
+        val listsOn by prefs.pysankaLists.continueOnEnter.observeAsState()
+        Block(
+            stringRes(R.string.pysanka__settings__lists),
+            stringRes(R.string.pysanka__settings__lists_state, "continue" to state(listsOn)),
+            icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
+        ) { ListsSettings() }
 
         val mode by prefs.theme.mode.observeAsState()
         val numberRow by prefs.keyboard.numberRow.observeAsState()
@@ -285,6 +294,23 @@ private fun PanelActionsRow() {
 }
 
 @Composable
+private fun ListsSettings() {
+    val prefs by FlorisPreferenceStore
+    val scope = rememberCoroutineScope()
+    PrefToggle(prefs.pysankaLists.continueOnEnter, stringRes(R.string.pysanka__lists__continue), stringRes(R.string.pysanka__lists__continue_summary))
+    val listStyle by prefs.pysankaLists.style.observeAsState()
+    ChoiceRow(
+        stringRes(R.string.pysanka__lists__style),
+        listOf(
+            "AUTO" to stringRes(R.string.pysanka__lists__style_auto),
+            "SYMBOLS" to stringRes(R.string.pysanka__lists__style_symbols),
+            "MARKDOWN" to stringRes(R.string.pysanka__lists__style_markdown),
+        ),
+        listStyle,
+    ) { v -> scope.launch { prefs.pysankaLists.style.set(v) } }
+}
+
+@Composable
 private fun TypingSettings() {
     val prefs by FlorisPreferenceStore
     val context = LocalContext.current
@@ -315,17 +341,6 @@ private fun TypingSettings() {
     PrefToggle(prefs.correction.doubleSpacePeriod, stringRes(R.string.pysanka__typing__double_space))
     PrefToggle(prefs.correction.autoSpacePunctuation, stringRes(R.string.pysanka__typing__auto_space))
     PrefToggle(prefs.correction.pysankaSmartPunctuation, stringRes(R.string.pysanka__typing__smart_punctuation), stringRes(R.string.pysanka__typing__smart_punctuation_summary))
-    PrefToggle(prefs.pysankaLists.continueOnEnter, stringRes(R.string.pysanka__lists__continue), stringRes(R.string.pysanka__lists__continue_summary))
-    val listStyle by prefs.pysankaLists.style.observeAsState()
-    ChoiceRow(
-        stringRes(R.string.pysanka__lists__style),
-        listOf(
-            "AUTO" to stringRes(R.string.pysanka__lists__style_auto),
-            "SYMBOLS" to stringRes(R.string.pysanka__lists__style_symbols),
-            "MARKDOWN" to stringRes(R.string.pysanka__lists__style_markdown),
-        ),
-        listStyle,
-    ) { v -> scope.launch { prefs.pysankaLists.style.set(v) } }
     BlockDivider()
     PrefChoice(prefs.gestures.deleteKeySwipeLeft, stringRes(R.string.pysanka__typing__delete_swipe), SwipeAction::class, "deleteSwipe")
     PrefChoice(prefs.gestures.spaceBarSwipeLeft, stringRes(R.string.pysanka__typing__space_swipe_left), SwipeAction::class, "general")

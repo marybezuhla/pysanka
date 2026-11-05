@@ -494,4 +494,6 @@
     <string name="pysanka__lists__style_auto">Як паказвае праграма (Markdown у Joplin, Obsidian, Markor)</string>
     <string name="pysanka__lists__style_symbols">Сімвалы ☐ ☑ •</string>
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
+    <string name="pysanka__settings__lists">Спісы і справы</string>
+    <string name="pysanka__settings__lists_state">Працягваць з Enter: {continue}</string>
 </resources>
