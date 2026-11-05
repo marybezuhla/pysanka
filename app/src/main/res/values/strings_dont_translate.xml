@@ -1,11 +1,11 @@
 <resources>
     <item name="floris_app_name" translatable="false" type="string">@string/app_name</item>
 
-    <string name="florisboard__repo_url" translatable="false">https://github.com/Marybezu/pysanka</string>
-    <string name="florisboard__issue_tracker_url" translatable="false">https://github.com/Marybezu/pysanka/issues</string>
-    <string name="florisboard__privacy_policy_url" translatable="false">https://github.com/Marybezu/pysanka/blob/main/PRIVACY.md</string>
-    <string name="florisboard__changelog_url" translatable="false">https://github.com/Marybezu/pysanka/releases/tag/v{version}</string>
-    <string name="florisboard__commit_by_hash_url" translatable="false">https://github.com/Marybezu/pysanka/commit/{hash}</string>
+    <string name="florisboard__repo_url" translatable="false">https://github.com/marybezuhla/pysanka</string>
+    <string name="florisboard__issue_tracker_url" translatable="false">https://github.com/marybezuhla/pysanka/issues</string>
+    <string name="florisboard__privacy_policy_url" translatable="false">https://github.com/marybezuhla/pysanka/blob/main/PRIVACY.md</string>
+    <string name="florisboard__changelog_url" translatable="false">https://github.com/marybezuhla/pysanka/releases/tag/v{version}</string>
+    <string name="florisboard__commit_by_hash_url" translatable="false">https://github.com/marybezuhla/pysanka/commit/{hash}</string>
 
     <string name="general__system_string_placeholder" translatable="false">%s</string>
     <string name="general__empty_string" translatable="false"/>

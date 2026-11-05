@@ -31,11 +31,11 @@
     <string name="pysanka__clipboard_copy__history_off">História schránky je vypnutá. Najprv ju zapnite v nastaveniach schránky.</string>
     <string name="pysanka__about__based_on__title">Založené na FlorisBoard</string>
     <string name="pysanka__about__based_on__summary">Pysanka je postavená na FlorisBoard od The FlorisBoard Contributors (Apache 2.0); je to nezávislý projekt a samotná Pysanka je pod licenciou GPL-3.0 alebo novšou</string>
-    <string name="pysanka__about__license__summary">GPL-3.0 alebo novšia: slobodný softvér bez akejkoľvek záruky. Zdrojový kód: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__license__summary">GPL-3.0 alebo novšia: slobodný softvér bez akejkoľvek záruky. Zdrojový kód: github.com/marybezuhla/pysanka</string>
     <string name="pysanka__about__data__title">Zdroje dát</string>
     <string name="pysanka__about__data__summary">Zoznamy slov z FrequencyWords (CC BY-SA 4.0) a dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), prekladové slovníky z Wikislovníka cez wiktextract (CC BY-SA 4.0), názvy emodži z Unicode CLDR, rozpoznávanie textu PaddleOCR (Apache 2.0), diktovanie Whisper (OpenAI, MIT) a whisper.cpp (MIT). Model UI Gemma (Google) sa sťahuje samostatne, podľa podmienok Gemma.</string>
     <string name="pysanka__error__copy">Nepodarilo sa skopírovať</string>
-    <string name="pysanka__error__license">Text licencie sa nepodarilo zobraziť. Nájdete ho v repozitári: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__error__license">Text licencie sa nepodarilo zobraziť. Nájdete ho v repozitári: github.com/marybezuhla/pysanka</string>
     <string name="pysanka__error__open">Nedá sa otvoriť: v telefóne nie je aplikácia, ktorá by to vedela</string>
     <string name="pysanka__tag__all">Všetko</string>
     <string name="pysanka__tag__tags">Štítky</string>
