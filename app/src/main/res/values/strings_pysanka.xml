@@ -362,8 +362,12 @@
     <string name="pysanka__theme__mak">Poppy</string>
     <string name="pysanka__theme__smereka">Spruce</string>
     <string name="pysanka__theme__chornozem">Black earth</string>
-    <string name="pysanka__theme__system">System colours</string>
-    <string name="pysanka__theme__system_dark">Dark, system colours</string>
+    <string name="pysanka__theme__glyna">Clay</string>
+    <string name="pysanka__theme__kalyna">Viburnum</string>
+    <string name="pysanka__theme__zhar">Embers</string>
+    <string name="pysanka__theme__zoriana_nich">Starry night</string>
+    <string name="pysanka__theme__system">Phone colours</string>
+    <string name="pysanka__theme__system_dark">Phone colours</string>
     <string name="pysanka__look__system_colors">Settings in the system\'s colours</string>
     <string name="pysanka__look__system_colors_summary">Material You instead of Pysanka\'s red and cream</string>
     <string name="pysanka__welcome__title">Welcome to Pysanka!</string>

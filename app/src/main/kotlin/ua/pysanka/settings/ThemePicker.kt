@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.patrickgold.florisboard.R
@@ -47,17 +46,28 @@ import org.florisboard.lib.compose.stringRes
 /** Pysanka: how a theme looks, for its small picture of the keyboard. */
 private class Look(val background: Color, val key: Color, val text: Color, val accent: Color, val onAccent: Color)
 
-/** The themes that come with Pysanka, as in [themeNames]: id, extension, night. */
-private val THEMES = listOf(
-    Triple("linen", "org.florisboard.themes", false),
-    Triple("visk", "org.florisboard.themes", false),
-    Triple("nebo", "org.florisboard.themes", false),
-    Triple("floris_day_my", "org.florisboard.themes.my", false),
-    Triple("mak", "org.florisboard.themes", true),
-    Triple("smereka", "org.florisboard.themes", true),
-    Triple("chornozem", "org.florisboard.themes", true),
-    Triple("floris_night_my", "org.florisboard.themes.my", true),
-)
+private const val OWN = "org.florisboard.themes"
+private const val MY = "org.florisboard.themes.my"
+
+/**
+ * The themes that come with Pysanka, as in the other apps with these themes: the phone's own colours
+ * first, then in pairs, each day theme at the same place as its night one (sky and starry night,
+ * viburnum and poppy, linen and black earth, beeswax and spruce, clay and embers).
+ */
+private val DAY = listOf(MY to "floris_day_my", OWN to "nebo", OWN to "kalyna", OWN to "linen", OWN to "visk", OWN to "glyna")
+private val NIGHT = listOf(MY to "floris_night_my", OWN to "zoriana_nich", OWN to "mak", OWN to "chornozem", OWN to "smereka", OWN to "zhar")
+
+/** A theme's pair: the night theme for a day one and the other way round (null for a theme not listed). */
+internal fun pairOf(id: String): ExtensionComponentName? {
+    val i = DAY.indexOfFirst { it.second == id }
+    val j = NIGHT.indexOfFirst { it.second == id }
+    val (ext, pair) = when {
+        i >= 0 -> NIGHT[i]
+        j >= 0 -> DAY[j]
+        else -> return null
+    }
+    return ExtensionComponentName(ext, pair)
+}
 
 /** A theme's colours, read from its stylesheet (the system's colours for the Material You ones). */
 private fun look(context: Context, extension: String, id: String, seed: Color): Look? = runCatching {
@@ -92,40 +102,54 @@ fun ThemePicker(night: Boolean, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val accent by prefs.theme.accentColor.observeAsState()
     val pref = if (night) prefs.theme.nightThemeId else prefs.theme.dayThemeId
+    val other = if (night) prefs.theme.dayThemeId else prefs.theme.nightThemeId
     val chosen by pref.observeAsState()
     // The phone's accent, as the keyboard's Material You themes take it
-    ThemeRow(night, systemAccentOrDefault(accent), chosen.componentId, modifier) { id -> scope.launch { pref.set(id) } }
+    ThemeRow(night, systemAccentOrDefault(accent), chosen.componentId, modifier) { id ->
+        scope.launch {
+            pref.set(id)
+            // Its pair comes with it, as in the other apps; the other one can still be changed after
+            pairOf(id.componentId)?.let { other.set(it) }
+        }
+    }
 }
 
-/** The pictures themselves ([chosen]: a theme's id), apart from the settings (drawn alone for review). */
+/** The pictures themselves ([chosen]: a theme's id), apart from the settings (drawn alone for review), in rows of three. */
 @Composable
 internal fun ThemeRow(night: Boolean, seed: Color, chosen: String, modifier: Modifier = Modifier, onChoose: (ExtensionComponentName) -> Unit) {
     val context = LocalContext.current
     val names = themeNames()
-    // Read off the main thread (four small stylesheets)
+    // Read off the main thread (six small stylesheets)
     val looks by androidx.compose.runtime.produceState(emptyList<Pair<ExtensionComponentName, Look>>(), seed, night) {
         value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-            THEMES.filter { it.third == night }.mapNotNull { (id, ext, _) -> look(context, ext, id, seed)?.let { ExtensionComponentName(ext, id) to it } }
+            (if (night) NIGHT else DAY).mapNotNull { (ext, id) -> look(context, ext, id, seed)?.let { ExtensionComponentName(ext, id) to it } }
         }
     }
-    Row(
-        modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    // Rows of exactly three across the whole width: none hides behind the edge of the screen
+    Column(
+        modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        for ((id, look) in looks) {
-            val selected = id.componentId == chosen
-            Column(
-                Modifier.width(132.dp).selectable(selected, role = Role.RadioButton) { onChoose(id) },
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Sample(look, selected)
-                Text(
-                    names[id.componentId] ?: id.componentId,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(top = 6.dp),
-                )
+        for (row in looks.chunked(3)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                for ((id, look) in row) {
+                    val selected = id.componentId == chosen
+                    Column(
+                        Modifier.weight(1f).selectable(selected, role = Role.RadioButton) { onChoose(id) },
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Sample(look, selected)
+                        Text(
+                            names[id.componentId] ?: id.componentId,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(top = 6.dp),
+                        )
+                    }
+                }
+                repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
             }
         }
     }

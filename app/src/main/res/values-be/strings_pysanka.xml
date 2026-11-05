@@ -363,8 +363,12 @@
     <string name="pysanka__theme__mak">Мак</string>
     <string name="pysanka__theme__smereka">Яліна</string>
     <string name="pysanka__theme__chornozem">Чарназём</string>
-    <string name="pysanka__theme__system">Колеры сістэмы</string>
-    <string name="pysanka__theme__system_dark">Цёмная, колеры сістэмы</string>
+    <string name="pysanka__theme__glyna">Гліна</string>
+    <string name="pysanka__theme__kalyna">Каліна</string>
+    <string name="pysanka__theme__zhar">Жар</string>
+    <string name="pysanka__theme__zoriana_nich">Зорная ноч</string>
+    <string name="pysanka__theme__system">Колеры тэлефона</string>
+    <string name="pysanka__theme__system_dark">Колеры тэлефона</string>
     <string name="pysanka__look__system_colors">Налады ў колерах сістэмы</string>
     <string name="pysanka__look__system_colors_summary">Material You замест чырвонага і крэмавага колераў Пісанкі</string>
     <string name="pysanka__welcome__title">Вітаем у Пісанцы!</string>

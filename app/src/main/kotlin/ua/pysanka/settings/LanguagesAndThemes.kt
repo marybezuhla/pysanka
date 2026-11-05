@@ -126,14 +126,18 @@ fun LanguagesBlock() {
 /** Pysanka's themes by their id, in the language of the settings (in the order they are offered). */
 @Composable
 fun themeNames(): Map<String, String> = linkedMapOf(
+    "floris_day_my" to stringRes(R.string.pysanka__theme__system),
+    "nebo" to stringRes(R.string.pysanka__theme__nebo),
+    "kalyna" to stringRes(R.string.pysanka__theme__kalyna),
     "linen" to stringRes(R.string.pysanka__theme__linen),
     "visk" to stringRes(R.string.pysanka__theme__visk),
-    "nebo" to stringRes(R.string.pysanka__theme__nebo),
-    "floris_day_my" to stringRes(R.string.pysanka__theme__system),
-    "mak" to stringRes(R.string.pysanka__theme__mak),
-    "smereka" to stringRes(R.string.pysanka__theme__smereka),
-    "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
+    "glyna" to stringRes(R.string.pysanka__theme__glyna),
     "floris_night_my" to stringRes(R.string.pysanka__theme__system_dark),
+    "zoriana_nich" to stringRes(R.string.pysanka__theme__zoriana_nich),
+    "mak" to stringRes(R.string.pysanka__theme__mak),
+    "chornozem" to stringRes(R.string.pysanka__theme__chornozem),
+    "smereka" to stringRes(R.string.pysanka__theme__smereka),
+    "zhar" to stringRes(R.string.pysanka__theme__zhar),
 )
 
 /** The day and the night theme, as small pictures of the keyboard (see [ThemePicker]). */
