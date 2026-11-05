@@ -15,6 +15,7 @@
 - 🧩 **Мова без словника** працює чесно: без свайпу, але з заміною тексту й вивченими словами.
 - ⚙️ **Налаштування:** відкритий розділ сам прокручується на екран; під висотою клавіатури є підказка для плаваючої.
 - 🎙️ **Точніше диктування українською:** тепер модель Whisper small замість base, тож менше русизмів і помилок. Застосунок через це більший (близько 250 МБ), а розпізнавання трохи довше.
+- 💙💛 **Слово від авторки** в розділі «Про застосунок»: як виникла ідея, про війну й офіційні способи підтримати Україну.
 - Виправлено: «еще» й «ещё» не пропонуються обидва; назви міст не перебивають звичайні слова.
 
 📲 Завантажте файл .apk нижче й відкрийте його на телефоні. 🔄 Для оновлень: Obtainium, «Додати застосунок» → `github.com/marybezuhla/pysanka`.
@@ -33,4 +34,5 @@
 - Swear words are offered only when typed in full, with a list for each language.
 - A language without a word list: no swipe, but text shortcuts and learned words work.
 - More accurate dictation: Whisper small instead of base, with fewer mistakes in Ukrainian. The app is larger (about 250 MB) and recognition takes a little longer.
+- A word from the author in About: how the idea came, the war, and official ways to support Ukraine.
 - Settings: an opened block scrolls into view.
