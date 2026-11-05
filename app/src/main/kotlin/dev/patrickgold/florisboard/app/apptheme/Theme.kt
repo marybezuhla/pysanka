@@ -56,9 +56,26 @@ fun getColorScheme(
         AppTheme.LIGHT -> false
     }
     val isAmoled = theme == AppTheme.AUTO_AMOLED || theme == AppTheme.AMOLED_DARK
-    // Pysanka: its own colours unless the phone's are chosen: the icon's red, its gold, and
-    // warm cream surfaces (from a warm neutral), like the egg on the icon
+    // Pysanka: the settings wear the keyboard's own theme (Linen by day, Poppy by night, and so on), so
+    // choosing a colour theme changes both. The phone's colours when chosen; the Material You themes too.
     if (!systemColors) {
+        val themeId by (if (isDark) prefs.theme.nightThemeId else prefs.theme.dayThemeId).observeAsState()
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val sheet = androidx.compose.runtime.remember(themeId) { keyboardThemeColors(context, themeId.extensionId, themeId.componentId) }
+        if (sheet != null) {
+            val base = neutralDynamicColorScheme(
+                primary = sheet.primary, isDark = isDark, isAmoled = isAmoled, tertiary = sheet.secondary,
+                neutral = sheet.surface, neutralVariant = sheet.surface,
+            )
+            return base.copy(
+                primary = sheet.primary, onPrimary = sheet.onPrimary, secondary = sheet.secondary,
+                background = sheet.background, onBackground = sheet.onSurface,
+                surface = sheet.background, onSurface = sheet.onSurface, onSurfaceVariant = sheet.onSurfaceVariant,
+                surfaceContainerLowest = sheet.background, surfaceContainerLow = sheet.surface, surfaceContainer = sheet.surface,
+                surfaceContainerHigh = sheet.surfaceVariant, surfaceContainerHighest = sheet.surfaceVariant,
+            )
+        }
+        // The icon's red, its gold, and warm cream surfaces (from a warm neutral), like the egg on the icon
         return neutralDynamicColorScheme(
             primary = PysankaRed, isDark = isDark, isAmoled = isAmoled,
             tertiary = PysankaGold, neutral = PysankaCream, neutralVariant = PysankaCream,
@@ -105,3 +122,25 @@ fun FlorisAppTheme(
         )
     }
 }
+
+/** The colours of one of Pysanka's own keyboard themes, as its stylesheet defines them. */
+private class SheetColors(
+    val primary: Color, val onPrimary: Color, val secondary: Color, val background: Color,
+    val surface: Color, val surfaceVariant: Color, val onSurface: Color, val onSurfaceVariant: Color,
+)
+
+/**
+ * Pysanka: reads a keyboard theme's colours from its stylesheet; null for a theme that is not one of
+ * Pysanka's own (the Material You ones take the phone's colours) or that cannot be read.
+ */
+private fun keyboardThemeColors(context: android.content.Context, extension: String, id: String): SheetColors? = runCatching {
+    if (extension != "org.florisboard.themes") return null
+    val text = context.assets.open("ime/theme/$extension/stylesheets/$id.json").use { it.readBytes().decodeToString() }
+    val defines = kotlinx.serialization.json.Json.parseToJsonElement(text)
+        .let { (it as kotlinx.serialization.json.JsonObject)["@defines"] as kotlinx.serialization.json.JsonObject }
+    fun c(name: String) = Color(android.graphics.Color.parseColor((defines[name] as kotlinx.serialization.json.JsonPrimitive).content.trim()))
+    SheetColors(
+        c("--primary"), c("--on-primary"), c("--secondary"), c("--background"),
+        c("--surface"), c("--surface-variant"), c("--on-surface"), c("--on-surface-variant"),
+    )
+}.getOrNull()
