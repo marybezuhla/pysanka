@@ -31,11 +31,11 @@
     <string name="pysanka__clipboard_copy__history_off">El historial del portapapeles está desactivado. Actívalo primero en los ajustes del portapapeles.</string>
     <string name="pysanka__about__based_on__title">Basado en FlorisBoard</string>
     <string name="pysanka__about__based_on__summary">Pysanka se basa en FlorisBoard, de The FlorisBoard Contributors (Apache 2.0); es un proyecto independiente y Pysanka se publica bajo GPL-3.0 o posterior</string>
-    <string name="pysanka__about__license__summary">GPL-3.0 o posterior: software libre sin ningún tipo de garantía. Código fuente: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__license__summary">GPL-3.0 o posterior: software libre sin ningún tipo de garantía. Código fuente: github.com/marybezuhla/pysanka</string>
     <string name="pysanka__about__data__title">Fuentes de datos</string>
     <string name="pysanka__about__data__summary">Listas de palabras de FrequencyWords (CC BY-SA 4.0) y dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), diccionarios de traducción de Wikcionario mediante wiktextract (CC BY-SA 4.0), nombres de emojis de Unicode CLDR, reconocimiento de texto con PaddleOCR (Apache 2.0), dictado con Whisper (OpenAI, MIT) y whisper.cpp (MIT). El modelo de IA Gemma (Google) se descarga aparte, bajo los términos de Gemma.</string>
     <string name="pysanka__error__copy">No se pudo copiar</string>
-    <string name="pysanka__error__license">No se pudo mostrar el texto de la licencia. Está en el repositorio: github.com/Marybezu/pysanka</string>
+    <string name="pysanka__error__license">No se pudo mostrar el texto de la licencia. Está en el repositorio: github.com/marybezuhla/pysanka</string>
     <string name="pysanka__error__open">No se pudo abrir: ninguna app del teléfono puede hacerlo</string>
     <string name="pysanka__tag__all">Todo</string>
     <string name="pysanka__tag__tags">Etiquetas</string>

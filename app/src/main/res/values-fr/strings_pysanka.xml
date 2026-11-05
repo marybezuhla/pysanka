@@ -31,11 +31,11 @@
     <string name="pysanka__clipboard_copy__history_off">L’historique du presse-papiers est désactivé. Activez-le d’abord dans les paramètres du presse-papiers.</string>
     <string name="pysanka__about__based_on__title">Basé sur FlorisBoard</string>
     <string name="pysanka__about__based_on__summary">Pysanka est construit sur FlorisBoard de The FlorisBoard Contributors (Apache 2.0) ; projet indépendant, Pysanka est lui-même sous GPL-3.0 ou ultérieure</string>
-    <string name="pysanka__about__license__summary">GPL-3.0 ou ultérieure : logiciel libre, sans aucune garantie. Code source : github.com/Marybezu/pysanka</string>
+    <string name="pysanka__about__license__summary">GPL-3.0 ou ultérieure : logiciel libre, sans aucune garantie. Code source : github.com/marybezuhla/pysanka</string>
     <string name="pysanka__about__data__title">Sources des données</string>
     <string name="pysanka__about__data__summary">Listes de mots de FrequencyWords (CC BY-SA 4.0) et dict_uk, LibreOffice, Belacorpus, spell-be-tarask (CC BY-SA 3.0), dictionnaires de traduction du Wiktionnaire via wiktextract (CC BY-SA 4.0), noms des emojis d’Unicode CLDR, reconnaissance de texte par PaddleOCR (Apache 2.0), dictée par Whisper (OpenAI, MIT) et whisper.cpp (MIT). Le modèle d’IA Gemma (Google) se télécharge séparément, selon les conditions de Gemma.</string>
     <string name="pysanka__error__copy">Impossible de copier</string>
-    <string name="pysanka__error__license">Impossible d’afficher le texte de la licence. Il se trouve dans le dépôt : github.com/Marybezu/pysanka</string>
+    <string name="pysanka__error__license">Impossible d’afficher le texte de la licence. Il se trouve dans le dépôt : github.com/marybezuhla/pysanka</string>
     <string name="pysanka__error__open">Impossible de l’ouvrir : aucune application du téléphone ne peut le faire</string>
     <string name="pysanka__tag__all">Tout</string>
     <string name="pysanka__tag__tags">Étiquettes</string>

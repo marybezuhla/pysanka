@@ -12,7 +12,7 @@
 - **Збої:** якщо застосунок впаде, на телефоні лишається короткий технічний звіт (лише назви помилок і місця в коді, без вашого тексту). Ви самі вирішуєте, чи надсилати його.
 - **Аналітики, реклами й акаунтів немає.**
 
-Питання: [Issues](https://github.com/Marybezu/pysanka/issues).
+Питання: [Issues](https://github.com/marybezuhla/pysanka/issues).
 
 ## English
 
@@ -26,4 +26,4 @@
 - **Crashes:** if the app crashes, a short technical report stays on the phone (only error names and code locations, none of your text). You decide whether to send it.
 - **No analytics, no ads, no accounts.**
 
-Questions: [Issues](https://github.com/Marybezu/pysanka/issues).
+Questions: [Issues](https://github.com/marybezuhla/pysanka/issues).

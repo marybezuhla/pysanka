@@ -26,7 +26,7 @@
 1. Завантажте файл `pysanka-<версія>.apk` з [Releases](../../releases) на телефоні й відкрийте його. Android попросить дозволити встановлення з цього джерела (браузера чи файлового менеджера): дозвольте.
 2. Google Play Protect може попередити про невідомого розробника: це звичайне попередження для застосунків не з Google Play. Справжність можна перевірити відбитком сертифіката нижче (наприклад, через AppVerifier).
 3. Відкрийте Писанку й пройдіть два кроки: увімкнути клавіатуру й обрати її.
-4. Для оновлень зручно Obtainium: «Додати застосунок» → `github.com/Marybezu/pysanka`.
+4. Для оновлень зручно Obtainium: «Додати застосунок» → `github.com/marybezuhla/pysanka`.
 
 На інший телефон переноситься лише буфер (копією під паролем). Вивчені слова, заміни тексту, зразки стилю й налаштування лишаються на цьому телефоні. Що й де зберігається: [PRIVACY.md](PRIVACY.md).
 
@@ -73,7 +73,7 @@ Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictati
 1. Download `pysanka-<version>.apk` from [Releases](../../releases) on the phone and open it. Android asks to allow installing from that source (the browser or file manager): allow it.
 2. Google Play Protect may warn about an unknown developer: the usual warning for apps not from Google Play. You can check it is genuine by the certificate fingerprint below (with AppVerifier, for example).
 3. Open Pysanka and follow the two steps: turn the keyboard on and choose it.
-4. For updates, Obtainium is handy: "Add app" → `github.com/Marybezu/pysanka`.
+4. For updates, Obtainium is handy: "Add app" → `github.com/marybezuhla/pysanka`.
 
 Only the clipboard moves to another phone (as a password-protected copy). Learned words, text shortcuts, style samples and settings stay on this phone. What is kept where: [PRIVACY.md](PRIVACY.md).
 

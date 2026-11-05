@@ -138,7 +138,7 @@ fun AboutScreen() = FlorisScreen {
             icon = Icons.Outlined.Description,
             title = stringRes(R.string.pysanka__about__data__title),
             summary = stringRes(R.string.pysanka__about__data__summary),
-            onClick = { context.launchUrl("https://github.com/Marybezu/pysanka/blob/main/NOTICE.md") },
+            onClick = { context.launchUrl("https://github.com/marybezuhla/pysanka/blob/main/NOTICE.md") },
         )
     }
 }
