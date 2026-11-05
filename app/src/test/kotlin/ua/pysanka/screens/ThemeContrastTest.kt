@@ -37,8 +37,8 @@ class ThemeContrastTest : FunSpec({
         return (hi + 0.05) / (lo + 0.05)
     }
 
-    test("all six themes are checked") {
-        dir.listFiles { f -> f.extension == "json" }!!.size shouldBe 6
+    test("all ten themes are checked") {
+        dir.listFiles { f -> f.extension == "json" }!!.size shouldBe 10
     }
 
     for (file in dir.listFiles { f -> f.extension == "json" }!!.sortedBy { it.name }) {
