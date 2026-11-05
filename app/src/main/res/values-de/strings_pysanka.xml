@@ -361,8 +361,12 @@
     <string name="pysanka__theme__mak">Mohn</string>
     <string name="pysanka__theme__smereka">Fichte</string>
     <string name="pysanka__theme__chornozem">Schwarzerde</string>
-    <string name="pysanka__theme__system">Systemfarben</string>
-    <string name="pysanka__theme__system_dark">Dunkel, Systemfarben</string>
+    <string name="pysanka__theme__glyna">Ton</string>
+    <string name="pysanka__theme__kalyna">Schneeball</string>
+    <string name="pysanka__theme__zhar">Glut</string>
+    <string name="pysanka__theme__zoriana_nich">Sternennacht</string>
+    <string name="pysanka__theme__system">Farben des Telefons</string>
+    <string name="pysanka__theme__system_dark">Farben des Telefons</string>
     <string name="pysanka__look__system_colors">Einstellungen in den Farben des Systems</string>
     <string name="pysanka__look__system_colors_summary">Material You statt Pysankas Rot und Creme</string>
     <string name="pysanka__welcome__title">Willkommen bei Pysanka!</string>

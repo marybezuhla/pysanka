@@ -362,8 +362,12 @@
     <string name="pysanka__theme__mak">Amapola</string>
     <string name="pysanka__theme__smereka">Abeto</string>
     <string name="pysanka__theme__chornozem">Tierra negra</string>
-    <string name="pysanka__theme__system">Colores del sistema</string>
-    <string name="pysanka__theme__system_dark">Oscuro, colores del sistema</string>
+    <string name="pysanka__theme__glyna">Arcilla</string>
+    <string name="pysanka__theme__kalyna">Viburno</string>
+    <string name="pysanka__theme__zhar">Brasas</string>
+    <string name="pysanka__theme__zoriana_nich">Noche estrellada</string>
+    <string name="pysanka__theme__system">Colores del teléfono</string>
+    <string name="pysanka__theme__system_dark">Colores del teléfono</string>
     <string name="pysanka__look__system_colors">Ajustes con los colores del sistema</string>
     <string name="pysanka__look__system_colors_summary">Material You en lugar del rojo y crema de Pysanka</string>
     <string name="pysanka__welcome__title">¡Te damos la bienvenida a Pysanka!</string>

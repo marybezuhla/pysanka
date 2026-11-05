@@ -362,8 +362,12 @@
     <string name="pysanka__theme__mak">Mac</string>
     <string name="pysanka__theme__smereka">Molid</string>
     <string name="pysanka__theme__chornozem">Cernoziom</string>
-    <string name="pysanka__theme__system">Culorile sistemului</string>
-    <string name="pysanka__theme__system_dark">Întunecat, culorile sistemului</string>
+    <string name="pysanka__theme__glyna">Lut</string>
+    <string name="pysanka__theme__kalyna">Călin</string>
+    <string name="pysanka__theme__zhar">Jar</string>
+    <string name="pysanka__theme__zoriana_nich">Noapte înstelată</string>
+    <string name="pysanka__theme__system">Culorile telefonului</string>
+    <string name="pysanka__theme__system_dark">Culorile telefonului</string>
     <string name="pysanka__look__system_colors">Setările în culorile sistemului</string>
     <string name="pysanka__look__system_colors_summary">Material You în loc de roșul și crem-ul Pysanka</string>
     <string name="pysanka__welcome__title">Bun venit în Pysanka!</string>
