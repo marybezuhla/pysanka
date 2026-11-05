@@ -496,4 +496,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Listy i zadania</string>
     <string name="pysanka__settings__lists_state">Kontynuuj Enterem: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">Pomysł, by tworzyć wygodne ukraińskie aplikacje, które proszą o jak najmniej uprawnień i dobrze działają bez internetu, przyszedł mi, gdy pracowałam przy laptopie niemal w całkowitej ciemności: po kolejnym rosyjskim ataku dronów znów zabrakło prądu. Tak narodziła się Pysanka: klawiatura widzi wszystko, co piszesz, więc nie może nikomu tego przekazywać.</string>
+    <string name="pysanka__about__letter_2">Pysanka jest wolnym oprogramowaniem: jej kod jest otwarty i każdy może sprawdzić, co robi. Bez reklam, śledzenia i kont. Wolność w oprogramowaniu to nie drobiazg, lecz prawo do wiedzy, co dzieje się w twoim telefonie, i do tego, by nikomu nie oddawać swojego życia.</string>
+    <string name="pysanka__about__letter_3">Pysankę stworzono w Ukrainie 🇺🇦. Język jest dla nas domem i oporem. Pisz w swoim języku, gdziekolwiek jesteś: Pysanka jest dla Ukraińców na całym świecie i dla ich sąsiadów. A jeśli przechodzisz na ukraiński, pomoże ci. To nasza autentyczność i ona żyje. My żyjemy.</string>
+    <string name="pysanka__about__letter_4">Jednak od 2014 roku, a od 24 lutego 2022 roku z pełną siłą, Rosja prowadzi wojnę przeciwko mojemu krajowi. Codziennie rakiety i drony uderzają w miasta, domy, szpitale i elektrownie. Okupanci zabijają, porywają ukraińskie dzieci, niszczą muzea, świątynie i biblioteki, zakazują naszego języka na zajętych ziemiach. Chcą, by Ukraińców jako narodu nie było.</string>
+    <string name="pysanka__about__letter_5">Walczymy o prawo do istnienia: by żyć na własnej ziemi, mówić własnym językiem, tworzyć własne. Wolność, którą cenisz w oprogramowaniu, jest dziś dla nas sprawą życia.</string>
+    <string name="pysanka__about__letter_6">Jeśli Pysanka jest dla ciebie przydatna, wesprzyj Ukrainę. Nie otrzymuję tych pieniędzy: linki prowadzą prosto na oficjalne strony organizacji.</string>
+    <string name="pysanka__about__letter_7">Jeśli jesteś z Ukrainy, dziękuję, że tu jesteś. Trzymamy się. Bronimy się, wpłacamy, dbamy o siebie nawzajem i wybieramy ukraińskie: tak razem przybliżamy zwycięstwo.</string>
+    <string name="pysanka__about__letter_signature">Autorka Pysanki 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Wesprzyj Ukrainę 💙💛</string>
+    <string name="pysanka__about__support_note">Linki otwierają się w przeglądarce, na stronach samych organizacji. Aplikacja nic o tym nie wie i nic nie otrzymuje.</string>
+    <string name="pysanka__about__open_site">Otwórz stronę</string>
+    <string name="pysanka__about__support_defence">Obrona</string>
+    <string name="pysanka__about__support_humanitarian">Pomoc humanitarna</string>
+    <string name="pysanka__about__support_any">Możesz też wesprzeć dowolną sprawdzoną fundację, wolontariuszy lub jednostkę, którym ufasz. Sprawdzaj zbiórki: oficjalne dane i sprawozdania.</string>
+    <string name="pysanka__about__org_united24_defence">Oficjalna państwowa platforma zbiórek: kierunek „Obrona”</string>
+    <string name="pysanka__about__org_united24_humanitarian">Ta sama platforma: pomoc medyczna, humanitarne rozminowanie, odbudowa</string>
+    <string name="pysanka__about__org_nbu">Specjalne konto Narodowego Banku Ukrainy</string>
+    <string name="pysanka__about__org_nbu_what">Konto na potrzeby armii, otwarte 24 lutego 2022 roku; bank co miesiąc publikuje sprawozdanie</string>
+    <string name="pysanka__about__org_brave1_what">Państwowy klaster technologii obronnych: dowiedz się, jak Ukraina je tworzy</string>
+    <string name="pysanka__about__org_redcross">Ukraiński Czerwony Krzyż</string>
+    <string name="pysanka__about__org_redcross_what">Krajowe stowarzyszenie Czerwonego Krzyża: pomoc ludziom poszkodowanym przez wojnę</string>
 </resources>

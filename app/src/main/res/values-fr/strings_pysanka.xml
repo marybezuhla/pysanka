@@ -495,4 +495,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Listes et tâches</string>
     <string name="pysanka__settings__lists_state">Continuer avec Entrée : {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">L’idée de créer des applications ukrainiennes pratiques, qui demandent le moins d’autorisations possible et fonctionnent bien hors ligne, m’est venue alors que je travaillais sur mon ordinateur presque dans le noir : après une nouvelle attaque de drones russes, le courant avait encore sauté. C’est ainsi qu’est née Pysanka : un clavier voit tout ce que vous écrivez, il ne doit donc rien en transmettre à personne.</string>
+    <string name="pysanka__about__letter_2">Pysanka est un logiciel libre : son code est ouvert et chacun peut vérifier ce qu’elle fait. Sans publicité, sans pistage, sans compte. La liberté dans les logiciels n’est pas un détail : c’est le droit de savoir ce qui se passe dans votre téléphone et de ne confier votre vie à personne.</string>
+    <string name="pysanka__about__letter_3">Pysanka a été créée en Ukraine 🇺🇦. La langue est pour nous à la fois un foyer et une résistance. Écrivez dans la vôtre, où que vous soyez : Pysanka est faite pour les Ukrainiens du monde entier et pour leurs voisins. Et si vous passez à l’ukrainien, elle vous aidera. C’est ce que nous sommes, et c’est vivant. Nous sommes vivants.</string>
+    <string name="pysanka__about__letter_4">Pourtant depuis 2014, et depuis le 24 février 2022 de toutes ses forces, la Russie mène une guerre contre mon pays. Chaque jour, missiles et drones frappent des villes, des maisons, des hôpitaux et des centrales électriques. Les occupants tuent, enlèvent des enfants ukrainiens, détruisent musées, églises et bibliothèques, et interdisent notre langue dans les territoires occupés. Ils veulent que les Ukrainiens cessent d’exister en tant que peuple.</string>
+    <string name="pysanka__about__letter_5">Nous nous battons pour le droit d’exister : vivre sur notre terre, parler notre langue, créer ce qui est à nous. La liberté que vous appréciez dans les logiciels est aujourd’hui pour nous une question de vie.</string>
+    <string name="pysanka__about__letter_6">Si Pysanka vous est utile, soutenez l’Ukraine. Je ne reçois rien de cet argent : les liens mènent directement aux sites officiels des organisations.</string>
+    <string name="pysanka__about__letter_7">Si vous venez d’Ukraine, merci d’être là. Nous tenons bon. Nous nous défendons, nous donnons, nous prenons soin les uns des autres et nous choisissons ce qui est ukrainien : ensemble, nous rapprochons la victoire.</string>
+    <string name="pysanka__about__letter_signature">L’autrice de Pysanka 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Soutenir l’Ukraine 💙💛</string>
+    <string name="pysanka__about__support_note">Les liens s’ouvrent dans le navigateur, sur les sites des organisations elles-mêmes. L’application n’en sait rien et ne reçoit rien.</string>
+    <string name="pysanka__about__open_site">Ouvrir le site</string>
+    <string name="pysanka__about__support_defence">Défense</string>
+    <string name="pysanka__about__support_humanitarian">Aide humanitaire</string>
+    <string name="pysanka__about__support_any">Vous pouvez aussi soutenir toute fondation vérifiée, des bénévoles ou une unité en qui vous avez confiance. Vérifiez les collectes : coordonnées officielles et rapports.</string>
+    <string name="pysanka__about__org_united24_defence">La plateforme officielle de collecte de l’État ukrainien : Défense</string>
+    <string name="pysanka__about__org_united24_humanitarian">La même plateforme : aide médicale, déminage humanitaire, reconstruction</string>
+    <string name="pysanka__about__org_nbu">Compte spécial de la Banque nationale d’Ukraine</string>
+    <string name="pysanka__about__org_nbu_what">Un compte pour les besoins de l’armée, ouvert le 24 février 2022 ; la Banque nationale en rend compte chaque mois</string>
+    <string name="pysanka__about__org_brave1_what">Le pôle public des technologies de défense : découvrir comment l’Ukraine les conçoit</string>
+    <string name="pysanka__about__org_redcross">Croix-Rouge ukrainienne</string>
+    <string name="pysanka__about__org_redcross_what">La société nationale de la Croix-Rouge : aide aux personnes touchées par la guerre</string>
 </resources>

@@ -494,4 +494,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Listák és teendők</string>
     <string name="pysanka__settings__lists_state">Folytatás Enterrel: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">Az ötlet, hogy kényelmes ukrán alkalmazásokat készítsek, amelyek a lehető legkevesebb engedélyt kérik és internet nélkül is jól működnek, akkor született, amikor szinte teljes sötétben dolgoztam a laptopomon: egy újabb orosz dróntámadás után megint elment az áram. Így született a Pysanka: a billentyűzet mindent lát, amit ír, ezért senkinek sem adhatja tovább.</string>
+    <string name="pysanka__about__letter_2">A Pysanka szabad szoftver: a kódja nyílt, és bárki ellenőrizheti, mit csinál. Reklámok, követés és fiókok nélkül. A szoftverszabadság nem apróság, hanem jog ahhoz, hogy tudja, mi történik a telefonján, és hogy senkinek ne adja át az életét.</string>
+    <string name="pysanka__about__letter_3">A Pysanka Ukrajnában készült 🇺🇦. A nyelv számunkra otthon és ellenállás. Írjon a saját nyelvén, bárhol is van: a Pysanka a világ ukránjainak és szomszédaiknak készült. Ha pedig áttér az ukránra, segít. Ez a mi sajátunk, és él. Mi élünk.</string>
+    <string name="pysanka__about__letter_4">Ám 2014 óta, 2022. február 24. óta pedig teljes erővel, Oroszország háborút folytat a hazám ellen. Rakéták és drónok mindennap városokat, otthonokat, kórházakat és erőműveket támadnak. A megszállók gyilkolnak, ukrán gyerekeket rabolnak el, múzeumokat, templomokat és könyvtárakat pusztítanak, és betiltják a nyelvünket az elfoglalt területeken. Azt akarják, hogy az ukránok népként megszűnjenek létezni.</string>
+    <string name="pysanka__about__letter_5">Azért harcolunk, hogy létezhessünk: a saját földünkön éljünk, a saját nyelvünkön beszéljünk, a sajátunkat alkossuk. A szabadság, amelyet a szoftverekben becsül, számunkra ma élet kérdése.</string>
+    <string name="pysanka__about__letter_6">Ha a Pysanka hasznos az Ön számára, kérem, támogassa Ukrajnát. Ebből a pénzből semmit sem kapok: a linkek egyenesen a szervezetek hivatalos oldalaira vezetnek.</string>
+    <string name="pysanka__about__letter_7">Ha Ukrajnából való, köszönöm, hogy itt van. Kitartunk. Védekezünk, adományozunk, vigyázunk egymásra, és az ukránt választjuk: így együtt közelebb hozzuk a győzelmet.</string>
+    <string name="pysanka__about__letter_signature">A Pysanka szerzője 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Ukrajna támogatása 💙💛</string>
+    <string name="pysanka__about__support_note">A linkek a böngészőben nyílnak meg, maguknak a szervezeteknek az oldalain. Az alkalmazás erről semmit sem tud, és semmit sem kap.</string>
+    <string name="pysanka__about__open_site">Oldal megnyitása</string>
+    <string name="pysanka__about__support_defence">Védelem</string>
+    <string name="pysanka__about__support_humanitarian">Humanitárius segítség</string>
+    <string name="pysanka__about__support_any">Bármely ellenőrzött alapítványt, önkénteseket vagy egységet is támogathat, amelyben megbízik. Ellenőrizze a gyűjtéseket: hivatalos adatok és beszámolók.</string>
+    <string name="pysanka__about__org_united24_defence">Ukrajna hivatalos állami gyűjtőplatformja: Védelem</string>
+    <string name="pysanka__about__org_united24_humanitarian">Ugyanez a platform: orvosi segítség, humanitárius aknamentesítés, újjáépítés</string>
+    <string name="pysanka__about__org_nbu">Az Ukrán Nemzeti Bank különszámlája</string>
+    <string name="pysanka__about__org_nbu_what">Számla a hadsereg szükségleteire, 2022. február 24-én nyitották; a bank havonta beszámol róla</string>
+    <string name="pysanka__about__org_brave1_what">Állami védelmi technológiai klaszter: tudja meg, hogyan fejleszti őket Ukrajna</string>
+    <string name="pysanka__about__org_redcross">Ukrán Vöröskereszt</string>
+    <string name="pysanka__about__org_redcross_what">A nemzeti Vöröskereszt társaság: segítség a háború sújtotta embereknek</string>
 </resources>
