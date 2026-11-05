@@ -499,4 +499,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Listas y tareas</string>
     <string name="pysanka__settings__lists_state">Continuar con Enter: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">La idea de crear aplicaciones ucranianas prácticas, que piden los mínimos permisos y funcionan bien sin internet, surgió mientras trabajaba con el portátil casi a oscuras: tras otro ataque ruso con drones, se había vuelto a ir la luz. Así nació Pysanka: un teclado ve todo lo que escribes, así que no debe pasárselo a nadie.</string>
+    <string name="pysanka__about__letter_2">Pysanka es software libre: su código es abierto y cualquiera puede comprobar lo que hace. Sin anuncios, sin rastreo, sin cuentas. La libertad en el software no es poca cosa: es el derecho a saber qué pasa en tu teléfono y a no entregar tu vida a nadie.</string>
+    <string name="pysanka__about__letter_3">Pysanka se hizo en Ucrania 🇺🇦. La lengua es para nosotros hogar y resistencia. Escribe en la tuya, estés donde estés: Pysanka es para los ucranianos de todo el mundo y para sus vecinos. Y si te estás pasando al ucraniano, te ayudará. Esto es lo que somos, y está vivo. Estamos vivos.</string>
+    <string name="pysanka__about__letter_4">Sin embargo, desde 2014, y desde el 24 de febrero de 2022 con toda su fuerza, Rusia libra una guerra contra mi país. Cada día, misiles y drones golpean ciudades, hogares, hospitales y centrales eléctricas. Los ocupantes matan, secuestran a niños ucranianos, destruyen museos, iglesias y bibliotecas, y prohíben nuestra lengua en las tierras ocupadas. Quieren que los ucranianos dejen de existir como pueblo.</string>
+    <string name="pysanka__about__letter_5">Luchamos por el derecho a existir: a vivir en nuestra tierra, hablar nuestra lengua, crear lo nuestro. La libertad que valoras en el software es hoy para nosotros una cuestión de vida.</string>
+    <string name="pysanka__about__letter_6">Si Pysanka te resulta útil, apoya a Ucrania. Yo no recibo ese dinero: los enlaces llevan directamente a los sitios oficiales de las organizaciones.</string>
+    <string name="pysanka__about__letter_7">Si eres de Ucrania, gracias por estar aquí. Resistimos. Nos defendemos, donamos, cuidamos unos de otros y elegimos lo ucraniano: así acercamos juntos la victoria.</string>
+    <string name="pysanka__about__letter_signature">La autora de Pysanka 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Apoyar a Ucrania 💙💛</string>
+    <string name="pysanka__about__support_note">Los enlaces se abren en el navegador, en los sitios de las propias organizaciones. La aplicación no sabe nada de ello ni recibe nada.</string>
+    <string name="pysanka__about__open_site">Abrir el sitio</string>
+    <string name="pysanka__about__support_defence">Defensa</string>
+    <string name="pysanka__about__support_humanitarian">Ayuda humanitaria</string>
+    <string name="pysanka__about__support_any">También puedes apoyar a cualquier fundación verificada, voluntarios o unidad en quienes confíes. Comprueba las colectas: datos oficiales e informes.</string>
+    <string name="pysanka__about__org_united24_defence">La plataforma oficial de recaudación del Estado ucraniano: Defensa</string>
+    <string name="pysanka__about__org_united24_humanitarian">La misma plataforma: ayuda médica, desminado humanitario, reconstrucción</string>
+    <string name="pysanka__about__org_nbu">Cuenta especial del Banco Nacional de Ucrania</string>
+    <string name="pysanka__about__org_nbu_what">Una cuenta para las necesidades del ejército, abierta el 24 de febrero de 2022; el banco informa de ella cada mes</string>
+    <string name="pysanka__about__org_brave1_what">El clúster estatal de tecnologías de defensa: descubre cómo las crea Ucrania</string>
+    <string name="pysanka__about__org_redcross">Cruz Roja Ucraniana</string>
+    <string name="pysanka__about__org_redcross_what">La sociedad nacional de la Cruz Roja: ayuda a las personas afectadas por la guerra</string>
 </resources>

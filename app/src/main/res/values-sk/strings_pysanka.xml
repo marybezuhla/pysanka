@@ -500,4 +500,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Zoznamy a úlohy</string>
     <string name="pysanka__settings__lists_state">Pokračovať klávesom Enter: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">Nápad robiť pohodlné ukrajinské aplikácie, ktoré žiadajú čo najmenej povolení a dobre fungujú bez internetu, prišiel, keď som pracovala pri notebooku takmer v úplnej tme: po ďalšom ruskom útoku dronov znova vypadla elektrina. Tak sa zrodila Pysanka: klávesnica vidí všetko, čo píšete, preto to nesmie nikomu odovzdať.</string>
+    <string name="pysanka__about__letter_2">Pysanka je slobodný softvér: jej kód je otvorený a ktokoľvek si môže overiť, čo robí. Bez reklám, sledovania a účtov. Sloboda v softvéri nie je maličkosť, ale právo vedieť, čo sa deje vo vašom telefóne, a nikomu neodovzdať svoj život.</string>
+    <string name="pysanka__about__letter_3">Pysanka vznikla na Ukrajine 🇺🇦. Jazyk je pre nás domovom aj odporom. Píšte svojím jazykom, nech ste kdekoľvek: Pysanka je pre Ukrajincov na celom svete a pre ich susedov. A ak prechádzate na ukrajinčinu, pomôže vám. To je naša autentickosť a je živá. Sme živí.</string>
+    <string name="pysanka__about__letter_4">No od roku 2014, a od 24. februára 2022 plnou silou, vedie Rusko vojnu proti mojej krajine. Každý deň rakety a drony zasahujú mestá, domovy, nemocnice a elektrárne. Okupanti zabíjajú, unášajú ukrajinské deti, ničia múzeá, chrámy a knižnice, zakazujú náš jazyk na obsadených územiach. Chcú, aby Ukrajinci ako národ prestali existovať.</string>
+    <string name="pysanka__about__letter_5">Bojujeme za právo byť: žiť na vlastnej zemi, hovoriť vlastným jazykom, tvoriť vlastné. Sloboda, ktorú si ceníte v softvéri, je pre nás dnes otázkou života.</string>
+    <string name="pysanka__about__letter_6">Ak je pre vás Pysanka užitočná, podporte Ukrajinu. Tieto peniaze nedostávam: odkazy vedú priamo na oficiálne stránky organizácií.</string>
+    <string name="pysanka__about__letter_7">Ak ste z Ukrajiny, ďakujem, že ste tu. Držíme sa. Bránime sa, prispievame, staráme sa jeden o druhého a vyberáme si ukrajinské: tak spolu približujeme víťazstvo.</string>
+    <string name="pysanka__about__letter_signature">Autorka Pysanky 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Podporiť Ukrajinu 💙💛</string>
+    <string name="pysanka__about__support_note">Odkazy sa otvárajú v prehliadači, na stránkach samotných organizácií. Aplikácia o tom nič nevie a nič nedostáva.</string>
+    <string name="pysanka__about__open_site">Otvoriť stránku</string>
+    <string name="pysanka__about__support_defence">Obrana</string>
+    <string name="pysanka__about__support_humanitarian">Humanitárna pomoc</string>
+    <string name="pysanka__about__support_any">Podporiť môžete aj akúkoľvek overenú nadáciu, dobrovoľníkov či jednotku, ktorým dôverujete. Overujte zbierky: oficiálne údaje a správy.</string>
+    <string name="pysanka__about__org_united24_defence">Oficiálna štátna platforma zbierok: oblasť Obrana</string>
+    <string name="pysanka__about__org_united24_humanitarian">Tá istá platforma: zdravotná pomoc, humanitárne odmínovanie, obnova</string>
+    <string name="pysanka__about__org_nbu">Osobitný účet Národnej banky Ukrajiny</string>
+    <string name="pysanka__about__org_nbu_what">Účet na potreby armády, otvorený 24. februára 2022; banka každý mesiac zverejňuje správu</string>
+    <string name="pysanka__about__org_brave1_what">Štátny klaster obranných technológií: zistite, ako ich Ukrajina vytvára</string>
+    <string name="pysanka__about__org_redcross">Ukrajinský Červený kríž</string>
+    <string name="pysanka__about__org_redcross_what">Národná spoločnosť Červeného kríža: pomoc ľuďom, ktorých zasiahla vojna</string>
 </resources>

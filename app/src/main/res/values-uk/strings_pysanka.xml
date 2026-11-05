@@ -500,4 +500,33 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Списки й справи</string>
     <string name="pysanka__settings__lists_state">Продовжувати з Enter: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">Ідея робити зручні українські застосунки, що просять мінімум дозволів і добре працюють без інтернету, зʼявилася, коли я працювала за ноутбуком майже в повній темряві: після чергової російської атаки дронів знову зникло світло. Так народилася Писанка: клавіатура бачить усе, що ви пишете, тож вона має нікому цього не передавати.</string>
+    <string name="pysanka__about__letter_2">Писанка є вільним програмним забезпеченням: код відкритий, і будь-хто може перевірити, що застосунок робить. Без реклами, стеження й облікових записів. Свобода в програмах не дрібниця, а право знати, що відбувається у вашому телефоні, і не віддавати нікому свого життя.</string>
+    <string name="pysanka__about__letter_3">Писанку зроблено в Україні 🇺🇦. Мова для нас і дім, і спротив. Пишіть рідною, де б ви не були: Писанка для українців по світу і для їхніх сусідів. А якщо ви переходите на українську, вона допоможе. Це наша автентика, вона жива. Ми живі.</string>
+    <string name="pysanka__about__letter_4">Та з 2014 року, а від 24 лютого 2022-го на повну силу, росія веде війну проти нашої країни. Щодня ракети й дрони бʼють по містах, домівках, лікарнях і електростанціях. Окупанти вбивають, викрадають українських дітей, нищать музеї, храми й бібліотеки, забороняють нашу мову на захоплених землях. Вони хочуть, щоб українців як народу не стало.</string>
+    <string name="pysanka__about__letter_5">Ми боремося за право бути: жити на своїй землі, говорити своєю мовою, творити своє. Свобода, яку ви цінуєте в програмах, для нас сьогодні питання життя.</string>
+    <string name="pysanka__about__letter_6">Якщо Писанка вам корисна, підтримайте Україну. Я не отримую цих коштів: посилання ведуть просто на офіційні сайти організацій.</string>
+    <string name="pysanka__about__letter_7">Якщо ви з України, дякую, що ви тут. Тримаємося. Обороняємося, донатимо, бережемо одне одного й обираємо українське: так ми разом наближаємо перемогу.</string>
+    <string name="pysanka__about__letter_signature">Авторка Писанки 💙💛</string>
+    <string name="pysanka__about__author_name">Марʼяна Безугла</string>
+    <string name="pysanka__about__support_note">Посилання відкриваються в браузері, на сайтах самих організацій. Застосунок нічого про це не знає й не отримує.</string>
+    <string name="pysanka__about__open_site">Відкрити сайт</string>
+    <string name="pysanka__about__org_united24">UNITED24</string>
+    <string name="pysanka__about__org_united24_url">https://u24.gov.ua/</string>
+    <string name="pysanka__about__org_redcross">Товариство Червоного Хреста України</string>
+    <string name="pysanka__about__org_redcross_what">Національне товариство Червоного Хреста: допомога людям, що постраждали від війни</string>
+    <string name="pysanka__about__org_redcross_url">https://redcross.org.ua/</string>
+    <string name="pysanka__about__org_brave1">Brave1</string>
+    <string name="pysanka__about__org_brave1_what">Державний кластер оборонних технологій: дізнатися, як Україна їх створює</string>
+    <string name="pysanka__about__org_brave1_url">https://brave1.gov.ua/</string>
+    <string name="pysanka__about__org_united24_defence">Офіційна платформа зборів від держави: напрям «Оборона»</string>
+    <string name="pysanka__about__org_united24_humanitarian">Та сама платформа: медична допомога, гуманітарне розмінування, відбудова</string>
+    <string name="pysanka__about__org_nbu">Спецрахунок Національного банку</string>
+    <string name="pysanka__about__org_nbu_what">Рахунок для збору коштів на потреби армії, відкритий 24 лютого 2022 року; НБУ щомісяця звітує</string>
+    <string name="pysanka__about__org_nbu_url">https://bank.gov.ua/ua/news/all/natsionalniy-bank-vidkriv-spetsrahunok-dlya-zboru-koshtiv-na-potrebi-armiyi</string>
+    <string name="pysanka__about__support_title">Підтримати Україну 💙💛</string>
+    <string name="pysanka__about__support_defence">Оборона</string>
+    <string name="pysanka__about__support_humanitarian">Гуманітарна допомога</string>
+    <string name="pysanka__about__support_any">Підтримати можна й будь-який перевірений фонд, волонтерів чи підрозділ, яким ви довіряєте. Перевіряйте збори: офіційні реквізити й звіти.</string>
 </resources>

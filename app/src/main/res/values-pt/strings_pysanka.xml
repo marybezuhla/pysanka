@@ -498,4 +498,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Listas e tarefas</string>
     <string name="pysanka__settings__lists_state">Continuar com Enter: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">A ideia de criar aplicações ucranianas práticas, que pedem o mínimo de permissões e funcionam bem sem internet, surgiu quando eu trabalhava no portátil quase às escuras: depois de mais um ataque russo com drones, a luz tinha voltado a falhar. Assim nasceu a Pysanka: um teclado vê tudo o que escreve, por isso não deve passar nada disso a ninguém.</string>
+    <string name="pysanka__about__letter_2">A Pysanka é software livre: o código é aberto e qualquer pessoa pode verificar o que faz. Sem anúncios, sem rastreio, sem contas. A liberdade no software não é um pormenor: é o direito de saber o que acontece no seu telefone e de não entregar a sua vida a ninguém.</string>
+    <string name="pysanka__about__letter_3">A Pysanka foi feita na Ucrânia 🇺🇦. A língua é para nós casa e resistência. Escreva na sua, esteja onde estiver: a Pysanka é para os ucranianos de todo o mundo e para os seus vizinhos. E se estiver a passar para o ucraniano, ela ajuda. Isto é o que somos, e está vivo. Estamos vivos.</string>
+    <string name="pysanka__about__letter_4">No entanto, desde 2014, e desde 24 de fevereiro de 2022 com toda a força, a Rússia trava uma guerra contra o meu país. Todos os dias, mísseis e drones atingem cidades, casas, hospitais e centrais elétricas. Os ocupantes matam, raptam crianças ucranianas, destroem museus, igrejas e bibliotecas e proíbem a nossa língua nas terras ocupadas. Querem que os ucranianos deixem de existir como povo.</string>
+    <string name="pysanka__about__letter_5">Lutamos pelo direito de existir: viver na nossa terra, falar a nossa língua, criar o que é nosso. A liberdade que valoriza no software é hoje para nós uma questão de vida.</string>
+    <string name="pysanka__about__letter_6">Se a Pysanka lhe é útil, apoie a Ucrânia. Eu não recebo este dinheiro: as ligações levam diretamente aos sites oficiais das organizações.</string>
+    <string name="pysanka__about__letter_7">Se é da Ucrânia, obrigada por estar aqui. Resistimos. Defendemo-nos, doamos, cuidamos uns dos outros e escolhemos o que é ucraniano: assim aproximamos juntos a vitória.</string>
+    <string name="pysanka__about__letter_signature">A autora da Pysanka 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Apoiar a Ucrânia 💙💛</string>
+    <string name="pysanka__about__support_note">As ligações abrem no navegador, nos sites das próprias organizações. A aplicação não sabe nada disso e não recebe nada.</string>
+    <string name="pysanka__about__open_site">Abrir o site</string>
+    <string name="pysanka__about__support_defence">Defesa</string>
+    <string name="pysanka__about__support_humanitarian">Ajuda humanitária</string>
+    <string name="pysanka__about__support_any">Também pode apoiar qualquer fundação verificada, voluntários ou unidade em que confie. Verifique as angariações: dados oficiais e relatórios.</string>
+    <string name="pysanka__about__org_united24_defence">A plataforma oficial de angariação do Estado ucraniano: Defesa</string>
+    <string name="pysanka__about__org_united24_humanitarian">A mesma plataforma: ajuda médica, desminagem humanitária, reconstrução</string>
+    <string name="pysanka__about__org_nbu">Conta especial do Banco Nacional da Ucrânia</string>
+    <string name="pysanka__about__org_nbu_what">Uma conta para as necessidades do exército, aberta a 24 de fevereiro de 2022; o banco presta contas todos os meses</string>
+    <string name="pysanka__about__org_brave1_what">O cluster estatal de tecnologias de defesa: saber como a Ucrânia as cria</string>
+    <string name="pysanka__about__org_redcross">Cruz Vermelha Ucraniana</string>
+    <string name="pysanka__about__org_redcross_what">A sociedade nacional da Cruz Vermelha: ajuda às pessoas afetadas pela guerra</string>
 </resources>

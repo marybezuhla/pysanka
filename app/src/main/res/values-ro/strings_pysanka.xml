@@ -499,4 +499,27 @@
     <string name="pysanka__lists__style_markdown">Markdown - [ ]</string>
     <string name="pysanka__settings__lists">Liste și sarcini</string>
     <string name="pysanka__settings__lists_state">Continuă cu Enter: {continue}</string>
+    <!-- The author's letter and Support Ukraine (About) -->
+    <string name="pysanka__about__letter_1">Ideea de a face aplicații ucrainene comode, care cer cât mai puține permisiuni și funcționează bine fără internet, mi-a venit când lucram la laptop aproape în întuneric total: după încă un atac rusesc cu drone, curentul dispăruse din nou. Așa s-a născut Pysanka: tastatura vede tot ce scrieți, așa că nu are voie să transmită nimănui nimic.</string>
+    <string name="pysanka__about__letter_2">Pysanka este software liber: codul este deschis și oricine poate verifica ce face. Fără reclame, urmărire sau conturi. Libertatea în software nu e un lucru mărunt, ci dreptul de a ști ce se întâmplă în telefonul vostru și de a nu vă da viața nimănui.</string>
+    <string name="pysanka__about__letter_3">Pysanka a fost creată în Ucraina 🇺🇦. Limba este pentru noi și casă, și rezistență. Scrieți în limba voastră, oriunde ați fi: Pysanka este pentru ucrainenii din toată lumea și pentru vecinii lor. Iar dacă treceți la ucraineană, vă va ajuta. Aceasta este autenticitatea noastră și e vie. Suntem vii.</string>
+    <string name="pysanka__about__letter_4">Totuși, din 2014, iar din 24 februarie 2022 cu toată forța, Rusia duce un război împotriva țării mele. În fiecare zi, rachete și drone lovesc orașe, case, spitale și centrale electrice. Ocupanții ucid, răpesc copii ucraineni, distrug muzee, biserici și biblioteci și interzic limba noastră pe pământurile ocupate. Vor ca ucrainenii să înceteze să existe ca popor.</string>
+    <string name="pysanka__about__letter_5">Luptăm pentru dreptul de a exista: să trăim pe pământul nostru, să vorbim limba noastră, să creăm ce e al nostru. Libertatea pe care o prețuiți în software este pentru noi astăzi o chestiune de viață.</string>
+    <string name="pysanka__about__letter_6">Dacă Pysanka vă este utilă, sprijiniți Ucraina. Eu nu primesc acești bani: linkurile duc direct la site-urile oficiale ale organizațiilor.</string>
+    <string name="pysanka__about__letter_7">Dacă sunteți din Ucraina, vă mulțumesc că sunteți aici. Rezistăm. Ne apărăm, donăm, avem grijă unii de alții și alegem ce e ucrainean: așa apropiem împreună victoria.</string>
+    <string name="pysanka__about__letter_signature">Autoarea aplicației Pysanka 💙💛</string>
+    <string name="pysanka__about__author_name">Mariana Bezuhla</string>
+    <string name="pysanka__about__support_title">Sprijiniți Ucraina 💙💛</string>
+    <string name="pysanka__about__support_note">Linkurile se deschid în browser, pe site-urile organizațiilor. Aplicația nu știe nimic despre asta și nu primește nimic.</string>
+    <string name="pysanka__about__open_site">Deschide site-ul</string>
+    <string name="pysanka__about__support_defence">Apărare</string>
+    <string name="pysanka__about__support_humanitarian">Ajutor umanitar</string>
+    <string name="pysanka__about__support_any">Puteți sprijini și orice fundație verificată, voluntari sau unitate în care aveți încredere. Verificați strângerile de fonduri: date oficiale și rapoarte.</string>
+    <string name="pysanka__about__org_united24_defence">Platforma oficială de strângere de fonduri a statului: Apărare</string>
+    <string name="pysanka__about__org_united24_humanitarian">Aceeași platformă: ajutor medical, deminare umanitară, reconstrucție</string>
+    <string name="pysanka__about__org_nbu">Contul special al Băncii Naționale a Ucrainei</string>
+    <string name="pysanka__about__org_nbu_what">Cont pentru nevoile armatei, deschis pe 24 februarie 2022; banca raportează în fiecare lună</string>
+    <string name="pysanka__about__org_brave1_what">Clusterul de stat pentru tehnologii de apărare: aflați cum le creează Ucraina</string>
+    <string name="pysanka__about__org_redcross">Crucea Roșie Ucraineană</string>
+    <string name="pysanka__about__org_redcross_what">Societatea națională de Cruce Roșie: ajutor pentru oamenii afectați de război</string>
 </resources>
