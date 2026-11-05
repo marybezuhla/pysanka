@@ -361,8 +361,12 @@
     <string name="pysanka__theme__mak">Pipacs</string>
     <string name="pysanka__theme__smereka">Lucfenyő</string>
     <string name="pysanka__theme__chornozem">Feketeföld</string>
-    <string name="pysanka__theme__system">Rendszerszínek</string>
-    <string name="pysanka__theme__system_dark">Sötét, rendszerszínek</string>
+    <string name="pysanka__theme__glyna">Agyag</string>
+    <string name="pysanka__theme__kalyna">Bangita</string>
+    <string name="pysanka__theme__zhar">Parázs</string>
+    <string name="pysanka__theme__zoriana_nich">Csillagos éj</string>
+    <string name="pysanka__theme__system">A telefon színei</string>
+    <string name="pysanka__theme__system_dark">A telefon színei</string>
     <string name="pysanka__look__system_colors">Beállítások a rendszer színeivel</string>
     <string name="pysanka__look__system_colors_summary">Material You a Pysanka piros és krémszíne helyett</string>
     <string name="pysanka__welcome__title">Üdvözöl a Pysanka!</string>

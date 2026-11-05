@@ -36,6 +36,22 @@
       "isNight": false
     },
     {
+      "id": "glyna",
+      "label": "Glyna",
+      "authors": [
+        "Pysanka"
+      ],
+      "isNight": false
+    },
+    {
+      "id": "kalyna",
+      "label": "Kalyna",
+      "authors": [
+        "Pysanka"
+      ],
+      "isNight": false
+    },
+    {
       "id": "mak",
       "label": "Mak",
       "authors": [
@@ -54,6 +70,22 @@
     {
       "id": "chornozem",
       "label": "Chornozem",
+      "authors": [
+        "Pysanka"
+      ],
+      "isNight": true
+    },
+    {
+      "id": "zhar",
+      "label": "Zhar",
+      "authors": [
+        "Pysanka"
+      ],
+      "isNight": true
+    },
+    {
+      "id": "zoriana_nich",
+      "label": "Zoriana nich",
       "authors": [
         "Pysanka"
       ],
