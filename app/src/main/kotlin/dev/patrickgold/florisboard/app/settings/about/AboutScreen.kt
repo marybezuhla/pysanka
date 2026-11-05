@@ -78,6 +78,13 @@ fun AboutScreen() = FlorisScreen {
                 modifier = Modifier.padding(top = 16.dp),
             )
         }
+        // Pysanka: the author's letter and how to support Ukraine, as in the author's other apps
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            ua.pysanka.settings.AuthorLetter()
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(top = 24.dp))
+            ua.pysanka.settings.SupportUkraine(open = { context.launchUrl(it) })
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(top = 24.dp))
+        }
         Preference(
             icon = Icons.Outlined.Info,
             title = stringRes(R.string.about__version__title),
