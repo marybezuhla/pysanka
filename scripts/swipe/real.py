@@ -32,11 +32,14 @@ def main(src, train_out, test_out):
         if len(path) < 2:
             continue
         data[i % 2].append((l["word"], feats[layout].features(path)))
+        # The app's own guesses, only where Pysanka's decoder answered (not the fallback)
+        if not l.get("decoder", True):
+            fallback += 1
+            continue
         g = l.get("guesses") or []
         app_right += bool(g) and g[0].lower() == l["word"].lower()
         app_any += l["word"].lower() in [x.lower() for x in g[:3]]
-        fallback += not l.get("decoder", True)
-    n = max(len(lines), 1)
+    n = max(len(lines) - fallback, 1)
     print(f"swipes: {len(lines)}; the app's first guess right: {app_right / n:.0%}, among its first three: {app_any / n:.0%}"
           + (f"; {fallback} answered by FlorisBoard's fallback" if fallback else ""))
     pickle.dump(data[0], open(train_out, "wb"))

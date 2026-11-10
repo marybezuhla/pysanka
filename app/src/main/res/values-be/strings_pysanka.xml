@@ -98,9 +98,9 @@
     <string name="pysanka__typing__glide_summary">Вядзіце пальцам па літарах</string>
     <string name="pysanka__typing__glide_trail">Паказваць след пальца</string>
     <string name="pysanka__swipe_practice__title">Трэніроўка свайпу</string>
-    <string name="pysanka__swipe_practice__summary">Дапамагае наладзіць свайп пад вашы пальцы</string>
+    <string name="pysanka__swipe_practice__summary">Запішыце правядзенні слоў са спісу, каб дапамагчы палепшыць свайп</string>
     <string name="pysanka__swipe_practice__about">Правядзіце кожнае слова адным рухам, як звычайна. Пісанка запіша шлях пальца і тое, што адгадала, каб наладзіць свайп на сапраўдных рухах. Запісваюцца толькі словы з гэтага спісу, ваш тэкст ніколі. Запісы застаюцца на тэлефоне, пакуль вы самі не захаваеце іх у файл і не перадасце. Словы ўкраінскія: пераключыце клавіятуру на ўкраінскую.</string>
-    <string name="pysanka__swipe_practice__glide_off">Свайп выключаны: уключыце яго вышэй.</string>
+    <string name="pysanka__swipe_practice__glide_off">Свайп выключаны: уключыце яго ў наладах набору.</string>
     <string name="pysanka__swipe_practice__progress">Слова {n} з {all}</string>
     <string name="pysanka__swipe_practice__field">Правядзіце слова тут</string>
     <string name="pysanka__swipe_practice__right">✓ «{word}»: адгадана.</string>

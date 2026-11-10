@@ -98,9 +98,9 @@
     <string name="pysanka__typing__glide_summary">Húzd az ujjad a betűkön</string>
     <string name="pysanka__typing__glide_trail">Csúsztatás nyomvonalának megjelenítése</string>
     <string name="pysanka__swipe_practice__title">Csúsztatós gépelés gyakorlása</string>
-    <string name="pysanka__swipe_practice__summary">Segít a csúsztatós gépelést az ujjaidhoz hangolni</string>
+    <string name="pysanka__swipe_practice__summary">Rögzítsd a lista szavainak mozdulatait, hogy segíts javítani a csúsztatós gépelést</string>
     <string name="pysanka__swipe_practice__about">Minden szót egyetlen mozdulattal húzz végig, ahogy szoktad. A Pysanka rögzíti az ujjad útját és azt, amit kitalált, hogy valódi mozdulatokra hangolja a csúsztatós gépelést. Csak a lista szavai kerülnek rögzítésre, a saját szöveged soha. A felvételek a telefonon maradnak, amíg te magad fájlba nem mented és tovább nem adod őket. A szavak ukránok: válts ukrán billentyűzetre.</string>
-    <string name="pysanka__swipe_practice__glide_off">A csúsztatós gépelés ki van kapcsolva: kapcsold be fent.</string>
+    <string name="pysanka__swipe_practice__glide_off">A csúsztatós gépelés ki van kapcsolva: kapcsold be a gépelési beállításokban.</string>
     <string name="pysanka__swipe_practice__progress">{n}. szó / {all}</string>
     <string name="pysanka__swipe_practice__field">Húzd ide a szót</string>
     <string name="pysanka__swipe_practice__right">✓ „{word}”: eltalálta.</string>

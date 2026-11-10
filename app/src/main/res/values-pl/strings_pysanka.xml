@@ -98,9 +98,9 @@
     <string name="pysanka__typing__glide_summary">Przesuwaj palcem po literach</string>
     <string name="pysanka__typing__glide_trail">Pokazuj ślad gestu</string>
     <string name="pysanka__swipe_practice__title">Trening przesuwania</string>
-    <string name="pysanka__swipe_practice__summary">Pomaga dostroić pisanie przesuwem do twoich palców</string>
-    <string name="pysanka__swipe_practice__about">Przesuń każde słowo jednym ruchem, jak zwykle. Pysanka zapisze drogę palca i to, co odgadła, aby dostroić pisanie przesuwem do prawdziwych ruchów. Zapisywane są tylko słowa z tej listy, nigdy twój tekst. Zapisy zostają na telefonie, dopóki sam ich nie zapiszesz do pliku i nie przekażesz. Słowa są ukraińskie: przełącz klawiaturę na ukraiński.</string>
-    <string name="pysanka__swipe_practice__glide_off">Pisanie przesuwem jest wyłączone: włącz je wyżej.</string>
+    <string name="pysanka__swipe_practice__summary">Nagraj przesunięcia słów z listy, aby pomóc ulepszyć pisanie przesuwem</string>
+    <string name="pysanka__swipe_practice__about">Przesuń każde słowo jednym ruchem, jak zwykle. Pysanka zapisze drogę palca i to, co odgadła, aby dostroić pisanie przesuwem do prawdziwych ruchów. Zapisywane są tylko słowa z tej listy, nigdy twój tekst. Zapisy zostają na telefonie, dopóki nie zachowasz ich w pliku i nie przekażesz. Słowa są ukraińskie: przełącz klawiaturę na ukraiński.</string>
+    <string name="pysanka__swipe_practice__glide_off">Pisanie przesuwem jest wyłączone: włącz je w ustawieniach pisania.</string>
     <string name="pysanka__swipe_practice__progress">Słowo {n} z {all}</string>
     <string name="pysanka__swipe_practice__field">Przesuń słowo tutaj</string>
     <string name="pysanka__swipe_practice__right">✓ „{word}”: odgadnięte.</string>

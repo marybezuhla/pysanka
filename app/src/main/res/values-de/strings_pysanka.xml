@@ -98,9 +98,9 @@
     <string name="pysanka__typing__glide_summary">Mit dem Finger über die Buchstaben wischen</string>
     <string name="pysanka__typing__glide_trail">Wischspur anzeigen</string>
     <string name="pysanka__swipe_practice__title">Wischen üben</string>
-    <string name="pysanka__swipe_practice__summary">Hilft, das Wischen auf deine Finger abzustimmen</string>
-    <string name="pysanka__swipe_practice__about">Wische jedes Wort in einer Bewegung, wie gewohnt. Pysanka zeichnet den Weg des Fingers und das Erratene auf, um das Wischen auf echte Bewegungen abzustimmen. Aufgezeichnet werden nur Wörter aus dieser Liste, nie dein eigener Text. Die Aufzeichnungen bleiben auf dem Handy, bis du sie selbst in eine Datei speicherst und weitergibst. Die Wörter sind ukrainisch: Schalte die Tastatur auf Ukrainisch um.</string>
-    <string name="pysanka__swipe_practice__glide_off">Wischen ist ausgeschaltet: Schalte es oben ein.</string>
+    <string name="pysanka__swipe_practice__summary">Nimm Wischbewegungen von Listenwörtern auf, um das Wischen zu verbessern</string>
+    <string name="pysanka__swipe_practice__about">Wische jedes Wort in einer Bewegung, wie gewohnt. Pysanka zeichnet den Weg des Fingers und was sie erraten hat, auf, um das Wischen auf echte Bewegungen abzustimmen. Aufgezeichnet werden nur Wörter aus dieser Liste, nie dein eigener Text. Die Aufzeichnungen bleiben auf dem Handy, bis du sie selbst in eine Datei speicherst und weitergibst. Die Wörter sind ukrainisch: Schalte die Tastatur auf Ukrainisch um.</string>
+    <string name="pysanka__swipe_practice__glide_off">Wischen ist ausgeschaltet: Schalte es in den Tipp-Einstellungen ein.</string>
     <string name="pysanka__swipe_practice__progress">Wort {n} von {all}</string>
     <string name="pysanka__swipe_practice__field">Wische das Wort hier</string>
     <string name="pysanka__swipe_practice__right">✓ „{word}“: richtig erraten.</string>

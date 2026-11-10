@@ -97,10 +97,10 @@
     <string name="pysanka__typing__glide">Tastare prin glisare</string>
     <string name="pysanka__typing__glide_summary">Glisați degetul peste litere</string>
     <string name="pysanka__typing__glide_trail">Afișează urma glisării</string>
-    <string name="pysanka__swipe_practice__title">Exersare tastare prin glisare</string>
-    <string name="pysanka__swipe_practice__summary">Ajută la potrivirea glisării pe degetele dvs.</string>
+    <string name="pysanka__swipe_practice__title">Exersarea tastării prin glisare</string>
+    <string name="pysanka__swipe_practice__summary">Înregistrați glisări ale cuvintelor din listă pentru a ajuta la îmbunătățirea glisării</string>
     <string name="pysanka__swipe_practice__about">Glisați fiecare cuvânt dintr-o singură mișcare, ca de obicei. Pysanka înregistrează drumul degetului și ce a ghicit, pentru a potrivi glisarea pe mișcări reale. Se înregistrează doar cuvintele din această listă, niciodată textul dvs. Înregistrările rămân pe telefon până când le salvați într-un fișier și le transmiteți dvs. Cuvintele sunt ucrainene: comutați tastatura pe ucraineană.</string>
-    <string name="pysanka__swipe_practice__glide_off">Tastarea prin glisare este dezactivată: activați-o mai sus.</string>
+    <string name="pysanka__swipe_practice__glide_off">Tastarea prin glisare este dezactivată: activați-o în setările de tastare.</string>
     <string name="pysanka__swipe_practice__progress">Cuvântul {n} din {all}</string>
     <string name="pysanka__swipe_practice__field">Glisați cuvântul aici</string>
     <string name="pysanka__swipe_practice__right">✓ „{word}”: ghicit.</string>

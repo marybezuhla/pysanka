@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,20 +55,28 @@ fun SwipePracticeScreen() = FlorisScreen {
         val last by SwipeRecorder.last.collectAsState()
         LaunchedEffect(Unit) { SwipeRecorder.refresh(context) }
         var index by remember { mutableIntStateOf(-1) }
+        var seen by remember { mutableIntStateOf(-1) }
         var text by remember { mutableStateOf("") }
+        // The swiped word arrives in the field a moment after it was recorded: it is cleared then too
+        var clearNext by remember { mutableStateOf(false) }
         var confirmClear by remember { mutableStateOf(false) }
         var saved by remember { mutableStateOf<Boolean?>(null) }
 
-        // The next word once a swipe was recorded (and where the last practice stopped, at first)
+        // Where the last practice stopped, at first; then the next word after each recorded swipe
         LaunchedEffect(count) {
             if (count < 0 || words.isEmpty()) return@LaunchedEffect
-            index = count % words.size
-            text = ""
+            if (seen < 0) index = count % words.size else if (count > seen) {
+                index = (index + 1) % words.size
+                text = ""
+                clearNext = true
+            } else if (count == 0) index = 0
+            seen = count
         }
         val word = words.getOrNull(index)
-        DisposableEffect(word) {
+        // Asked only while the screen is in front (not behind another app or the home screen)
+        androidx.lifecycle.compose.LifecycleResumeEffect(word) {
             SwipeRecorder.target = word
-            onDispose { SwipeRecorder.target = null }
+            onPauseOrDispose { SwipeRecorder.target = null }
         }
         val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
             if (uri != null) saved = SwipeRecorder.export(context, uri)
@@ -88,11 +95,15 @@ fun SwipePracticeScreen() = FlorisScreen {
                 LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
                 OutlinedTextField(
                     value = text,
-                    onValueChange = { text = it },
+                    onValueChange = { if (clearNext) { clearNext = false; text = "" } else text = it },
                     modifier = Modifier.fillMaxWidth().focusRequester(focus),
                     singleLine = true,
                     label = { Text(stringRes(R.string.pysanka__swipe_practice__field)) },
-                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None, autoCorrectEnabled = false),
+                    // Marked: only a swipe into this field is recorded (SwipeRecorder.targetFor)
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.None, autoCorrectEnabled = false,
+                        platformImeOptions = androidx.compose.ui.text.input.PlatformImeOptions(SwipeRecorder.FIELD),
+                    ),
                 )
                 last?.let { (asked, guess) ->
                     Text(
@@ -106,6 +117,7 @@ fun SwipePracticeScreen() = FlorisScreen {
                 OutlinedButton(onClick = {
                     index = (index + 1) % words.size
                     text = ""
+                    clearNext = false
                 }) { Text(stringRes(R.string.pysanka__swipe_practice__skip)) }
             }
             Text(stringRes(R.string.pysanka__swipe_practice__count, "n" to count.coerceAtLeast(0).toString()), style = MaterialTheme.typography.bodyMedium)

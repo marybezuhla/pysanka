@@ -242,7 +242,8 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
      */
     fun practiceShot(gesture: Gesture): ua.pysanka.typing.swipe.SwipeRecorder.Shot? {
         val subtype = currentSubtype ?: return null
-        val letters = keys.filter { Character.isLetter(it.baseCode()) }
+        // (a copy: the layout may change on the main thread meanwhile)
+        val letters = runCatching { ArrayList(keys) }.getOrNull()?.filter { Character.isLetter(it.baseCode()) } ?: return null
         val width = letters.map { it.touchBounds.width }.sorted().let { if (it.isEmpty()) 0f else it[it.size / 2] }
         if (width <= 0f || gesture.pointCount == 0) return null
         val points = HashMap<Char, ua.pysanka.typing.swipe.SwipeDecoder.Point>()

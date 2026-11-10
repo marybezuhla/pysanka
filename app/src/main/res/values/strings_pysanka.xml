@@ -99,9 +99,9 @@
     <string name="pysanka__typing__glide_summary">Slide your finger over the letters</string>
     <string name="pysanka__typing__glide_trail">Show the swipe trail</string>
     <string name="pysanka__swipe_practice__title">Swipe practice</string>
-    <string name="pysanka__swipe_practice__summary">Helps tune swipe to your fingers</string>
+    <string name="pysanka__swipe_practice__summary">Record swipes of listed words to help improve swipe</string>
     <string name="pysanka__swipe_practice__about">Swipe each word in one movement, as you usually do. Pysanka records the finger\'s path and what it guessed, to tune swipe on real movements. Only words from this list are recorded, never your own text. The records stay on the phone until you save them to a file and pass it on yourself. The words are Ukrainian: switch the keyboard to Ukrainian.</string>
-    <string name="pysanka__swipe_practice__glide_off">Swipe typing is off: turn it on above.</string>
+    <string name="pysanka__swipe_practice__glide_off">Swipe typing is off: turn it on in the typing settings.</string>
     <string name="pysanka__swipe_practice__progress">Word {n} of {all}</string>
     <string name="pysanka__swipe_practice__field">Swipe the word here</string>
     <string name="pysanka__swipe_practice__right">✓ «{word}»: guessed right.</string>

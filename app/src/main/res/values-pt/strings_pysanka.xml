@@ -98,9 +98,9 @@
     <string name="pysanka__typing__glide_summary">Deslize o dedo pelas letras</string>
     <string name="pysanka__typing__glide_trail">Mostrar o traço do gesto</string>
     <string name="pysanka__swipe_practice__title">Treino de escrita por deslize</string>
-    <string name="pysanka__swipe_practice__summary">Ajuda a ajustar o deslize aos seus dedos</string>
-    <string name="pysanka__swipe_practice__about">Deslize cada palavra num só movimento, como de costume. A Pysanka grava o percurso do dedo e o que adivinhou, para ajustar o deslize a movimentos reais. Só se gravam palavras desta lista, nunca o seu texto. As gravações ficam no telefone até as guardar num arquivo e as passar por si. As palavras são ucranianas: mude o teclado para ucraniano.</string>
-    <string name="pysanka__swipe_practice__glide_off">A escrita por deslize está desativada: ative-a acima.</string>
+    <string name="pysanka__swipe_practice__summary">Grave deslizes de palavras da lista para ajudar a melhorar o deslize</string>
+    <string name="pysanka__swipe_practice__about">Deslize cada palavra num só movimento, como de costume. A Pysanka grava o percurso do dedo e o que adivinhou, para ajustar o deslize a movimentos reais. Só se gravam palavras desta lista, nunca o seu texto. As gravações ficam no telefone até que as guarde num arquivo e as envie. As palavras são ucranianas: mude o teclado para ucraniano.</string>
+    <string name="pysanka__swipe_practice__glide_off">A escrita por deslize está desativada: ative-a nas definições de escrita.</string>
     <string name="pysanka__swipe_practice__progress">Palavra {n} de {all}</string>
     <string name="pysanka__swipe_practice__field">Deslize a palavra aqui</string>
     <string name="pysanka__swipe_practice__right">✓ «{word}»: acertou.</string>

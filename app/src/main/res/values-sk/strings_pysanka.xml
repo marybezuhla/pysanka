@@ -98,11 +98,11 @@
     <string name="pysanka__typing__glide_summary">Posúvajte prst po písmenách</string>
     <string name="pysanka__typing__glide_trail">Zobraziť stopu prsta</string>
     <string name="pysanka__swipe_practice__title">Tréning písania ťahom</string>
-    <string name="pysanka__swipe_practice__summary">Pomáha prispôsobiť písanie ťahom vašim prstom</string>
+    <string name="pysanka__swipe_practice__summary">Zaznamenajte ťahy slov zo zoznamu a pomôžte zlepšiť písanie ťahom</string>
     <string name="pysanka__swipe_practice__about">Prejdite každé slovo jedným ťahom, ako zvyčajne. Pysanka zapíše dráhu prsta a to, čo uhádla, aby prispôsobila písanie ťahom skutočným pohybom. Zapisujú sa len slová z tohto zoznamu, nikdy váš text. Záznamy zostávajú v telefóne, kým ich sami neuložíte do súboru a neodovzdáte. Slová sú ukrajinské: prepnite klávesnicu na ukrajinčinu.</string>
-    <string name="pysanka__swipe_practice__glide_off">Písanie ťahom je vypnuté: zapnite ho vyššie.</string>
+    <string name="pysanka__swipe_practice__glide_off">Písanie ťahom je vypnuté: zapnite ho v nastaveniach písania.</string>
     <string name="pysanka__swipe_practice__progress">Slovo {n} z {all}</string>
-    <string name="pysanka__swipe_practice__field">Prejdite slovo sem</string>
+    <string name="pysanka__swipe_practice__field">Napíšte slovo sem ťahom</string>
     <string name="pysanka__swipe_practice__right">✓ „{word}“: uhádnuté.</string>
     <string name="pysanka__swipe_practice__wrong">✗ „{word}“: Pysanka uhádla „{guess}“.</string>
     <string name="pysanka__swipe_practice__skip">Preskočiť</string>

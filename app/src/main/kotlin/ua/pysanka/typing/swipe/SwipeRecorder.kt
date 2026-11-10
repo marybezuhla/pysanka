@@ -16,7 +16,7 @@ import java.io.File
  * key centres, all in key widths. Kept in Pysanka's files until saved by the person or deleted.
  */
 object SwipeRecorder {
-    data class Shot(
+    class Shot(
         val xs: FloatArray, val ys: FloatArray,
         val keys: Map<Char, SwipeDecoder.Point>,
         val language: String,
@@ -24,8 +24,23 @@ object SwipeRecorder {
         val decoder: Boolean,
     )
 
-    /** The word the practice screen asks for; null: nothing is recorded. */
+    /** The word the practice screen asks for while it is shown; null: nothing is recorded. */
     @Volatile var target: String? = null
+
+    /** The practice field's mark (its private IME options): only a swipe into that field is recorded. */
+    const val FIELD = "ua.pysanka.swipe_practice"
+
+    /**
+     * The word asked, only when the swipe went into the practice field itself (Pysanka's own, marked
+     * field, not private, not the clipboard search): taken when the swipe ends, on the main thread.
+     * Never anything typed elsewhere, even with the practice screen open behind or beside.
+     */
+    fun targetFor(info: dev.patrickgold.florisboard.ime.editor.FlorisEditorInfo, ownPackage: String): String? {
+        val word = target ?: return null
+        if (info.packageName != ownPackage || info.base.privateImeOptions != FIELD) return null
+        if (ua.pysanka.privacy.FieldPrivacy.isPrivate || ua.pysanka.privacy.FieldPrivacy.isPassword || ua.pysanka.clipboard.ClipSearch.active) return null
+        return word
+    }
 
     private val _count = MutableStateFlow(-1)
     /** Swipes recorded so far (-1: not read yet). */
@@ -42,10 +57,11 @@ object SwipeRecorder {
         _count.value = if (f.exists()) f.useLines { s -> s.count { it.isNotBlank() } } else 0
     }
 
-    /** One swipe for the word asked; [guesses]: the decoder's words, likeliest first. */
+    /** One swipe of [word] (asked when the swipe ended); [guesses]: the decoder's words, likeliest first. */
     @Synchronized
-    fun record(context: Context, shot: Shot, guesses: List<String>) {
-        val word = target ?: return
+    fun record(context: Context, word: String, shot: Shot, guesses: List<String>) {
+        // The list is Ukrainian: a swipe on another layout says nothing about it
+        if (shot.language != "uk") return
         val line = JSONObject().apply {
             put("word", word)
             put("lang", shot.language)
@@ -57,7 +73,7 @@ object SwipeRecorder {
         }
         file(context).appendText(line.toString() + "\n")
         _last.value = word to guesses.firstOrNull()
-        refresh(context)
+        _count.value = _count.value.coerceAtLeast(0) + 1
     }
 
     private fun round(v: Float) = Math.round(v * 1000) / 1000.0
