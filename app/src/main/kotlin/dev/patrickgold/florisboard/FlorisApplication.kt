@@ -131,6 +131,8 @@ class FlorisApplication : Application() {
             preferenceStoreLoaded.value = true
             // Pysanka: "Translate (Pysanka)" in the selection menu as the settings say
             runCatching { ua.pysanka.translate.TranslateEntry.sync(this@FlorisApplication) }
+            // Pysanka: reading aloud in the selection menu and Pysanka as the phone's voice, as the voices and settings say
+            runCatching { ua.pysanka.speech.SpeechEntry.sync(this@FlorisApplication) }
         }
         extensionManager.value.init()
         clipboardManager.value.initializeForContext(this)

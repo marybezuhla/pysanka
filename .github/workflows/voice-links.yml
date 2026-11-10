@@ -1,0 +1,35 @@
+name: Check the voice links
+
+# Pysanka: run by hand (Actions → Check the voice links → Run workflow). Downloads the reading voices from the
+# exact links Pysanka offers and checks that each is the pinned file (size and SHA-256, as in PinnedModel).
+# Tetiana is there only once the v1.0.0 release has the file.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Cori (English)
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 --proto '=https' -o cori.onnx \
+            "https://huggingface.co/rhasspy/piper-voices/resolve/293cad0539066f86e6bce3b9780c472cc9157489/en/en_GB/cori/medium/en_GB-cori-medium.onnx?download=true"
+          test "$(stat -c %s cori.onnx)" = 63531379
+          echo "1899f98e5fb8310154f3c2973f4b8a929ba7245e722b3d3a85680b833d95f10d  cori.onnx" | sha256sum -c -
+      - name: Tetiana (Ukrainian)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if curl -fsSL --retry 3 --proto '=https' -o tetiana.onnx \
+            "https://github.com/marybezuhla/pysanka/releases/download/v1.0.0/uk-tetiana.onnx"; then
+            test "$(stat -c %s tetiana.onnx)" = 151507141
+            echo "6d76437e89207e973266b7b3911de8f2bab8cef25bbaaeeb40d34f5a0bae8df9  tetiana.onnx" | sha256sum -c -
+          else
+            echo "::warning::Tetiana is not in the v1.0.0 release yet"
+          fi

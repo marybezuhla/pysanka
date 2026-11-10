@@ -161,6 +161,8 @@ android {
     }
 
     androidResources {
+        // Pysanka: the stress dictionary is mapped straight from the APK, so it is stored uncompressed
+        noCompress += "bin"
         // Pysanka: the interface is Ukrainian and English only (FlorisBoard's other translations,
         // Russian among them, stay out of the APK); keyboard languages are not affected
         localeFilters += listOf("en", "uk", "be", "pl", "sk", "hu", "ro", "de", "fr", "es", "pt")
@@ -240,6 +242,7 @@ dependencies {
     implementation(projects.lib.kotlin)
     // Pysanka: whisper.cpp for dictation
     implementation(projects.lib.whisper)
+    implementation(projects.lib.espeak)
     implementation(projects.lib.snygg)
 
     testImplementation(libs.kotest.assertions.core)

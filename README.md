@@ -18,6 +18,7 @@
 - 🔍 **Текст із фото й камери** розпізнається на телефоні.
 - 🤖 **Локальний ШІ (Gemma 4), за бажанням.** ШІ-помічник просто в клавіатурі (✦: дії плитками, відповідь замість клавіш): стиль, граматика й пунктуація, підсумок довгих текстів (з перевіркою чисел і назв), переклад, русизми, список, таблиця, нотатки, лист за описом, варіанти відповіді, приховати особисте, «Моїм стилем» (за вашими зашифрованими зразками); «Поділитися → Писанка ШІ» з будь-якого застосунку. Для соцмереж: лічильник знаків, тред, «Спокійніше», версії для кількох мереж у буфер, скільки емодзі, обираєте ви.
 - 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель (≈190 МБ) ви завантажуєте один раз у налаштуваннях диктування. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите. Або диктуйте голосовою клавіатурою іншого застосунку (наприклад, FUTO Voice Input): мікрофон Писанки перемкне на неї.
+- 🔊 **Читання вголос голосами Грамоти, за бажанням.** Виділіть текст у будь-якому застосунку й виберіть «Прочитати вголос (Писанка)»; у перекладі слова 🔊 його вимовляє. Український голос (Тетяна, ≈150 МБ) і англійський (Cori, ≈64 МБ) завантажуються окремо в налаштуваннях читання. Можна читати у фоні й зробити Писанку голосом телефону для інших застосунків і TalkBack.
 
 Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Моделі ШІ й диктування ви додаєте самі; без них клавіатура працює повністю.
 
@@ -34,6 +35,7 @@
 
 - Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈80 МБ.
 - Диктування: процесор ARMv8.2 (більшість телефонів з 2018 року; у частини дешевих моделей до 2022 року його немає, тоді диктування просто недоступне) і ≈450 МБ вільного місця під час встановлення (≈200 МБ, коли завантажений файл видалено).
+- Читання вголос: ≈150 МБ для українського голосу й ≈64 МБ для англійського (стільки ж ненадовго ще раз, поки завантажений файл не видалено).
 - Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі (під час встановлення ненадовго ≈5,5 ГБ, поки завантажений файл ще не видалено).
 
 ## Прозорість
@@ -65,6 +67,7 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - Themes in pysanka colours, calm for long typing, or the system's colours. Keyboard height, letter size and gaps between keys to your liking.
 - On-device text recognition from photos and the camera.
 - Optional on-device dictation (Whisper; you download its model, ≈190 MB, once in the dictation settings): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself. Or dictate with another app's voice keyboard (FUTO Voice Input, for example): Pysanka's microphone switches to it.
+- Optional reading aloud with Hramota's voices: select text in any app and choose «Read aloud (Pysanka)»; in a word's translation, 🔊 says it. The Ukrainian voice (Tetiana, ≈150 MB) and the English one (Cori, ≈64 MB) are downloaded separately in the reading settings. Reading can go on in the background, and Pysanka can be the phone's voice for other apps and TalkBack.
 
 Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI and dictation models yourself; without them the keyboard works fully.
 
@@ -81,6 +84,7 @@ Only the clipboard moves to another phone (as a password-protected copy). Learne
 
 - Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈80 MB.
 - Dictation: an ARMv8.2 processor (most phones since 2018; some budget models up to 2022 lack it, and then dictation is simply unavailable) and ≈450 MB free while installing (≈200 MB once the downloaded file is deleted).
+- Reading aloud: ≈150 MB for the Ukrainian voice and ≈64 MB for the English one (as much again for a while, until the downloaded file is deleted).
 - On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model (≈5.5 GB for a moment while installing, until the downloaded file is deleted).
 
 ## Transparency

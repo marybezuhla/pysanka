@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pysanka as the phone's voice: its settings are Pysanka's reading settings -->
+<tts-engine xmlns:android="http://schemas.android.com/apk/res/android" />

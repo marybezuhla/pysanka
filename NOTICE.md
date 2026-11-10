@@ -80,6 +80,18 @@ those copies keep that licence.
   unchanged in weights (see `SOURCES.json` and `scripts/ocr_models.py`).
 - LiteRT-LM (Google, Apache 2.0) runs the AI editor's model. The Gemma model is not included; the
   owner downloads it under its own terms, and only the exact published file is accepted.
+- Reading aloud uses Hramota's voices and text preparation (same author):
+  - **Tetiana** — [robinhad/ukrainian-tts](https://github.com/robinhad/ukrainian-tts) v5.0.0 (MIT; recordings
+    from ukrainian-tts-datasets, Apache 2.0), turned into ONNX by Hramota; not included, the owner downloads it
+    (Pysanka's v1.0.0 release), only the exact file is accepted (`PinnedModel.TETIANA`). Its tokens and speaker
+    vector are in `app/src/main/assets/speech`. Licence: `LICENSE-ukrainian-tts.txt` there.
+  - **Cori** — `en_GB-cori-medium` from [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices) (MIT;
+    LibriVox recordings, public domain); not included, downloaded by the owner from a pinned revision
+    (`PinnedModel.CORI`). Its settings and model card are in `app/src/main/assets/speech`.
+  - **Stress dictionary** (`app/src/main/assets/speech/stress.bin`) — [ukrainian-word-stress](https://github.com/lang-uk/ukrainian-word-stress)
+    2.1.0 (MIT), converted by Hramota. Licence: `LICENSE-ukrainian-word-stress.txt`.
+  - **eSpeak NG** 1.52.0 (GPL-3.0-or-later; `lib/espeak/prebuilt`, built from source by `.github/workflows/espeak.yml`,
+    with its English data in `app/src/main/assets/speech/espeak-ng-data`): only English phonemes for Cori.
 - `lib/whisper/src/main/cpp/whisper.cpp` — whisper.cpp v1.9.5 and ggml (The ggml authors, MIT, its
   `LICENSE` alongside), only the files the phone build needs, unchanged. It runs dictation.
 - The Whisper small model (OpenAI, MIT, https://github.com/openai/whisper) in whisper.cpp's 5-bit

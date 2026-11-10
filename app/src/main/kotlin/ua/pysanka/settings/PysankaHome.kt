@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
+import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Keyboard
@@ -217,6 +218,21 @@ fun PysankaHome(
         Block(stringRes(R.string.pysanka__voice__title), voiceState, icon = Icons.Outlined.Mic) {
             LinkRow(stringRes(R.string.pysanka__settings__voice_open), voiceState) {
                 navController.navigate(Routes.Settings.PysankaVoice)
+            }
+        }
+
+        // Reading aloud: which voices are there
+        val speechState = stringRes(
+            when {
+                ua.pysanka.speech.SpeechEngine.has(context, "uk") && ua.pysanka.speech.SpeechEngine.has(context, "en") -> R.string.pysanka__speech__state_both
+                ua.pysanka.speech.SpeechEngine.has(context, "uk") -> R.string.pysanka__speech__state_uk
+                ua.pysanka.speech.SpeechEngine.has(context, "en") -> R.string.pysanka__speech__state_en
+                else -> R.string.pysanka__speech__state_none
+            },
+        )
+        Block(stringRes(R.string.pysanka__speech__title), speechState, icon = Icons.AutoMirrored.Outlined.VolumeUp) {
+            LinkRow(stringRes(R.string.pysanka__speech__open), speechState) {
+                navController.navigate(Routes.Settings.PysankaSpeech)
             }
         }
 

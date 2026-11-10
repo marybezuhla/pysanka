@@ -39,10 +39,12 @@ jobs:
       - name: Check strings (unescaped apostrophes)
         run: bash .github/check-strings.sh
 
-      # The text recognition models come with the app: only the exact pinned files
+      # Text recognition models, voice data and eSpeak come with the app: only the exact pinned files
       - name: Check the built-in models (exact pinned files)
         run: |
           (cd app/src/main/assets/ocr && sha256sum -c SHA256SUMS)
+          (cd app/src/main/assets/speech && sha256sum -c SHA256SUMS)
+          (cd lib/espeak/prebuilt && sha256sum -c SHA256SUMS)
 
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:

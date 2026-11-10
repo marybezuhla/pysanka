@@ -61,6 +61,37 @@ class PinnedModel(
             sizeGb = 0.19,
             spaceGb = 0.25,
         )
+
+        /**
+         * Tetiana, the Ukrainian voice for reading aloud: robinhad/ukrainian-tts v5.0.0 (MIT;
+         * recordings Apache 2.0), turned into ONNX at full precision as in Hramota. Not published
+         * elsewhere in this form, so it lies in Pysanka's v1.0.0 release (never deleted).
+         */
+        val TETIANA = PinnedModel(
+            dir = "speech_uk",
+            name = "uk-tetiana.onnx",
+            downloadName = "uk-tetiana.onnx",
+            download = "https://github.com/marybezuhla/pysanka/releases/download/v1.0.0/uk-tetiana.onnx",
+            bytes = 151_507_141L,
+            maxBytes = 151_507_141L,
+            sha256 = "6d76437e89207e973266b7b3911de8f2bab8cef25bbaaeeb40d34f5a0bae8df9",
+            sizeGb = 0.15,
+            spaceGb = 0.2,
+        )
+
+        /** Cori, the English voice: Piper's en_GB-cori-medium (MIT; public-domain recordings), unchanged. */
+        val CORI = PinnedModel(
+            dir = "speech_en",
+            name = "en-cori.onnx",
+            downloadName = "en_GB-cori-medium.onnx",
+            download = "https://huggingface.co/rhasspy/piper-voices/resolve/" +
+                "293cad0539066f86e6bce3b9780c472cc9157489/en/en_GB/cori/medium/en_GB-cori-medium.onnx?download=true",
+            bytes = 63_531_379L,
+            maxBytes = 63_531_379L,
+            sha256 = "1899f98e5fb8310154f3c2973f4b8a929ba7245e722b3d3a85680b833d95f10d",
+            sizeGb = 0.064,
+            spaceGb = 0.1,
+        )
     }
 }
 
@@ -154,6 +185,7 @@ class ModelStore(private val context: Context, val model: PinnedModel = PinnedMo
             ua.pysanka.ai.AiEngine.cacheDir(context).deleteRecursively()
             ua.pysanka.ai.AiEntry.sync(context)
         }
+        if (model === PinnedModel.TETIANA || model === PinnedModel.CORI) ua.pysanka.speech.SpeechEntry.sync(context)
     }
 
     /**
