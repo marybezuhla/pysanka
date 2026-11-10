@@ -308,7 +308,10 @@
     <string name="pysanka__voice__not_here">A diktálás nem működik jelszó-, inkognitó- és „tanulás nélküli” mezőkben.</string>
     <string name="pysanka__voice__set_up">A diktáláshoz engedélyezd a mikrofont.</string>
     <string name="pysanka__voice__unsupported">A telefon processzora nem tudja futtatni a diktálást.</string>
-    <string name="pysanka__voice__about">A Whisper (OpenAI) teljesen a telefonon ismeri fel a beszédet: a hang soha nem kerül el sehová, és nem mentjük el, csak a felismerés idejéig marad a memóriában. A Whisper base modell az alkalmazással együtt érkezik: nem kell semmit letölteni.</string>
+    <string name="pysanka__voice__about">A Whisper (OpenAI) teljesen a telefonon ismeri fel a beszédet: a hang soha nem kerül el sehová, és nem mentjük el, csak a felismerés idejéig marad a memóriában. A Whisper small modellt külön, egyszer kell letölteni. Így a Pysanka nagyjából harmadakkora, és aki nem diktál, annak nem kell helyet szánnia rá.</string>
+    <string name="pysanka__voice__step1">1. Töltsd le a böngészőben ezt a fájlt: {file} (kb. {size} MB).</string>
+    <string name="pysanka__voice__delete_ask">Törlöd a diktálási modellt? Ha újra diktálnál, a fájlt ({size} MB) ismét le kell tölteni.</string>
+    <string name="pysanka__voice__no_model">A diktáláshoz előbb töltsd le a modellt a beállításokban.</string>
     <string name="pysanka__voice__how_to_use">Koppints a 🎙 jelre a billentyűzet felett, és beszélj. A szöveg egy szünet vagy a nagy mikrofonra koppintás után jelenik meg (vagy amikor elengeded, ha beszéd közben nyomva tartod). A panel a következő mondatra is nyitva marad: mellette vannak az írásjelek, a ⌫, a szóköz, az új sor, az emojijaid és az Eltávolítás (visszavonja, ami épp bekerült). A ⌨ visszahozza a billentyűket. A nyelv a billentyűzeté. Egyszerre legfeljebb 2 perc. Jelszó-, inkognitó- és „tanulás nélküli” mezőkben nem működik.</string>
     <string name="pysanka__voice__mic">Mikrofon engedélyezése</string>
     <string name="pysanka__voice__mic_granted">Mikrofon engedélyezve</string>
@@ -316,6 +319,7 @@
     <string name="pysanka__voice__system_settings">Rendszerbeállítások megnyitása</string>
     <string name="pysanka__settings__voice_ready">Kész: mikrofon a billentyűzet felett</string>
     <string name="pysanka__settings__voice_no_mic">Mikrofon engedélyezése</string>
+    <string name="pysanka__settings__voice_no_model">Töltsd le a modellt</string>
     <string name="pysanka__settings__voice_open">Mikrofon és a diktálás módja</string>
     <string name="pysanka__ai__action_post">Közösségimédia-bejegyzés</string>
     <string name="pysanka__ai__action_calmer">Nyugodtabb</string>

@@ -14,12 +14,12 @@
 - 🌐 **Переклад слів між 12 мовами без інтернету.** Словники з Вікісловника вже в застосунку: кнопка над клавіатурою перекладає слово біля курсора й ставить переклад на його місце, а «Перекласти (Писанка)» є в меню виділеного тексту будь-якого застосунку (вимикається в налаштуваннях). Знаходить і форми слів («ключа» → ключ → key, klucz, Schlüssel).
 - ☑️ **Списки, справи й дата** як у нотатках: кнопка над клавіатурою ставить •, 1. чи ☐ на початок рядка, повторний дотик позначає справу ☑; Enter продовжує список. У Joplin, Obsidian і Markor — Markdown, який вони показують своїми чекбоксами. Дата й час мовою клавіатури.
 - ⌨️ **Фізична клавіатура** друкує мовою Писанки (Ctrl+Пробіл перемикає), а на планшетах і розкладних телефонах клавіатура розділяється на дві половини.
-- 🎨 **Теми в кольорах писанок:** Небо, Калина, Льон, Віск, Глина вдень і Зоряна ніч, Мак, Чорнозем, Смерека, Жар уночі, у парах, спокійні для довгого набору; або кольори телефона. Висота клавіатури, розмір літер і відступи між клавішами на ваш смак.
+- 🎨 **Теми в кольорах писанок:** Небо, Калина, Льон, Віск, Глина вдень і Зоряна ніч, Мак, Чорнозем, Смерека, Жар уночі, у парах, спокійні для довгого набору; або кольори телефону. Висота клавіатури, розмір літер і відступи між клавішами на ваш смак.
 - 🔍 **Текст із фото й камери** розпізнається на телефоні.
 - 🤖 **Локальний ШІ (Gemma 4), за бажанням.** ШІ-помічник просто в клавіатурі (✦: дії плитками, відповідь замість клавіш): стиль, граматика й пунктуація, підсумок довгих текстів (з перевіркою чисел і назв), переклад, русизми, список, таблиця, нотатки, лист за описом, варіанти відповіді, приховати особисте, «Моїм стилем» (за вашими зашифрованими зразками); «Поділитися → Писанка ШІ» з будь-якого застосунку. Для соцмереж: лічильник знаків, тред, «Спокійніше», версії для кількох мереж у буфер, скільки емодзі, обираєте ви.
-- 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель уже в застосунку. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите.
+- 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель (≈190 МБ) ви завантажуєте один раз у налаштуваннях диктування. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите.
 
-Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Модель ШІ ви додаєте самі; без неї клавіатура працює повністю.
+Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Моделі ШІ й диктування ви додаєте самі; без них клавіатура працює повністю.
 
 ## Як встановити
 
@@ -32,8 +32,8 @@
 
 ## Вимоги
 
-- Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈100 МБ.
-- Диктування: процесор ARMv8.2 (більшість телефонів з 2018 року; у частини дешевих моделей до 2022 року його немає, тоді диктування просто недоступне).
+- Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈80 МБ.
+- Диктування: процесор ARMv8.2 (більшість телефонів з 2018 року; у частини дешевих моделей до 2022 року його немає, тоді диктування просто недоступне) і ≈450 МБ вільного місця під час встановлення (≈200 МБ, коли завантажений файл видалено).
 - Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі (під час встановлення ненадовго ≈5,5 ГБ, поки завантажений файл ще не видалено).
 
 ## Прозорість
@@ -64,9 +64,9 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - A physical keyboard types in Pysanka's language (Ctrl+Space switches it); on tablets and foldables the keyboard splits in two halves.
 - Themes in pysanka colours, calm for long typing, or the system's colours. Keyboard height, letter size and gaps between keys to your liking.
 - On-device text recognition from photos and the camera.
-- Optional on-device dictation (Whisper, the model comes with the app): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
+- Optional on-device dictation (Whisper; you download its model, ≈190 MB, once in the dictation settings): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
 
-Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI model yourself; without it the keyboard works fully.
+Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI and dictation models yourself; without them the keyboard works fully.
 
 ## Installing
 
@@ -79,8 +79,8 @@ Only the clipboard moves to another phone (as a password-protected copy). Learne
 
 ## Requirements
 
-- Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈100 MB.
-- Dictation: an ARMv8.2 processor (most phones since 2018; some budget models up to 2022 lack it, and then dictation is simply unavailable).
+- Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈80 MB.
+- Dictation: an ARMv8.2 processor (most phones since 2018; some budget models up to 2022 lack it, and then dictation is simply unavailable) and ≈450 MB free while installing (≈200 MB once the downloaded file is deleted).
 - On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model (≈5.5 GB for a moment while installing, until the downloaded file is deleted).
 
 ## Transparency

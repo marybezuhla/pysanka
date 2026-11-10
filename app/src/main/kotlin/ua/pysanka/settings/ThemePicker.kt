@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -139,20 +141,34 @@ internal fun ThemeRow(night: Boolean, seed: Color, chosen: String, modifier: Mod
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Sample(look, selected)
-                        Text(
-                            names[id.componentId] ?: id.componentId,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 6.dp),
-                        )
+                        ThemeName(names[id.componentId] ?: id.componentId, selected)
                     }
                 }
                 repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
             }
         }
     }
+}
+
+/**
+ * A theme's name under its picture: never broken inside a word ("Viburnu / m" on a narrow phone with
+ * large text). As many lines as words at most; a word that does not fit gets a smaller size instead.
+ */
+@Composable
+private fun ThemeName(name: String, selected: Boolean) {
+    val style = MaterialTheme.typography.bodyMedium.merge(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+        textAlign = TextAlign.Center,
+    )
+    // One word per line: any other break overflows, so the text shrinks instead
+    BasicText(
+        name.replace(' ', '\n'),
+        modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+        style = style,
+        maxLines = name.split(' ').size,
+        autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = style.fontSize, stepSize = 0.5.sp),
+    )
 }
 
 /** Two rows of keys and Enter, in the theme's colours; the chosen one framed in the accent of the settings. */

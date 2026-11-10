@@ -202,6 +202,7 @@ fun PysankaHome(
             when {
                 // A processor that cannot run it: said here too, not only when dictating
                 !ua.pysanka.whisper.WhisperNative.supported -> R.string.pysanka__voice__unsupported
+                !ua.pysanka.voice.VoiceModel.present(context) -> R.string.pysanka__settings__voice_no_model
                 !ua.pysanka.voice.VoiceInput.hasMic(context) -> R.string.pysanka__settings__voice_no_mic
                 else -> R.string.pysanka__settings__voice_ready
             },

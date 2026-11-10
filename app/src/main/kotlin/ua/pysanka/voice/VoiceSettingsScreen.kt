@@ -36,8 +36,9 @@ import kotlinx.coroutines.launch
 import ua.pysanka.whisper.WhisperNative
 
 /**
- * Pysanka: dictation in the settings: how it works, the pause that ends it and the microphone,
- * asked for here, never from the keyboard (the model comes with the app).
+ * Pysanka: dictation in the settings: how it works, the model (downloaded by the person, see
+ * [ua.pysanka.models.ModelSection]), the pause that ends it and the microphone, asked for here,
+ * never from the keyboard.
  */
 @Composable
 fun VoiceSettingsScreen() = FlorisScreen {
@@ -65,6 +66,14 @@ fun VoiceSettingsScreen() = FlorisScreen {
             Text(stringRes(R.string.pysanka__voice__about), style = MaterialTheme.typography.bodyMedium)
             if (!WhisperNative.supported) {
                 Text(stringRes(R.string.pysanka__voice__unsupported), color = MaterialTheme.colorScheme.error)
+            } else {
+                // The model first: without it nothing below does anything
+                ua.pysanka.models.ModelSection(
+                    ua.pysanka.models.ModelImport.VOICE,
+                    step1 = R.string.pysanka__voice__step1,
+                    deleteAsk = R.string.pysanka__voice__delete_ask,
+                )
+                HorizontalDivider()
             }
             val prefs by dev.patrickgold.florisboard.app.FlorisPreferenceStore
             val scope = androidx.compose.runtime.rememberCoroutineScope()

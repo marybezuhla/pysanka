@@ -157,7 +157,7 @@ private object VoiceEngine {
     // Touched on the worker thread only
     private var model: WhisperNative.Model? = null
 
-    /** Loads the model that comes with the app (once; read from the APK, see [VoiceModel]). */
+    /** Loads the downloaded model (once; see [VoiceModel]). */
     fun load(context: Context) {
         val app = context.applicationContext
         worker.execute {
@@ -190,19 +190,21 @@ private object VoiceEngine {
 }
 
 /**
- * Pysanka: Whisper small (OpenAI, MIT; whisper.cpp's 5-bit file) comes with the app
- * (assets/voice: downloaded by the build, its SHA-256 and source next to it), stored uncompressed so it is mapped from the
- * APK rather than copied.
+ * Pysanka: Whisper small (OpenAI, MIT; whisper.cpp's 5-bit file), downloaded by the person and
+ * kept in Pysanka's private storage only if it is exactly the pinned file (see
+ * [ua.pysanka.models.PinnedModel.WHISPER]). Mapped rather than read into memory.
  */
 object VoiceModel {
-    private const val ASSET = "voice/ggml-small-q5_1.bin"
+    private fun store(context: Context) = ua.pysanka.models.ModelStore(context, ua.pysanka.models.PinnedModel.WHISPER)
+
+    /** Whether the model has been added. */
+    fun present(context: Context) = store(context).modelFile() != null
 
     /** The file, mapped; whisper copies what it needs while loading, then this can go. */
     fun map(context: Context): java.nio.ByteBuffer? = runCatching {
-        context.assets.openFd(ASSET).use { fd ->
-            java.io.FileInputStream(fd.fileDescriptor).channel.use { ch ->
-                ch.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.length)
-            }
+        val file = store(context).modelFile() ?: return null
+        java.io.RandomAccessFile(file, "r").use { raf ->
+            raf.channel.use { ch -> ch.map(java.nio.channels.FileChannel.MapMode.READ_ONLY, 0, ch.size()) }
         }
     }.getOrNull()
 }

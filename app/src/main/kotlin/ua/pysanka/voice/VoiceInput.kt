@@ -38,7 +38,7 @@ object VoiceInput {
         data class Failed(@StringRes val message: Int) : State
     }
 
-    enum class Ready { YES, NOT_HERE, NO_MIC, UNSUPPORTED }
+    enum class Ready { YES, NOT_HERE, NO_MIC, NO_MODEL, UNSUPPORTED }
 
     val state: StateFlow<State>
         field = MutableStateFlow<State>(State.Idle)
@@ -76,6 +76,7 @@ object VoiceInput {
     fun ready(context: Context): Ready = when {
         !allowedHere() -> Ready.NOT_HERE
         !WhisperNative.supported -> Ready.UNSUPPORTED
+        !VoiceModel.present(context) -> Ready.NO_MODEL
         !hasMic(context) -> Ready.NO_MIC
         else -> Ready.YES
     }

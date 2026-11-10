@@ -63,5 +63,3 @@ target/
 *.pdb
 __pycache__/
 
-# Pysanka: the dictation model is downloaded and checked by the build (assets/voice/SOURCE.md)
-app/src/main/assets/voice/*.bin

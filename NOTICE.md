@@ -82,8 +82,8 @@ those copies keep that licence.
   owner downloads it under its own terms, and only the exact published file is accepted.
 - `lib/whisper/src/main/cpp/whisper.cpp` — whisper.cpp v1.9.5 and ggml (The ggml authors, MIT, its
   `LICENSE` alongside), only the files the phone build needs, unchanged. It runs dictation.
-- `app/src/main/assets/voice/ggml-small-q5_1.bin` — the Whisper small model (OpenAI, MIT,
-  https://github.com/openai/whisper) in whisper.cpp's 5-bit format, unchanged; downloaded by the
-  build, source and SHA-256 in `SOURCE.md` and `SHA256SUMS` alongside.
+- The Whisper small model (OpenAI, MIT, https://github.com/openai/whisper) in whisper.cpp's 5-bit
+  format is not included: the owner downloads it for dictation, and only the exact published file
+  (pinned revision and SHA-256 in `PinnedModel.WHISPER`) is accepted.
 - ONNX Runtime (Microsoft, MIT), Bouncy Castle (MIT-style),
   SQLCipher for Android (BSD-style) are used as dependencies under their own licences.

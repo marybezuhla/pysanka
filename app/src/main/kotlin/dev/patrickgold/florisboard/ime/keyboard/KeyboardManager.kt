@@ -332,6 +332,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             }
             ua.pysanka.voice.VoiceInput.Ready.NOT_HERE -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
             ua.pysanka.voice.VoiceInput.Ready.UNSUPPORTED -> appContext.showLongToastSync(R.string.pysanka__voice__unsupported)
+            ua.pysanka.voice.VoiceInput.Ready.NO_MODEL -> {
+                appContext.showLongToastSync(R.string.pysanka__voice__no_model)
+                ua.pysanka.voice.openVoiceSettings(appContext)
+            }
             else -> {
                 appContext.showShortToastSync(R.string.pysanka__voice__set_up)
                 ua.pysanka.voice.openVoiceSettings(appContext)

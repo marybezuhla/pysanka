@@ -55,7 +55,7 @@ object WhisperNative {
     }
 
     /**
-     * The model in [buffer] (the file that comes with the app, mapped from the APK), or null if it
+     * The model in [buffer] (the downloaded model file, mapped), or null if it
      * cannot be read (or this phone cannot run it).
      */
     fun load(buffer: java.nio.ByteBuffer): Model? {
