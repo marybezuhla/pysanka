@@ -105,13 +105,13 @@ class ReadAloudService : Service() {
             .setStyle(Notification.MediaStyle().setMediaSession(session.sessionToken).setShowActionsInCompactView(0, 1, 2))
             .build()
         if (!foreground) {
-            // Android may refuse it from the background: then the controls are only shown
+            // Android may refuse it from the background
             foreground = try {
                 if (android.os.Build.VERSION.SDK_INT >= 29) startForeground(ID, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK) else startForeground(ID, n)
                 true
             } catch (e: Exception) {
-                // Not allowed in the foreground now: Android would stop the process; reading goes on only while the window is open
-                runCatching { getSystemService(NotificationManager::class.java).notify(ID, n) }
+                // Not allowed in the foreground now: no reading without controls; it ends with the window
+                ReadAloud.noBackground()
                 stopSelf()
                 false
             }

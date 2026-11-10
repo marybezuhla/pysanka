@@ -338,6 +338,7 @@
     <string name="pysanka__speech__next">Propoziția următoare</string>
     <string name="pysanka__speech__no_uk">Vocea ucraineană nu a fost încă descărcată: descărcați-o din setările de citire.</string>
     <string name="pysanka__speech__no_en">Vocea engleză nu a fost încă descărcată: descărcați-o din setările de citire.</string>
+    <string name="pysanka__speech__no_language">Nu există nimic aici ce o voce poate citi: se citesc doar ucraineana și engleza.</string>
     <string name="pysanka__speech__no_sound">Sunetul nu a putut fi redat. Încercați din nou.</string>
     <string name="pysanka__speech__open_settings">Setări de citire</string>
     <string name="pysanka__speech__preparing">Pregătesc vocea…</string>

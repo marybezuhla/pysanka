@@ -339,6 +339,7 @@
     <string name="pysanka__speech__next">Наступне речення</string>
     <string name="pysanka__speech__no_uk">Українського голосу ще немає: завантажте його в налаштуваннях читання.</string>
     <string name="pysanka__speech__no_en">Англійського голосу ще немає: завантажте його в налаштуваннях читання.</string>
+    <string name="pysanka__speech__no_language">Тут немає нічого, що голос може прочитати: читаються лише українська й англійська.</string>
     <string name="pysanka__speech__no_sound">Не вдалося відтворити звук. Спробуйте ще раз.</string>
     <string name="pysanka__speech__open_settings">Налаштування читання</string>
     <string name="pysanka__speech__preparing">Готую голос…</string>

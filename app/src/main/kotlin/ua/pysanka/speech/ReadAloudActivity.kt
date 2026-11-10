@@ -195,7 +195,7 @@ private fun window(text: String, at: Int): IntRange {
     val base = (at / PART) * PART
     var from = (base - PART / 2).coerceAtLeast(0)
     var to = (base + PART * 2).coerceAtMost(text.length)
-    if (from > 0) from = text.indexOf(' ', from).let { if (it < 0 || it > at) from else it + 1 }
+    if (from > 0) from = text.indexOf(' ', from).let { if (it < 0 || it >= at) from else it + 1 }
     if (to < text.length) to = text.lastIndexOf(' ', to).let { if (it <= at) to else it }
     return from..to
 }
@@ -225,7 +225,7 @@ private fun ReadAloudScreen(onSettings: () -> Unit, onClose: () -> Unit, onAway:
                 val markText = MaterialTheme.colorScheme.onPrimaryContainer
                 // A long text is shown a part at a time around the sentence (laid out again on every sentence)
                 val part = remember(s.text, s.start / PART) { window(s.text, s.start) }
-                val shown = remember(part, s.start, s.end, mark, markText) {
+                val shown = remember(s.text, part, s.start, s.end, mark, markText) {
                     buildAnnotatedString {
                         val t = s.text.substring(part.first, part.last)
                         val a = (s.start - part.first).coerceIn(0, t.length)
@@ -256,6 +256,7 @@ private fun ReadAloudScreen(onSettings: () -> Unit, onClose: () -> Unit, onAway:
                                 when (s.notice) {
                                     ReadAloud.NOTICE_NO_UK -> R.string.pysanka__speech__no_uk
                                     ReadAloud.NOTICE_NO_EN -> R.string.pysanka__speech__no_en
+                                    ReadAloud.NOTICE_NO_LANGUAGE -> R.string.pysanka__speech__no_language
                                     else -> R.string.pysanka__speech__no_sound
                                 },
                             ),
@@ -307,7 +308,7 @@ class SpeakService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val word = intent?.getStringExtra(EXTRA_WORD).orEmpty().take(200)
+        val word = intent?.getStringExtra(EXTRA_WORD).orEmpty().take(200).let { if (it.isNotEmpty() && it.last().isHighSurrogate()) it.dropLast(1) else it }
         if (word.isNotBlank()) ReadAloud.start(this, word, intent?.getIntExtra(EXTRA_SPEED, 100)?.div(100f) ?: 1f, background = false)
         // Gone once the word has been said (or could not be); the word does not stay as a paused reading
         ReadAloud.whenIdle {

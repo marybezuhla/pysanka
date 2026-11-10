@@ -337,6 +337,7 @@
     <string name="pysanka__speech__next">Következő mondat</string>
     <string name="pysanka__speech__no_uk">Az ukrán hang még nincs meg: töltsd le a felolvasás beállításaiban.</string>
     <string name="pysanka__speech__no_en">Az angol hang még nincs meg: töltsd le a felolvasás beállításaiban.</string>
+    <string name="pysanka__speech__no_language">Itt nincs semmi, amit egy hang fel tudna olvasni: csak ukrán és angol szöveget olvas fel.</string>
     <string name="pysanka__speech__no_sound">Nem sikerült lejátszani a hangot. Próbáld újra.</string>
     <string name="pysanka__speech__open_settings">Felolvasás beállításai</string>
     <string name="pysanka__speech__preparing">A hang előkészítése…</string>

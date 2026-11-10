@@ -125,6 +125,7 @@ object ReadAloud {
 
     private var job: Job? = null
     private var idleJob: Job? = null
+    private var releaseJob: Job? = null
     private var spans: List<Sentences.Span> = emptyList()
     private lateinit var app: Context
 
@@ -133,6 +134,7 @@ object ReadAloud {
         app = context.applicationContext
         job?.cancel()
         idleJob?.cancel()
+        releaseJob?.cancel()
         // (not cutting a two-part character such as an emoji in half)
         val t = text.take(MAX_CHARS).let { if (it.isNotEmpty() && it.last().isHighSurrogate()) it.dropLast(1) else it }
         spans = Sentences.split(t)
@@ -179,6 +181,9 @@ object ReadAloud {
 
     fun clearNotice() = _state.update { it.copy(notice = null) }
 
+    /** Background reading was not allowed now: reading then ends with the window, as without «Читати у фоні». */
+    fun noBackground(): Unit = onMain { _state.update { it.copy(background = false) } }
+
     /** [block] on the main thread once nothing is being read (paused, ended or stopped). */
     fun whenIdle(block: () -> Unit) {
         main.launch { _state.first { !it.playing }; block() }
@@ -191,7 +196,9 @@ object ReadAloud {
         spans = emptyList()
         _state.value = State(speed = _state.value.speed)
         if (::app.isInitialized) ReadAloudService.hide(app)
-        main.launch(Dispatchers.Default) { if (!_state.value.active) SpeechEngine.release() }
+        // The voices stay a minute (the next word from the translation is said at once), then their memory is freed
+        releaseJob?.cancel()
+        releaseJob = main.launch(Dispatchers.Default) { delay(60_000); if (!_state.value.active) SpeechEngine.release() }
     }
 
     private fun onMain(block: () -> Unit) { main.launch { block() } }
@@ -205,6 +212,7 @@ object ReadAloud {
         if (all.isEmpty()) {
             // Nothing a voice could say (only symbols or emoji)
             _state.update { it.copy(playing = false, preparing = false, notice = NOTICE_NO_LANGUAGE) }
+            idleJob?.cancel(); idleJob = main.launch { delay(PAUSED_LIMIT); stopNow() }
             return
         }
         val from = (k + by).coerceIn(0, all.size - 1)
@@ -217,7 +225,10 @@ object ReadAloud {
     // Other sound (music, a podcast) waits while Pysanka reads; a call or another player pauses reading
     private var focus: android.media.AudioFocusRequest? = null
     private val focusListener = android.media.AudioManager.OnAudioFocusChangeListener { change ->
-        if (change == android.media.AudioManager.AUDIOFOCUS_LOSS || change == android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) pause()
+        // Speech is not turned down under a navigation prompt: it pauses, as Android advises
+        if (change == android.media.AudioManager.AUDIOFOCUS_LOSS || change == android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ||
+            change == android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK
+        ) pause()
     }
 
     private fun takeFocus(short: Boolean) {
@@ -227,7 +238,10 @@ object ReadAloud {
             if (short) android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK else android.media.AudioManager.AUDIOFOCUS_GAIN,
         )
             .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-            .setOnAudioFocusChangeListener(focusListener).build().also { runCatching { audio.requestAudioFocus(it) } }
+            .setOnAudioFocusChangeListener(focusListener).build()
+        val granted = runCatching { audio.requestAudioFocus(focus!!) }.getOrDefault(android.media.AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+        // Refused (a call): not read over it
+        if (granted == android.media.AudioManager.AUDIOFOCUS_REQUEST_FAILED) { focus = null; pause() }
     }
 
     private fun dropFocus() {

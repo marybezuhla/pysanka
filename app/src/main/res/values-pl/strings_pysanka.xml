@@ -339,6 +339,7 @@
     <string name="pysanka__speech__next">Następne zdanie</string>
     <string name="pysanka__speech__no_uk">Głosu ukraińskiego jeszcze nie ma: pobierz go w ustawieniach czytania.</string>
     <string name="pysanka__speech__no_en">Głosu angielskiego jeszcze nie ma: pobierz go w ustawieniach czytania.</string>
+    <string name="pysanka__speech__no_language">Nie ma tu nic, co głos mógłby przeczytać: czytane są tylko ukraiński i angielski.</string>
     <string name="pysanka__speech__no_sound">Nie udało się odtworzyć dźwięku. Spróbuj ponownie.</string>
     <string name="pysanka__speech__open_settings">Ustawienia czytania</string>
     <string name="pysanka__speech__preparing">Przygotowuję głos…</string>

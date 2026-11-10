@@ -337,6 +337,7 @@
     <string name="pysanka__speech__next">Nächster Satz</string>
     <string name="pysanka__speech__no_uk">Die ukrainische Stimme fehlt noch. Lade sie in den Vorlese-Einstellungen herunter.</string>
     <string name="pysanka__speech__no_en">Die englische Stimme fehlt noch. Lade sie in den Vorlese-Einstellungen herunter.</string>
+    <string name="pysanka__speech__no_language">Hier gibt es nichts, was eine Stimme lesen kann: Nur Ukrainisch und Englisch werden vorgelesen.</string>
     <string name="pysanka__speech__no_sound">Der Ton konnte nicht abgespielt werden. Versuche es noch einmal.</string>
     <string name="pysanka__speech__open_settings">Vorlese-Einstellungen</string>
     <string name="pysanka__speech__preparing">Stimme wird vorbereitet…</string>

@@ -337,6 +337,7 @@
     <string name="pysanka__speech__next">Frase seguinte</string>
     <string name="pysanka__speech__no_uk">A voz ucraniana ainda não foi transferida: transfira-a nas definições de leitura.</string>
     <string name="pysanka__speech__no_en">A voz inglesa ainda não foi transferida: transfira-a nas definições de leitura.</string>
+    <string name="pysanka__speech__no_language">Não há aqui nada que uma voz possa ler: só se lê ucraniano e inglês.</string>
     <string name="pysanka__speech__no_sound">Não foi possível reproduzir o som. Tente de novo.</string>
     <string name="pysanka__speech__open_settings">Definições de leitura</string>
     <string name="pysanka__speech__preparing">A preparar a voz…</string>

@@ -339,6 +339,7 @@
     <string name="pysanka__speech__next">Наступны сказ</string>
     <string name="pysanka__speech__no_uk">Украінскага голасу яшчэ няма: спампуйце яго ў наладах чытання.</string>
     <string name="pysanka__speech__no_en">Англійскага голасу яшчэ няма: спампуйце яго ў наладах чытання.</string>
+    <string name="pysanka__speech__no_language">Тут няма нічога, што голас можа прачытаць: чытаюцца толькі ўкраінская і англійская.</string>
     <string name="pysanka__speech__no_sound">Не ўдалося прайграць гук. Паспрабуйце яшчэ раз.</string>
     <string name="pysanka__speech__open_settings">Налады чытання</string>
     <string name="pysanka__speech__preparing">Рыхтую голас…</string>

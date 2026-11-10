@@ -339,6 +339,7 @@
     <string name="pysanka__speech__next">Nasledujúca veta</string>
     <string name="pysanka__speech__no_uk">Ukrajinský hlas tu ešte nie je: stiahnite ho v nastaveniach čítania.</string>
     <string name="pysanka__speech__no_en">Anglický hlas tu ešte nie je: stiahnite ho v nastaveniach čítania.</string>
+    <string name="pysanka__speech__no_language">Nie je tu nič, čo by hlas vedel prečítať: číta sa len ukrajinčina a angličtina.</string>
     <string name="pysanka__speech__no_sound">Zvuk sa nepodarilo prehrať. Skúste to znova.</string>
     <string name="pysanka__speech__open_settings">Nastavenia čítania</string>
     <string name="pysanka__speech__preparing">Pripravujem hlas…</string>

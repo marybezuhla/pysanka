@@ -338,6 +338,7 @@
     <string name="pysanka__speech__next">Frase siguiente</string>
     <string name="pysanka__speech__no_uk">Aún no tienes la voz ucraniana: descárgala en los ajustes de lectura.</string>
     <string name="pysanka__speech__no_en">Aún no tienes la voz inglesa: descárgala en los ajustes de lectura.</string>
+    <string name="pysanka__speech__no_language">Aquí no hay nada que una voz pueda leer: solo se leen ucraniano e inglés.</string>
     <string name="pysanka__speech__no_sound">No se pudo reproducir el sonido. Inténtalo de nuevo.</string>
     <string name="pysanka__speech__open_settings">Ajustes de lectura</string>
     <string name="pysanka__speech__preparing">Preparando la voz…</string>
