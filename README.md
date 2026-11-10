@@ -17,7 +17,7 @@
 - 🎨 **Теми в кольорах писанок:** Небо, Калина, Льон, Віск, Глина вдень і Зоряна ніч, Мак, Чорнозем, Смерека, Жар уночі, у парах, спокійні для довгого набору; або кольори телефону. Висота клавіатури, розмір літер і відступи між клавішами на ваш смак.
 - 🔍 **Текст із фото й камери** розпізнається на телефоні.
 - 🤖 **Локальний ШІ (Gemma 4), за бажанням.** ШІ-помічник просто в клавіатурі (✦: дії плитками, відповідь замість клавіш): стиль, граматика й пунктуація, підсумок довгих текстів (з перевіркою чисел і назв), переклад, русизми, список, таблиця, нотатки, лист за описом, варіанти відповіді, приховати особисте, «Моїм стилем» (за вашими зашифрованими зразками); «Поділитися → Писанка ШІ» з будь-якого застосунку. Для соцмереж: лічильник знаків, тред, «Спокійніше», версії для кількох мереж у буфер, скільки емодзі, обираєте ви.
-- 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель (≈190 МБ) ви завантажуєте один раз у налаштуваннях диктування. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите.
+- 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель (≈190 МБ) ви завантажуєте один раз у налаштуваннях диктування. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите. Або диктуйте голосовою клавіатурою іншого застосунку (наприклад, FUTO Voice Input): мікрофон Писанки перемкне на неї.
 
 Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Моделі ШІ й диктування ви додаєте самі; без них клавіатура працює повністю.
 
@@ -64,7 +64,7 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - A physical keyboard types in Pysanka's language (Ctrl+Space switches it); on tablets and foldables the keyboard splits in two halves.
 - Themes in pysanka colours, calm for long typing, or the system's colours. Keyboard height, letter size and gaps between keys to your liking.
 - On-device text recognition from photos and the camera.
-- Optional on-device dictation (Whisper; you download its model, ≈190 MB, once in the dictation settings): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself.
+- Optional on-device dictation (Whisper; you download its model, ≈190 MB, once in the dictation settings): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself. Or dictate with another app's voice keyboard (FUTO Voice Input, for example): Pysanka's microphone switches to it.
 
 Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI and dictation models yourself; without them the keyboard works fully.
 

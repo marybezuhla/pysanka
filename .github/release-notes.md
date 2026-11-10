@@ -1,6 +1,7 @@
 **Писанка 0.26.0**: приватна клавіатура для Android без доступу до інтернету.
 
 - 📦 **Утричі легша:** модель диктування більше не вшита в застосунок. Хто диктує, завантажує її один раз (≈190 МБ) у Налаштуваннях → Диктування: Писанка відкриє посилання в браузері, а потім ви вибираєте завантажений файл. Приймається лише точний файл моделі, а сама Писанка й далі без інтернету.
+- 🔀 **Диктування іншим застосунком, за бажанням:** якщо на телефоні є голосова клавіатура (наприклад, FUTO Voice Input), її можна вибрати в Налаштуваннях → Диктування, і мікрофон Писанки перемкне на неї. Звук і текст тоді обробляє той застосунок.
 - 🎨 Назви тем не розриваються посеред слова на вузькому екрані з великим шрифтом.
 - ✍️ Підпис авторки в розділі «Про застосунок» без курсиву.
 
@@ -15,6 +16,7 @@
 **Pysanka 0.26.0**: a private keyboard for Android with no internet access.
 
 - About three times smaller: the dictation model is no longer built in. If you dictate, download it once (≈190 MB) in Settings → Dictation: Pysanka opens the link in your browser, then you pick the downloaded file. Only the exact model file is accepted, and Pysanka itself stays offline.
+- Optional dictation with another app: if the phone has a voice keyboard (FUTO Voice Input, for example), choose it in Settings → Dictation and Pysanka's microphone switches to it. The sound and the text are then handled by that app.
 - Theme names no longer break mid-word on a narrow screen with large text.
 - The author's signature in About is no longer in italics.
 

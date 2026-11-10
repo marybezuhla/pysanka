@@ -241,6 +241,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
             key = "pysanka__voice__hold_to_talk",
             default = false,
         )
+        /** Dictate with another app's voice keyboard (its id), or with Pysanka itself (""). */
+        val engine = string(
+            key = "pysanka__voice__engine",
+            default = "",
+        )
     }
 
     val correction = Correction()

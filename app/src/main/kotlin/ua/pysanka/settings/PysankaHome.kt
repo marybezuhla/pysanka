@@ -198,7 +198,14 @@ fun PysankaHome(
             ) { v -> scope.launch { prefs.pysankaTranslate.target.set(v) } }
         }
 
-        val voiceState = stringRes(
+        // Another app's voice keyboard, if chosen: its name (or that it is gone)
+        val voiceEngine by prefs.pysankaVoice.engine.observeAsState()
+        val voiceOther = remember(voiceEngine) { if (voiceEngine.isEmpty()) null else ua.pysanka.voice.VoiceKeyboards.find(context, voiceEngine) }
+        val voiceState = when {
+            voiceEngine.isEmpty() -> null
+            voiceOther == null || !voiceOther.enabled -> stringRes(R.string.pysanka__voice__other_gone)
+            else -> stringRes(R.string.pysanka__settings__voice_other, "name" to voiceOther.label)
+        } ?: stringRes(
             when {
                 // A processor that cannot run it: said here too, not only when dictating
                 !ua.pysanka.whisper.WhisperNative.supported -> R.string.pysanka__voice__unsupported

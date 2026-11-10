@@ -148,6 +148,12 @@ class FlorisImeService : LifecycleInputMethodService() {
             return ims.switchToNextInputMethod()
         }
 
+        /** Pysanka: switches to another app's voice keyboard (see [ua.pysanka.voice.VoiceKeyboards]). */
+        fun pysankaSwitchToVoice(id: String): Boolean {
+            val ims = FlorisImeServiceReference.get() ?: return false
+            return ims.pysankaSwitchToVoice(id)
+        }
+
         fun showImePicker(): Boolean {
             val ims = FlorisImeServiceReference.get() ?: return false
             return InputMethodUtils.showImePicker(ims)
@@ -204,6 +210,27 @@ class FlorisImeService : LifecycleInputMethodService() {
             imm?.showInputMethodPicker()
         }
         return false
+    }
+
+    /** Pysanka: to the voice keyboard [id], if it is turned on; false if it is not there or not on. */
+    fun pysankaSwitchToVoice(id: String): Boolean {
+        val imm = systemServiceOrNull(InputMethodManager::class) ?: return false
+        val info = runCatching { imm.enabledInputMethodList }.getOrNull()?.firstOrNull { it.id == id } ?: return false
+        val subtype = ua.pysanka.voice.VoiceKeyboards.voiceSubtype(info)
+        return try {
+            if (AndroidVersion.ATLEAST_API28_P) {
+                switchInputMethod(id, subtype)
+                true
+            } else {
+                val token = window.window?.attributes?.token ?: return false
+                @Suppress("DEPRECATION")
+                imm.setInputMethodAndSubtype(token, id, subtype)
+                true
+            }
+        } catch (e: Exception) {
+            flogError { "Unable to switch to the voice keyboard" }
+            false
+        }
     }
 
     /**
