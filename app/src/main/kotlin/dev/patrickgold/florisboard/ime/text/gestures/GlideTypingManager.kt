@@ -34,7 +34,7 @@ import kotlin.math.min
  * Handles the [GlideTypingClassifier]. Basically responsible for linking [GlideTypingGesture.Detector]
  * with [GlideTypingClassifier].
  */
-class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
+class GlideTypingManager(private val context: Context) : GlideTypingGesture.Listener {
     companion object {
         private const val MAX_SUGGESTION_COUNT = 8
     }
@@ -121,6 +121,12 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
             val suggestions = glideTypingClassifier.getSuggestions(path, MAX_SUGGESTION_COUNT)
                 .filter { !(block && ua.pysanka.typing.Offensive.isOffensive(it, language)) }
                 .distinctBy { it.lowercase().replace('ё', 'е') }
+            // Pysanka: the swipe practice screen records the finished swipe with the guesses
+            if (commit && ua.pysanka.typing.swipe.SwipeRecorder.target != null) {
+                glideTypingClassifier.practiceShot(path)?.let {
+                    runCatching { ua.pysanka.typing.swipe.SwipeRecorder.record(context.applicationContext, it, suggestions) }
+                }
+            }
 
             withContext(Dispatchers.Main) {
                 if (!commit && started != generation.get()) {

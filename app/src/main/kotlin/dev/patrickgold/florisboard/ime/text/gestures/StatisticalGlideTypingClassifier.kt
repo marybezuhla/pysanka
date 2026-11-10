@@ -236,6 +236,27 @@ class StatisticalGlideTypingClassifier(context: Context) : GlideTypingClassifier
     override fun getSuggestions(maxSuggestionCount: Int, gestureCompleted: Boolean): List<String> =
         getSuggestions(copyGesture(), maxSuggestionCount)
 
+    /**
+     * Pysanka: a finished swipe for the practice screen ([ua.pysanka.typing.swipe.SwipeRecorder]): the
+     * points and key centres in key widths, as the decoder sees them.
+     */
+    fun practiceShot(gesture: Gesture): ua.pysanka.typing.swipe.SwipeRecorder.Shot? {
+        val subtype = currentSubtype ?: return null
+        val letters = keys.filter { Character.isLetter(it.baseCode()) }
+        val width = letters.map { it.touchBounds.width }.sorted().let { if (it.isEmpty()) 0f else it[it.size / 2] }
+        if (width <= 0f || gesture.pointCount == 0) return null
+        val points = HashMap<Char, ua.pysanka.typing.swipe.SwipeDecoder.Point>()
+        for (k in letters) {
+            val c = k.visibleBounds.center
+            points[Character.toLowerCase(k.baseCode()).toChar()] = ua.pysanka.typing.swipe.SwipeDecoder.Point(c.x / width, c.y / width)
+        }
+        val n = gesture.pointCount
+        return ua.pysanka.typing.swipe.SwipeRecorder.Shot(
+            FloatArray(n) { gesture.getX(it) / width }, FloatArray(n) { gesture.getY(it) / width },
+            points, subtype.primaryLocale.language, decoder != null,
+        )
+    }
+
     /** Pysanka: a copy of the swipe so far (taken on the thread that adds the points). */
     fun copyGesture(): Gesture = synchronized(gesture) { gesture.clone() }
 

@@ -345,6 +345,11 @@ private fun TypingSettings() {
 
     PrefToggle(prefs.glide.enabled, stringRes(R.string.pysanka__typing__glide), stringRes(R.string.pysanka__typing__glide_summary))
     PrefToggle(prefs.glide.showTrail, stringRes(R.string.pysanka__typing__glide_trail), enabled = glide)
+    // Pysanka: swipe practice (records swipes of listed words, for tuning the decoder on real fingers)
+    val practiceNav = LocalNavController.current
+    LinkRow(stringRes(R.string.pysanka__swipe_practice__title), stringRes(R.string.pysanka__swipe_practice__summary)) {
+        practiceNav.navigate(Routes.Settings.PysankaSwipePractice)
+    }
     PrefToggle(prefs.suggestion.enabled, stringRes(R.string.pysanka__typing__suggestions), stringRes(R.string.pysanka__typing__suggestions_summary))
     PrefToggle(prefs.correction.pysankaAutoCorrect, stringRes(R.string.pysanka__typing__auto_correct), stringRes(R.string.pysanka__typing__auto_correct_summary), enabled = suggestions)
     PrefToggle(prefs.correction.pysankaKeyTargeting, stringRes(R.string.pysanka__typing__key_targeting), stringRes(R.string.pysanka__typing__key_targeting_summary), enabled = suggestions)
