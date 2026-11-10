@@ -133,16 +133,19 @@ object ReadAloud {
         app = context.applicationContext
         job?.cancel()
         idleJob?.cancel()
-        val t = text.take(MAX_CHARS)
+        // (not cutting a two-part character such as an emoji in half)
+        val t = text.take(MAX_CHARS).let { if (it.isNotEmpty() && it.last().isHighSurrogate()) it.dropLast(1) else it }
         spans = Sentences.split(t)
         val first = spans.firstOrNull()
         _state.value = State(t, playing = true, start = first?.start ?: 0, end = first?.end ?: 0, speed = speed, background = background, look = look)
-        if (background) ReadAloudService.show(app)
+        // A word said from the translation ends an earlier reading in the background, with its notification
+        if (background) ReadAloudService.show(app) else ReadAloudService.hide(app)
         run(0, 0)
     }
 
     fun pause(): Unit = onMain {
         job?.cancel(); job = null
+        dropFocus()
         _state.update { it.copy(playing = false, preparing = false) }
         idleJob?.cancel(); idleJob = main.launch { delay(PAUSED_LIMIT); stopNow() }
     }
@@ -183,6 +186,7 @@ object ReadAloud {
 
     private fun stopNow() {
         job?.cancel(); job = null
+        dropFocus()
         idleJob?.cancel(); idleJob = null
         spans = emptyList()
         _state.value = State(speed = _state.value.speed)
@@ -198,15 +202,41 @@ object ReadAloud {
     private fun run(k: Int, by: Int) {
         job?.cancel()
         val all = spans
-        if (all.isEmpty()) return
+        if (all.isEmpty()) {
+            // Nothing a voice could say (only symbols or emoji)
+            _state.update { it.copy(playing = false, preparing = false, notice = NOTICE_NO_LANGUAGE) }
+            return
+        }
         val from = (k + by).coerceIn(0, all.size - 1)
         _state.update { it.copy(start = all[from].start, end = all[from].end) }
         if (!_state.value.playing) return
-        job = main.launch(Dispatchers.Default) { read(all, from) }
+        val text = _state.value.text
+        job = main.launch(Dispatchers.Default) { read(text, all, from) }
     }
 
-    private suspend fun read(all: List<Sentences.Span>, from: Int) = kotlinx.coroutines.coroutineScope {
-        val text = _state.value.text
+    // Other sound (music, a podcast) waits while Pysanka reads; a call or another player pauses reading
+    private var focus: android.media.AudioFocusRequest? = null
+    private val focusListener = android.media.AudioManager.OnAudioFocusChangeListener { change ->
+        if (change == android.media.AudioManager.AUDIOFOCUS_LOSS || change == android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) pause()
+    }
+
+    private fun takeFocus(short: Boolean) {
+        if (focus != null) return
+        val audio = app.getSystemService(android.media.AudioManager::class.java) ?: return
+        focus = android.media.AudioFocusRequest.Builder(
+            if (short) android.media.AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK else android.media.AudioManager.AUDIOFOCUS_GAIN,
+        )
+            .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
+            .setOnAudioFocusChangeListener(focusListener).build().also { runCatching { audio.requestAudioFocus(it) } }
+    }
+
+    private fun dropFocus() {
+        val f = focus ?: return
+        focus = null
+        runCatching { app.getSystemService(android.media.AudioManager::class.java)?.abandonAudioFocusRequest(f) }
+    }
+
+    private suspend fun read(text: String, all: List<Sentences.Span>, from: Int) = kotlinx.coroutines.coroutineScope {
         val made = Channel<Pair<Int, Sound?>>(capacity = 2)
         // Made ahead: the next sentence is ready when this one ends
         val maker = launch {
@@ -218,6 +248,10 @@ object ReadAloud {
             made.close()
         }
         val out = Output()
+        withContext(Dispatchers.Main) { takeFocus(short = all.size == 1 && text.length < 60) }
+        // Whether anything was heard, and whether anything had a language a voice knows
+        var played = false
+        var known = false
         try {
             while (isActive) {
                 // While the next sentence is still being made, quiet sound keeps playing: the pause is
@@ -226,9 +260,10 @@ object ReadAloud {
                 while (next.isFailure && !next.isClosed && isActive) { out.silence(0.1f); next = made.tryReceive() }
                 val (k, sound) = next.getOrNull() ?: break
                 _state.update { it.copy(start = all[k].start, end = all[k].end, preparing = false) }
+                val lang = Sentences.language(text.substring(all[k].start, all[k].end))
+                if (lang != null) known = true
                 if (sound == null) {
                     // No voice for this sentence's language: reading stops here (the place kept), saying why
-                    val lang = Sentences.language(text.substring(all[k].start, all[k].end))
                     if (lang != null && !SpeechEngine.has(app, lang)) {
                         _state.update { it.copy(notice = if (lang == "uk") NOTICE_NO_UK else NOTICE_NO_EN) }
                         withContext(Dispatchers.Main) { pause() }
@@ -237,14 +272,20 @@ object ReadAloud {
                     continue
                 }
                 out.play(sound)
+                played = true
                 val paragraphEnd = all[k].end >= text.length || text.getOrNull(all[k].end) == '\n'
                 out.silence(if (paragraphEnd) 0.55f else 0.28f)
             }
             out.drain()
-            // The end: back to the beginning, paused
+            // The end: back to the beginning, paused (and why, if nothing could be said)
             if (isActive) {
                 withContext(Dispatchers.Main) {
-                    _state.update { it.copy(start = all.first().start, end = all.first().end) }
+                    _state.update {
+                        it.copy(
+                            start = all.first().start, end = all.first().end,
+                            notice = if (played) null else if (known) NOTICE_NO_SOUND else NOTICE_NO_LANGUAGE,
+                        )
+                    }
                     pause()
                 }
             }

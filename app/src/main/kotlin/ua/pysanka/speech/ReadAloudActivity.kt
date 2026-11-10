@@ -186,6 +186,20 @@ class ReadAloudActivity : ComponentActivity() {
 
 private val SPEEDS = listOf(0.8f, 1f, 1.2f, 1.5f)
 
+/** How much of a long text is shown around the sentence being read. */
+private const val PART = 3000
+
+/** The part of [text] shown while the sentence at [at] is read: [PART]-sized steps, cut at spaces. */
+private fun window(text: String, at: Int): IntRange {
+    if (text.length <= 2 * PART) return 0..text.length
+    val base = (at / PART) * PART
+    var from = (base - PART / 2).coerceAtLeast(0)
+    var to = (base + PART * 2).coerceAtMost(text.length)
+    if (from > 0) from = text.indexOf(' ', from).let { if (it < 0 || it > at) from else it + 1 }
+    if (to < text.length) to = text.lastIndexOf(' ', to).let { if (it <= at) to else it }
+    return from..to
+}
+
 @Composable
 private fun ReadAloudScreen(onSettings: () -> Unit, onClose: () -> Unit, onAway: () -> Unit) {
     val s by ReadAloud.state.collectAsState()
@@ -209,19 +223,26 @@ private fun ReadAloudScreen(onSettings: () -> Unit, onClose: () -> Unit, onAway:
                 var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
                 val mark = MaterialTheme.colorScheme.primaryContainer
                 val markText = MaterialTheme.colorScheme.onPrimaryContainer
-                val shown = remember(s.text, s.start, s.end, mark) {
+                // A long text is shown a part at a time around the sentence (laid out again on every sentence)
+                val part = remember(s.text, s.start / PART) { window(s.text, s.start) }
+                val shown = remember(part, s.start, s.end, mark, markText) {
                     buildAnnotatedString {
-                        val a = s.start.coerceIn(0, s.text.length)
-                        val b = s.end.coerceIn(a, s.text.length)
-                        append(s.text.substring(0, a))
-                        withStyle(SpanStyle(background = mark, color = markText)) { append(s.text.substring(a, b)) }
-                        append(s.text.substring(b))
+                        val t = s.text.substring(part.first, part.last)
+                        val a = (s.start - part.first).coerceIn(0, t.length)
+                        val b = (s.end - part.first).coerceIn(a, t.length)
+                        if (part.first > 0) append("… ")
+                        append(t.substring(0, a))
+                        withStyle(SpanStyle(background = mark, color = markText)) { append(t.substring(a, b)) }
+                        append(t.substring(b))
+                        if (part.last < s.text.length) append(" …")
                     }
                 }
-                LaunchedEffect(s.start, layout) {
+                // Where the sentence starts in what is shown (after "… " when the part does not start the text)
+                val at = (if (part.first > 0) 2 else 0) + (s.start - part.first).coerceAtLeast(0)
+                LaunchedEffect(shown, layout) {
                     val l = layout ?: return@LaunchedEffect
-                    if (s.start <= l.layoutInput.text.length) {
-                        val top = l.getLineTop(l.getLineForOffset(s.start.coerceAtMost(l.layoutInput.text.length))).toInt()
+                    if (at <= l.layoutInput.text.length) {
+                        val top = l.getLineTop(l.getLineForOffset(at.coerceAtMost(l.layoutInput.text.length))).toInt()
                         scroll.animateScrollTo((top - 48).coerceAtLeast(0))
                     }
                 }
@@ -262,7 +283,7 @@ private fun ReadAloudScreen(onSettings: () -> Unit, onClose: () -> Unit, onAway:
                     IconButton(onClick = { ReadAloud.skip(1) }) { Icon(Icons.Default.SkipNext, contentDescription = stringRes(R.string.pysanka__speech__next)) }
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally)) {
-                    for (v in SPEEDS) {
+                    for (v in (SPEEDS + s.speed).distinct().sorted()) {
                         FilterChip(s.speed == v, { ReadAloud.setSpeed(v) }, { Text(speedLabel(v)) })
                     }
                 }
@@ -288,8 +309,12 @@ class SpeakService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val word = intent?.getStringExtra(EXTRA_WORD).orEmpty().take(200)
         if (word.isNotBlank()) ReadAloud.start(this, word, intent?.getIntExtra(EXTRA_SPEED, 100)?.div(100f) ?: 1f, background = false)
-        // Gone once the word has been said (or could not be)
-        ReadAloud.whenIdle { stopSelf(startId) }
+        // Gone once the word has been said (or could not be); the word does not stay as a paused reading
+        ReadAloud.whenIdle {
+            val s = ReadAloud.state.value
+            if (!s.background && s.text == word) ReadAloud.stop()
+            stopSelf(startId)
+        }
         return START_NOT_STICKY
     }
 

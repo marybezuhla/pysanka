@@ -11,8 +11,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
 import android.graphics.drawable.Icon
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaMetadata
 import android.media.session.MediaSession
@@ -36,8 +34,6 @@ import dev.patrickgold.florisboard.R
 class ReadAloudService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private lateinit var session: MediaSession
-    private lateinit var audio: AudioManager
-    private var focus: AudioFocusRequest? = null
     private var foreground = false
 
     private val noisy = object : BroadcastReceiver() {
@@ -46,7 +42,6 @@ class ReadAloudService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        audio = getSystemService(AudioManager::class.java)
         session = MediaSession(this, "Pysanka").apply {
             setCallback(object : MediaSession.Callback() {
                 override fun onPlay() = ReadAloud.resume()
@@ -64,7 +59,6 @@ class ReadAloudService : Service() {
         scope.launch {
             ReadAloud.state.map { it.active to it.playing }.distinctUntilChanged().collect { (active, playing) ->
                 if (!active) { stopSelf(); return@collect }
-                if (playing) takeFocus() else dropFocus()
                 session.setPlaybackState(
                     PlaybackState.Builder()
                         .setActions(
@@ -81,19 +75,6 @@ class ReadAloudService : Service() {
             }
         }
     }
-
-    private val focusListener = AudioManager.OnAudioFocusChangeListener { change ->
-        if (change == AudioManager.AUDIOFOCUS_LOSS || change == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) ReadAloud.pause()
-    }
-
-    private fun takeFocus() {
-        if (focus != null) return
-        focus = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-            .setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build())
-            .setOnAudioFocusChangeListener(focusListener).build().also { audio.requestAudioFocus(it) }
-    }
-
-    private fun dropFocus() { focus?.let { audio.abandonAudioFocusRequest(it) }; focus = null }
 
     private fun action(code: Int, action: String) =
         PendingIntent.getService(this, code, Intent(this, ReadAloudService::class.java).setAction(action), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
@@ -154,7 +135,6 @@ class ReadAloudService : Service() {
 
     override fun onDestroy() {
         scope.cancel()
-        dropFocus()
         try { unregisterReceiver(noisy) } catch (_: Exception) {}
         session.release()
         getSystemService(NotificationManager::class.java).cancel(ID)
