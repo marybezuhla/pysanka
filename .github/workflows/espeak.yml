@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get install -y -q cmake ninja-build >/dev/null
+          sudo apt-get update -q >/dev/null && sudo apt-get install -y -q cmake ninja-build >/dev/null
           cmake -S src -B host -G Ninja -DCMAKE_BUILD_TYPE=Release -DUSE_ASYNC=OFF -DUSE_MBROLA=OFF -DUSE_LIBSONIC=OFF -DUSE_LIBPCAUDIO=OFF -DUSE_KLATT=OFF -DUSE_SPEECHPLAYER=OFF -DCOMPILE_INTONATIONS=ON
           cmake --build host
           ls host; find host -maxdepth 2 -name 'espeak-ng-data' -type d
@@ -41,10 +41,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          NDK="$ANDROID_NDK_LATEST_HOME"
+          # The same NDK as the app (gradle/tools.versions.toml), so the library can be rebuilt and compared
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;29.0.14206865" >/dev/null || true
+          NDK="$ANDROID_HOME/ndk/29.0.14206865"
+          test -d "$NDK"
           for abi in arm64-v8a; do
             cmake -S src -B "android-$abi" -G Ninja -DCMAKE_BUILD_TYPE=Release \
-              -DCMAKE_TOOLCHAIN_FILE="$NDK/build/cmake/android.toolchain.cmake" -DANDROID_ABI=$abi -DANDROID_PLATFORM=android-31 \
+              -DCMAKE_TOOLCHAIN_FILE="$NDK/build/cmake/android.toolchain.cmake" -DANDROID_ABI=$abi -DANDROID_PLATFORM=android-26 \
               -DBUILD_SHARED_LIBS=OFF -DUSE_ASYNC=OFF -DUSE_MBROLA=OFF -DUSE_LIBSONIC=OFF -DUSE_LIBPCAUDIO=OFF -DUSE_KLATT=OFF -DUSE_SPEECHPLAYER=OFF \
               -DESPEAKNG_BUILD_TESTS=OFF -DCMAKE_C_FLAGS="-fPIC -ffile-prefix-map=$PWD=." -DCMAKE_CXX_FLAGS="-fPIC -ffile-prefix-map=$PWD=."
             cmake --build "android-$abi" --target espeak-ng
@@ -65,7 +68,7 @@ jobs:
           # English only: the phoneme tables, intonation, the English dictionary and language file
           cp "$D"/phontab "$D"/phonindex "$D"/phondata "$D"/intonations out/data/
           cp "$D"/en_dict out/data/
-          mkdir -p out/data/lang/gmw && cp "$D"/lang/gmw/en* out/data/lang/gmw/ 2>/dev/null || cp -R "$D"/lang out/data/
+          mkdir -p out/data/lang/gmw && cp "$D"/lang/gmw/en* out/data/lang/gmw/
           cp src/COPYING out/LICENSE-espeak-ng
           echo "$TAG $COMMIT" > out/VERSION
           # Check: the build machine's eSpeak says what the voice was trained on

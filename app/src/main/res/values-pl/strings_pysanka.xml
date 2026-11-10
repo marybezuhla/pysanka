@@ -347,7 +347,7 @@
     <string name="pysanka__speech__state_en">Głos angielski</string>
     <string name="pysanka__speech__state_none">Pobierz głos</string>
     <string name="pysanka__speech__open">Głosy i ustawienia</string>
-    <string name="pysanka__speech__about">Pysanka czyta na głos głosami Hramoty, w całości na telefonie: tekst nigdzie nie jest wysyłany. Głos ukraiński (Tetiana) i angielski (Cori) pobiera się osobno, każdy raz; możesz wziąć tylko potrzebny.</string>
+    <string name="pysanka__speech__about">Pysanka czyta na głos głosami Hramoty, w całości na telefonie: tekst nigdzie nie jest wysyłany. Głos ukraiński (Tetiana) i angielski (Cori) pobiera się osobno, każdy tylko raz; możesz wziąć tylko potrzebny.</string>
     <string name="pysanka__speech__voice_uk">Głos ukraiński: Tetiana</string>
     <string name="pysanka__speech__voice_en">Głos angielski: Cori</string>
     <string name="pysanka__speech__delete_ask">Usunąć ten głos? Aby znów nim czytać, trzeba będzie ponownie pobrać plik ({size} MB).</string>

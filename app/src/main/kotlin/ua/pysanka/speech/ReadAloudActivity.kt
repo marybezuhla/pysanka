@@ -95,19 +95,21 @@ class ReadAloudEntryActivity : ComponentActivity() {
 class ReadAloudActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (intent.getBooleanExtra(EXTRA_SECURE, false)) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         if (android.os.Build.VERSION.SDK_INT >= 33) setRecentsScreenshotEnabled(false)
         val text = intent.getStringExtra(EXTRA_TEXT).orEmpty()
         // A new text starts reading; opened from the notification, the reading under way is shown
         if (savedInstanceState == null && text.isNotEmpty()) {
-            ReadAloud.start(this, text, intent.getIntExtra(EXTRA_SPEED, 100) / 100f, intent.getBooleanExtra(EXTRA_BACKGROUND, false))
-        } else if (savedInstanceState == null && !ReadAloud.state.value.active) {
+            ReadAloud.start(this, text, intent.getIntExtra(EXTRA_SPEED, 100) / 100f, intent.getBooleanExtra(EXTRA_BACKGROUND, false), look(intent))
+        } else if (!ReadAloud.state.value.active) {
             finish()
             return
         }
+        // As the settings were when reading started (the notification's intent carries none)
+        val look = if (text.isNotEmpty()) look(intent) else ReadAloud.state.value.look
+        secure(look.secure)
         setContent {
-            ProvideLocalizedResources(ua.pysanka.settings.AppLanguage.context(this, intent.getStringExtra(EXTRA_LANGUAGE)), appName = R.string.app_name) {
-                FlorisAppTheme(theme = AppTheme.AUTO, systemColorsOverride = intent.getBooleanExtra(EXTRA_SYSTEM_COLORS, false)) {
+            ProvideLocalizedResources(ua.pysanka.settings.AppLanguage.context(this, look.language), appName = R.string.app_name) {
+                FlorisAppTheme(theme = AppTheme.AUTO, systemColorsOverride = look.systemColors) {
                     ReadAloudScreen(
                         onSettings = { openSettings(this); finish() },
                         onClose = { ReadAloud.stop(); finish() },
@@ -123,9 +125,21 @@ class ReadAloudActivity : ComponentActivity() {
         val text = intent.getStringExtra(EXTRA_TEXT).orEmpty()
         if (text.isNotEmpty()) {
             setIntent(intent)
-            ReadAloud.start(this, text, intent.getIntExtra(EXTRA_SPEED, 100) / 100f, intent.getBooleanExtra(EXTRA_BACKGROUND, false))
+            secure(look(intent).secure)
+            ReadAloud.start(this, text, intent.getIntExtra(EXTRA_SPEED, 100) / 100f, intent.getBooleanExtra(EXTRA_BACKGROUND, false), look(intent))
         }
     }
+
+    private fun secure(on: Boolean) {
+        if (on) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE) else window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    /** The look an intent from the keyboard's process carries (screenshots blocked unless it says otherwise). */
+    private fun look(i: Intent) = ReadAloud.Look(
+        secure = i.getBooleanExtra(EXTRA_SECURE, true),
+        language = i.getStringExtra(EXTRA_LANGUAGE),
+        systemColors = i.getBooleanExtra(EXTRA_SYSTEM_COLORS, false),
+    )
 
     override fun onStop() {
         super.onStop()

@@ -345,7 +345,7 @@
     <string name="pysanka__speech__state_en">Angol hang</string>
     <string name="pysanka__speech__state_none">Tölts le egy hangot</string>
     <string name="pysanka__speech__open">Hangok és beállítások</string>
-    <string name="pysanka__speech__about">A Pysanka a Hramota hangjaival olvas fel, teljesen a telefonon: a szöveg sehová nem kerül el. Az ukrán hangot (Tetiana) és az angolt (Cori) külön kell letölteni, mindkettőt egyszer; elég csak azt, amelyikre szükséged van.</string>
+    <string name="pysanka__speech__about">A Pysanka a Hramota hangjaival olvas fel, teljesen a telefonon: a szöveg nem kerül sehova. Az ukrán hangot (Tetiana) és az angolt (Cori) külön kell letölteni, mindkettőt egyszer; elég csak azt, amelyikre szükséged van.</string>
     <string name="pysanka__speech__voice_uk">Ukrán hang: Tetiana</string>
     <string name="pysanka__speech__voice_en">Angol hang: Cori</string>
     <string name="pysanka__speech__delete_ask">Törlöd ezt a hangot? Ha újra ezzel olvasnál, a fájlt ({size} MB) ismét le kell tölteni.</string>

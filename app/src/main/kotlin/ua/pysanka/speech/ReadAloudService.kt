@@ -129,7 +129,9 @@ class ReadAloudService : Service() {
                 if (android.os.Build.VERSION.SDK_INT >= 29) startForeground(ID, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK) else startForeground(ID, n)
                 true
             } catch (e: Exception) {
+                // Not allowed in the foreground now: Android would stop the process; reading goes on only while the window is open
                 runCatching { getSystemService(NotificationManager::class.java).notify(ID, n) }
+                stopSelf()
                 false
             }
         } else {

@@ -335,8 +335,8 @@
     <string name="pysanka__speech__pause">Pausa</string>
     <string name="pysanka__speech__previous">Frase anterior</string>
     <string name="pysanka__speech__next">Frase seguinte</string>
-    <string name="pysanka__speech__no_uk">A voz ucraniana ainda não existe: transfira-a nas definições de leitura.</string>
-    <string name="pysanka__speech__no_en">A voz inglesa ainda não existe: transfira-a nas definições de leitura.</string>
+    <string name="pysanka__speech__no_uk">A voz ucraniana ainda não foi transferida: transfira-a nas definições de leitura.</string>
+    <string name="pysanka__speech__no_en">A voz inglesa ainda não foi transferida: transfira-a nas definições de leitura.</string>
     <string name="pysanka__speech__no_sound">Não foi possível reproduzir o som. Tente de novo.</string>
     <string name="pysanka__speech__open_settings">Definições de leitura</string>
     <string name="pysanka__speech__preparing">A preparar a voz…</string>
@@ -345,7 +345,7 @@
     <string name="pysanka__speech__state_en">Voz inglesa</string>
     <string name="pysanka__speech__state_none">Transfira uma voz</string>
     <string name="pysanka__speech__open">Vozes e definições</string>
-    <string name="pysanka__speech__about">A Pysanka lê em voz alta com as vozes da Hramota, totalmente no telefone: o texto nunca é enviado. A voz ucraniana (Tetiana) e a inglesa (Cori) são transferidas à parte, uma vez cada; pode ficar só com a que precisa.</string>
+    <string name="pysanka__speech__about">A Pysanka lê em voz alta com as vozes da Hramota, totalmente no telefone: o texto nunca é enviado. A voz ucraniana (Tetiana) e a inglesa (Cori) são transferidas à parte, uma vez cada; pode ficar só com a de que precisa.</string>
     <string name="pysanka__speech__voice_uk">Voz ucraniana: Tetiana</string>
     <string name="pysanka__speech__voice_en">Voz inglesa: Cori</string>
     <string name="pysanka__speech__delete_ask">Apagar esta voz? Para voltar a ler com ela, terá de transferir de novo o arquivo ({size} MB).</string>

@@ -336,8 +336,8 @@
     <string name="pysanka__speech__pause">Pause</string>
     <string name="pysanka__speech__previous">Previous sentence</string>
     <string name="pysanka__speech__next">Next sentence</string>
-    <string name="pysanka__speech__no_uk">The Ukrainian voice is not here yet: download it in the reading settings.</string>
-    <string name="pysanka__speech__no_en">The English voice is not here yet: download it in the reading settings.</string>
+    <string name="pysanka__speech__no_uk">The Ukrainian voice isn\'t downloaded yet: download it in the reading settings.</string>
+    <string name="pysanka__speech__no_en">The English voice isn\'t downloaded yet: download it in the reading settings.</string>
     <string name="pysanka__speech__no_sound">The sound could not be played. Try again.</string>
     <string name="pysanka__speech__open_settings">Reading settings</string>
     <string name="pysanka__speech__preparing">Getting the voice ready…</string>

@@ -98,7 +98,12 @@ object ReadAloud {
         val background: Boolean = false,
         /** Said when something could not be read. */
         val notice: Int? = null,
+        /** The window as the settings said when reading started (kept for the window opened from the notification). */
+        val look: Look = Look(),
     ) { val active get() = text.isNotEmpty() }
+
+    /** «Заборонити знімки екрана», the settings' language and the phone's colours, as read in the keyboard's process. */
+    data class Look(val secure: Boolean = true, val language: String? = null, val systemColors: Boolean = false)
 
     const val NOTICE_NO_UK = 1
     const val NOTICE_NO_EN = 2
@@ -124,14 +129,14 @@ object ReadAloud {
     private lateinit var app: Context
 
     /** Starts reading [text] from its beginning. */
-    fun start(context: Context, text: String, speed: Float, background: Boolean): Unit = onMain {
+    fun start(context: Context, text: String, speed: Float, background: Boolean, look: Look = Look()): Unit = onMain {
         app = context.applicationContext
         job?.cancel()
         idleJob?.cancel()
         val t = text.take(MAX_CHARS)
         spans = Sentences.split(t)
         val first = spans.firstOrNull()
-        _state.value = State(t, playing = true, start = first?.start ?: 0, end = first?.end ?: 0, speed = speed, background = background)
+        _state.value = State(t, playing = true, start = first?.start ?: 0, end = first?.end ?: 0, speed = speed, background = background, look = look)
         if (background) ReadAloudService.show(app)
         run(0, 0)
     }

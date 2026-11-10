@@ -347,7 +347,7 @@
     <string name="pysanka__speech__state_en">Anglický hlas</string>
     <string name="pysanka__speech__state_none">Stiahnite hlas</string>
     <string name="pysanka__speech__open">Hlasy a nastavenia</string>
-    <string name="pysanka__speech__about">Pysanka číta nahlas hlasmi Hramoty, celé v telefóne: text sa nikam neodosiela. Ukrajinský hlas (Tetiana) a anglický (Cori) sa sťahujú zvlášť, každý raz; môžete si vziať len ten potrebný.</string>
+    <string name="pysanka__speech__about">Pysanka číta nahlas hlasmi Hramoty, úplne v telefóne: text sa nikam neodosiela. Ukrajinský hlas (Tetiana) a anglický (Cori) sa sťahujú zvlášť, každý raz; môžete si vziať len ten potrebný.</string>
     <string name="pysanka__speech__voice_uk">Ukrajinský hlas: Tetiana</string>
     <string name="pysanka__speech__voice_en">Anglický hlas: Cori</string>
     <string name="pysanka__speech__delete_ask">Odstrániť tento hlas? Ak ním budete chcieť znova čítať, súbor ({size} MB) bude treba stiahnuť znova.</string>

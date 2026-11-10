@@ -354,7 +354,7 @@
     <string name="pysanka__speech__how_to_use">Виділіть текст у будь-якому застосунку й виберіть «Прочитати вголос (Писанка)». У перекладі слова кнопка 🔊 його вимовляє.</string>
     <string name="pysanka__speech__speed">Швидкість читання</string>
     <string name="pysanka__speech__background">Читати у фоні</string>
-    <string name="pysanka__speech__background_hint">Читання триває, коли вікно закрите чи екран вимкнено; керування у сповіщенні.</string>
+    <string name="pysanka__speech__background_hint">Читання триває, коли вікно закрито чи екран вимкнено; керування у сповіщенні.</string>
     <string name="pysanka__speech__system">Писанка як голос телефону</string>
     <string name="pysanka__speech__system_hint">Тоді інші застосунки й TalkBack зможуть читати голосами Писанки. Потім виберіть Писанку в налаштуваннях синтезу мовлення Android.</string>
     <string name="pysanka__speech__system_open">Налаштування синтезу мовлення</string>

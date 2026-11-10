@@ -20,7 +20,7 @@
 - 🎙️ **Диктування на телефоні (Whisper), за бажанням.** Модель (≈190 МБ) ви завантажуєте один раз у налаштуваннях диктування. Звук розпізнається на телефоні й ніде не зберігається; мікрофон лише тоді, коли ви самі його дозволите. Або диктуйте голосовою клавіатурою іншого застосунку (наприклад, FUTO Voice Input): мікрофон Писанки перемкне на неї.
 - 🔊 **Читання вголос голосами Грамоти, за бажанням.** Виділіть текст у будь-якому застосунку й виберіть «Прочитати вголос (Писанка)»; у перекладі слова 🔊 його вимовляє. Український голос (Тетяна, ≈150 МБ) і англійський (Cori, ≈64 МБ) завантажуються окремо в налаштуваннях читання. Можна читати у фоні й зробити Писанку голосом телефону для інших застосунків і TalkBack.
 
-Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Моделі ШІ й диктування ви додаєте самі; без них клавіатура працює повністю.
+Основа: FlorisBoard, з простішими налаштуваннями й посиленою приватністю. ШІ й диктування працюють лише на телефоні. Моделі ШІ, диктування й голоси ви додаєте самі; без них клавіатура працює повністю.
 
 ## Як встановити
 
@@ -69,7 +69,7 @@ A private keyboard for Android with no internet access. Typing, swipe, clipboard
 - Optional on-device dictation (Whisper; you download its model, ≈190 MB, once in the dictation settings): the sound is recognised on the phone and never saved; the microphone only if you allow it yourself. Or dictate with another app's voice keyboard (FUTO Voice Input, for example): Pysanka's microphone switches to it.
 - Optional reading aloud with Hramota's voices: select text in any app and choose «Read aloud (Pysanka)»; in a word's translation, 🔊 says it. The Ukrainian voice (Tetiana, ≈150 MB) and the English one (Cori, ≈64 MB) are downloaded separately in the reading settings. Reading can go on in the background, and Pysanka can be the phone's voice for other apps and TalkBack.
 
-Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI and dictation models yourself; without them the keyboard works fully.
+Built on FlorisBoard, with simpler settings and stronger privacy. AI and dictation run on the phone only. You add the AI and dictation models and the voices yourself; without them the keyboard works fully.
 
 ## Installing
 
