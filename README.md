@@ -33,7 +33,7 @@
 
 ## Вимоги
 
-- Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈80 МБ.
+- Android 8.0 або новіший, 64-бітний процесор ARM (майже всі телефони останніх років). Файл застосунку ≈90 МБ.
 - Диктування: процесор ARMv8.2 (більшість телефонів з 2018 року; у частини дешевих моделей до 2022 року його немає, тоді диктування просто недоступне) і ≈450 МБ вільного місця під час встановлення (≈200 МБ, коли завантажений файл видалено).
 - Читання вголос: ≈150 МБ для українського голосу й ≈64 МБ для англійського (стільки ж ненадовго ще раз, поки завантажений файл не видалено).
 - Локальний ШІ: від 6 ГБ оперативної пам'яті (краще 8 ГБ) і ≈3 ГБ вільного місця для моделі (під час встановлення ненадовго ≈5,5 ГБ, поки завантажений файл ще не видалено).
@@ -82,7 +82,7 @@ Only the clipboard moves to another phone (as a password-protected copy). Learne
 
 ## Requirements
 
-- Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈80 MB.
+- Android 8.0 or newer, a 64-bit ARM processor (nearly every recent phone). The app is ≈90 MB.
 - Dictation: an ARMv8.2 processor (most phones since 2018; some budget models up to 2022 lack it, and then dictation is simply unavailable) and ≈450 MB free while installing (≈200 MB once the downloaded file is deleted).
 - Reading aloud: ≈150 MB for the Ukrainian voice and ≈64 MB for the English one (as much again for a while, until the downloaded file is deleted).
 - On-device AI: 6 GB of RAM or more (8 GB is better) and ≈3 GB of free space for the model (≈5.5 GB for a moment while installing, until the downloaded file is deleted).
