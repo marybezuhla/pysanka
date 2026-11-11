@@ -94,8 +94,12 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
 
         val starts = nearKeys(xs[0], ys[0])
         val ends = nearKeys(xs[n - 1], ys[n - 1])
-        // First a cheap look (where the swipe starts and ends, its length) keeps the likeliest
-        // [SHORTLIST]; only those get the full measures and their frequency looked up
+        // First a cheap look (where the swipe starts and ends, its length, and how near it runs to
+        // the word's keys at a few points) keeps the likeliest [SHORTLIST]; only those get the full
+        // measures and their frequency looked up. Without the near-the-keys part the right word was
+        // often dropped here: thousands of words share the first and last key (real swipes: 39 %
+        // right first, against 95 % with it)
+        val coarse = path.resample(COARSE)
         val cheap = ArrayList<Pair<Double, Int>>()
         val fx = xs[0]; val fy = ys[0]; val lx = xs[n - 1]; val ly = ys[n - 1]
         for (a in starts) for (b in ends) {
@@ -106,7 +110,12 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
                 val il = idealLength[wi]
                 if (il > 0f && (userLength < 0.4f * il - 1.2f || userLength > 2.0f * il + 1.5f)) continue
                 val lr = if (il > 0.3f) ln(max(userLength, 1e-3f) / il).toDouble() else 0.0
-                cheap += (W_ENDS * endsCost + W_LENGTH * (lr - LENGTH_MEAN) * (lr - LENGTH_MEAN)) to wi
+                val seq = seqs[wi]
+                val near = Path(FloatArray(seq.size) { kx[seq[it]] }, FloatArray(seq.size) { ky[seq[it]] }).resample(COARSE)
+                var off = 0.0
+                for (i in 0 until COARSE) off += hypot(near.x[i] - coarse.x[i], near.y[i] - coarse.y[i])
+                off /= COARSE
+                cheap += (W_ENDS * endsCost + W_LENGTH * (lr - LENGTH_MEAN) * (lr - LENGTH_MEAN) + W_COARSE * off * off) to wi
             }
         }
         val shortlist = if (cheap.size > SHORTLIST) cheap.sortedBy { it.first }.take(SHORTLIST) else cheap
@@ -271,6 +280,9 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
 
         /** How many words the cheap first look passes on to the full measures. */
         private const val SHORTLIST = 400
+        /** Points of the cheap look's near-the-keys measure, and its weight. */
+        private const val COARSE = 12
+        private const val W_COARSE = 20.0
 
         // ґ on г (Ukrainian, Belarusian); ё on е and ъ on ь (Russian); letters that are not a mark
         // on another letter (ł, ß, æ, œ, ø); Hungarian ő, ű on its ö, ü keys
@@ -279,17 +291,19 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
             'ő' to 'ö', 'ű' to 'ü',
         )
 
-        // Tuned on simulated swipes (scripts/swipe/tune.py)
-        private const val W_SHAPE = 44.354
-        private const val W_LOC = 11.68
-        private const val W_VISITS = 3.077
-        private const val W_ENDS = 2.349
-        private const val W_DETOUR = 85.448
-        private const val W_LENGTH = 149.674
-        private const val LENGTH_MEAN = -0.122
-        private const val KAPPA = 26.94
+        // Tuned on 155 real swipes from the swipe practice (scripts/swipe/real.py and tune.py, each half
+        // checked on the other: 94-95 % right first), and still 98 % on simulated swipes
+        private const val W_SHAPE = 67.947
+        private const val W_LOC = 1.344
+        private const val W_VISITS = 3.248
+        private const val W_ENDS = 0.598
+        private const val W_DETOUR = 5.612
+        private const val W_LENGTH = 14.458
+        private const val LENGTH_MEAN = -0.045
+        private const val KAPPA = 9.853
 
         /** How much a word the person often writes after the previous one counts (see [decode]'s bonus). */
-        fun pairBonus(pairs: Int): Double = if (pairs <= 0) 0.0 else 2.0 + 1.5 * ln(pairs.toDouble())
+        // (scaled with the frequency's weight, which the real swipes lowered from 26.94)
+        fun pairBonus(pairs: Int): Double = if (pairs <= 0) 0.0 else 0.73 + 0.55 * ln(pairs.toDouble())
     }
 }
