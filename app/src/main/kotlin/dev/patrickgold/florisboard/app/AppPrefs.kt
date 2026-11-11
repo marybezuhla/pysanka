@@ -228,6 +228,26 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         )
     }
 
+    // Pysanka: reading aloud with Hramota's voices
+    val pysankaSpeech = PysankaSpeech()
+    inner class PysankaSpeech {
+        /** Reading pace in percent (80..150). */
+        val speed = int(
+            key = "pysanka__speech__speed",
+            default = 100,
+        )
+        /** Reading goes on with the window closed or the screen off (a notification with the controls). */
+        val background = boolean(
+            key = "pysanka__speech__background",
+            default = false,
+        )
+        /** Pysanka offered to the phone as a text-to-speech engine (the person then chooses it in Android). */
+        val systemVoice = boolean(
+            key = "pysanka__speech__system_voice",
+            default = false,
+        )
+    }
+
     // Pysanka: dictation
     val pysankaVoice = PysankaVoice()
     inner class PysankaVoice {
@@ -240,6 +260,11 @@ abstract class FlorisPreferenceModel : PreferenceModel() {
         val holdToTalk = boolean(
             key = "pysanka__voice__hold_to_talk",
             default = false,
+        )
+        /** Dictate with another app's voice keyboard (its id), or with Pysanka itself (""). */
+        val engine = string(
+            key = "pysanka__voice__engine",
+            default = "",
         )
     }
 

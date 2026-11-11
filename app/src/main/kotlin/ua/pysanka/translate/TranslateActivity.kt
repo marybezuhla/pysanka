@@ -28,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -145,11 +146,16 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
         ) {
             Column(Modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
                 val lemma = lookup?.lemmas?.firstOrNull()
-                Text(
-                    if (lemma != null && lemma != Translations.key(text)) "$text → $lemma" else text,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        if (lemma != null && lemma != Translations.key(text)) "$text → $lemma" else text,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f),
+                    )
+                    // Said aloud by Pysanka's voice for its language, when one is downloaded
+                    from?.let { Speak(text, it) }
+                }
                 val f = from
                 if (f != null) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -198,6 +204,7 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
                                         Text(r.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
+                                Speak(r.word, to)
                                 IconButton(onClick = { copy(context, r.word) }) {
                                     Icon(Icons.Default.ContentCopy, contentDescription = stringRes(R.string.pysanka__translate__copy))
                                 }
@@ -213,6 +220,17 @@ private fun TranslateScreen(text: String, canReplace: Boolean, onReplace: (Strin
                 )
             }
         }
+    }
+}
+
+/** 🔊: the word said by Pysanka's voice (Ukrainian or English, when downloaded); nothing otherwise. */
+@Composable
+private fun Speak(word: String, language: String) {
+    val context = LocalContext.current
+    val can = remember(language) { language in setOf("uk", "en") && ua.pysanka.speech.SpeechEngine.has(context, language) }
+    if (!can) return
+    IconButton(onClick = { ua.pysanka.speech.SpeakService.say(context, word) }) {
+        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = stringRes(R.string.pysanka__speech__say, "word" to word))
     }
 }
 

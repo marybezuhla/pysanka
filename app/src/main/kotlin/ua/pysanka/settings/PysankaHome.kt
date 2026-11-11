@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
+import androidx.compose.material.icons.automirrored.outlined.VolumeUp
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Keyboard
@@ -198,10 +199,18 @@ fun PysankaHome(
             ) { v -> scope.launch { prefs.pysankaTranslate.target.set(v) } }
         }
 
-        val voiceState = stringRes(
+        // Another app's voice keyboard, if chosen: its name (or that it is gone)
+        val voiceEngine by prefs.pysankaVoice.engine.observeAsState()
+        val voiceOther = remember(voiceEngine) { if (voiceEngine.isEmpty()) null else ua.pysanka.voice.VoiceKeyboards.find(context, voiceEngine) }
+        val voiceState = when {
+            voiceEngine.isEmpty() -> null
+            voiceOther == null || !voiceOther.enabled -> stringRes(R.string.pysanka__voice__other_gone)
+            else -> stringRes(R.string.pysanka__settings__voice_other, "name" to voiceOther.label)
+        } ?: stringRes(
             when {
                 // A processor that cannot run it: said here too, not only when dictating
                 !ua.pysanka.whisper.WhisperNative.supported -> R.string.pysanka__voice__unsupported
+                !ua.pysanka.voice.VoiceModel.present(context) -> R.string.pysanka__settings__voice_no_model
                 !ua.pysanka.voice.VoiceInput.hasMic(context) -> R.string.pysanka__settings__voice_no_mic
                 else -> R.string.pysanka__settings__voice_ready
             },
@@ -209,6 +218,21 @@ fun PysankaHome(
         Block(stringRes(R.string.pysanka__voice__title), voiceState, icon = Icons.Outlined.Mic) {
             LinkRow(stringRes(R.string.pysanka__settings__voice_open), voiceState) {
                 navController.navigate(Routes.Settings.PysankaVoice)
+            }
+        }
+
+        // Reading aloud: which voices are there
+        val speechState = stringRes(
+            when {
+                ua.pysanka.speech.SpeechEngine.has(context, "uk") && ua.pysanka.speech.SpeechEngine.has(context, "en") -> R.string.pysanka__speech__state_both
+                ua.pysanka.speech.SpeechEngine.has(context, "uk") -> R.string.pysanka__speech__state_uk
+                ua.pysanka.speech.SpeechEngine.has(context, "en") -> R.string.pysanka__speech__state_en
+                else -> R.string.pysanka__speech__state_none
+            },
+        )
+        Block(stringRes(R.string.pysanka__speech__title), speechState, icon = Icons.AutoMirrored.Outlined.VolumeUp) {
+            LinkRow(stringRes(R.string.pysanka__speech__open), speechState) {
+                navController.navigate(Routes.Settings.PysankaSpeech)
             }
         }
 
@@ -321,6 +345,11 @@ private fun TypingSettings() {
 
     PrefToggle(prefs.glide.enabled, stringRes(R.string.pysanka__typing__glide), stringRes(R.string.pysanka__typing__glide_summary))
     PrefToggle(prefs.glide.showTrail, stringRes(R.string.pysanka__typing__glide_trail), enabled = glide)
+    // Pysanka: swipe practice (records swipes of listed words, for tuning the decoder on real fingers)
+    val practiceNav = LocalNavController.current
+    LinkRow(stringRes(R.string.pysanka__swipe_practice__title), stringRes(R.string.pysanka__swipe_practice__summary)) {
+        practiceNav.navigate(Routes.Settings.PysankaSwipePractice)
+    }
     PrefToggle(prefs.suggestion.enabled, stringRes(R.string.pysanka__typing__suggestions), stringRes(R.string.pysanka__typing__suggestions_summary))
     PrefToggle(prefs.correction.pysankaAutoCorrect, stringRes(R.string.pysanka__typing__auto_correct), stringRes(R.string.pysanka__typing__auto_correct_summary), enabled = suggestions)
     PrefToggle(prefs.correction.pysankaKeyTargeting, stringRes(R.string.pysanka__typing__key_targeting), stringRes(R.string.pysanka__typing__key_targeting_summary), enabled = suggestions)

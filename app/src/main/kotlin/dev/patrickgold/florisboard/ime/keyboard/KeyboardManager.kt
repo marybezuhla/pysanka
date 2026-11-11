@@ -325,6 +325,20 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
      */
     fun pysankaDictate(listen: Boolean = !prefs.pysankaVoice.holdToTalk.get()) {
         val voice = ua.pysanka.voice.VoiceInput
+        // Another app's voice keyboard, if chosen: Pysanka only switches to it (not in private fields)
+        val other = prefs.pysankaVoice.engine.get()
+        if (other.isNotEmpty()) {
+            when {
+                !voice.allowedHere() -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
+                // Pysanka's keys, not a stale panel, when the person comes back
+                FlorisImeService.pysankaSwitchToVoice(other) -> { activeState.imeUiMode = ImeUiMode.TEXT }
+                else -> {
+                    appContext.showLongToastSync(R.string.pysanka__voice__other_missing)
+                    ua.pysanka.voice.openVoiceSettings(appContext)
+                }
+            }
+            return
+        }
         when (voice.ready(appContext)) {
             ua.pysanka.voice.VoiceInput.Ready.YES -> {
                 if (listen) pysankaListen()
@@ -332,6 +346,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             }
             ua.pysanka.voice.VoiceInput.Ready.NOT_HERE -> appContext.showShortToastSync(R.string.pysanka__voice__not_here)
             ua.pysanka.voice.VoiceInput.Ready.UNSUPPORTED -> appContext.showLongToastSync(R.string.pysanka__voice__unsupported)
+            ua.pysanka.voice.VoiceInput.Ready.NO_MODEL -> {
+                appContext.showLongToastSync(R.string.pysanka__voice__no_model)
+                ua.pysanka.voice.openVoiceSettings(appContext)
+            }
             else -> {
                 appContext.showShortToastSync(R.string.pysanka__voice__set_up)
                 ua.pysanka.voice.openVoiceSettings(appContext)
@@ -1322,8 +1340,9 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 KeyCode.CLIPBOARD_SELECT_ALL -> {
                     editorInfo.isRichInputEditor
                 }
-                // Pysanka: dictation is greyed out on a processor that cannot run it
-                KeyCode.VOICE_INPUT -> ua.pysanka.whisper.WhisperNative.supported
+                // Pysanka: dictation is greyed out on a processor that cannot run it (unless another
+                // app's voice keyboard is chosen)
+                KeyCode.VOICE_INPUT -> ua.pysanka.whisper.WhisperNative.supported || prefs.pysankaVoice.engine.get().isNotEmpty()
                 KeyCode.TOGGLE_INCOGNITO_MODE -> when (prefs.suggestion.incognitoMode.get()) {
                     IncognitoMode.FORCE_OFF, IncognitoMode.FORCE_ON -> false
                     IncognitoMode.DYNAMIC_ON_OFF -> !editorInfo.imeOptions.flagNoPersonalizedLearning

@@ -51,3 +51,5 @@ include(":lib:kotlin")
 include(":lib:snygg")
 // Pysanka: whisper.cpp for dictation
 include(":lib:whisper")
+// Pysanka: eSpeak NG for the English voice
+include(":lib:espeak")

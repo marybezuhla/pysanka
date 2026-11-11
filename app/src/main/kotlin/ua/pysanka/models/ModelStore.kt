@@ -27,7 +27,7 @@ class PinnedModel(
     val sha256: String,
     /** About how big, in GB, for the person. */
     val sizeGb: Double,
-    /** About how much free space the copy needs, in GB. */
+    /** Free space required before copying (checked), in GB. */
     val spaceGb: Double,
 ) {
     companion object {
@@ -43,6 +43,54 @@ class PinnedModel(
             sha256 = "181938105e0eefd105961417e8da75903eacda102c4fce9ce90f50b97139a63c",
             sizeGb = 2.6,
             spaceGb = 2.8,
+        )
+
+        /**
+         * Whisper small for dictation (OpenAI, MIT; whisper.cpp's 5-bit file). Downloaded by the
+         * person rather than built in: it was about 70 % of the APK.
+         */
+        val WHISPER = PinnedModel(
+            dir = "voice_model",
+            name = "ggml-small-q5_1.bin",
+            downloadName = "ggml-small-q5_1.bin",
+            download = "https://huggingface.co/ggerganov/whisper.cpp/resolve/" +
+                "f281eb45af861ab5e5297d23694b7d46e090c02c/ggml-small-q5_1.bin?download=true",
+            bytes = null,
+            maxBytes = 200_000_000L,
+            sha256 = "ae85e4a935d7a567bd102fe55afc16bb595bdb618e11b2fc7591bc08120411bb",
+            sizeGb = 0.19,
+            spaceGb = 0.25,
+        )
+
+        /**
+         * Tetiana, the Ukrainian voice for reading aloud: robinhad/ukrainian-tts v5.0.0 (MIT;
+         * recordings Apache 2.0), turned into ONNX at full precision as in Hramota. Not published
+         * elsewhere in this form, so it lies in Pysanka's v1.0.0 release (never deleted).
+         */
+        val TETIANA = PinnedModel(
+            dir = "speech_uk",
+            name = "uk-tetiana.onnx",
+            downloadName = "uk-tetiana.onnx",
+            download = "https://github.com/marybezuhla/pysanka/releases/download/v1.0.0/uk-tetiana.onnx",
+            bytes = 151_507_141L,
+            maxBytes = 151_507_141L,
+            sha256 = "6d76437e89207e973266b7b3911de8f2bab8cef25bbaaeeb40d34f5a0bae8df9",
+            sizeGb = 0.15,
+            spaceGb = 0.2,
+        )
+
+        /** Cori, the English voice: Piper's en_GB-cori-medium (MIT; public-domain recordings), unchanged. */
+        val CORI = PinnedModel(
+            dir = "speech_en",
+            name = "en-cori.onnx",
+            downloadName = "en_GB-cori-medium.onnx",
+            download = "https://huggingface.co/rhasspy/piper-voices/resolve/" +
+                "293cad0539066f86e6bce3b9780c472cc9157489/en/en_GB/cori/medium/en_GB-cori-medium.onnx?download=true",
+            bytes = 63_531_379L,
+            maxBytes = 63_531_379L,
+            sha256 = "1899f98e5fb8310154f3c2973f4b8a929ba7245e722b3d3a85680b833d95f10d",
+            sizeGb = 0.064,
+            spaceGb = 0.1,
         )
     }
 }
@@ -88,7 +136,7 @@ class ModelStore(private val context: Context, val model: PinnedModel = PinnedMo
             tmp.delete() // a leftover from a failed copy must not block the space check
             // A file of another size is refused at once, not after copying gigabytes
             if (total > 0 && !fits(total)) throw WrongFile()
-            if (dir.usableSpace < model.maxBytes + 200 * MB) throw NoSpace()
+            if (dir.usableSpace < (model.spaceGb * 1e9).toLong()) throw NoSpace()
             val sha = java.security.MessageDigest.getInstance("SHA-256")
             try {
                 cr.openInputStream(uri)!!.use { input ->
@@ -117,9 +165,11 @@ class ModelStore(private val context: Context, val model: PinnedModel = PinnedMo
             }
             val target = File(dir, model.name)
             target.delete()
+            // A rename in the same folder is all or nothing; a copy cut off halfway would look like
+            // a model (Whisper's size is not pinned) and break dictation, so there is no copy fallback
             if (!tmp.renameTo(target)) {
-                tmp.copyTo(target, overwrite = true)
                 tmp.delete()
+                throw java.io.IOException("could not move the model into place")
             }
             val deleted = if (deleteOriginal) {
                 runCatching { DocumentsContract.deleteDocument(cr, uri) }.getOrDefault(false)
@@ -135,6 +185,7 @@ class ModelStore(private val context: Context, val model: PinnedModel = PinnedMo
             ua.pysanka.ai.AiEngine.cacheDir(context).deleteRecursively()
             ua.pysanka.ai.AiEntry.sync(context)
         }
+        if (model === PinnedModel.TETIANA || model === PinnedModel.CORI) ua.pysanka.speech.SpeechEntry.sync(context)
     }
 
     /**
@@ -143,9 +194,5 @@ class ModelStore(private val context: Context, val model: PinnedModel = PinnedMo
      */
     fun cleanUp() {
         dir.listFiles()?.forEach { f -> if (f.name != model.name || !fits(f.length())) f.delete() }
-    }
-
-    private companion object {
-        const val MB = 1024L * 1024L
     }
 }

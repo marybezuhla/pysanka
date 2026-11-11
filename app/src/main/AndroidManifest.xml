@@ -16,6 +16,10 @@
     <!-- Pysanka: the optional fingerprint before the clipboard history (an install-time permission
          for the system's own fingerprint screen; nothing about the fingerprint reaches Pysanka) -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <!-- Pysanka: reading aloud in the background (only when the person turns on «Читати у фоні»):
+         the controls in a notification while it reads -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
     <!-- Android 11+ only: Define that FlorisBoard requests to see all apps that
           ship with an IME or Spell Check service. This is used to guide the user
@@ -193,6 +197,64 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <!-- Pysanka: «Прочитати вголос (Писанка)» in the text selection menu of any app (only plain text);
+             only while a voice is downloaded (SpeechEntry.sync). It reads the settings and hands the
+             text to the reading window in the ":speech" process. -->
+        <activity
+            android:name="ua.pysanka.speech.ReadAloudEntryActivity"
+            android:exported="true"
+            android:enabled="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/pysanka__speech__entry_label">
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- Pysanka: the reading window, with the voices in their own process so they never weigh on the keyboard -->
+        <activity
+            android:name="ua.pysanka.speech.ReadAloudActivity"
+            android:exported="false"
+            android:process=":speech"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:taskAffinity="ua.pysanka.speech"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|locale|layoutDirection|fontScale|density"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/pysanka__speech__title" />
+
+        <!-- Pysanka: reading on with the window closed (only with «Читати у фоні») -->
+        <service
+            android:name="ua.pysanka.speech.ReadAloudService"
+            android:exported="false"
+            android:process=":speech"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <!-- Pysanka: a word said aloud from the translation -->
+        <service
+            android:name="ua.pysanka.speech.SpeakService"
+            android:exported="false"
+            android:process=":speech" />
+
+        <!-- Pysanka as the phone's voice: off until the person turns it on (SpeechEntry.sync);
+             then Android offers it in its text-to-speech settings -->
+        <service
+            android:name="ua.pysanka.speech.PysankaTtsService"
+            android:exported="true"
+            android:enabled="false"
+            android:process=":speech"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.TTS_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="android.speech.tts" android:resource="@xml/tts_engine" />
+        </service>
 
         <!-- Pysanka: text from a photo or the camera; its own task, not in recent apps -->
         <activity

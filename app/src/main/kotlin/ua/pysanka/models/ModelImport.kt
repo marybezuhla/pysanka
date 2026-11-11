@@ -20,6 +20,9 @@ import kotlinx.coroutines.launch
 class ModelImport private constructor(val model: PinnedModel) {
     companion object {
         val AI = ModelImport(PinnedModel.GEMMA)
+        val VOICE = ModelImport(PinnedModel.WHISPER)
+        val TETIANA = ModelImport(PinnedModel.TETIANA)
+        val CORI = ModelImport(PinnedModel.CORI)
 
         private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
@@ -58,6 +61,7 @@ class ModelImport private constructor(val model: PinnedModel) {
                 error = R.string.pysanka__ai__import_failed
             } finally {
                 if (model === PinnedModel.GEMMA) ua.pysanka.ai.AiEntry.sync(app)
+                if (model === PinnedModel.TETIANA || model === PinnedModel.CORI) ua.pysanka.speech.SpeechEntry.sync(app)
                 status.value = Status(progress = null, error = error, originalKept = kept, finished = status.value.finished + 1)
             }
         }

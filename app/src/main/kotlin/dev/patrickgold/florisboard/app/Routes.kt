@@ -83,6 +83,16 @@ object Routes {
         @Deeplink("settings/pysanka/voice")
         object PysankaVoice
 
+        // Pysanka: swipe practice (recorded swipes for tuning the decoder)
+        @Serializable
+        @Deeplink("settings/pysanka/swipe-practice")
+        object PysankaSwipePractice
+
+        // Pysanka: reading aloud (the voices, the pace, in the background, as the phone's voice)
+        @Serializable
+        @Deeplink("settings/pysanka/speech")
+        object PysankaSpeech
+
         // Pysanka: text replacement (shortcuts → texts)
         @Serializable
         @Deeplink("settings/typing/shortcuts")
@@ -145,6 +155,8 @@ object Routes {
             composableWithDeepLink(Settings.TextShortcuts::class) { ua.pysanka.typing.TextShortcutsScreen() }
             composableWithDeepLink(Settings.PysankaAi::class) { ua.pysanka.ai.AiSettingsScreen() }
             composableWithDeepLink(Settings.PysankaVoice::class) { ua.pysanka.voice.VoiceSettingsScreen() }
+            composableWithDeepLink(Settings.PysankaSpeech::class) { ua.pysanka.speech.SpeechSettingsScreen() }
+            composableWithDeepLink(Settings.PysankaSwipePractice::class) { ua.pysanka.typing.swipe.SwipePracticeScreen() }
 
             composableWithDeepLink(Settings.About::class) { AboutScreen() }
             composableWithDeepLink(Settings.ProjectLicense::class) { ProjectLicenseScreen() }

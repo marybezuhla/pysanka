@@ -20,6 +20,7 @@ import android.content.Context
 import dev.patrickgold.florisboard.app.FlorisPreferenceStore
 import dev.patrickgold.florisboard.ime.nlp.WordSuggestionCandidate
 import dev.patrickgold.florisboard.ime.text.keyboard.TextKey
+import dev.patrickgold.florisboard.editorInstance
 import dev.patrickgold.florisboard.keyboardManager
 import dev.patrickgold.florisboard.nlpManager
 import dev.patrickgold.florisboard.subtypeManager
@@ -34,7 +35,7 @@ import kotlin.math.min
  * Handles the [GlideTypingClassifier]. Basically responsible for linking [GlideTypingGesture.Detector]
  * with [GlideTypingClassifier].
  */
-class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
+class GlideTypingManager(private val context: Context) : GlideTypingGesture.Listener {
     companion object {
         private const val MAX_SUGGESTION_COUNT = 8
     }
@@ -43,6 +44,7 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
     private val keyboardManager by context.keyboardManager()
     private val nlpManager by context.nlpManager()
     private val subtypeManager by context.subtypeManager()
+    private val editorInstance by context.editorInstance()
 
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     private var glideTypingClassifier = StatisticalGlideTypingClassifier(context)
@@ -62,7 +64,9 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
         // Pysanka: the whole path is taken (and the classifier made ready for the next swipe) at once,
         // here, so a next swipe started while this one is worked out neither joins nor loses points
         val path = glideTypingClassifier.takeGesture()
-        updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true, path) {}
+        // Pysanka: the swipe practice word, only for a swipe into the practice field itself
+        val practice = ua.pysanka.typing.swipe.SwipeRecorder.targetFor(editorInstance.activeInfo, context.packageName)
+        updateSuggestionsAsync(MAX_SUGGESTION_COUNT, true, path, practice) {}
     }
 
     override fun onGlideCancelled() {
@@ -106,6 +110,7 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
         commit: Boolean,
         // Pysanka: the swipe as it was when asked (a copy)
         path: StatisticalGlideTypingClassifier.Gesture,
+        practice: String? = null,
         callback: (Boolean) -> Unit,
     ) {
         if (!glideTypingClassifier.ready) {
@@ -121,6 +126,14 @@ class GlideTypingManager(context: Context) : GlideTypingGesture.Listener {
             val suggestions = glideTypingClassifier.getSuggestions(path, MAX_SUGGESTION_COUNT)
                 .filter { !(block && ua.pysanka.typing.Offensive.isOffensive(it, language)) }
                 .distinctBy { it.lowercase().replace('ё', 'е') }
+            // Pysanka: the swipe practice screen records the finished swipe with the guesses
+            if (commit && practice != null) {
+                runCatching {
+                    glideTypingClassifier.practiceShot(path)?.let {
+                        ua.pysanka.typing.swipe.SwipeRecorder.record(context.applicationContext, practice, it, suggestions)
+                    }
+                }
+            }
 
             withContext(Dispatchers.Main) {
                 if (!commit && started != generation.get()) {

@@ -3,6 +3,7 @@ package ua.pysanka.models
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -32,9 +33,15 @@ import org.florisboard.lib.compose.stringRes
 /**
  * Pysanka: getting a model on a settings screen (download in the browser, then pick the file; only
  * the exact published file is accepted) and removing it. [ready]: what to show while it is there.
+ * [step1] and [deleteAsk] get the model's size: in GB for a model of 1 GB or more, else in MB.
  */
 @Composable
-fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
+fun ModelSection(
+    import: ModelImport,
+    @StringRes step1: Int = R.string.pysanka__ai__step1,
+    @StringRes deleteAsk: Int = R.string.pysanka__ai__delete_ask,
+    ready: @Composable () -> Unit = {},
+) {
     val context = LocalContext.current
     val model = import.model
     val store = remember { ModelStore(context, model).also { if (!import.running) it.cleanUp() } }
@@ -52,6 +59,7 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
     // Sizes written the way the settings' language writes numbers (2,6 or 2.6)
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     fun gb(v: Double) = java.text.NumberFormat.getInstance(locale).apply { maximumFractionDigits = 2 }.format(v)
+    val size = if (model.sizeGb >= 1.0) gb(model.sizeGb) else java.text.NumberFormat.getInstance(locale).format(Math.round(model.sizeGb * 1000))
     // Off unless chosen: the same file may serve another app too
     var deleteOriginal by remember { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -68,15 +76,15 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
             }
             if (asking) {
                 ua.pysanka.settings.ConfirmDialog(
-                    stringRes(R.string.pysanka__ai__delete_ask, "size" to gb(model.sizeGb)),
+                    stringRes(deleteAsk, "size" to size),
                     onConfirm = { store.delete(); state = store.state() },
                     onDismiss = { asking = false },
                 )
             }
         }
         ModelStore.State.Missing -> {
-            // A phone with less memory than the model needs: said before a 2.6 GB download
-            val ramGb = remember {
+            // A phone with less memory than the AI model needs: said before a 2.6 GB download
+            val ramGb = if (model !== PinnedModel.GEMMA) Double.MAX_VALUE else remember {
                 val info = android.app.ActivityManager.MemoryInfo()
                 (context.getSystemService(android.content.Context.ACTIVITY_SERVICE) as android.app.ActivityManager).getMemoryInfo(info)
                 info.totalMem / 1_000_000_000.0
@@ -90,7 +98,7 @@ fun ModelSection(import: ModelImport, ready: @Composable () -> Unit) {
                 )
             }
             Text(
-                stringRes(R.string.pysanka__ai__step1, "file" to model.downloadName, "size" to gb(model.sizeGb)),
+                stringRes(step1, "file" to model.downloadName, "size" to size),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
