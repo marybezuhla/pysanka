@@ -2,6 +2,7 @@ package ua.pysanka.typing.swipe
 
 import java.text.Normalizer
 import kotlin.math.hypot
+import kotlin.math.sqrt
 import kotlin.math.ln
 import kotlin.math.max
 import kotlin.math.min
@@ -24,9 +25,9 @@ import kotlin.math.min
  * - **length**: the swipe's length against the path's (people cut corners and overshoot a little);
  *
  * and then how common the word is, and whether the person often writes it after the previous word.
- * The weights were tuned on simulated swipes (noisy key targets, cut corners, uneven speed) over
- * the 8000 most common Ukrainian words; there they put the right word first 90 % of the time where
- * FlorisBoard's way did 75 % (`scripts/swipe/`).
+ * The weights were tuned on 155 real swipes by one person from the swipe practice (each half checked
+ * on the other: 93-97 % right first on the half not tuned on), and still put the right word first in
+ * 98 % of simulated swipes (`scripts/swipe/`, real.py and tune.py).
  */
 class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
     /** A key centre, in key widths. */
@@ -97,8 +98,8 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         // First a cheap look (where the swipe starts and ends, its length, and how near it runs to
         // the word's keys at a few points) keeps the likeliest [SHORTLIST]; only those get the full
         // measures and their frequency looked up. Without the near-the-keys part the right word was
-        // often dropped here: thousands of words share the first and last key (real swipes: 39 %
-        // right first, against 95 % with it)
+        // often dropped here, since thousands of words share the first and last key: on real swipes
+        // the app put it first only 39 % of the time; this and the re-tuned weights together, 95 %
         val coarse = path.resample(COARSE)
         val cheap = ArrayList<Pair<Double, Int>>()
         val fx = xs[0]; val fy = ys[0]; val lx = xs[n - 1]; val ly = ys[n - 1]
@@ -110,11 +111,7 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
                 val il = idealLength[wi]
                 if (il > 0f && (userLength < 0.4f * il - 1.2f || userLength > 2.0f * il + 1.5f)) continue
                 val lr = if (il > 0.3f) ln(max(userLength, 1e-3f) / il).toDouble() else 0.0
-                val seq = seqs[wi]
-                val near = Path(FloatArray(seq.size) { kx[seq[it]] }, FloatArray(seq.size) { ky[seq[it]] }).resample(COARSE)
-                var off = 0.0
-                for (i in 0 until COARSE) off += hypot(near.x[i] - coarse.x[i], near.y[i] - coarse.y[i])
-                off /= COARSE
+                val off = coarseOff(seqs[wi], il, coarse)
                 cheap += (W_ENDS * endsCost + W_LENGTH * (lr - LENGTH_MEAN) * (lr - LENGTH_MEAN) + W_COARSE * off * off) to wi
             }
         }
@@ -200,6 +197,42 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         val dx = px - (ax + t * abx)
         val dy = py - (ay + t * aby)
         return (dx * dx + dy * dy).toDouble()
+    }
+
+    /**
+     * The mean distance between the swipe at [COARSE] even points ([coarse]) and the word's key path
+     * ([seq], [total] long) at the same points: as Path.resample, without making new arrays (it runs
+     * for every word that shares the swipe's first and last key, at every update while swiping).
+     */
+    private fun coarseOff(seq: IntArray, total: Float, coarse: Path): Double {
+        var sum = 0.0
+        if (seq.size == 1 || total <= 0f) {
+            val x = kx[seq[0]]; val y = ky[seq[0]]
+            for (k in 0 until COARSE) { val dx = x - coarse.x[k]; val dy = y - coarse.y[k]; sum += sqrt(dx * dx + dy * dy) }
+            return sum / COARSE
+        }
+        var seg = 0
+        var segStart = 0f
+        var segLen = segLength(seq, 0)
+        for (k in 0 until COARSE) {
+            val t = total * k / (COARSE - 1)
+            while (seg < seq.size - 2 && segStart + segLen < t) {
+                segStart += segLen
+                seg++
+                segLen = segLength(seq, seg)
+            }
+            val u = if (segLen > 0f) ((t - segStart) / segLen).coerceIn(0f, 1f) else 0f
+            val a = seq[seg]; val b = seq[seg + 1]
+            val dx = kx[a] + (kx[b] - kx[a]) * u - coarse.x[k]
+            val dy = ky[a] + (ky[b] - ky[a]) * u - coarse.y[k]
+            sum += sqrt(dx * dx + dy * dy)
+        }
+        return sum / COARSE
+    }
+
+    private fun segLength(seq: IntArray, i: Int): Float {
+        val dx = kx[seq[i + 1]] - kx[seq[i]]; val dy = ky[seq[i + 1]] - ky[seq[i]]
+        return sqrt(dx * dx + dy * dy)
     }
 
     /** The keys a swipe may have started (or ended) on: the nearest, and others not much farther. */
@@ -291,8 +324,8 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
             'ő' to 'ö', 'ű' to 'ü',
         )
 
-        // Tuned on 155 real swipes from the swipe practice (scripts/swipe/real.py and tune.py, each half
-        // checked on the other: 94-95 % right first), and still 98 % on simulated swipes
+        // Tuned on 155 real swipes by one person from the swipe practice (scripts/swipe/real.py and
+        // tune.py; 93-97 % right first on the half not tuned on), and still 98 % on simulated swipes
         private const val W_SHAPE = 67.947
         private const val W_LOC = 1.344
         private const val W_VISITS = 3.248
@@ -303,7 +336,8 @@ class SwipeDecoder(keys: Map<Char, Point>, words: List<String>) {
         private const val KAPPA = 9.853
 
         /** How much a word the person often writes after the previous one counts (see [decode]'s bonus). */
-        // (scaled with the frequency's weight, which the real swipes lowered from 26.94)
+        // (scaled with the frequency's weight, which the real swipes lowered from 26.94; the practice has
+        // no word pairs, so this was not measured on real swipes)
         fun pairBonus(pairs: Int): Double = if (pairs <= 0) 0.0 else 0.73 + 0.55 * ln(pairs.toDouble())
     }
 }
