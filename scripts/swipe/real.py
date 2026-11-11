@@ -12,7 +12,7 @@ import json, pickle, sys, numpy as np
 from sim import load, key_seq
 from feat import Feat
 
-CURRENT = [44.354, 11.68, 3.077, 2.349, 85.448, 149.674, -0.122, 26.94]
+CURRENT = [67.947, 1.344, 3.248, 0.598, 5.612, 14.458, -0.045, 9.853]
 
 
 def main(src, train_out, test_out):
